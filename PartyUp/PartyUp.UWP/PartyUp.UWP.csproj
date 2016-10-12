@@ -133,6 +133,14 @@
       <Name>PartyUp</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Reference Include="MvvmNano.Core">
+      <HintPath>..\..\..\..\..\MvvmNano\src\MvvmNano.Forms\bin\Release\MvvmNano.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="MvvmNano.Forms">
+      <HintPath>..\..\..\..\..\MvvmNano\src\MvvmNano.Forms\bin\Release\MvvmNano.Forms.dll</HintPath>
+    </Reference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

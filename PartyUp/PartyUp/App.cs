@@ -1,27 +1,33 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-using Xamarin.Forms;
+﻿
+using MvvmNano;
+using MvvmNano.Forms;
+using PartyUp.Service.Interface;
+using PartyUp.Service.Service;
+using PartyUp.ViewModel;
+using Xamarin.Forms; 
 
 namespace PartyUp
 {
-    public class App : Application
+    public class App : MvvmNanoApplication 
     {
         public App()
         {
-            // The root page of your application
-            MainPage = new ContentPage
+            Resources = new ResourceDictionary
             {
-                Content = new StackLayout
+                new Style(typeof(Label))
                 {
-                    VerticalOptions = LayoutOptions.Center,
-                    Children = {
-                        new Label {
-                            HorizontalTextAlignment = TextAlignment.Center,
-                            Text = "Welcome to Xamarin Forms!"
-                        }
+                    Setters =
+                    {
+                        new Setter
+                        {
+                            Property = Label.VerticalOptionsProperty,
+                            Value = LayoutOptions.Center
+                        },
+                        new Setter
+                        {
+                            Property = Label.HorizontalOptionsProperty,
+                            Value = LayoutOptions.Center
+                        },
                     }
                 }
             };
@@ -29,17 +35,18 @@ namespace PartyUp
 
         protected override void OnStart()
         {
-            // Handle when your app starts
+            RegisterInterfaces();
+
+            base.OnStart(); 
+            SetUpMasterDetailPage<NavigationViewModel>();
+            AddSiteToDetailPages(new MasterDetailData(typeof(DashboardViewModel), "Dashboard")); 
+            AddSiteToDetailPages(new MasterDetailData(typeof(EventPickerViewModel), "Pick a party"));
         }
 
-        protected override void OnSleep()
+        private void RegisterInterfaces()
         {
-            // Handle when your app sleeps
-        }
-
-        protected override void OnResume()
-        {
-            // Handle when your app resumes
+            MvvmNanoIoC.Register<ICacheService, CacheService>();
+            MvvmNanoIoC.Register<ICacheService, CacheService>();
         }
     }
 }
