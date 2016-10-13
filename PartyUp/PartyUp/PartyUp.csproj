@@ -63,10 +63,10 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="MvvmNano.Core">
-      <HintPath>..\..\..\..\..\MvvmNano\src\MvvmNano.Forms\bin\Release\MvvmNano.Core.dll</HintPath>
+      <HintPath>..\..\Libs\MvvmNano.Core.dll</HintPath>
     </Reference>
     <Reference Include="MvvmNano.Forms">
-      <HintPath>..\..\..\..\..\MvvmNano\src\MvvmNano.Forms\bin\Release\MvvmNano.Forms.dll</HintPath>
+      <HintPath>..\..\Libs\MvvmNano.Forms.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Portable.Ninject.3.3\lib\portable-net4+sl5+wp8+win8+wpa81+monotouch+monoandroid\Ninject.dll</HintPath>

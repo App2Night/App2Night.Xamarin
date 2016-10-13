@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Net.Http;
 using MvvmNano;
 using PartyUp.Model;
 using PartyUp.Service.Interface;
@@ -29,5 +31,10 @@ namespace PartyUp.ViewModel
         {
             
         }
+    }
+
+    public class User
+    {
+        public string Name { get; set; }
     }
 }

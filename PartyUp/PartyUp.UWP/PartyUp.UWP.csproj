@@ -134,11 +134,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="MvvmNano.Core">
-      <HintPath>..\..\..\..\..\MvvmNano\src\MvvmNano.Forms\bin\Release\MvvmNano.Core.dll</HintPath>
+    <Reference Include="MvvmNano.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\MvvmNano.Core.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmNano.Forms">
-      <HintPath>..\..\..\..\..\MvvmNano\src\MvvmNano.Forms\bin\Release\MvvmNano.Forms.dll</HintPath>
+    <Reference Include="MvvmNano.Forms, Version=2.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\Libs\MvvmNano.Forms.dll</HintPath>
     </Reference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
