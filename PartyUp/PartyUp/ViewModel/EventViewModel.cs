@@ -1,5 +1,6 @@
 ﻿using MvvmNano;
 using PartyUp.Model;
+using PartyUp.Model.Model;
 
 namespace PartyUp.ViewModel
 {

@@ -41,7 +41,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Class1.cs" />
     <Compile Include="Interface\ICacheService.cs" />
     <Compile Include="Interface\IClientServce.cs" />
     <Compile Include="Interface\ILocationService.cs" />
