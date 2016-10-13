@@ -9,7 +9,7 @@ namespace PartyUp.Model.Model
         public int Age { get; set; }
         public Gender Gender { get; set; }
         public string Email { get; set; }
-        public ObservableCollection<Event> Events { get; set; }
+        public ObservableCollection<Party> Events { get; set; }
         public Location Addresse { get; set; }
         public Location LastGpsLocation { get; set; }
     }

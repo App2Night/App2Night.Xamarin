@@ -3,7 +3,7 @@ using PartyUp.Model.Enum;
 
 namespace PartyUp.Model.Model
 {
-    public class Event
+    public class Party
     {
         public string Name { get; set; }
         public EventCommitmentState MyEventCommitmentState { get; set; }

@@ -8,12 +8,12 @@ namespace PartyUp.Service.Service
 {
     public class CacheService : ICacheService
     {
-        public ObservableCollection<Event> GetEvents()
+        public ObservableCollection<Party> GetEvents()
         {
-            var result = new ObservableCollection<Event>();
+            var result = new ObservableCollection<Party>();
             for (int i = 0; i < 9; i++)
             {
-                result.Add(new Event
+                result.Add(new Party
                 {
                     Name = "Test event " + (i+1) + " !"
                 });
@@ -31,9 +31,9 @@ namespace PartyUp.Service.Service
                 Age = 21,
                 Email = "hardy@party.de",
                 LastGpsLocation = new Location(),
-                Events = new ObservableCollection<Event>
+                Events = new ObservableCollection<Party>
                 {
-                    new Event
+                    new Party
                     {
                         MusicGenre = MusicGenre.Pop,
                         Name = "DH goes Ballermann",

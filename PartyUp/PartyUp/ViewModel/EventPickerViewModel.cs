@@ -10,20 +10,20 @@ namespace PartyUp.ViewModel
 {
     public class EventPickerViewModel : MvvmNanoViewModel
     {
-        private Event _selectedEvent = null;
-        public ObservableCollection<Event> Events => MvvmNanoIoC.Resolve<ICacheService>().GetEvents();
+        private Party _selectedParty = null;
+        public ObservableCollection<Party> Events => MvvmNanoIoC.Resolve<ICacheService>().GetEvents();
 
-        public Event SelectedEvent
+        public Party SelectedParty
         {
-            get { return _selectedEvent; }
+            get { return _selectedParty; }
             set
             {
                 if (value != null)
                 {
-                    _selectedEvent = value;
-                    NavigateTo<EventViewModel, Event>(value);
-                    _selectedEvent = null;
-                    NotifyPropertyChanged(nameof(SelectedEvent));
+                    _selectedParty = value;
+                    NavigateTo<EventViewModel, Party>(value);
+                    _selectedParty = null;
+                    NotifyPropertyChanged(nameof(SelectedParty));
                 }
             }
         }

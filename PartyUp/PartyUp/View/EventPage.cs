@@ -7,7 +7,7 @@ namespace PartyUp.View
     {
         public EventPage()
         {
-            BindToViewModel(this, TitleProperty, vm => vm.Event.Name);
+            BindToViewModel(this, TitleProperty, vm => vm.Party.Name);
         }
     }
 }

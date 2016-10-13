@@ -9,7 +9,7 @@ namespace PartyUp.View
         public NavigationPage()
         {
             var label = new Label() { Text = "TEST" };
-            //BindToViewModel(label, Label.TextProperty, o => o.TestValue);
+            BindToViewModel(label, Label.TextProperty, o => o.TestValue);
             MasterContent = new Grid()
             {
                 RowDefinitions =

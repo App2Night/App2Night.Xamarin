@@ -1,4 +1,6 @@
-﻿namespace PartyUp.Model.Model
+﻿using PartyUp.Model.Enum;
+
+namespace PartyUp.Model.Model
 {
     public class Location
     {
@@ -8,7 +10,6 @@
         public int HouseNumber { get; set; }
         public string HouseNumberAdditional { get; set; }
         public int Zipcode { get; set; }
-        public float Longitude { get; set; }
-        public float Latitude { get; set; }
+        public Coordinates Coordinates { get; set; }
     }
 }

@@ -4,14 +4,14 @@ using PartyUp.Model.Model;
 
 namespace PartyUp.ViewModel
 {
-    public class EventViewModel : MvvmNanoViewModel<Event>
+    public class EventViewModel : MvvmNanoViewModel<Party>
     {
-        public Event Event { get; private set; }
+        public Party Party { get; private set; }
 
-        public override void Initialize(Event pEvent)
+        public override void Initialize(Party pParty)
         {
-            base.Initialize(pEvent);
-            Event = pEvent;
+            base.Initialize(pParty);
+            Party = pParty;
         }
     }
 }

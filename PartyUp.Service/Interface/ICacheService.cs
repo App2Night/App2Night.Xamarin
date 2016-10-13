@@ -11,8 +11,8 @@ namespace PartyUp.Service.Interface
         /// <summary>
         /// Returns a cached collection of all events filtered by last applied search criteria.
         /// </summary>
-        /// <returns><see cref="ObservableCollection{Event}"/></returns>
-        ObservableCollection<Event> GetEvents();
+        /// <returns><see cref="ObservableCollection{Party}"/></returns>
+        ObservableCollection<Party> GetEvents();
 
         /// <summary>
         /// Returns cached user data.

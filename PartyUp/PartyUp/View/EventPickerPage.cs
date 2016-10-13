@@ -10,7 +10,7 @@ namespace PartyUp.View
         {
             var eventListView = new ListView(ListViewCachingStrategy.RecycleElement);
             BindToViewModel(eventListView, ListView.ItemsSourceProperty, vm => vm.Events);
-            BindToViewModel(eventListView, ListView.SelectedItemProperty, vm => vm.SelectedEvent);
+            BindToViewModel(eventListView, ListView.SelectedItemProperty, vm => vm.SelectedParty);
 
             eventListView.ItemTemplate  = new DataTemplate(() =>
             {

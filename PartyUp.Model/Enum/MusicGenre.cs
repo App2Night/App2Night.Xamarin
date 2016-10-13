@@ -2,6 +2,7 @@
 {
     public enum MusicGenre
     {
+        All,
         Rock,
         Pop
     }
