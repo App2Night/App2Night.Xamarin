@@ -26,10 +26,16 @@ namespace PartyUp
                         new Setter
                         {
                             Property = Label.HorizontalOptionsProperty,
-                            Value = LayoutOptions.Center
+                            Value = LayoutOptions.Center,
+                            
                         },
-                    }
-                }
+                    },
+                   
+                },
+                {"Test", new Style(typeof(Label))
+                {
+                    
+                }}
             };
         }
 

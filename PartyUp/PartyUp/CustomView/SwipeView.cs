@@ -1,41 +1,43 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace PartyUp.CustomView
 {
     public class SwipeView : ContentView
     {
-        private Xamarin.Forms.View _topView => _mainGrid.Children.LastOrDefault();
-
-        private Xamarin.Forms.View itemTemplate;
-    
-
+        private Xamarin.Forms.View _topView => _mainGrid.Children.LastOrDefault(); 
 
         public static BindableProperty ItemSourceProperty =
             BindableProperty.Create(nameof(ItemSource), typeof(IEnumerable<object>), typeof(SwipeView),
-                propertyChanged: (bindable, value, newValue) => ((SwipeView)bindable).CollectionSet((IEnumerable<object>)value, (IEnumerable<object>)newValue));
+                propertyChanged: (bindable, value, newValue) => ((SwipeView)bindable).CollectionSet());
 
-        private void CollectionSet(IEnumerable<object> oldValue, IEnumerable<object> newValue)
+        private void CollectionSet()
         {
             AllCards.Clear();
             _mainGrid.Children.Clear();
-            if (newValue == null) return; 
-            var rnd = new Random();
-            foreach (object o in newValue)
-            {  
-                var card = new BoxView() //Replace this grid with a fancy card design
+            if (ItemSource == null) return; 
+            foreach (object o in ItemSource)
+            {
+                Xamarin.Forms.View card;
+                if (_templateType != null)
                 {
-                    Color = Color.FromRgb(rnd.Next(0,100)/100.0, rnd.Next(0, 100) / 100.0, rnd.Next(0, 100) / 100.0)
-                    ,InputTransparent = true,
-                    VerticalOptions = LayoutOptions.Center,
-                    HorizontalOptions = LayoutOptions.Center
-                };
+                    card = (Xamarin.Forms.View) Activator.CreateInstance(_templateType);
+                }
+                else
+                {
+                    var rnd = new Random();
+                    card = new ContentView
+                    { 
+                        BackgroundColor =
+                            Color.FromRgb(rnd.Next(0, 100)/100.0, rnd.Next(0, 100)/100.0, rnd.Next(0, 100)/100.0),
+                        Content = new Label() {Text = "Override this template with SetTemplate."}
+                    };
+                }
+                card.BindingContext = o;
+                card.InputTransparent = true;
                 _mainGrid.Children.Add(card);
             }
             SetCardSize();
@@ -51,8 +53,7 @@ namespace PartyUp.CustomView
         {
             foreach (Xamarin.Forms.View view in _mainGrid.Children)
             {
-                view.WidthRequest = Width*(5.0/7);
-                view.HeightRequest = Height * (5.0 / 7); 
+                view.Margin = Width*(1.0/10); 
             }
         }
 
@@ -62,17 +63,11 @@ namespace PartyUp.CustomView
             set { SetValue(ItemSourceProperty, value); }
         }
 
-        public Xamarin.Forms.View ItemTemplate
-        {
-            get
-            {
-                return itemTemplate;
-            }
+        private Type _templateType;
 
-            set
-            {
-                itemTemplate = value;
-            }
+        public void SetTemplate<TType>(TType t) where TType : Xamarin.Forms.View
+        {
+            _templateType = t.GetType();
         }
 
         public List<Xamarin.Forms.View> AllCards = new List<Xamarin.Forms.View>();
@@ -85,8 +80,7 @@ namespace PartyUp.CustomView
         PanGestureRecognizer _gesture = new PanGestureRecognizer();
 
         public SwipeView()
-        {
-            CollectionSet(null, ItemSource);
+        {  
             Content = _mainGrid;    
             _gesture.PanUpdated += GestureOnPanUpdated;      
             _mainGrid.GestureRecognizers.Add(_gesture);

@@ -17,7 +17,8 @@ namespace PartyUp.View
 
             var moreInfoLabel = new Label
             {
-                Text = "More infos here."
+                Text = "More infos here.",
+                StyleId = "Test"
             };
 
             var mainLayout = new Grid
