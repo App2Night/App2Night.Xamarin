@@ -1,6 +1,7 @@
 ﻿using MvvmNano.Forms;
 using PartyUp.ViewModel;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 
 namespace PartyUp.View
 {
@@ -8,9 +9,14 @@ namespace PartyUp.View
     {
         public DashboardPage()
         {
-            var profilePictureView = new ContentView()
+            var profilePictureView = new Map(
+                    MapSpan.FromCenterAndRadius(
+                    new Position(37, -122), Distance.FromMiles(0.3)))
             {
-                BackgroundColor = Color.Gray
+                IsShowingUser = true,
+                HeightRequest = 100,
+                WidthRequest = 960,
+                VerticalOptions = LayoutOptions.FillAndExpand
             };
 
             var lineBox = new BoxView {Color = Color.Aqua};

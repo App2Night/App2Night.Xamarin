@@ -59,6 +59,7 @@ namespace PartyUp.UWP
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 Xamarin.Forms.Forms.Init(e);
+                Xamarin.FormsMaps.Init("INSERT_AUTHENTICATION_TOKEN_HERE");
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
