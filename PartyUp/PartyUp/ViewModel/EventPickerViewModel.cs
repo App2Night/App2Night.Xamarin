@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Net.Http;
 using MvvmNano;
 using PartyUp.Model;
@@ -11,7 +12,18 @@ namespace PartyUp.ViewModel
     public class EventPickerViewModel : MvvmNanoViewModel
     {
         private Party _selectedParty = null;
-        public ObservableCollection<Party> Events => MvvmNanoIoC.Resolve<ICacheService>().GetEvents();
+        public ObservableCollection<Party> Events => MvvmNanoIoC.Resolve<ICacheService>().Partys;
+
+
+        public EventPickerViewModel()
+        {
+            Events.CollectionChanged += Events_CollectionChanged;
+        }
+
+        private void Events_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            Debug.WriteLine("CHANGE!!!");
+        }
 
         public Party SelectedParty
         {
@@ -28,10 +40,6 @@ namespace PartyUp.ViewModel
             }
         }
 
-        public EventPickerViewModel()
-        {
-            
-        }
     }
 
     public class User

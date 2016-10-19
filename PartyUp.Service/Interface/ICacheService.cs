@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Threading.Tasks;
 using PartyUp.Model.Model;
 
 namespace PartyUp.Service.Interface
@@ -12,7 +13,9 @@ namespace PartyUp.Service.Interface
         /// Returns a cached collection of all events filtered by last applied search criteria.
         /// </summary>
         /// <returns><see cref="ObservableCollection{Party}"/></returns>
-        ObservableCollection<Party> GetEvents();
+        ObservableCollection<Party> Partys { get; }
+
+        Task RefreshPartys();
 
         /// <summary>
         /// Returns cached user data.

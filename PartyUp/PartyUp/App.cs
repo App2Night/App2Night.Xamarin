@@ -1,4 +1,5 @@
 ﻿
+using System.Threading.Tasks;
 using MvvmNano;
 using MvvmNano.Forms;
 using PartyUp.Service.Interface;
@@ -47,12 +48,23 @@ namespace PartyUp
             SetUpMasterDetailPage<NavigationViewModel>();
             AddSiteToDetailPages(new MasterDetailData(typeof(DashboardViewModel), "Dashboard")); 
             AddSiteToDetailPages(new MasterDetailData(typeof(EventPickerViewModel), "Pick a party"));
+            Device.BeginInvokeOnMainThread(async ()=>
+            {
+                await StartupSync();
+            });
+
+
+        } 
+
+        private async Task StartupSync()
+        {
+            await MvvmNanoIoC.Resolve<ICacheService>().RefreshPartys();
         }
 
         private void RegisterInterfaces()
         {
-            MvvmNanoIoC.Register<ICacheService, CacheService>();
-            MvvmNanoIoC.Register<ICacheService, CacheService>();
+            MvvmNanoIoC.Register<IClientService, ClientService>();
+            MvvmNanoIoC.RegisterAsSingleton<ICacheService, CacheService>();
         }
     }
 }

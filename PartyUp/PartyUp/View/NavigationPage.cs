@@ -8,8 +8,8 @@ namespace PartyUp.View
     {
         public NavigationPage()
         {
-            var label = new Label() { Text = "TEST" };
-            BindToViewModel(label, Label.TextProperty, o => o.TestValue);
+            var syncButton = new Button { Text = "Sync" }; 
+            BindToViewModel(syncButton, Button.CommandProperty, o => o.SyncCommand);
             MasterContent = new Grid()
             {
                 RowDefinitions =
@@ -18,9 +18,9 @@ namespace PartyUp.View
                     new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)} 
                 },
                 Children =
-                {
-                    label,
-                    DetailListView
+                { 
+                    DetailListView,
+                    {syncButton, 0, 1},
                 }
             };
         } 
