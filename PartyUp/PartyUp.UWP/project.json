@@ -2,7 +2,7 @@
   "dependencies": {
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
     "Portable.Ninject": "3.3.0",
-    "Xamarin.Forms": "2.3.2.127",
+    "Xamarin.Forms": "2.3.3.163-pre3",
     "Xamarin.Forms.Maps": "2.3.2.127"
   },
   "frameworks": {
