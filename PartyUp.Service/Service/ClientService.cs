@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using PartyUp.Model.Enum;
-using PartyUp.Model.Model;
 using PartyUp.Service.Interface;  
 
 namespace PartyUp.Service.Service
@@ -20,6 +15,7 @@ namespace PartyUp.Service.Service
     {  
         public async Task<TExpectedType> SendRequest<TExpectedType>(string uri,RestType restType,string query = "", object bodyParameter = null)
         {
+            
             TExpectedType result = default(TExpectedType);
             
             //Add the query to the uri if one is stated.
@@ -30,9 +26,11 @@ namespace PartyUp.Service.Service
             {
                 using (HttpClient client = GetClient())
                 {
-                    HttpResponseMessage response; 
+                    HttpResponseMessage response;
 
                     //Execute the request with the proper request type.
+                    Stopwatch timer = new Stopwatch();
+                    timer.Start();
                     switch (restType)
                     {
                         case RestType.Post:
@@ -51,7 +49,7 @@ namespace PartyUp.Service.Service
                         default:
                             throw new Exception("Unexpected RestType " + restType);
                     }
-
+                    Debug.WriteLine("Request excequted in: " + timer.Elapsed.ToString("c"));
                     //Check wheter or not the request was successfull.
                     if (response.IsSuccessStatusCode)
                     {
@@ -61,20 +59,19 @@ namespace PartyUp.Service.Service
                         if (!string.IsNullOrEmpty(resultAsString))
                         {
                             result = JsonConvert.DeserializeObject<TExpectedType>(resultAsString); 
-                        }
-                            
+                        }  
                     }
                     else
                     {
                         
-                    }
-                    return result;
+                    } 
                 }
             }
             catch(Exception e)
             {
-                return result;
-            }
+               
+            } 
+            return result;
         } 
 
         private HttpClient GetClient()
