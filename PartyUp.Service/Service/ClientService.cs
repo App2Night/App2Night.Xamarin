@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using PartyUp.Service.Interface;  
@@ -12,10 +13,10 @@ namespace PartyUp.Service.Service
     //TODO CLIENT Add the correct nuget package
     
     public class ClientService : IClientService
-    {  
-        public async Task<TExpectedType> SendRequest<TExpectedType>(string uri,RestType restType,string query = "", object bodyParameter = null)
-        {
-            
+    { 
+
+        public async Task<TExpectedType> SendRequest<TExpectedType>(string uri,RestType restType, bool cacheData = false, string query = "", object bodyParameter = null)
+        { 
             TExpectedType result = default(TExpectedType);
             
             //Add the query to the uri if one is stated.
