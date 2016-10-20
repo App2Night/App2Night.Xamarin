@@ -6,5 +6,6 @@
         public string Message { get; set; }
         public TExpectedType Data { get; set; }
         public bool IsCached { get; set; }
+        public bool RequestFailedToException { get; set; }
     }
 }

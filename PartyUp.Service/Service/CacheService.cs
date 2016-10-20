@@ -35,15 +35,13 @@ namespace PartyUp.Service.Service
         public ObservableCollection<Party> Partys { get; } = new ObservableCollection<Party>();
 
         public async Task RefreshPartys()
-        {
-            //Get cached data!
-            IEnumerable<Party> cached = null;
+        { 
             var syncResult = await _clientService.SendRequest<IEnumerable<Party>>("Party", RestType.Get); 
             //If synced data is success override the old cache
             if (syncResult != null)
             {
                 Partys.Clear();
-                foreach (Party party in syncResult)
+                foreach (Party party in syncResult.Data)
                 {
                     Partys.Add(party);
                 }

@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using PartyUp.Model.Model;
 using PartyUp.Service.Service;
 
 namespace PartyUp.Service.Interface
@@ -16,6 +17,6 @@ namespace PartyUp.Service.Interface
         /// <param name="query">Optional: A uri query that will be send with the request.</param>
         /// <param name="bodyParameter">Optional: A body parameter that will be send with the request.</param> 
         /// <returns></returns>
-        Task<TExpectedType> SendRequest<TExpectedType>(string uri, RestType restType, bool cacheData = false, string query = "", object bodyParameter = null);
+        Task<Result<TExpectedType>> SendRequest<TExpectedType>(string uri, RestType restType, bool cacheData = false, string query = "", object bodyParameter = null);
     }
 }
