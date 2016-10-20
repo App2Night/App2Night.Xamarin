@@ -36,6 +36,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="CustomView\CustomScrollView.cs" />
+    <Compile Include="CustomView\GallerieView.cs" />
     <Compile Include="CustomView\SwipeView.cs" />
     <Compile Include="CustomView\EnhancedContainer.cs" />
     <Compile Include="DependencyService\IConnectionService.cs" />

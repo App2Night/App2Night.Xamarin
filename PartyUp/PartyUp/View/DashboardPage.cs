@@ -1,4 +1,5 @@
-﻿using MvvmNano.Forms;
+﻿using System.Collections.Generic;
+using MvvmNano.Forms;
 using PartyUp.CustomView;
 using PartyUp.ViewModel;
 using Xamarin.Forms;
@@ -10,19 +11,77 @@ namespace PartyUp.View
         private EnhancedContainer _userInfoContainer = new EnhancedContainer
         {
             Name = "User",
-            ButtonText = "Edit" 
+            ButtonText = "Edit",
+            Content = new GallerieView
+            {
+                HeightRequest = 100,
+                ItemSource = new List<string>()
+                {
+                    "Test1",
+                    "Test2",
+                    "Test3",
+                    "Test4",
+                    "Test5",
+                    "Test6",
+                    "Test7"
+                }
+            }
         };
 
         private EnhancedContainer _myPartiesContainer = new EnhancedContainer
         {
             Name = "MyEvents",
-            ButtonText = "More"
+            ButtonText = "More",
+            Content = new GallerieView
+            {
+                HeightRequest = 200,
+                MaxElementSize = 200,
+                ItemSource = new List<string>()
+                {
+                    "Test1",
+                    "Test2",
+                    "Test3",
+                    "Test4",
+                    "Test5",
+                    "Test6",
+                    "Test7"
+                }
+            }
         }; 
 
         private EnhancedContainer _historyContainer = new EnhancedContainer
         {
             Name = "History",
-            ButtonText = "More"
+            ButtonText = "More",
+            Content = new GallerieView
+            {
+                HeightRequest = 190,
+                MaxElementSize = 100,
+                ItemSource = new List<string>()
+                {
+                    "Test1",
+                    "Test2",
+                    "Test3",
+                    "Test4",
+                    "Test5",
+                    "Test6",
+                    "Test7",
+                    "Test1",
+                    "Test2",
+                    "Test3",
+                    "Test4",
+                    "Test5",
+                    "Test6",
+                    "Test7",
+                    "Test1",
+                    "Test2",
+                    "Test3",
+                    "Test4",
+                    "Test5",
+                    "Test6",
+                    "Test7"
+                }
+            }
         };
 
 
@@ -64,7 +123,11 @@ namespace PartyUp.View
                 }
             };
 
-            Content = mainLayout;
+            Content = new ScrollView
+            {
+                Content = mainLayout,
+                Orientation  = ScrollOrientation.Vertical
+            };
         }
     }
 }
