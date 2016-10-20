@@ -11,17 +11,17 @@ namespace PartyUp.View
         {
             var profilePictureView =
 
-                new Label() {Text = "Uh :("};
+                //new Label() {Text = "Uh :("};
 
-            //    //new Map(
-            //        MapSpan.FromCenterAndRadius(
-            //        new Position(37, -122), Distance.FromMiles(0.3)))
-            //{
-            //    IsShowingUser = true,
-            //    HeightRequest = 100,
-            //    WidthRequest = 960,
-            //    VerticalOptions = LayoutOptions.FillAndExpand
-            //};
+                new Map(
+                MapSpan.FromCenterAndRadius(
+                    new Position(37, -122), Distance.FromMiles(0.3)))
+            {
+                IsShowingUser = true,
+                HeightRequest = 100,
+                WidthRequest = 960,
+                VerticalOptions = LayoutOptions.FillAndExpand
+            };
 
             var lineBox = new BoxView {Color = Color.Aqua};
 

@@ -43,6 +43,7 @@
     <Compile Include="Enum\MusicGenre.cs" />
     <Compile Include="Model\Party.cs" />
     <Compile Include="Model\Location.cs" />
+    <Compile Include="Model\Result.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Model\User.cs" />
   </ItemGroup>
