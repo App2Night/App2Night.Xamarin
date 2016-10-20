@@ -21,12 +21,12 @@ namespace PartyUp
                     {
                         new Setter
                         {
-                            Property = Label.VerticalOptionsProperty,
+                            Property = Xamarin.Forms.View.VerticalOptionsProperty,
                             Value = LayoutOptions.Center
                         },
                         new Setter
                         {
-                            Property = Label.HorizontalOptionsProperty,
+                            Property = Xamarin.Forms.View.HorizontalOptionsProperty,
                             Value = LayoutOptions.Center,
                             
                         },
@@ -34,9 +34,7 @@ namespace PartyUp
                    
                 },
                 {"Test", new Style(typeof(Label))
-                {
-                    
-                }}
+                }
             };
         }
 
@@ -51,6 +49,7 @@ namespace PartyUp
             AddSiteToDetailPages(new MasterDetailData(typeof(CreatePartyViewModel), "Create"));
             AddSiteToDetailPages(new MasterDetailData(typeof(HistoryViewModel), "History"));
             AddSiteToDetailPages(new MasterDetailData(typeof(SettingViewModel), "Setting"));
+            AddSiteToDetailPages(new MasterDetailData(typeof(AboutViewModel),"About"));
             
             Device.BeginInvokeOnMainThread(async ()=>
             {
