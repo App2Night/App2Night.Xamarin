@@ -76,7 +76,8 @@ namespace PartyUp.Service.Service
         private HttpClient GetClient()
         {
             HttpClient client = new HttpClient {BaseAddress = new Uri("https://app2nightapi.azurewebsites.net/api/")};
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json")); 
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Host = "app2nightapi.azurewebsites.net";
             return client;
         }
     }

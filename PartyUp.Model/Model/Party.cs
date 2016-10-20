@@ -9,8 +9,6 @@ namespace PartyUp.Model.Model
         public EventCommitmentState MyEventCommitmentState { get; set; }
         public DateTime Date { get; set; }
         public DateTime CreationDateTime { get; set; }
-        public MusicGenre MusicGenre { get; set; }
-        
-
+        public MusicGenre MusicGenre { get; set; } 
     }
 }

@@ -38,7 +38,7 @@ namespace PartyUp.Service.Service
         { 
             var syncResult = await _clientService.SendRequest<IEnumerable<Party>>("Party", RestType.Get); 
             //If synced data is success override the old cache
-            if (syncResult != null)
+            if (syncResult.Data != null)
             {
                 Partys.Clear();
                 foreach (Party party in syncResult.Data)

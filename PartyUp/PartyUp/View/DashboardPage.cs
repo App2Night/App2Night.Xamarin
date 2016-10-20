@@ -1,63 +1,69 @@
 ﻿using MvvmNano.Forms;
+using PartyUp.CustomView;
 using PartyUp.ViewModel;
 using Xamarin.Forms;
-using Xamarin.Forms.Maps;
 
 namespace PartyUp.View
 {
     public class DashboardPage : MvvmNanoContentPage<DashboardViewModel>
     {
-        public DashboardPage()
+        private EnhancedContainer _userInfoContainer = new EnhancedContainer
         {
-            var profilePictureView =
+            Name = "User",
+            ButtonText = "Edit" 
+        };
 
-                //new Label() {Text = "Uh :("};
+        private EnhancedContainer _myPartiesContainer = new EnhancedContainer
+        {
+            Name = "MyEvents",
+            ButtonText = "More"
+        }; 
 
-                new Map(
-                MapSpan.FromCenterAndRadius(
-                    new Position(37, -122), Distance.FromMiles(0.3)))
+        private EnhancedContainer _historyContainer = new EnhancedContainer
+        {
+            Name = "History",
+            ButtonText = "More"
+        };
+
+
+        public DashboardPage()
+        { 
+            BindToViewModel(_userInfoContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToUserEditCommand);
+            
+
+            BackgroundColor = Color.White;
+            //    new Map(
+            //    MapSpan.FromCenterAndRadius(
+            //        new Position(37, -122), Distance.FromMiles(0.3)))
+            //{
+            //    IsShowingUser = true,
+            //    HeightRequest = 100,
+            //    WidthRequest = 960,
+            //    VerticalOptions = LayoutOptions.FillAndExpand
+            //}; 
+
+            var headerContainer = new ContentView
             {
-                IsShowingUser = true,
-                HeightRequest = 100,
-                WidthRequest = 960,
-                VerticalOptions = LayoutOptions.FillAndExpand
-            };
-
-            var lineBox = new BoxView {Color = Color.Aqua};
-
-            var moreInfoLabel = new Label
+                BackgroundColor = Color.Aqua,
+                HeightRequest = 150
+            }; 
+            var mainLayout = new StackLayout()
             {
-                Text = "More infos here.",
-                StyleId = "Test"
-            };
-
-            var mainLayout = new Grid
-            {
-                Padding = new Thickness(0, 20,0,0),
-                RowDefinitions =
-                {
-                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star)},
-                    new RowDefinition { Height = new GridLength(1, GridUnitType.Absolute)}, 
-                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star)},
-                    new RowDefinition { Height = new GridLength(4, GridUnitType.Star)}, 
-                },
-                ColumnDefinitions =
-                {
-                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star)},
-                    new ColumnDefinition { Width = new GridLength(5, GridUnitType.Star)},
-                    new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star)}, 
-                },
+                Spacing = 0,
                 Children =
                 {
-                     {lineBox,0,1 },
-                    { profilePictureView,1,0},
-                   
-                    {moreInfoLabel, 0, 3 }
+                    headerContainer,
+                    new BoxView
+                    {
+                        Color = Color.Black,
+                        HeightRequest = 1
+                    },
+                    _userInfoContainer,
+                    _myPartiesContainer,
+                    _historyContainer
                 }
-            }; 
-            Grid.SetRowSpan(profilePictureView, 3);
-            Grid.SetColumnSpan(lineBox, 3);
-            Grid.SetColumnSpan(moreInfoLabel, 3); 
+            };
+
             Content = mainLayout;
         }
     }
