@@ -48,6 +48,10 @@ namespace PartyUp
             SetUpMasterDetailPage<NavigationViewModel>();
             AddSiteToDetailPages(new MasterDetailData(typeof(DashboardViewModel), "Dashboard")); 
             AddSiteToDetailPages(new MasterDetailData(typeof(EventPickerViewModel), "Pick a party"));
+            AddSiteToDetailPages(new MasterDetailData(typeof(CreatePartyViewModel), "Create"));
+            AddSiteToDetailPages(new MasterDetailData(typeof(HistoryViewModel), "History"));
+            AddSiteToDetailPages(new MasterDetailData(typeof(SettingViewModel), "Setting"));
+            
             Device.BeginInvokeOnMainThread(async ()=>
             {
                 await StartupSync();
