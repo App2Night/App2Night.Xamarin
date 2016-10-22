@@ -88,8 +88,8 @@ namespace PartyUp.View
         public DashboardPage()
         { 
             BindToViewModel(_userInfoContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToUserEditCommand);
-            BindToViewModel(_myPartiesContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToUserEditCommand);
-            BindToViewModel(_historyContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToUserEditCommand);
+            BindToViewModel(_myPartiesContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToMyPartiesCommand);
+            BindToViewModel(_historyContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToHistoryCommand);
 
             BackgroundColor = Color.White;
             //    new Map(

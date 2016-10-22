@@ -13,5 +13,19 @@ namespace PartyUp.ViewModel
         {
             NavigateTo<EditProfileViewModel>();
         }
+
+        public MvvmNanoCommand MoveToMyPartiesCommand => new MvvmNanoCommand(MoveToMyParties);
+
+        private void MoveToMyParties()
+        {
+            NavigateTo<MyPartysViewModel>();
+        }
+
+        public MvvmNanoCommand MoveToHistoryCommand => new MvvmNanoCommand(MoveToHistory);
+
+        private void MoveToHistory()
+        {
+            NavigateTo<HistoryViewModel>();
+        }
     }
 }
