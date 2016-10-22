@@ -7,7 +7,14 @@ namespace PartyUp.CustomView
     public class EnhancedContainer : Grid
     {
 
-        public static BindableProperty CommandProperty = BindableProperty.Create(nameof(CommandProperty), typeof(MvvmNanoCommand), typeof(EnhancedContainer));
+        public static BindableProperty CommandProperty = BindableProperty.Create(nameof(CommandProperty), typeof(MvvmNanoCommand), typeof(EnhancedContainer),
+            propertyChanged: CommandAssigned);
+
+        private static void CommandAssigned(BindableObject bindable, object oldValue, object newValue)
+        {
+            ((EnhancedContainer) bindable)._btnLabel.IsVisible = newValue != null;
+        }
+
         public MvvmNanoCommand Command
         {
             get { return (MvvmNanoCommand)GetValue(CommandProperty); }
@@ -33,15 +40,17 @@ namespace PartyUp.CustomView
             set { SetValue(SeperatorColorProperty, value); }
         }
 
+        private Xamarin.Forms.View _content;
+
         public Xamarin.Forms.View Content
         {
-            get { return Children[4]; }
+            get { return _content; }
             set
             {
-                if (Children[4] != null)
-                    Children.Remove(Children[4]);
-
-                Children.Add(value, 0, 3);
+                if (_content!= null)
+                    Children.Remove(_content);
+                _content = value;
+                Children.Add(_content, 0, 3);
             }
         }
 
@@ -57,17 +66,34 @@ namespace PartyUp.CustomView
             set { _btnLabel.Text = value; }
         }
 
-        private Label _nameLabel = new Label() {HorizontalOptions = LayoutOptions.Start};
+        Label _nameLabel = new Label()
+        {
+            HorizontalOptions = LayoutOptions.Start,
+            FontSize = 20
+        };
 
-        private Label _btnLabel = new Label() {HorizontalOptions = LayoutOptions.End};
+        Label _btnLabel = new Label()
+        {
+            HorizontalOptions = LayoutOptions.End,
+            Margin = new Thickness(8,3),
+            IsVisible = false
+        };
+        BoxView _topBoxView = new BoxView() {IsVisible = false};
+        BoxView _middleBoxView = new BoxView();
+        BoxView _bottomBoxView = new BoxView();
 
-        private BoxView _topBoxView = new BoxView() {IsVisible = false};
-        private BoxView _middleBoxView = new BoxView();
-        private BoxView _bottomBoxView = new BoxView();
-        private Xamarin.Forms.View _content;
-
+        public int HeaderHeight
+        {
+            get { return _headerHeight; }
+            set
+            {
+                _headerHeight = value;
+                RowDefinitions[1].Height = new GridLength(value, GridUnitType.Absolute);
+            }
+        }
 
         TapGestureRecognizer _gesture = new TapGestureRecognizer();
+        private int _headerHeight = 40;
 
         public EnhancedContainer()
         {
@@ -80,7 +106,7 @@ namespace PartyUp.CustomView
             RowDefinitions = new RowDefinitionCollection
             { 
                 new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
-                new RowDefinition {Height = new GridLength(50, GridUnitType.Absolute)},
+                new RowDefinition {Height = new GridLength(HeaderHeight, GridUnitType.Absolute)},
                 new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
                 new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
                 new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
@@ -96,14 +122,19 @@ namespace PartyUp.CustomView
         protected override void OnRemoved(Xamarin.Forms.View view)
         {
             base.OnRemoved(view);
-            _gesture.Tapped += GestureOnTapped;
+            _gesture.Tapped -= GestureOnTapped;
 
         }
 
-        private void GestureOnTapped(object sender, EventArgs eventArgs)
+        private async void GestureOnTapped(object sender, EventArgs eventArgs)
         {
-            if(Command!=null)
-                Command.Execute(null);
+            if (Command != null)
+            {
+                await _btnLabel.ScaleTo(1.6, 25U);
+                await _btnLabel.ScaleTo(1, 300U,  Easing.BounceIn);
+
+                Command.Execute(null); 
+            }
         }
     }
 }

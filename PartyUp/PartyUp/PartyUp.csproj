@@ -38,6 +38,7 @@
     <Compile Include="App.cs" />
     <Compile Include="CustomView\CustomScrollView.cs" />
     <Compile Include="CustomView\GallerieView.cs" />
+    <Compile Include="CustomView\RoundView.cs" />
     <Compile Include="CustomView\SwipeView.cs" />
     <Compile Include="CustomView\EnhancedContainer.cs" />
     <Compile Include="DependencyService\IConnectionService.cs" />
@@ -108,6 +109,9 @@
     <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.2.3.3.163-pre3\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Platform.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Xamarin.Forms.Platform.Android">
+      <HintPath>..\..\packages\Xamarin.Forms.2.3.3.163-pre3\lib\MonoAndroid10\Xamarin.Forms.Platform.Android.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Xaml, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.2.3.3.163-pre3\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.Xaml.dll</HintPath>

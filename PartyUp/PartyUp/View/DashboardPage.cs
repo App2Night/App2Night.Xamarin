@@ -101,8 +101,9 @@ namespace PartyUp.View
             //    VerticalOptions = LayoutOptions.FillAndExpand
             //}; 
 
-            var headerContainer = new ContentView
+            var headerContainer = new RoundView()
             {
+                Content = new BoxView() { Color = Color.Red},
                 BackgroundColor = Color.Aqua,
                 HeightRequest = 150
             }; 

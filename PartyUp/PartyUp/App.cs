@@ -27,8 +27,12 @@ namespace PartyUp
                         new Setter
                         {
                             Property = Xamarin.Forms.View.HorizontalOptionsProperty,
-                            Value = LayoutOptions.Center,
-                            
+                            Value = LayoutOptions.Center, 
+                        },
+                        new Setter
+                        {
+                            Property = Xamarin.Forms.View.MarginProperty,
+                            Value = 4,
                         },
                     },
                    
