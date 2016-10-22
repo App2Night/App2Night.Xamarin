@@ -8,13 +8,14 @@ namespace PartyUp.View
     {
         public AboutPage()
         {
+            // Set title of the page
             var titleLabel = new Label
             {
                 Text = "Information about this App",
                 FontSize = 20
                 
             };
-
+            // Set Context of the page
             var contextLabel = new Label
             {
                 Text = "Context goes Here!"
@@ -33,7 +34,7 @@ namespace PartyUp.View
                    {contextLabel,0,1}
                 },
             };
-
+            // set content
             Content = new ContentView()
             {
                 Content = grid,
