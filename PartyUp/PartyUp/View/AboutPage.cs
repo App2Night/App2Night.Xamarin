@@ -8,6 +8,7 @@ namespace PartyUp.View
     {
         public AboutPage()
         {
+            // TODO Fill Context
             Title = "Information";
             // Set Context of the page
             var contextLabel = new Label

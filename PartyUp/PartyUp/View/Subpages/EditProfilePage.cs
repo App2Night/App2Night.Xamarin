@@ -1,4 +1,5 @@
 ﻿using MvvmNano.Forms;
+using PartyUp.Model.Enum;
 using PartyUp.ViewModel.Subpages;
 using Xamarin.Forms;
 
@@ -6,6 +7,7 @@ namespace PartyUp.View.Subpages
 {
     public class EditProfilePage : MvvmNanoContentPage<EditProfileViewModel>
     {
+        // TODO Set Text
         public string NameText
         {
             get { return _nameEntry.Text; }
@@ -23,12 +25,17 @@ namespace PartyUp.View.Subpages
             get { return _addressEntry.Text; }
             set { _addressEntry.Text = value; }
         }
-
+        // TODO Set Style of Entry
         Entry _nameEntry = new Entry();
 
         Entry _emailEntry = new Entry();
 
         Entry _addressEntry = new Entry();
+
+        Picker _genderPicker = new Picker
+        {
+            Items = {Gender.Unkown.ToString(), Gender.Men.ToString(), Gender.Woman.ToString()},
+        };
 
         Button cancelBtn = new Button
         {
@@ -40,11 +47,30 @@ namespace PartyUp.View.Subpages
             Text = "Ok"
         };
 
+        /// <summary>
+        /// Page where Name, Email, Address etc. can be changed.
+        /// </summary>
         public EditProfilePage()
         {
             Title = "Edit Profile";
             BindToViewModel(cancelBtn, Button.CommandProperty, vm => vm.MoveToCancelCommand);
             BindToViewModel(okBtn, Button.CommandProperty, vm => vm.MoveTOkCommand);
+            // TODO Handle Gender
+            _genderPicker.SelectedIndexChanged += (sender, args) =>
+            {
+                if (_genderPicker.SelectedIndex == 0)
+                {
+
+                }
+                else if (_genderPicker.SelectedIndex == 1)
+                {
+
+                }
+                else
+                {
+
+                }
+            };
             var stackPane = new Grid()
             {
                 RowDefinitions = new RowDefinitionCollection
@@ -97,9 +123,18 @@ namespace PartyUp.View.Subpages
                                     },
                                     0, 2
                                 },
+                                {
+                                    new Label
+                                    {
+                                        Text = "Gender",
+                                        HorizontalOptions = LayoutOptions.Start
+                                    },
+                                    0, 3
+                                },
                                 {_nameEntry, 1, 0},
                                 {_emailEntry, 1, 1},
                                 {_addressEntry, 1, 2},
+                                {_genderPicker, 1, 3}
                             }
                         },
                         0, 0

@@ -8,6 +8,7 @@ namespace PartyUp.View
     {
         public SettingPage()
         {
+            // TODO Set Settingsoption
             var stackLayout = new StackLayout
             {
                 Children =
