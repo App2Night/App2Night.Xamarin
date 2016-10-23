@@ -14,7 +14,7 @@ namespace PartyUp.View
                 {
                     new Label
                     {
-                        Text = "Settings",
+                        Text = "Privacy",
                         FontSize = 20
                     },
                     new BoxView

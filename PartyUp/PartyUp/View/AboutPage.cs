@@ -8,13 +8,7 @@ namespace PartyUp.View
     {
         public AboutPage()
         {
-            // Set title of the page
-            var titleLabel = new Label
-            {
-                Text = "Information about this App",
-                FontSize = 20
-                
-            };
+            Title = "Information";
             // Set Context of the page
             var contextLabel = new Label
             {
@@ -24,14 +18,11 @@ namespace PartyUp.View
             {
                 RowDefinitions = new RowDefinitionCollection()
                 {
-                    new RowDefinition() {Height = new GridLength(50, GridUnitType.Absolute)},
-                    new RowDefinition() {Height = new GridLength(50, GridUnitType.Absolute)},
-                    new RowDefinition() {Height = new GridLength(1, GridUnitType.Auto)}
+                    new RowDefinition() {Height = new GridLength(1, GridUnitType.Auto)},
                 },
                 Children =
                 {
-                   {titleLabel,0,0},
-                   {contextLabel,0,1}
+                    {contextLabel, 0, 0}
                 },
             };
             // set content
