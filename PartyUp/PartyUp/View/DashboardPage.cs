@@ -100,14 +100,46 @@ namespace PartyUp.View
             //    HeightRequest = 100,
             //    WidthRequest = 960,
             //    VerticalOptions = LayoutOptions.FillAndExpand
-            //}; 
+            //};
 
-            var headerContainer = new RoundView()
+            var profilePictureHeight = 200;
+
+            //TODO Replace with actual map
+            var mapView = new BoxView
             {
-                Content = new BoxView() { Color = Color.Red},
-                BackgroundColor = Color.Aqua,
-                HeightRequest = 150
-            }; 
+                Color = Color.Green,
+                IsVisible = false
+            };
+
+            var profilePicture = new RoundView()
+            {
+                //TODO Replace with actuel profile picture
+                Content = new BoxView() { Color = Color.Red },
+                BackgroundColor = Color.White
+            };
+
+            var headerContainer = new Grid
+            {
+                RowDefinitions =
+                {
+                    new RowDefinition {Height = new GridLength(0, GridUnitType.Absolute)},
+                    new RowDefinition {Height = new GridLength(profilePictureHeight, GridUnitType.Absolute)},
+                },
+                ColumnDefinitions =
+                {
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                    new ColumnDefinition {Width = new GridLength(profilePictureHeight*1.2, GridUnitType.Absolute)},
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)} 
+                },
+                Children =
+                {
+                    {profilePicture, 1,1 },
+                    mapView
+                }
+            };
+            Grid.SetColumnSpan(mapView,3);
+            Grid.SetRowSpan(mapView,2); 
+
             var mainLayout = new StackLayout()
             {
                 Spacing = 0,
