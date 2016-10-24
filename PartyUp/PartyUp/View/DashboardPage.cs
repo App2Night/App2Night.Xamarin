@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
+using System.Threading.Tasks;
 using MvvmNano.Forms;
 using PartyUp.CustomView;
 using PartyUp.Model.Model;
@@ -31,7 +33,17 @@ namespace PartyUp.View
             }
         };
 
-        private EnhancedContainer _myPartiesContainer = new EnhancedContainer
+        readonly ContentView _previewContainer1 = new ContentView
+        { 
+            IsVisible = false
+        };
+
+        readonly ContentView _previewContainer2 = new ContentView
+        {
+            IsVisible = false
+        };
+
+        readonly EnhancedContainer _myPartiesContainer = new EnhancedContainer
         {
             Name = "MyEvents",
             ButtonText = "More" 
@@ -97,16 +109,7 @@ namespace PartyUp.View
             BindToViewModel(_myPartiesContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToMyPartiesCommand);
             BindToViewModel(_historyContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToHistoryCommand);
 
-            BackgroundColor = Color.White;
-            //    new Map(
-            //    MapSpan.FromCenterAndRadius(
-            //        new Position(37, -122), Distance.FromMiles(0.3)))
-            //{
-            //    IsShowingUser = true,
-            //    HeightRequest = 100,
-            //    WidthRequest = 960,
-            //    VerticalOptions = LayoutOptions.FillAndExpand
-            //};
+            BackgroundColor = Color.White; 
 
             var profilePictureHeight = 200;
 
@@ -163,20 +166,105 @@ namespace PartyUp.View
                 }
             };
 
-            Content = new ScrollView
+            var mainScroll = new ScrollView
             {
                 Content = mainLayout,
-                Orientation  = ScrollOrientation.Vertical
+                Orientation = ScrollOrientation.Vertical
+            };
+            Grid.SetRowSpan(mainScroll,2);
+
+            
+
+            Content = new Grid
+            {
+                RowDefinitions =
+                {
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}
+                },
+                Children =
+                {
+                    mainScroll,
+                    {_previewContainer1,0,1 },
+                    {_previewContainer2,0,1 }
+                }
             };
         }
+
+
+        private bool _isPreviewVisible;
+        private int _selectedPreviewContainer = 0;
+        PreviewView _preview;
 
         /// <summary>
         /// Gets fired if a partie item gets tapped on.
         /// Will display the party info view.
         /// </summary> 
-        private void PartieSelected(object sender, object o)
+        private async void PartieSelected(object sender, object o)
         {
             var party = (Party)o; 
+            _preview = new PartyPreviewView(party, Height, Width);
+            _preview.CloseViewEvent += ClosePreviewEvent;
+            await ShowPreview(_preview);
+        }
+
+        private async void ClosePreviewEvent(object sender, EventArgs eventArgs)
+        {
+            _preview.CloseViewEvent -= ClosePreviewEvent;
+            await ClosePreview();
+        }
+
+        async Task ClosePreview()
+        {
+            var currentContainerRef = _selectedPreviewContainer == 0 ? _previewContainer1 : _previewContainer2;
+            await currentContainerRef.TranslateTo(0, _preview.HeightRequest, easing: Easing.CubicInOut);
+            _isPreviewVisible = false;
+            _previewContainer1.IsVisible = false;
+            _previewContainer2.IsVisible = false;
+            _previewContainer1.TranslationY = 0;
+            _previewContainer2.TranslationY = 0; 
+        }
+
+        async Task ShowPreview(PreviewView view)
+        {
+            if (_isPreviewVisible)
+                ChangeToPreview(view);
+            else
+                await OpenPreview(view);
+        }
+
+        async Task OpenPreview(PreviewView newView)
+        {
+            _selectedPreviewContainer = 0;
+            _previewContainer1.Content = newView; 
+            _previewContainer1.TranslationY = newView.HeightRequest;
+            _previewContainer1.IsVisible = true;
+            await _previewContainer1.TranslateTo(0, 0, easing: Easing.CubicInOut);
+            _isPreviewVisible = true;
+            _preview = newView;
+        }
+
+        void ChangeToPreview(PreviewView newView)
+        {
+            var nextContainerRef = _selectedPreviewContainer == 0 ? _previewContainer2 : _previewContainer1;
+            var currentContainerRef = _selectedPreviewContainer == 0 ? _previewContainer1 : _previewContainer2; 
+
+            nextContainerRef.Content = newView;
+            nextContainerRef.TranslationX = -Width;
+            nextContainerRef.IsVisible = true; 
+            var rotateAnimation = new Animation(d =>
+            {
+                nextContainerRef.TranslationX = -Width* (1-d);
+                currentContainerRef.TranslationX = Width * d; 
+            }, 0, 1);
+            rotateAnimation.Commit(this, "RotateAnimation", easing: Easing.CubicInOut, finished: (d, b) =>
+            {
+                currentContainerRef.Content = null; 
+                currentContainerRef.IsVisible = false;
+                currentContainerRef.TranslationX = 0;
+                _selectedPreviewContainer = _selectedPreviewContainer == 0 ? 1 : 0;
+                _preview = newView;
+            }); 
         }
     }
 }

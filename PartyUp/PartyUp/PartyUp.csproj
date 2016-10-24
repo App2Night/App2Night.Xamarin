@@ -38,7 +38,8 @@
     <Compile Include="App.cs" />
     <Compile Include="CustomView\CustomScrollView.cs" />
     <Compile Include="CustomView\GallerieView.cs" />
-    <Compile Include="CustomView\ListView.cs" />
+    <Compile Include="CustomView\PartyPreviewView.cs" />
+    <Compile Include="CustomView\PreviewView.cs" />
     <Compile Include="CustomView\RoundView.cs" />
     <Compile Include="CustomView\SwipeView.cs" />
     <Compile Include="CustomView\EnhancedContainer.cs" />
@@ -70,6 +71,7 @@
     <Compile Include="View\Subpages\EditProfilePage.cs" />
     <Compile Include="View\Subpages\MyPartysPage.cs" />
     <Compile Include="View\Subpages\ParticipantPage.cs" />
+    <Compile Include="View\TestPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\" />

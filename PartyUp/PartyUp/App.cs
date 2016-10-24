@@ -21,7 +21,7 @@ namespace PartyUp
             //Check if it is installed on start.
             if (Device.OS == TargetPlatform.Android)
             { 
-                MapAvailable = Xamarin.Forms.DependencyService.Get<IAndroidAppLookupService>().DoesAppExist("com.google.android.gms.maps");
+                MapAvailable = Xamarin.Forms.DependencyService.Get<IAndroidAppLookupService>().DoesAppExist("com.google.android.apps.maps");
             }
             Resources = new ResourceDictionary
             {

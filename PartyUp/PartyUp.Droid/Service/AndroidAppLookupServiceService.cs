@@ -2,8 +2,10 @@
 using Android.App;
 using Android.Content.PM;
 using PartyUp.DependencyService;
-using PartyUp.Droid.Service;[assembly: Xamarin.Forms.Dependency(typeof(AndroidAppLookupServiceService))]
+using PartyUp.Droid.Service;
 
+
+[assembly: Xamarin.Forms.Dependency(typeof(AndroidAppLookupServiceService))]
 namespace PartyUp.Droid.Service
 {
     public class AndroidAppLookupServiceService : IAndroidAppLookupService
