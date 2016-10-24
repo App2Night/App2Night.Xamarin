@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using PartyUp.DependencyService;
+using PartyUp.Model.Enum;
 using PartyUp.Model.Model;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
@@ -25,10 +27,11 @@ namespace PartyUp.CustomView
             TapGestureRecognizer closeTapGestureRecognizer = new TapGestureRecognizer();
             closeLabel.GestureRecognizers.Add(closeTapGestureRecognizer);
             closeTapGestureRecognizer.Tapped += CloseTapGestureRecognizerOnTapped;
-
+            var bla = Xamarin.Forms.DependencyService.Get<IUserLocationService>();
+            Coordinates s = bla.GetUserCoordinates();
             //TODO Set coordinates, customize the map
             Map map = new Map(MapSpan.FromCenterAndRadius(
-                new Position(37, -122), Distance.FromMiles(0.3)))
+                new Position((double)s.Latitude, (double)s.Longitude), Distance.FromMiles(0.3)))
             {
                 IsShowingUser = true
             };
