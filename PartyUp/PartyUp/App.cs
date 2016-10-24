@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MvvmNano;
 using MvvmNano.Forms;
+using PartyUp.DependencyService;
 using PartyUp.Service.Interface;
 using PartyUp.Service.Service;
 using PartyUp.ViewModel;
@@ -9,10 +10,19 @@ using Xamarin.Forms;
 
 namespace PartyUp
 {
-    public class App : MvvmNanoApplication 
+    public class App : MvvmNanoApplication
     {
+        public static bool MapAvailable { get; private set; }
+
+
         public App()
         {
+            //It is possible (even if it is unlikely) that Google Maps is not installed on the device.
+            //Check if it is installed on start.
+            if (Device.OS == TargetPlatform.Android)
+            { 
+                MapAvailable = Xamarin.Forms.DependencyService.Get<IAndroidAppLookupService>().DoesAppExist("com.google.android.gms.maps");
+            }
             Resources = new ResourceDictionary
             {
                 new Style(typeof(Label))
