@@ -41,6 +41,7 @@
     <Compile Include="CustomView\RoundView.cs" />
     <Compile Include="CustomView\SwipeView.cs" />
     <Compile Include="CustomView\EnhancedContainer.cs" />
+    <Compile Include="DependencyService\IAndroidAppLookupService.cs" />
     <Compile Include="DependencyService\IConnectionService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\AboutViewModel.cs" />

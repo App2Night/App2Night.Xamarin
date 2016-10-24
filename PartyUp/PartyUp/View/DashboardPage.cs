@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using MvvmNano.Forms;
 using PartyUp.CustomView;
+using PartyUp.Model.Model;
 using PartyUp.ViewModel;
 using Xamarin.Forms;
 
@@ -14,7 +17,7 @@ namespace PartyUp.View
             ButtonText = "Edit",
             Content = new GallerieView
             {
-                HeightRequest = 100,
+                //HeightRequest = 100,
                 ItemSource = new List<string>()
                 {
                     "Test1",
@@ -31,22 +34,7 @@ namespace PartyUp.View
         private EnhancedContainer _myPartiesContainer = new EnhancedContainer
         {
             Name = "MyEvents",
-            ButtonText = "More",
-            Content = new GallerieView
-            {
-                HeightRequest = 200,
-                MaxElementSize = 200,
-                ItemSource = new List<string>()
-                {
-                    "Test1",
-                    "Test2",
-                    "Test3",
-                    "Test4",
-                    "Test5",
-                    "Test6",
-                    "Test7"
-                }
-            }
+            ButtonText = "More" 
         }; 
 
         private EnhancedContainer _historyContainer = new EnhancedContainer
@@ -54,9 +42,9 @@ namespace PartyUp.View
             Name = "History",
             ButtonText = "More",
             Content = new GallerieView
-            {
-                HeightRequest = 190,
-                MaxElementSize = 100,
+            { 
+                Rows = 3,
+                ElementSize = 100,
                 ItemSource = new List<string>()
                 {
                     "Test1",
@@ -84,9 +72,27 @@ namespace PartyUp.View
             }
         };
 
+        GallerieView partieGallerie = new GallerieView
+        {
+            //HeightRequest = 200,
+            ElementSize = 200,
+            ItemSource = new List<string>()
+                {
+                    "Test1",
+                    "Test2",
+                    "Test3",
+                    "Test4",
+                    "Test5",
+                    "Test6",
+                    "Test7"
+                }
+        }; 
 
         public DashboardPage()
-        { 
+        {
+            _myPartiesContainer.Content = partieGallerie;
+            partieGallerie.ElementTapped += PartieSelected;
+
             BindToViewModel(_userInfoContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToUserEditCommand);
             BindToViewModel(_myPartiesContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToMyPartiesCommand);
             BindToViewModel(_historyContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToHistoryCommand);
@@ -162,6 +168,15 @@ namespace PartyUp.View
                 Content = mainLayout,
                 Orientation  = ScrollOrientation.Vertical
             };
+        }
+
+        /// <summary>
+        /// Gets fired if a partie item gets tapped on.
+        /// Will display the party info view.
+        /// </summary> 
+        private void PartieSelected(object sender, object o)
+        {
+            var party = (Party)o; 
         }
     }
 }
