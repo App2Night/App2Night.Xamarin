@@ -38,6 +38,8 @@
     <Compile Include="App.cs" />
     <Compile Include="CustomView\CustomScrollView.cs" />
     <Compile Include="CustomView\GallerieView.cs" />
+    <Compile Include="CustomView\PartyPreviewView.cs" />
+    <Compile Include="CustomView\PreviewView.cs" />
     <Compile Include="CustomView\RoundView.cs" />
     <Compile Include="CustomView\SwipeView.cs" />
     <Compile Include="CustomView\EnhancedContainer.cs" />
