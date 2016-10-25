@@ -9,9 +9,9 @@ namespace PartyUp.View
     {
         public EventPickerPage()
         {
-            //var eventListView = new ListView(ListViewCachingStrategy.RecycleElement);
-            //BindToViewModel(eventListView, ListView.ItemsSourceProperty, vm => vm.Events);
-            //BindToViewModel(eventListView, ListView.SelectedItemProperty, vm => vm.SelectedParty);
+            //var eventListView = new ListPartyView(ListViewCachingStrategy.RecycleElement);
+            //BindToViewModel(eventListView, ListPartyView.ItemsSourceProperty, vm => vm.Events);
+            //BindToViewModel(eventListView, ListPartyView.SelectedItemProperty, vm => vm.SelectedParty);
 
             //eventListView.ItemTemplate  = new DataTemplate(() =>
             //{

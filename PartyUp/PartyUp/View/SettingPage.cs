@@ -1,13 +1,32 @@
 ﻿using MvvmNano.Forms;
+using PartyUp.View;
 using PartyUp.ViewModel;
 using Xamarin.Forms;
 
 namespace PartyUp.View
 {
-    public class SettingPage : MvvmNanoContentPage<SettingViewModel>
-    {
+    public class SettingPage : MvvmNanoContentPage<SettingViewModel> { 
+        BoxView _topBoxView = new BoxView
+        {
+            HeightRequest = 1
+        };
+        public Color SeperatorColor
+        {
+            get { return (Color)GetValue(SeperatorColorProperty); }
+            set { SetValue(SeperatorColorProperty, value); }
+        }
+        public static BindableProperty SeperatorColorProperty = BindableProperty.Create(nameof(SeperatorColor),
+            typeof(Color), typeof(SettingPage), Color.Accent,
+            propertyChanged: (bindable, value, newValue) => ColorChanged(bindable, (Color)value, (Color)newValue));
+
+        private static void ColorChanged(BindableObject bindable, Color oldValue, Color newValue)
+        {
+            SettingPage thisListView = (SettingPage)bindable;
+            thisListView._topBoxView.Color = newValue;
+        }
         public SettingPage()
         {
+            ColorChanged(this, SeperatorColor, SeperatorColor);
             // TODO Set Settingsoption
             var stackLayout = new StackLayout
             {
@@ -18,11 +37,7 @@ namespace PartyUp.View
                         Text = "Privacy",
                         FontSize = 20
                     },
-                    new BoxView
-                    {
-                        HeightRequest = 1,
-                        BackgroundColor = Color.Black
-                    },
+                    _topBoxView,
                     new Grid
                     {
                         ColumnDefinitions = new ColumnDefinitionCollection

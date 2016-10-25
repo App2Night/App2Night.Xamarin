@@ -12,10 +12,10 @@ namespace PartyUp.View
             {
                 Children =
                 {
-                    new CustomView.ListView(),
-                    new CustomView.ListView(),
-                    new CustomView.ListView(),
-                    new CustomView.ListView(),
+                    new CustomView.ListPartyView(),
+                    new CustomView.ListPartyView(),
+                    new CustomView.ListPartyView(),
+                    new CustomView.ListPartyView(),
                 }
             };
             Title = "History";
