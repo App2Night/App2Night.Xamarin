@@ -57,7 +57,7 @@ namespace PartyUp.CustomView
                 {
                     titleLabel,
                     closeLabel,
-                    {map, 0, 1}
+                    {new MapWrapper(map), 0, 1}
                 }
             };
             //TODO Implments informations

@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="CustomView\MapWrapper.cs" />
     <Compile Include="CustomView\CustomScrollView.cs" />
     <Compile Include="CustomView\GallerieView.cs" />
     <Compile Include="CustomView\ListPartyView.cs" />

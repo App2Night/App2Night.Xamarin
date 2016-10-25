@@ -1,132 +1,129 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.Globalization;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MvvmNano.Forms;
 using PartyUp.CustomView;
 using PartyUp.Model.Model;
 using PartyUp.ViewModel;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 
 namespace PartyUp.View
 {
     public class DashboardPage : MvvmNanoContentPage<DashboardViewModel>
     {
-        private EnhancedContainer _userInfoContainer = new EnhancedContainer
-        {
-            Name = "User",
-            ButtonText = "Edit",
-            Content = new GallerieView
-            {
-                //HeightRequest = 100,
-                ItemSource = new List<string>()
-                {
-                    "Test1",
-                    "Test2",
-                    "Test3",
-                    "Test4",
-                    "Test5",
-                    "Test6",
-                    "Test7"
-                }
-            }
-        };
-
-        readonly ContentView _previewContainer1 = new ContentView
+        Map _headerMap = new Map()
         { 
-            IsVisible = false
         };
 
-        readonly ContentView _previewContainer2 = new ContentView
+        RoundView profilePicture = new RoundView()
+        {
+            //TODO Replace with actuel profile picture
+            Content = new BoxView() { Color = Color.Red },
+            BackgroundColor = Color.White
+        };
+
+        private readonly ContentView _previewContainer1 = new ContentView
         {
             IsVisible = false
         };
 
-        readonly EnhancedContainer _myPartiesContainer = new EnhancedContainer
+        private readonly ContentView _previewContainer2 = new ContentView
         {
-            Name = "MyEvents",
-            ButtonText = "More" 
+            IsVisible = false
         }; 
 
-        private EnhancedContainer _historyContainer = new EnhancedContainer
+        private GallerieView historyGallerieView = new GallerieView
         {
-            Name = "History",
-            ButtonText = "More",
-            Content = new GallerieView
-            { 
-                Rows = 3,
-                ElementSize = 100,
-                ItemSource = new List<string>()
-                {
-                    "Test1",
-                    "Test2",
-                    "Test3",
-                    "Test4",
-                    "Test5",
-                    "Test6",
-                    "Test7",
-                    "Test1",
-                    "Test2",
-                    "Test3",
-                    "Test4",
-                    "Test5",
-                    "Test6",
-                    "Test7",
-                    "Test1",
-                    "Test2",
-                    "Test3",
-                    "Test4",
-                    "Test5",
-                    "Test6",
-                    "Test7"
-                }
+            Rows = 3,
+            ElementSize = 100,
+            ItemSource = new List<string>()
+            {
+                "Test1",
+                "Test2",
+                "Test3",
+                "Test4",
+                "Test5",
+                "Test6",
+                "Test7",
+                "Test1",
+                "Test2",
+                "Test3",
+                "Test4",
+                "Test5",
+                "Test6",
+                "Test7",
+                "Test1",
+                "Test2",
+                "Test3",
+                "Test4",
+                "Test5",
+                "Test6",
+                "Test7"
             }
         };
 
-        GallerieView partieGallerie = new GallerieView
+        private GallerieView interestingPartieGallerie = new GallerieView
         {
-            //HeightRequest = 200,
-            ElementSize = 200,
+            ElementSize = 150
+        };
+
+        private GallerieView myPartieGallerie = new GallerieView
+        { 
+            ElementSize = 150,
             ItemSource = new List<string>()
-                {
-                    "Test1",
-                    "Test2",
-                    "Test3",
-                    "Test4",
-                    "Test5",
-                    "Test6",
-                    "Test7"
-                }
-        }; 
+            {
+                "Test1",
+                "Test2",
+                "Test3",
+                "Test4",
+                "Test5",
+                "Test6",
+                "Test7"
+            }
+        };
 
         public DashboardPage()
-        {
-            _myPartiesContainer.Content = partieGallerie;
-            partieGallerie.ElementTapped += PartieSelected;
-
+        { 
+            //User info view
+            EnhancedContainer _userInfoContainer = new EnhancedContainer
+            {
+                Name = "User",
+                ButtonText = "Edit"
+            };
             BindToViewModel(_userInfoContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToUserEditCommand);
+
+
+            //Interesting partie view
+            var interestingPartieContainer = new EnhancedContainer
+            {
+                Content = interestingPartieGallerie
+            };
+            BindToViewModel(interestingPartieGallerie, GallerieView.ItemSourceProperty, vm => vm.InterestingPartiesForUser);
+            BindToViewModel(interestingPartieContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToPartyPicker);
+
+            //Users parties view
+            var _myPartiesContainer = new EnhancedContainer
+            {
+                Name = "MyEvents",
+                ButtonText = "More",
+                Content = myPartieGallerie
+            };
+            myPartieGallerie.ElementTapped += PartieSelected;
             BindToViewModel(_myPartiesContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToMyPartiesCommand);
+
+            //Partie history
+            var _historyContainer = new EnhancedContainer
+            {
+                Name = "History",
+                ButtonText = "More",
+                Content = historyGallerieView
+            };
             BindToViewModel(_historyContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToHistoryCommand);
 
-            BackgroundColor = Color.White; 
-
+            //Header
             var profilePictureHeight = 200;
-
-            //TODO Replace with actual map
-            var mapView = new BoxView
-            {
-                Color = Color.Green,
-                IsVisible = false
-            };
-
-            var profilePicture = new RoundView()
-            {
-                //TODO Replace with actuel profile picture
-                Content = new BoxView() { Color = Color.Red },
-                BackgroundColor = Color.White
-            };
+            var mapWrapper = new MapWrapper(_headerMap);
 
             var headerContainer = new Grid
             {
@@ -139,17 +136,19 @@ namespace PartyUp.View
                 {
                     new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
                     new ColumnDefinition {Width = new GridLength(profilePictureHeight*1.2, GridUnitType.Absolute)},
-                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)} 
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
                 },
                 Children =
                 {
-                    {profilePicture, 1,1 },
-                    mapView
+                    {profilePicture, 1, 1},
+                    mapWrapper
                 }
             };
-            Grid.SetColumnSpan(mapView,3);
-            Grid.SetRowSpan(mapView,2); 
+            Grid.SetColumnSpan(mapWrapper, 3);
+            Grid.SetRowSpan(mapWrapper, 2);
 
+
+            //Main layout
             var mainLayout = new StackLayout()
             {
                 Spacing = 0,
@@ -163,6 +162,7 @@ namespace PartyUp.View
                     },
                     _userInfoContainer,
                     _myPartiesContainer,
+                    interestingPartieContainer,
                     _historyContainer
                 }
             };
@@ -172,9 +172,7 @@ namespace PartyUp.View
                 Content = mainLayout,
                 Orientation = ScrollOrientation.Vertical
             };
-            Grid.SetRowSpan(mainScroll,2);
-
-            
+            Grid.SetRowSpan(mainScroll, 2); 
 
             Content = new Grid
             {
@@ -186,16 +184,19 @@ namespace PartyUp.View
                 Children =
                 {
                     mainScroll,
-                    {_previewContainer1,0,1 },
-                    {_previewContainer2,0,1 }
+                    {_previewContainer1, 0, 1},
+                    {_previewContainer2, 0, 1}
                 }
             };
         }
 
-
+        /// <summary>
+        /// Animations for the preview view gets handled here.
+        /// </summary>
+        #region preview animation
         private bool _isPreviewVisible;
-        private int _selectedPreviewContainer = 0;
-        PreviewView _preview;
+        private int _selectedPreviewContainer;
+        private PreviewView _preview;
 
         /// <summary>
         /// Gets fired if a partie item gets tapped on.
@@ -203,7 +204,7 @@ namespace PartyUp.View
         /// </summary> 
         private async void PartieSelected(object sender, object o)
         {
-            var party = (Party)o; 
+            var party = (Party) o;
             _preview = new PartyPreviewView(party, Height, Width);
             _preview.CloseViewEvent += ClosePreviewEvent;
             await ShowPreview(_preview);
@@ -215,7 +216,7 @@ namespace PartyUp.View
             await ClosePreview();
         }
 
-        async Task ClosePreview()
+        private async Task ClosePreview()
         {
             var currentContainerRef = _selectedPreviewContainer == 0 ? _previewContainer1 : _previewContainer2;
             await currentContainerRef.TranslateTo(0, _preview.HeightRequest, easing: Easing.CubicInOut);
@@ -223,10 +224,10 @@ namespace PartyUp.View
             _previewContainer1.IsVisible = false;
             _previewContainer2.IsVisible = false;
             _previewContainer1.TranslationY = 0;
-            _previewContainer2.TranslationY = 0; 
+            _previewContainer2.TranslationY = 0;
         }
 
-        async Task ShowPreview(PreviewView view)
+        private async Task ShowPreview(PreviewView view)
         {
             if (_isPreviewVisible)
                 ChangeToPreview(view);
@@ -234,10 +235,10 @@ namespace PartyUp.View
                 await OpenPreview(view);
         }
 
-        async Task OpenPreview(PreviewView newView)
+        private async Task OpenPreview(PreviewView newView)
         {
             _selectedPreviewContainer = 0;
-            _previewContainer1.Content = newView; 
+            _previewContainer1.Content = newView;
             _previewContainer1.TranslationY = newView.HeightRequest;
             _previewContainer1.IsVisible = true;
             await _previewContainer1.TranslateTo(0, 0, easing: Easing.CubicInOut);
@@ -245,27 +246,28 @@ namespace PartyUp.View
             _preview = newView;
         }
 
-        void ChangeToPreview(PreviewView newView)
+        private void ChangeToPreview(PreviewView newView)
         {
             var nextContainerRef = _selectedPreviewContainer == 0 ? _previewContainer2 : _previewContainer1;
-            var currentContainerRef = _selectedPreviewContainer == 0 ? _previewContainer1 : _previewContainer2; 
+            var currentContainerRef = _selectedPreviewContainer == 0 ? _previewContainer1 : _previewContainer2;
 
             nextContainerRef.Content = newView;
             nextContainerRef.TranslationX = -Width;
-            nextContainerRef.IsVisible = true; 
+            nextContainerRef.IsVisible = true;
             var rotateAnimation = new Animation(d =>
             {
-                nextContainerRef.TranslationX = -Width* (1-d);
-                currentContainerRef.TranslationX = Width * d; 
-            }, 0, 1);
+                nextContainerRef.TranslationX = -Width*(1 - d);
+                currentContainerRef.TranslationX = Width*d;
+            });
             rotateAnimation.Commit(this, "RotateAnimation", easing: Easing.CubicInOut, finished: (d, b) =>
             {
-                currentContainerRef.Content = null; 
+                currentContainerRef.Content = null;
                 currentContainerRef.IsVisible = false;
                 currentContainerRef.TranslationX = 0;
                 _selectedPreviewContainer = _selectedPreviewContainer == 0 ? 1 : 0;
                 _preview = newView;
-            }); 
+            });
         }
     }
+    #endregion
 }
