@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using PartyUp.DependencyService;
 using PartyUp.Model.Enum;
@@ -11,7 +12,10 @@ namespace PartyUp.CustomView
     public class PartyPreviewView : PreviewView
     {
         private readonly Party _party;
-        private readonly IUserLocationService _userLocationService = Xamarin.Forms.DependencyService.Get<IUserLocationService>();
+
+        private readonly IUserLocationService _userLocationService =
+            Xamarin.Forms.DependencyService.Get<IUserLocationService>();
+
         private readonly TapGestureRecognizer _closeTapGestureRecognizer = new TapGestureRecognizer();
 
         public PartyPreviewView(Party party, double parentHeight, double parentWidth)
@@ -22,6 +26,14 @@ namespace PartyUp.CustomView
             var titleLabel = new Label {Text = party.Name};
             //Close label
             var closeLabel = new Label {Text = "Close", HorizontalOptions = LayoutOptions.Start};
+            // set button to calculate route
+            var routeBtn = new Button
+            {
+                Text = "Route",
+                HorizontalOptions = LayoutOptions.Center
+            };
+            // TODO Handle BtnClicked
+            routeBtn.Clicked += CalculateRoute;
             //Set TabGesture
             closeLabel.GestureRecognizers.Add(_closeTapGestureRecognizer);
             _closeTapGestureRecognizer.Tapped += CloseTapGestureRecognizerOnTapped;
@@ -63,18 +75,76 @@ namespace PartyUp.CustomView
                         },
                         Children =
                         {
-                            {new Label
                             {
-                                Text = "Name",
-                                HorizontalOptions = LayoutOptions.Start,
-                            },0,0},
-                            {new Label
+                                new Label
+                                {
+                                    Text = "Name",
+                                    HorizontalOptions = LayoutOptions.Start,
+                                },
+                                0, 0
+                            },
                             {
-                                Text = _party.Name,
-                                HorizontalOptions = LayoutOptions.End,
-                            },1,0}
+                                new Label
+                                {
+                                    Text = _party.Name,
+                                    HorizontalOptions = LayoutOptions.End,
+                                },
+                                1, 0
+                            },
+                            {
+                                new Label
+                                {
+                                    Text = "Date",
+                                    HorizontalOptions = LayoutOptions.Start,
+                                },
+                                0, 1
+                            },
+                            {
+                                //TODO Handle DateFormating for system
+                                new Label
+                                {
+                                    Text = _party.Date.Date.ToString("HH:mm:ss dd.MM.yyyy",
+                                        CultureInfo.CurrentUICulture),
+                                    HorizontalOptions = LayoutOptions.End,
+                                },
+                                1, 1
+                            },
+                            {
+                                new Label
+                                {
+                                    Text = "Music Genre",
+                                    HorizontalOptions = LayoutOptions.Start,
+                                },
+                                0, 2
+                            },
+                            {
+                                new Label
+                                {
+                                    Text = _party.MusicGenre.ToString(),
+                                    HorizontalOptions = LayoutOptions.End,
+                                },
+                                1, 2
+                            },
+                            {
+                                new Label
+                                {
+                                    Text = "Created",
+                                    HorizontalOptions = LayoutOptions.Start,
+                                },
+                                0, 3
+                            },
+                            {
+                                new Label
+                                {
+                                    Text = _party.CreationDateTime.ToString("dd MMMM yyyy",
+                                        CultureInfo.CurrentUICulture),
+                                    HorizontalOptions = LayoutOptions.End,
+                                },
+                                1, 3
+                            }
                         }
-                    }
+                    },
+                    routeBtn
                 }
             };
 
@@ -88,6 +158,11 @@ namespace PartyUp.CustomView
         private void CloseTapGestureRecognizerOnTapped(object sender, EventArgs eventArgs)
         {
             CloseView();
+        }
+
+        private void CalculateRoute(object sender, EventArgs eventArgs)
+        {
+            
         }
     }
 }
