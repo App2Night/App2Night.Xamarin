@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using PartyUp.DependencyService;
 using PartyUp.Model.Enum;
 using PartyUp.Model.Model;
@@ -12,7 +13,7 @@ namespace PartyUp.CustomView
     public class PartyPreviewView : PreviewView
     {
         private readonly Party _party;
-
+        private Map map;
         private readonly IUserLocationService _userLocationService =
             Xamarin.Forms.DependencyService.Get<IUserLocationService>();
 
@@ -37,9 +38,9 @@ namespace PartyUp.CustomView
             //Set TabGesture
             closeLabel.GestureRecognizers.Add(_closeTapGestureRecognizer);
             _closeTapGestureRecognizer.Tapped += CloseTapGestureRecognizerOnTapped;
-            // TODO Shows the current Position
+            // TODO Shows the current position
             Coordinates userCoordinates = _userLocationService.GetUserCoordinates();
-            Map map = new Map(MapSpan.FromCenterAndRadius(
+            map = new Map(MapSpan.FromCenterAndRadius(
                 new Position(userCoordinates.Latitude, userCoordinates.Longitude),
                 Distance.FromMiles(0.3)))
             {
@@ -164,5 +165,16 @@ namespace PartyUp.CustomView
         {
             
         }
+
+        //private void m()
+        //{
+        //    Coordinates userCoordinates = a _userLocationService.GetUserCoordinates();
+        //    map = new Map(MapSpan.FromCenterAndRadius(
+        //        new Position(userCoordinates.Latitude, userCoordinates.Longitude),
+        //        Distance.FromMiles(0.3)))
+        //    {
+        //        IsShowingUser = true
+        //    };
+        //}
     }
 }
