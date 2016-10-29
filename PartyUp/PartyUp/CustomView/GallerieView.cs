@@ -29,7 +29,7 @@ namespace PartyUp.CustomView
         }
 
         public double ElementSize { get; set; } = 100;
-        public int Rows { get; set; } = 1;
+        public int MaxRows { get; set; } = 1;
         public bool FitRows { get; set; } = false;
 
         public double Spacing
@@ -54,7 +54,7 @@ namespace PartyUp.CustomView
             _contentGrid.Children.Clear();
             foreach (object o in ItemSource)
             {
-                var view = new BoxView() {Color = Color.Gray.MultiplyAlpha(0.2)};
+                var view = new BoxView() {Color = Color.Gray.MultiplyAlpha(0.5)};
                 view.BindingContext = new Party
                 {
                     Name = "TESTPARTY!",
@@ -106,38 +106,79 @@ namespace PartyUp.CustomView
             if (Height <= 0) return;
             if (_contentGrid.Children.Count == 0) return;
 
+            //Clear the grid
             _contentGrid.Padding = Spacing;
             _contentGrid.RowDefinitions.Clear();
             _contentGrid.ColumnDefinitions.Clear();
 
-
-            int rows = Rows;
+            //Gallerie view can take a given ElementSize or calculate 
+            //the actualElementSize based on a maxElementSize and the Height ob the view.
+            int rows = MaxRows;
             double actualElementSize = ElementSize;
             if (!FitRows)
-                HeightRequest = (Rows - 1)*Spacing + Spacing*2 + Rows*ElementSize;
+            {
+                //Calculate how many rows are needed
+                int visibleElementsPerRow = (int)(Width / actualElementSize + 0.5);
+                int neededRows = 0;
+                int tmpElementCount = ItemSource.Count();
+                for (int i = 0; i < rows; i++)
+                {
+                    if (tmpElementCount > visibleElementsPerRow)
+                    {
+                        neededRows++;
+                        tmpElementCount -= visibleElementsPerRow;
+                    }
+                    else
+                        break;
+                } 
+                rows = neededRows;
+                HeightRequest = (rows - 1) * Spacing + Spacing * 2 + rows * ElementSize;
+            }
             else
             {
                 double rowsRaw = (Height - Spacing * 2) / (ElementSize);
                 rows = (int)(rowsRaw + 0.5);
-                actualElementSize = (Height - Spacing * 2 - (Spacing * (rows - 1))) / rows; 
-            } 
-            if(rows==0) return;
-            for (int i = 0; i < rows; i++)
-            {
-                _contentGrid.RowDefinitions.Add(new RowDefinition {Height = new GridLength(1, GridUnitType.Star)});
+                actualElementSize = (Height - Spacing * 2 - (Spacing * (rows - 1))) / rows;
             }
-            for (int i = 0; i < ItemSource.Count()/rows; i++)
+            if (rows == 0) return;
+
+            //Create the rows
+            CreateGridRows(rows);
+
+            //Create the columns
+            CreateGridColumns(rows, actualElementSize);
+
+            //Position the elements
+            PositionElementsInGrid();
+        }
+
+        private void CreateGridColumns(int rows, double actualElementSize)
+        {
+            var columns = (int)((ItemSource.Count() / (double)rows) + 0.5);
+            for (int i = 0; i < columns; i++)
             {
                 _contentGrid.ColumnDefinitions.Add(new ColumnDefinition()
                 {
                     Width = new GridLength(actualElementSize, GridUnitType.Absolute)
                 });
             }
+        }
+
+        void CreateGridRows(int rows)
+        {
+            for (int i = 0; i < rows; i++)
+            {
+                _contentGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+            }
+        }
+
+        void PositionElementsInGrid()
+        {
             int columnCount = 0;
-            int row = 0;
+            int row = 0; 
             foreach (Xamarin.Forms.View o in _contentGrid.Children)
             {
-                if (_contentGrid.ColumnDefinitions.Count < columnCount)
+                if (_contentGrid.ColumnDefinitions.Count <= columnCount)
                 {
                     columnCount = 0;
                     row++;
@@ -146,7 +187,6 @@ namespace PartyUp.CustomView
                 Grid.SetColumn(o, columnCount);
                 columnCount++;
             }
-              
         }
 
         public GallerieView()
