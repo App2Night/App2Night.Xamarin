@@ -42,6 +42,7 @@
     <Compile Include="CustomView\GallerieView.cs" />
     <Compile Include="CustomView\ListPartyView.cs" />
     <Compile Include="CustomView\PartyPreviewView.cs" />
+    <Compile Include="CustomView\PartyTemplate.cs" />
     <Compile Include="CustomView\PreviewView.cs" />
     <Compile Include="CustomView\RoundView.cs" />
     <Compile Include="CustomView\SwipeView.cs" />

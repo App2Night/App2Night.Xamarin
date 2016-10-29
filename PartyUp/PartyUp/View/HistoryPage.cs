@@ -1,4 +1,6 @@
 ﻿using MvvmNano.Forms;
+using PartyUp.CustomView;
+using PartyUp.Model.Model;
 using PartyUp.ViewModel;
 using Xamarin.Forms;
 
@@ -8,14 +10,16 @@ namespace PartyUp.View
     {
         public HistoryPage()
         {
-            var stackLayout = new StackLayout
+            var stackLayout = new ListView()
             {
-                Children =
+                ItemTemplate = new DataTemplate(typeof(PartyTemplate)),
+                ItemsSource = new Party[]
                 {
-                    new CustomView.ListPartyView(),
-                    new CustomView.ListPartyView(),
-                    new CustomView.ListPartyView(),
-                    new CustomView.ListPartyView(),
+                    new Party(),
+                    new Party(),
+                    new Party(),
+                    new Party(),
+                    new Party(),
                 }
             };
             Title = "History";
