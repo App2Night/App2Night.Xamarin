@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<!--
+Drop a file named keys.xml in this folder and put in your secrets.
+-->
+<resources>
+  <string
+      name="maps_key"
+        >$(mapKey)</string>
+</resources> 
