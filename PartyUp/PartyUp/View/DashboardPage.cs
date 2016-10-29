@@ -34,33 +34,9 @@ namespace PartyUp.View
         }; 
 
         private GallerieView historyGallerieView = new GallerieView
-        {
-            Rows = 3,
-            ElementSize = 100,
-            ItemSource = new List<string>()
-            {
-                "Test1",
-                "Test2",
-                "Test3",
-                "Test4",
-                "Test5",
-                "Test6",
-                "Test7",
-                "Test1",
-                "Test2",
-                "Test3",
-                "Test4",
-                "Test5",
-                "Test6",
-                "Test7",
-                "Test1",
-                "Test2",
-                "Test3",
-                "Test4",
-                "Test5",
-                "Test6",
-                "Test7"
-            }
+        { 
+            MaxRows = 3,
+            ElementSize = 100, 
         };
 
         private GallerieView interestingPartieGallerie = new GallerieView
@@ -84,7 +60,15 @@ namespace PartyUp.View
         };
 
         public DashboardPage()
-        { 
+        {
+            //Dummy elements
+            var dummys = new List<string>();
+            for (int i = 0; i < 9; i++)
+            {
+                dummys.Add("Dummy " + (i+1));  
+            }
+            historyGallerieView.ItemSource = dummys;
+
             //User info view
             EnhancedContainer _userInfoContainer = new EnhancedContainer
             {
@@ -97,29 +81,31 @@ namespace PartyUp.View
             //Interesting partie view
             var interestingPartieContainer = new EnhancedContainer
             {
+                Name = "Events near you",
+                ButtonText = "More",
                 Content = interestingPartieGallerie
             };
+            BindToViewModel(interestingPartieContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToMyPartiesCommand);
             BindToViewModel(interestingPartieGallerie, GallerieView.ItemSourceProperty, vm => vm.InterestingPartiesForUser);
             BindToViewModel(interestingPartieContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToPartyPicker);
 
             //Users parties view
-            var _myPartiesContainer = new EnhancedContainer
+            var myPartiesContainer = new EnhancedContainer
             {
-                Name = "MyEvents",
-                ButtonText = "More",
+                Name = "MyEvents", 
                 Content = myPartieGallerie
             };
             myPartieGallerie.ElementTapped += PartieSelected;
-            BindToViewModel(_myPartiesContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToMyPartiesCommand);
+           
 
             //Partie history
-            var _historyContainer = new EnhancedContainer
+            var historyContainer = new EnhancedContainer
             {
                 Name = "History",
                 ButtonText = "More",
                 Content = historyGallerieView
             };
-            BindToViewModel(_historyContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToHistoryCommand);
+            BindToViewModel(historyContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToHistoryCommand);
 
             //Header
             var profilePictureHeight = 200;
@@ -161,9 +147,9 @@ namespace PartyUp.View
                         HeightRequest = 1
                     },
                     _userInfoContainer,
-                    _myPartiesContainer,
+                    myPartiesContainer,
                     interestingPartieContainer,
-                    _historyContainer
+                    historyContainer
                 }
             };
 

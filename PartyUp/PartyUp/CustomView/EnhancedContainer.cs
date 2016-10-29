@@ -12,7 +12,7 @@ namespace PartyUp.CustomView
 
         private static void CommandAssigned(BindableObject bindable, object oldValue, object newValue)
         {
-            ((EnhancedContainer) bindable)._btnLabel.IsVisible = newValue != null;
+            ((EnhancedContainer) bindable)._moreBtn.IsVisible = newValue != null;
         }
 
         public MvvmNanoCommand Command
@@ -62,8 +62,8 @@ namespace PartyUp.CustomView
 
         public string ButtonText
         {
-            get { return _btnLabel.Text; }
-            set { _btnLabel.Text = value; }
+            get { return _moreBtn.ButtonLabel.Text; }
+            set { _moreBtn.ButtonLabel.Text = value; }
         }
 
         Label _nameLabel = new Label()
@@ -72,10 +72,10 @@ namespace PartyUp.CustomView
             FontSize = 20
         };
 
-        Label _btnLabel = new Label()
+        CustomButton _moreBtn = new CustomButton 
         {
-            HorizontalOptions = LayoutOptions.End,
-            Margin = new Thickness(8,3),
+            HorizontalOptions = LayoutOptions.End, 
+            WidthRequest = 100,
             IsVisible = false
         };
         BoxView _topBoxView = new BoxView() {IsVisible = false};
@@ -91,17 +91,15 @@ namespace PartyUp.CustomView
                 RowDefinitions[1].Height = new GridLength(value, GridUnitType.Absolute);
             }
         }
-
-        TapGestureRecognizer _gesture = new TapGestureRecognizer();
+         
         private int _headerHeight = 40;
 
         public EnhancedContainer()
         {
             ColorChanged(this, SeperatorColor, SeperatorColor);
-            _gesture.Tapped += GestureOnTapped;
-            _btnLabel.GestureRecognizers.Add(_gesture);
+            _moreBtn.ButtonTapped += MoreBtnOnButtonTapped;
 
-            RowSpacing = 0;
+           RowSpacing = 0;
 
             RowDefinitions = new RowDefinitionCollection
             { 
@@ -116,25 +114,25 @@ namespace PartyUp.CustomView
             Children.Add(_middleBoxView, 0, 2);
             Children.Add(_bottomBoxView, 0, 4);
             Children.Add(_nameLabel, 0, 1);
-            Children.Add(_btnLabel, 0, 1);
+            Children.Add(_moreBtn, 0, 1);
+        }
+
+        private async void MoreBtnOnButtonTapped(object sender, EventArgs eventArgs)
+        {
+            if (Command != null)
+            {
+                await _moreBtn.ScaleTo(1.6, 25U);
+                await _moreBtn.ScaleTo(1, 300U, Easing.BounceIn);
+
+                Command.Execute(null);
+            }
         }
 
         protected override void OnRemoved(Xamarin.Forms.View view)
         {
             base.OnRemoved(view);
-            _gesture.Tapped -= GestureOnTapped;
+            _moreBtn.ButtonTapped -= MoreBtnOnButtonTapped;
 
-        }
-
-        private async void GestureOnTapped(object sender, EventArgs eventArgs)
-        {
-            if (Command != null)
-            {
-                await _btnLabel.ScaleTo(1.6, 25U);
-                await _btnLabel.ScaleTo(1, 300U,  Easing.BounceIn);
-
-                Command.Execute(null); 
-            }
-        }
+        } 
     }
 }

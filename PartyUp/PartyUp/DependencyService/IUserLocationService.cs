@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Android.Locations;
+﻿using System.Threading.Tasks; 
 using PartyUp.Model.Enum;
 
 namespace PartyUp.DependencyService
