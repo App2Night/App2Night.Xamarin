@@ -4,6 +4,7 @@ using System.Linq;
 using Android.Content;
 using Android.Locations;
 using Android.OS;
+using Android.Runtime;
 using PartyUp.DependencyService;
 using PartyUp.Droid.Service;
 using PartyUp.Model.Enum;
@@ -19,8 +20,8 @@ namespace PartyUp.Droid.Service
         string _locationProvider;
         private Coordinates _currentLocation;
         private Location Location;
-        public event EventHandler LocationChanged;
-        public event EventHandler LocationStatusChanged;
+        public event EventHandler<Coordinates> LocationChanged;
+        public event EventHandler<LocationChangeEventArgs> LocationStatusChanged;
 
 
         public AndroidUserLocationService()
@@ -73,27 +74,18 @@ namespace PartyUp.Droid.Service
         public void OnLocationChanged(Location location)
         {
             Location = location;
-            if (LocationChanged != null)
-            {
-                LocationChanged(this, new AndroidLocationChangedEventArgs(true, _currentLocation));
-            }
+            LocationChanged?.Invoke(this, new Coordinates { Latitude = (float)Location.Latitude, Longitude = (float)Location.Longitude});
         }
 
 
         public void OnProviderDisabled(string provider)
         {
-            if (LocationStatusChanged != null)
-            {
-                LocationStatusChanged(this, new AndroidLocationChangedEventArgs(false, null));
-            }
+            LocationStatusChanged?.Invoke(this, new LocationChangeEventArgs(false, null));
         }
 
         public void OnProviderEnabled(string provider)
         {
-            if (LocationStatusChanged != null)
-            {
-                LocationStatusChanged(this, new AndroidLocationChangedEventArgs(true, _currentLocation));
-            }
+            LocationStatusChanged?.Invoke(this, new LocationChangeEventArgs(true, _currentLocation));
         }
 
         public void OnStatusChanged(string provider, Availability status, Bundle extras)
@@ -101,19 +93,8 @@ namespace PartyUp.Droid.Service
             if (LocationStatusChanged != null)
             {
                 var hasFix = status == Availability.Available;
-                LocationStatusChanged(this, new AndroidLocationChangedEventArgs(hasFix, _currentLocation));
+                LocationStatusChanged(this, new LocationChangeEventArgs(hasFix, _currentLocation));
             }
-        }
-        public class AndroidLocationChangedEventArgs : EventArgs
-        {
-            public AndroidLocationChangedEventArgs(bool hasFix, Coordinates location)
-            {
-                HasFix = hasFix;
-                Location = location;
-            }
-
-            public Coordinates Location { get; set; }
-            public bool HasFix { get; set; }
         }
     }
 }
