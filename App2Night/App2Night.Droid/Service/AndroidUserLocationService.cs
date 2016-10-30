@@ -18,7 +18,7 @@ namespace App2Night.Droid.Service
         LocationManager _locationManager;
         string _locationProvider;
         private Coordinates _currentLocation;
-        private Location Location;
+        private Location _location;
         public event EventHandler<Coordinates> LocationChanged;
         public event EventHandler<LocationChangeEventArgs> LocationStatusChanged;
 
@@ -72,8 +72,8 @@ namespace App2Night.Droid.Service
 
         public void OnLocationChanged(Location location)
         {
-            Location = location;
-            LocationChanged?.Invoke(this, new Coordinates { Latitude = (float)Location.Latitude, Longitude = (float)Location.Longitude});
+            _location = location;
+            LocationChanged?.Invoke(this, new Coordinates { Latitude = (float)_location.Latitude, Longitude = (float)_location.Longitude});
         }
 
 

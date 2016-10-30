@@ -12,7 +12,14 @@ namespace App2Night.View
         {
             var stackLayout = new ListView()
             {
-                ItemTemplate = new DataTemplate(typeof(PartyTemplate)),
+                ItemTemplate = new DataTemplate(() => {
+                    var nativeCell = new PartyTemplate();
+                    nativeCell.SetBinding(PartyTemplate.NameProperty, "Name");
+                    nativeCell.SetBinding(PartyTemplate.DateProperty, "Date");
+                    nativeCell.SetBinding(PartyTemplate.ImageSourceProperty, "ImageSource");
+
+                    return nativeCell;
+                }),
                 ItemsSource = new Party[]
                 {
                     new Party(),
