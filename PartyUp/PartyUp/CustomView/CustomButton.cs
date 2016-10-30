@@ -24,7 +24,6 @@ namespace PartyUp.CustomView
             TapGestureRecognizer gestureRecognizer = new TapGestureRecognizer();
             gestureRecognizer.Command = new Command(Tapped);
             GestureRecognizers.Add(gestureRecognizer);
-            BackgroundColor = Color.Gray;
             Content = ButtonLabel;
         }
 
