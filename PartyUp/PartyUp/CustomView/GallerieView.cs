@@ -95,9 +95,8 @@ namespace PartyUp.CustomView
             base.OnSizeAllocated(width, height);
             if (oldWidth != (int) width)
             {
-                oldWidth = (int)width;
-
-                ArrengeElements();
+                oldWidth = (int)width; 
+                ArrengeElements(); 
             }
         }
 
@@ -118,7 +117,7 @@ namespace PartyUp.CustomView
             if (!FitRows)
             {
                 //Calculate how many rows are needed
-                int visibleElementsPerRow = (int)(Width / actualElementSize + 0.5);
+                int visibleElementsPerRow = (int)Math.Ceiling(Width / actualElementSize);
                 int neededRows = 0;
                 int tmpElementCount = ItemSource.Count();
                 for (int i = 0; i < rows; i++)
@@ -131,13 +130,13 @@ namespace PartyUp.CustomView
                     else
                         break;
                 } 
-                rows = neededRows;
+                rows = neededRows == 0 ? 1 : neededRows;
                 HeightRequest = (rows - 1) * Spacing + Spacing * 2 + rows * ElementSize;
             }
             else
             {
                 double rowsRaw = (Height - Spacing * 2) / (ElementSize);
-                rows = (int)(rowsRaw + 0.5);
+                rows = (int)Math.Ceiling(rowsRaw);
                 actualElementSize = (Height - Spacing * 2 - (Spacing * (rows - 1))) / rows;
             }
             if (rows == 0) return;
@@ -150,11 +149,14 @@ namespace PartyUp.CustomView
 
             //Position the elements
             PositionElementsInGrid();
+
+            //var totalElementWidth = actualElementSize*ItemSource.Count() + Spacing*2 + Spacing*(ItemSource.Count() - 1);
+            //IsEnabled = totalElementWidth > Width;
         }
 
         private void CreateGridColumns(int rows, double actualElementSize)
         {
-            var columns = (int)((ItemSource.Count() / (double)rows) + 0.5);
+            var columns = (int)Math.Ceiling(ItemSource.Count() / (double)rows);
             for (int i = 0; i < columns; i++)
             {
                 _contentGrid.ColumnDefinitions.Add(new ColumnDefinition()
