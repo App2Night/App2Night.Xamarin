@@ -1,10 +1,10 @@
 ECHO OFF
-rd /s /q "%~dp0\PartyUp\PartyUp\bin\Debug"
-rd /s /q "%~dp0\PartyUp\PartyUp\obj\Debug"
-rd /s /q "%~dp0\PartyUp\PartyUp\bin\Release"
-rd /s /q "%~dp0\PartyUp\PartyUp\obj\Release"
-rd /s /q "%~dp0\PartyUp\PartyUp.Droid\bin\Debug"
-rd /s /q "%~dp0\PartyUp\PartyUp.Droid\obj\Debug"
-rd /s /q "%~dp0\PartyUp\PartyUp.Droid\bin\Release"
-rd /s /q "%~dp0\PartyUp\PartyUp.Droid\obj\Release"
+rd /s /q "%~dp0\App2Night\App2Night\bin\Debug"
+rd /s /q "%~dp0\App2Night\App2Night\obj\Debug"
+rd /s /q "%~dp0\App2Night\App2Night\bin\Release"
+rd /s /q "%~dp0\App2Night\App2Night\obj\Release"
+rd /s /q "%~dp0\App2Night\App2Night.Droid\bin\Debug"
+rd /s /q "%~dp0\App2Night\App2Night.Droid\obj\Debug"
+rd /s /q "%~dp0\App2Night\App2Night.Droid\bin\Release"
+rd /s /q "%~dp0\App2Night\App2Night.Droid\obj\Release"
 PAUSE
