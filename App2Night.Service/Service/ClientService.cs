@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
+using App2Night.Model.Model;
 using Newtonsoft.Json;
 using PartyUp.Model.Model;
 using PartyUp.Service.Interface;  
@@ -33,6 +34,7 @@ namespace PartyUp.Service.Service
                     //Execute the request with the proper request type.
                     Stopwatch timer = new Stopwatch();
                     timer.Start();
+                    uri = "api/" + uri;
                     switch (restType)
                     {
                         case RestType.Post: 
@@ -71,11 +73,37 @@ namespace PartyUp.Service.Service
                 result.RequestFailedToException = true;
             } 
             return result;
-        } 
+        }
+
+        public async Task<Result<Token>> GetToken(string username, string password)
+        {
+            Result<Token> result = new Result<Token>();
+            using (var client = GetClient())
+            {
+                client.DefaultRequestHeaders.Accept.Clear(); 
+                var query = "client_id=nativeApp&" +
+                        "client_secret=secret&" +
+                        "grant_type=password&" +
+                        $"username={username}&" +
+                        $"password={password}&" +
+                        "scope=App2NightAPI offline_access&" +
+                        "offline_access=true";
+                var content = new StringContent(
+                    query, Encoding.UTF8, "application/x-www-form-urlencoded");
+                var requestResult = await client.PostAsync("connect/token", content);
+
+                if (requestResult.IsSuccessStatusCode)
+                {
+                    var response = await requestResult.Content.ReadAsStringAsync(); 
+                    result.Data = JsonConvert.DeserializeObject<Token>(response);
+                }
+            }
+            return result;
+        }
 
         private HttpClient GetClient()
         {
-            HttpClient client = new HttpClient {BaseAddress = new Uri("https://app2nightapi.azurewebsites.net/api/")};
+            HttpClient client = new HttpClient {BaseAddress = new Uri("https://app2nightapi.azurewebsites.net/")};
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Host = "app2nightapi.azurewebsites.net";
             return client;

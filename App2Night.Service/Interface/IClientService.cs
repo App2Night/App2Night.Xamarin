@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
+using App2Night.Model.Model;
 using PartyUp.Model.Model;
 using PartyUp.Service.Service;
 
 namespace PartyUp.Service.Interface
 {
     public interface IClientService
-    {
-        //TODO CLIENT return a "response object" with additionel infos :)
+    { 
         /// <summary>
         /// Sends a requests, deserializes the content and handles exceptions.
         /// </summary>
@@ -18,5 +18,14 @@ namespace PartyUp.Service.Interface
         /// <param name="bodyParameter">Optional: A body parameter that will be send with the request.</param> 
         /// <returns></returns>
         Task<Result<TExpectedType>> SendRequest<TExpectedType>(string uri, RestType restType, bool cacheData = false, string query = "", object bodyParameter = null);
+
+        /// <summary>
+        /// Request a token.
+        /// </summary>
+        /// <param name="username">User Username.</param>
+        /// <param name="password">User Password.</param
+        /// <returns></returns>
+        Task<Result<Token>> GetToken(string username, string password);
+
     }
 }
