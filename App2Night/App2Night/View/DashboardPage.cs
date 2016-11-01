@@ -16,20 +16,15 @@ namespace App2Night.View
         Map _headerMap = new Map()
         { 
             HeightRequest = 200
-        };
+        }; 
 
-        RoundView profilePicture = new RoundView()
-        { 
-            //TODO Replace with actuel profile picture
-            Content = new ContentView { BackgroundColor = Color.Gray, Content = new Label { FontFamily = "FontAwesome", TextColor = Color.Black, FontSize = 120, Text = "\uf1d6"}},
-            BackgroundColor = Color.White,
-            VerticalOptions = LayoutOptions.Center,
-            HorizontalOptions = LayoutOptions.Center,
+        RoundImage profilePicture = new RoundImage(null)
+        {
             HeightRequest = 100,
             WidthRequest = 100,
             Margin = new Thickness(10),
             EdgeColor = Color.Maroon
-        }; 
+        };
 
         private readonly ContentView _previewContainer1 = new ContentView
         {
