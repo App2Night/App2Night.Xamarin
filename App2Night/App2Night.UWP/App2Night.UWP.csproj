@@ -128,6 +128,14 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\App2Night.Model\App2Night.Model.csproj">
+      <Project>{2cb6e00c-b477-45a4-a455-8be9a3b0ad49}</Project>
+      <Name>App2Night.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\App2Night.Service\App2Night.Service.csproj">
+      <Project>{cf6b0541-17af-4faa-bb46-6d6a715f725f}</Project>
+      <Name>App2Night.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\App2Night\App2Night.csproj">
       <Project>{82039704-FDA9-4BFF-A0ED-0FD841A1AB52}</Project>
       <Name>App2Night</Name>

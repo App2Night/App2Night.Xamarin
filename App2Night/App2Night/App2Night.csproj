@@ -44,7 +44,7 @@
     <Compile Include="CustomView\PartyPreviewView.cs" />
     <Compile Include="CustomView\PartyTemplate.cs" />
     <Compile Include="CustomView\PreviewView.cs" />
-    <Compile Include="CustomView\RoundView.cs" />
+    <Compile Include="CustomView\RoundImage.cs" />
     <Compile Include="CustomView\SwipeView.cs" />
     <Compile Include="CustomView\EnhancedContainer.cs" />
     <Compile Include="DependencyService\IUserLocationService.cs" />
@@ -106,6 +106,14 @@
     </Reference>
     <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Portable.Ninject.3.3\lib\portable-net4+sl5+wp8+win8+wpa81+monotouch+monoandroid\Ninject.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SkiaSharp, Version=1.54.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SkiaSharp.1.54.1\lib\portable-net45+win8+wpa81+wp8\SkiaSharp.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="SkiaSharp.Views.Forms, Version=1.54.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\SkiaSharp.Views.Forms.1.54.1-beta1\lib\portable-net45+win8+wpa81+wp8\SkiaSharp.Views.Forms.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Windows.Foundation.UniversalApiContract">
