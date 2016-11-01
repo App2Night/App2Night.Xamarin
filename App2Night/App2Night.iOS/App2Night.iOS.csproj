@@ -90,6 +90,9 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
+    <Compile Include="Reachability.cs" />
+    <Compile Include="Service\iOSConnectionService.cs" />
+    <Compile Include="Service\iOSUserLocationService.cs" />
     <None Include="app.config" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist">
@@ -171,14 +174,16 @@
     <Reference Include="Xamarin.iOS" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\App2Night.Model\App2Night.Model.csproj">
+      <Project>{2CB6E00C-B477-45A4-A455-8BE9A3B0AD49}</Project>
+      <Name>App2Night.Model</Name>
+    </ProjectReference>
     <ProjectReference Include="..\App2Night\App2Night.csproj">
       <Project>{82039704-FDA9-4BFF-A0ED-0FD841A1AB52}</Project>
       <Name>App2Night</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Service\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.iOS.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.3.163-pre3\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.3.163-pre3\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
