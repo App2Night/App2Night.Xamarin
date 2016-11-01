@@ -20,11 +20,11 @@ namespace App2Night.CustomView
             int height = e.Info.Height;
             _lastKnownWidth = width;
             _lastKnownHeight = height;
-             
-            base.OnPaintSurface(e);  
+
+            base.OnPaintSurface(e);
 
             //Rectangle representing the view
-            SKRect rect = new SKRect(0, 0, width, height); 
+            SKRect rect = new SKRect(0, 0, width, height);
             SKPath path = new SKPath();
             if (FlatBottom)
             {
@@ -33,11 +33,15 @@ namespace App2Night.CustomView
                 FixedCubicTo(path, 57.098614, 841.030040, 0, 698.921590, 0, 554.575240);
                 FixedCubicTo(path, 0, 219.793510, 238.396740, -51.600685, 528.728170, -51.600707);
                 FixedCubicTo(path, 819.059620, -51.600707, 1054.419800, 219.793510, 1054.419800, 554.575240);
-                FixedCubicTo(path, 1054.419800, 712.181670, 1022.872800, 836.647530, 937.369210, 945);  
+                FixedCubicTo(path, 1054.419800, 712.181670, 1022.872800, 836.647530, 937.369210, 945);
             }
             else
-                path.AddCircle((float) (width / 2.0), (float) (height/2.0), (float) (width / 2.0));
-             
+            {
+                path.AddCircle((float) (width/2.0), (float) (height/2.0),
+                    (float) ((width > height ? height : width)/2.0));
+            }
+
+
             e.Surface.Canvas.ClipPath(path);
 
             //Test content, to be replaced with image
@@ -53,7 +57,7 @@ namespace App2Night.CustomView
                 edgePaint.IsAntialias = true;
                 edgePaint.Style = SKPaintStyle.Stroke;
                 edgePaint.Color = EdgeColor.ToSKColor();
-                edgePaint.StrokeWidth = (float) EdgeSize; 
+                edgePaint.StrokeWidth = (float) EdgeSize;
                 e.Surface.Canvas.DrawPath(path, edgePaint);
             }
         }
@@ -70,7 +74,8 @@ namespace App2Night.CustomView
         /// </summary> 
         void FixedCubicTo(SKPath path, double x1, double y1, double x2, double y2, double x3, double y3)
         {
-            path.CubicTo(GetCorrectX(x1), GetCorrectY(y1), GetCorrectX(x2), GetCorrectY(y2), GetCorrectX(x3), GetCorrectY(y3));
+            path.CubicTo(GetCorrectX(x1), GetCorrectY(y1), GetCorrectX(x2), GetCorrectY(y2), GetCorrectX(x3),
+                GetCorrectY(y3));
         }
 
         /// <summary>
@@ -79,7 +84,7 @@ namespace App2Night.CustomView
         float GetCorrectX(double x)
         {
             var xMulti = 1054.419800;
-            return (float)(_lastKnownWidth * (x / xMulti));
+            return (float) (_lastKnownWidth*(x/xMulti));
         }
 
         /// <summary>
@@ -89,7 +94,7 @@ namespace App2Night.CustomView
         {
             var yOffset = 52;
             var yMulti = 945 + yOffset;
-            return (float)(_lastKnownHeight * ((y + yOffset) / yMulti));
+            return (float) (_lastKnownHeight*((y + yOffset)/yMulti));
         }
-    } 
+    }
 }

@@ -151,6 +151,7 @@ namespace App2Night.CustomView
             HeightRequest = layoutGrid.RowDefinitions.Sum(o => o.Height.Value);
             Content = new ScrollView
             {
+                //TODO Header
                 Content = stackLayout
             };
         }
