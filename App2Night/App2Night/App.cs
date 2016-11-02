@@ -74,7 +74,7 @@ namespace App2Night
 
         private async Task StartupSync()
         {
-            var token = await MvvmNanoIoC.Resolve<IClientService>().GetToken("julian", "passwort");
+            var token = await MvvmNanoIoC.Resolve<IClientService>().GetToken("test", "test");
             await MvvmNanoIoC.Resolve<ICacheService>().RefreshPartys();
         }
 
