@@ -34,6 +34,26 @@ namespace App2Night.CustomView
 
         readonly ContentView _content = new ContentView();
 
+        public void StartOpeningAnimation(uint length = 500U)
+        {
+            _closeButton.ButtonLabel.Rotation = 180;
+            Animation openingAnimation = new Animation(d =>
+            {
+                _closeButton.ButtonLabel.Rotation = 180*d;
+            },1,0);
+            openingAnimation.Commit(this, "StartOpeningAnimation", length: length);
+        }
+
+        public void StartClosingAnimataion(uint length = 500U)
+        {
+            _closeButton.ButtonLabel.Rotation = 0;
+            Animation openingAnimation = new Animation(d =>
+            {
+                _closeButton.ButtonLabel.Rotation = 180 * d;
+            }, 0, 1);
+            openingAnimation.Commit(this, "StartOpeningAnimation", length: length);
+        }
+
         public PreviewView(string title, object item)
         {
             _moreButton.ButtonLabel.FontFamily = "FontAwesome";
@@ -85,5 +105,10 @@ namespace App2Night.CustomView
             if (MoreEvent != null)
                 MoreEvent(this, EventArgs.Empty);
         }
+    }
+
+    public enum AnimationType
+    {
+        Opening, Closing
     }
 }

@@ -50,16 +50,7 @@ namespace App2Night.View
         private GallerieView myPartieGallerie = new GallerieView
         { 
             ElementSize = 150
-        };
-
-        private Label _profileIcon = new Label
-        {
-            FontFamily = "FontAwesome", Text = "\uf2be",
-            VerticalOptions = LayoutOptions.Start,
-            HorizontalOptions = LayoutOptions.Start,
-            FontSize = 40,
-            TextColor = Color.Black
-        };
+        }; 
 
         public DashboardPage()
         {
@@ -104,13 +95,13 @@ namespace App2Night.View
             userInfoView.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
             Grid.SetRowSpan(profilePicture, profileDetails.Count+2); 
 
-            EnhancedContainer _userInfoContainer = new EnhancedContainer
+            EnhancedContainer userInfoContainer = new EnhancedContainer
             {
                 Name = "User",
                 ButtonText = "Edit",
                 Content = userInfoView
             };
-            BindToViewModel(_userInfoContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToUserEditCommand);
+            BindToViewModel(userInfoContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToUserEditCommand);
 
 
             //Interesting partie view
@@ -154,7 +145,7 @@ namespace App2Night.View
                         Color = Color.Black,
                         HeightRequest = 1
                     },
-                    _userInfoContainer,
+                    userInfoContainer,
                     myPartiesContainer,
                     interestingPartieContainer,
                     historyContainer
@@ -220,7 +211,9 @@ namespace App2Night.View
         private async Task ClosePreview()
         {
             var currentContainerRef = _selectedPreviewContainer == 0 ? _previewContainer1 : _previewContainer2;
-            await currentContainerRef.TranslateTo(0, _preview.HeightRequest, easing: Easing.CubicInOut);
+            uint animationLength = 500U;
+            _preview.StartClosingAnimataion(animationLength);
+            await currentContainerRef.TranslateTo(0, _preview.HeightRequest, animationLength, Easing.CubicInOut);
             _isPreviewVisible = false;
             _previewContainer1.IsVisible = false;
             _previewContainer2.IsVisible = false;
@@ -242,7 +235,9 @@ namespace App2Night.View
             _previewContainer1.Content = newView;
             _previewContainer1.TranslationY = newView.HeightRequest;
             _previewContainer1.IsVisible = true;
-            await _previewContainer1.TranslateTo(0, 0, easing: Easing.CubicInOut);
+            uint animationLength = 500U;
+            newView.StartOpeningAnimation(animationLength);
+            await _previewContainer1.TranslateTo(0, 0, animationLength, Easing.CubicInOut);
             _isPreviewVisible = true;
             _preview = newView;
         }
