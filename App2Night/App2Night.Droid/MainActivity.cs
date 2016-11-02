@@ -14,9 +14,9 @@ namespace App2Night.Droid
             base.OnCreate(bundle);
 
             global::Xamarin.Forms.Forms.Init(this, bundle);
-            CrashManager.Register(this, "$(HockeyAppId)");
-            UpdateManager.Register(this, "$(HockeyAppId)");
-            MetricsManager.Register(Application, "$(HockeyAppId)");
+            CrashManager.Register(this, "3aca0e171a5443c090b3e064f2e5ce4b");
+            UpdateManager.Register(this, "3aca0e171a5443c090b3e064f2e5ce4b");
+            MetricsManager.Register(Application, "3aca0e171a5443c090b3e064f2e5ce4b");
             Xamarin.FormsMaps.Init(this, bundle);
             LoadApplication(new App());
             

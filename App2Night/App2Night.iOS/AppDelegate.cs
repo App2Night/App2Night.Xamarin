@@ -28,7 +28,7 @@ namespace PartyUp.iOS
             LoadApplication(new App());
 
             var manager = BITHockeyManager.SharedHockeyManager;
-            manager.Configure("$(HockeyAppId)");
+            manager.Configure("3aca0e171a5443c090b3e064f2e5ce4b");
             manager.StartManager();
             manager.Authenticator.AuthenticateInstallation(); 
             return base.FinishedLaunching(app, options);
