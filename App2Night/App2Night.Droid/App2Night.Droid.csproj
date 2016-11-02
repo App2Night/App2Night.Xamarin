@@ -184,7 +184,6 @@
   <ItemGroup>
     <None Include="app.config" />
     <AndroidAsset Include="Assets\FontAwesome.ttf" />
-    <None Include="App2Night.keystore" />
     <None Include="packages.config" />
     <None Include="Resources\AboutResources.txt" />
     <None Include="Assets\AboutAssets.txt" />
