@@ -148,7 +148,7 @@ namespace App2Night.View
                 Spacing = 0,
                 Children =
                 {
-                    _headerMap,
+                    new  MapWrapper(_headerMap),
                     new BoxView
                     {
                         Color = Color.Black,

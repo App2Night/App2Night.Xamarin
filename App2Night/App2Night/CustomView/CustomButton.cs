@@ -17,7 +17,19 @@ namespace App2Night.CustomView
             set { SetValue(CommandProperty, value); }
         }
 
+        private string text;
+
         public Label ButtonLabel { get; } = new Label();
+
+        public string Text
+        {
+            get
+            {
+                return ButtonLabel.Text;
+            }
+
+            set { ButtonLabel.Text = value; }
+        }
 
         public CustomButton()
         {

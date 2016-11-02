@@ -78,25 +78,33 @@ namespace PartyUp.Service.Service
         public async Task<Result<Token>> GetToken(string username, string password)
         {
             Result<Token> result = new Result<Token>();
-            using (var client = GetClient())
+            try
             {
-                client.DefaultRequestHeaders.Accept.Clear(); 
-                var query = "client_id=nativeApp&" +
-                        "client_secret=secret&" +
-                        "grant_type=password&" +
-                        $"username={username}&" +
-                        $"password={password}&" +
-                        "scope=App2NightAPI offline_access&" +
-                        "offline_access=true";
-                var content = new StringContent(
-                    query, Encoding.UTF8, "application/x-www-form-urlencoded");
-                var requestResult = await client.PostAsync("connect/token", content);
-
-                if (requestResult.IsSuccessStatusCode)
+                using (var client = GetClient())
                 {
-                    var response = await requestResult.Content.ReadAsStringAsync(); 
-                    result.Data = JsonConvert.DeserializeObject<Token>(response);
+                    client.DefaultRequestHeaders.Accept.Clear(); 
+                    var query = "client_id=nativeApp&" +
+                                "client_secret=secret&" +
+                                "grant_type=password&" +
+                                $"username={username}&" +
+                                $"password={password}&" +
+                                "scope=App2NightAPI offline_access&" +
+                                "offline_access=true";
+                    var content = new StringContent(
+                        query, Encoding.UTF8, "application/x-www-form-urlencoded");
+                    var requestResult = await client.PostAsync("connect/token", content);
+
+                    if (requestResult.IsSuccessStatusCode)
+                    {
+                        var response = await requestResult.Content.ReadAsStringAsync(); 
+                        result.Data = JsonConvert.DeserializeObject<Token>(response);
+                    }
                 }
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+                result.RequestFailedToException = true;
             }
             return result;
         }

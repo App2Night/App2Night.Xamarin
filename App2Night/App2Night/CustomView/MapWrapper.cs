@@ -12,7 +12,7 @@ namespace App2Night.CustomView
             _map = map;
             if (Device.OS == TargetPlatform.Android && !App.MapAvailable)
             {
-                BackgroundColor = Color.Gray;
+                BackgroundColor = Color.Gray.MultiplyAlpha(0.6);
                 Content = new Label {Text = "Google maps is not installed on this device."};
             }
             else
