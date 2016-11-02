@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using App2Night;
 using Foundation;
+using HockeyApp.iOS;
 using UIKit;
 
 namespace PartyUp.iOS
@@ -26,7 +27,12 @@ namespace PartyUp.iOS
             Xamarin.FormsMaps.Init();
             LoadApplication(new App());
 
+            var manager = BITHockeyManager.SharedHockeyManager;
+            manager.Configure("$(HockeyAppId)");
+            manager.StartManager();
+            manager.Authenticator.AuthenticateInstallation(); 
             return base.FinishedLaunching(app, options);
+
         }
     }
 }

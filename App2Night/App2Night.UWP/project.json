@@ -1,5 +1,6 @@
 ﻿{
   "dependencies": {
+    "HockeySDK.Xamarin": "4.1.0",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
     "Portable.Ninject": "3.3.0",
     "SkiaSharp.Views.Forms": "1.54.1-beta1",
