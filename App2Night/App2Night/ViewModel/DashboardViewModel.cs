@@ -13,6 +13,6 @@ namespace App2Night.ViewModel
         public MvvmNanoCommand MoveToUserEditCommand => new MvvmNanoCommand(()=> NavigateTo<EditProfileViewModel>());
         public MvvmNanoCommand MoveToMyPartiesCommand => new MvvmNanoCommand(()=> NavigateTo<MyPartysViewModel>()); 
         public MvvmNanoCommand MoveToHistoryCommand => new MvvmNanoCommand(() => NavigateTo<HistoryViewModel>());
-        public MvvmNanoCommand MoveToPartyPicker => new MvvmNanoCommand(() => NavigateTo<EventPickerViewModel>());
+        public MvvmNanoCommand MoveToPartyPicker => new MvvmNanoCommand(() => NavigateTo<PartyPickerViewModel>());
     }
 }

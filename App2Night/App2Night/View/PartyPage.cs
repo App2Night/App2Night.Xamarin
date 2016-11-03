@@ -3,9 +3,9 @@ using MvvmNano.Forms;
 
 namespace App2Night.View
 {
-    public class EventPage : MvvmNanoContentPage<EventViewModel>
+    public class PartyPage : MvvmNanoContentPage<PartyViewModel>
     {
-        public EventPage()
+        public PartyPage()
         {
             BindToViewModel(this, TitleProperty, vm => vm.Party.Name);
         }

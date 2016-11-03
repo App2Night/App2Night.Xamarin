@@ -60,7 +60,7 @@
     <Compile Include="ViewModel\AboutViewModel.cs" />
     <Compile Include="ViewModel\CreatePartyViewModel.cs" />
     <Compile Include="ViewModel\DashboardViewModel.cs" />
-    <Compile Include="ViewModel\EventViewModel.cs" />
+    <Compile Include="ViewModel\PartyViewModel.cs" />
     <Compile Include="ViewModel\HistoryViewModel.cs" />
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\NavigationViewModel.cs" />
@@ -70,12 +70,12 @@
     <Compile Include="ViewModel\Subpages\MyPartysViewModel.cs" />
     <Compile Include="ViewModel\Subpages\ParticipantViewModel.cs" />
     <Compile Include="ViewModel\TestViewModel.cs" />
-    <Compile Include="ViewModel\EventPickerViewModel.cs" />
+    <Compile Include="ViewModel\PartyPickerViewModel.cs" />
     <Compile Include="View\AboutPage.cs" />
     <Compile Include="View\CreatePartyPage.cs" />
     <Compile Include="View\DashboardPage.cs" />
-    <Compile Include="View\EventPage.cs" />
-    <Compile Include="View\EventPickerPage.cs" />
+    <Compile Include="View\PartyPage.cs" />
+    <Compile Include="View\PartyPickerPage.cs" />
     <Compile Include="View\HistoryPage.cs" />
     <Compile Include="View\LoginPage.cs" />
     <Compile Include="View\NavigationPage.cs" />

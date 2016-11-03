@@ -9,9 +9,9 @@ using Xamarin.Forms;
 
 namespace App2Night.View
 {
-    public class EventPickerPage : MvvmNanoContentPage<EventPickerViewModel>
+    public class PartyPickerPage : MvvmNanoContentPage<PartyPickerViewModel>
     {
-        public EventPickerPage()
+        public PartyPickerPage()
         {
             //var eventListView = new ListPartyView(ListViewCachingStrategy.RecycleElement);
             //BindToViewModel(eventListView, ListPartyView.ItemsSourceProperty, vm => vm.Events);
