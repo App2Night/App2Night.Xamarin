@@ -85,8 +85,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CustomView\Page\" />
-    <Folder Include="Data\Image\" />
     <Folder Include="Model\" />
+    <Folder Include="Resource\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\App2Night.Model\App2Night.Model.csproj">
@@ -159,7 +159,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resource\2492718.jpg" />
+    <EmbeddedResource Include="Data\Image\default.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.3.163-pre3\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.3.163-pre3\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />

@@ -18,7 +18,7 @@ namespace App2Night.View
             HeightRequest = 200
         };
 
-        RoundImage profilePicture = new RoundImage("App2Night.Data.Image.flo.png")
+        RoundImage profilePicture = new RoundImage("App2Night.Data.Image.default.png")
         {
             HeightRequest = 100,
             WidthRequest = 100,
