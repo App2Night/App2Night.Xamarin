@@ -1,5 +1,6 @@
 ﻿{
   "dependencies": {
+    "Acr.UserDialogs": "6.3.0",
     "HockeySDK.Xamarin": "4.1.0",
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
     "Portable.Ninject": "3.3.0",

@@ -1,5 +1,8 @@
 ﻿using System.Threading.Tasks;
 using App2Night.DependencyService;
+using App2Night.Model.Model;
+using App2Night.Service.Interface;
+using App2Night.Service.Service;
 using App2Night.ViewModel;
 using MvvmNano;
 using MvvmNano.Forms;
@@ -64,21 +67,12 @@ namespace App2Night
             AddSiteToDetailPages(new MasterDetailData(typeof(SettingViewModel), "Setting"));
             AddSiteToDetailPages(new MasterDetailData(typeof(AboutViewModel),"About"));
 
-            //Task.Run(async () => { await StartupSync(); });
-
-
-        } 
-
-        private async Task StartupSync()
-        {
-            var token = await MvvmNanoIoC.Resolve<IClientService>().GetToken("test", "test");
-            await MvvmNanoIoC.Resolve<ICacheService>().RefreshPartys();
-        }
+        }  
 
         private void RegisterInterfaces()
         {
             MvvmNanoIoC.Register<IClientService, ClientService>();
-            MvvmNanoIoC.RegisterAsSingleton<ICacheService, CacheService>();
+            MvvmNanoIoC.RegisterAsSingleton<IDataService, DataService>();
         }
     }
 }

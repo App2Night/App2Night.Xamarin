@@ -29,34 +29,23 @@ namespace App2Night.View
         private HorizontalGallerieView historyGallerieView = new HorizontalGallerieView
         {
             MaxRows = 3,
-            ElementSize = 100,
             Template = typeof(QuadraticPartyTemplate)
         };
 
         private HorizontalGallerieView interestingPartieGallerie = new HorizontalGallerieView
         {
-            ElementSize = 150,
+            MaxRows = 2,
             Template = typeof(QuadraticPartyTemplate)
         };
 
         private HorizontalGallerieView myPartieGallerie = new HorizontalGallerieView
         {
-            ElementSize = 150,
+            MaxRows = 2,
             Template = typeof(QuadraticPartyTemplate)
         };
 
         public DashboardPage()
-        {
-            //Dummy elements
-            var dummys = new List<Party>();
-            for (int i = 0; i < 40; i++)
-            {
-                dummys.Add(new Party {Name = "Dummy " + (i + 1)});
-            }
-            myPartieGallerie.ItemSource = dummys.Where(o => dummys.IndexOf(o) < 2); 
-            interestingPartieGallerie.ItemSource = dummys.Where(o => dummys.IndexOf(o) < 9);
-            historyGallerieView.ItemSource = dummys;
-
+        { 
             //User info view
             var userInfoView = new Grid
             {
@@ -95,7 +84,6 @@ namespace App2Night.View
             };
             BindToViewModel(userInfoContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToUserEditCommand);
 
-
             //Interesting partie view
             var interestingPartieContainer = new EnhancedContainer
             {
@@ -103,7 +91,8 @@ namespace App2Night.View
                 ButtonText = "More",
                 Content = interestingPartieGallerie
             };
-            //BindToViewModel(interestingPartieGallerie, GallerieView.ItemSourceProperty, vm => vm.InterestingPartiesForUser);
+            interestingPartieGallerie.ElementTapped += PartieSelected;
+            BindToViewModel(interestingPartieGallerie, AbstractGallerieView.ItemSourceProperty, vm => vm.InterestingPartiesForUser);
             BindToViewModel(interestingPartieContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToPartyPicker);
 
             //Users parties view
@@ -113,7 +102,8 @@ namespace App2Night.View
                 Content = myPartieGallerie
             };
             myPartieGallerie.ElementTapped +=PartieSelected;
-                BindToViewModel(myPartiesContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToMyPartiesCommand);
+            BindToViewModel(myPartiesContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToMyPartiesCommand);
+            BindToViewModel(myPartieGallerie, AbstractGallerieView.ItemSourceProperty, vm => vm.NextPartiesForUser);
 
             //Partie history
             var historyContainer = new EnhancedContainer
@@ -123,7 +113,8 @@ namespace App2Night.View
                 Content = historyGallerieView
             };
             BindToViewModel(historyContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToHistoryCommand);
-
+            historyGallerieView.ElementTapped += PartieSelected;
+            BindToViewModel(historyGallerieView, AbstractGallerieView.ItemSourceProperty, vm => vm.PartyHistory);
 
             //Main layout
             var mainLayout = new StackLayout()
@@ -164,6 +155,12 @@ namespace App2Night.View
             base.OnSizeAllocated(width, height);
             profilePicture.HeightRequest = Width/2 - 20;
             profilePicture.WidthRequest = Width/2 - 20;
+
+            var spacing = myPartieGallerie.Spacing;
+            var widthWithoutSpacing = (Width - spacing*3);
+            historyGallerieView.ElementSize = widthWithoutSpacing/3;
+            myPartieGallerie.ElementSize = widthWithoutSpacing / 2;
+            interestingPartieGallerie.ElementSize = widthWithoutSpacing / 2;
         }
 
     }

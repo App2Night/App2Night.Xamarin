@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using App2Night.Service.Interface;
 using MvvmNano;
 using PartyUp.Model.Model;
 using PartyUp.Service.Interface;
@@ -9,7 +10,7 @@ namespace App2Night.ViewModel
     public class EventPickerViewModel : MvvmNanoViewModel
     {
         private Party _selectedParty = null;
-        public ObservableCollection<Party> Events => MvvmNanoIoC.Resolve<ICacheService>().Partys;
+        public ObservableCollection<Party> Events => MvvmNanoIoC.Resolve<IDataService>().Partys;
 
 
         public EventPickerViewModel()

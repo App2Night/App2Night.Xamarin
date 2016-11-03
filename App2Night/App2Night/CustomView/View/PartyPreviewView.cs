@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using App2Night.DependencyService;
 using PartyUp.Model.Enum;
@@ -19,7 +20,9 @@ namespace App2Night.CustomView.View
         private readonly TapGestureRecognizer _closeTapGestureRecognizer = new TapGestureRecognizer();
 
         public PartyPreviewView(Party party, double parentHeight, double parentWidth) : base(party.Name, party)
-        { 
+        {
+
+            
             BackgroundColor = Color.White;
             // set button to calculate route
             var routeBtn = new Button
@@ -28,103 +31,74 @@ namespace App2Night.CustomView.View
                 HorizontalOptions = LayoutOptions.Center
             };
             // TODO Handle BtnClicked
-            routeBtn.Clicked += CalculateRoute;
+            routeBtn.Clicked += OpenNavigationToParty;
             Coordinates userCoordinates = _userLocationService.GetUserCoordinates(); 
             map = new MapWrapper(new Map(MapSpan.FromCenterAndRadius(
                 new Position(userCoordinates.Latitude, userCoordinates.Longitude),
                 Distance.FromMiles(0.3)))
             {
-                IsShowingUser = true,
-                HeightRequest = 200
-            }); 
+                IsShowingUser = true 
+            });
+            Grid.SetColumnSpan(map, 2);
 
-            var view = new ScrollView
+            Style infoLabelStyle = new Style(typeof(Label))
             {
-                //TODO Header
-                Content = new Grid
+                Setters =
                 {
-                    ColumnDefinitions = new ColumnDefinitionCollection
+                    new Setter
                     {
-                        new ColumnDefinition {Width = new GridLength(50, GridUnitType.Star)},
-                        new ColumnDefinition {Width = new GridLength(50, GridUnitType.Star)},
-                    },
-                    Children =
-                    {
-                        map,
-                        {
-                            new Label
-                            {
-                                Text = "Name",
-                                HorizontalOptions = LayoutOptions.Start,
-                            }
-                            , 0, 1
-                        },
-                        {
-                            new Label {Text = Party.Name, HorizontalOptions = LayoutOptions.End,}
-                            , 1, 1
-                        },
-                        {
-                            new Label
-                            {
-                                Text = "Date",
-                                HorizontalOptions = LayoutOptions.Start,
-                            },
-                            0, 2
-                        },
-                        {
-                            //TODO Handle DateFormating for system
-                            new Label
-                            {
-                                Text = Party.Date.Date.ToString("HH:mm:ss dd.MM.yyyy",
-                                    CultureInfo.CurrentUICulture),
-                                HorizontalOptions = LayoutOptions.End,
-                            },
-                            1,2 
-                        },
-                        {
-                            new Label
-                            {
-                                Text = "Music Genre",
-                                HorizontalOptions = LayoutOptions.Start,
-                            },
-                            0, 3
-                        },
-                        {
-                            new Label
-                            {
-                                Text = Party.MusicGenre.ToString(),
-                                HorizontalOptions = LayoutOptions.End,
-                            },
-                            1, 3
-                        },
-                        {
-                            new Label
-                            {
-                                Text = "Created",
-                                HorizontalOptions = LayoutOptions.Start,
-                            },
-                            0, 4
-                        },
-                        {
-                            new Label
-                            {
-                                Text = Party.CreationDateTime.ToString("dd MMMM yyyy",
-                                    CultureInfo.CurrentUICulture),
-                                HorizontalOptions = LayoutOptions.End,
-                            },
-                            1, 4
-                        },
-                        {
-                            routeBtn, 0, 5
-                        }
+                        Property = Label.FontSizeProperty,
+                        Value = 20
                     }
                 }
             };
-            //HeightRequest = layoutGrid.RowDefinitions.Sum(o => o.Height.Value);
 
-            Grid.SetColumnSpan(map, 2);
+            var dateLabel = new Label{Style = infoLabelStyle};
+            dateLabel.SetBinding(Label.TextProperty, "Date");
+            var startTimeLabel = new Label { Style = infoLabelStyle };
+            startTimeLabel.SetBinding(Label.TextProperty, "Date");
+            var genreLabel = new Label { Style = infoLabelStyle };
+            genreLabel.SetBinding(Label.TextProperty, "Genre");
+
+            var views = new ResourceDictionary()
+            {
+                {"Date", dateLabel},
+                {"Start time", startTimeLabel },
+                {"Genre", genreLabel } 
+            };
+
+            var layoutGrid = new Grid()
+            {
+                RowDefinitions =
+                {
+                    new RowDefinition { Height = new GridLength(200, GridUnitType.Absolute)}
+                },
+                ColumnDefinitions =
+                {
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)} 
+                },
+                Children =
+                {
+                    map
+                }
+            };
+            int rowCounter = 1;
+            foreach (KeyValuePair<string, object> valuePair in views)
+            {
+                layoutGrid.RowDefinitions.Add(new RowDefinition {Height = new GridLength(1, GridUnitType.Star)});
+                layoutGrid.Children.Add(new Label {Text = valuePair.Key, Style = infoLabelStyle, HorizontalOptions = LayoutOptions.Start}, 0, rowCounter);
+                layoutGrid.Children.Add((Xamarin.Forms.View) valuePair.Value, 1, rowCounter); 
+                rowCounter++;
+            }
             HeightRequest = parentWidth * 2/3.0;
-            Content = view;
+            Content = new ScrollView { Content = layoutGrid };
+        }
+
+        protected override void OnBindingContextChanged()
+        {
+            base.OnBindingContextChanged();
+            var test = BindingContext;
         }
 
         private void CloseTapGestureRecognizerOnTapped(object sender, EventArgs eventArgs)
@@ -132,8 +106,9 @@ namespace App2Night.CustomView.View
             CloseView();
         }
 
-        private void CalculateRoute(object sender, EventArgs eventArgs)
+        private void OpenNavigationToParty(object sender, EventArgs eventArgs)
         {
+
         }
     }
 }

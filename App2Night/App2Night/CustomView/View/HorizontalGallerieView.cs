@@ -3,12 +3,15 @@ using System.Linq;
 using Xamarin.Forms;
 
 namespace App2Night.CustomView.View
-{
+{  
     public class HorizontalGallerieView : AbstractGallerieView
     {  
         public double ElementSize { get; set; } = 100;
         public int MaxRows { get; set; } = 1;
         public bool FitRows { get; set; } = false;
+        public int Columns { get; set; } = 2;
+
+
 
         protected override void ArrengeElements()
         {

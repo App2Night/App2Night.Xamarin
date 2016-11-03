@@ -8,53 +8,36 @@ namespace App2Night.CustomView.Template
     {
         public QuadraticPartyTemplate()
         {
-            SKCanvasView dummiImage = new ImageFromPortable("App2Night.Data.Image.default.png");
-              
+            SKCanvasView image = new ImageFromPortable("App2Night.Data.Image.default.png"); 
 
             var titleLabel = new Label()
             {
-                FontSize = 20
+                FontSize = 20,
+                TextColor = Color.Black
             };
             titleLabel.SetBinding(Label.TextProperty, "Name");
 
             var distanceLabel = new Label
             {
-                Text = "In 20,4 Km (Stuttgart)"
-            };
-
-            var descriptionLabel = new Label
-            {
-                Text = "Die super duper Party in Studi, kommt ran, es gibt alkoholische Getränke!!!!"
-            };
+                Text = "20,4km (Stuttgart)",
+                TextColor = Color.Black
+            }; 
 
             RowDefinitions = new RowDefinitionCollection
             {
-                new RowDefinition {Height = new GridLength(30, GridUnitType.Star)}, 
-                new RowDefinition {Height = new GridLength(4, GridUnitType.Star)},
-                new RowDefinition {Height = new GridLength(50, GridUnitType.Star)},
-                new RowDefinition {Height = new GridLength(20, GridUnitType.Star)}
-
-            }; 
-             
-            Children.Add(dummiImage);
-            SetRowSpan(dummiImage, 4);
+                new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
+                new RowDefinition {Height = new GridLength(1, GridUnitType.Star)}
+            };
+            var shadow = new BoxView() {Color = Color.White
+                //FromHex("#ffedb3")
+                .MultiplyAlpha(0.6)};
+            
+            Children.Add(image);
+            Children.Add(shadow);
             Children.Add(titleLabel);
-            Children.Add(descriptionLabel, 0, 2); 
-            Children.Add(distanceLabel, 0, 3); 
-            var headerOverlayView = new BoxView
-            {
-                Color = Color.White.MultiplyAlpha(0.2)
-            };
-
-            var bottomOverlayView = new BoxView
-            {
-                Color = Color.White.MultiplyAlpha(0.2)
-            };
-
-            Children.Add(headerOverlayView); 
-            Children.Add(bottomOverlayView, 0, 2);
-            SetRowSpan(bottomOverlayView, 2);
-
+            Children.Add(distanceLabel, 0, 1); 
+            SetRowSpan(image, 2);
+            SetRowSpan(shadow, 2);
         }
     }
 }

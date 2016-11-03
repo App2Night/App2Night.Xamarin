@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using App2Night.DependencyService;
+using App2Night.Service.Interface;
 using MvvmNano;
 using PartyUp.Service.Interface;
 
@@ -15,7 +16,7 @@ namespace App2Night.ViewModel
 
         private async Task Sync()
         {
-            await MvvmNanoIoC.Resolve<ICacheService>().RefreshPartys();
+            await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys();
         }
     }
 }
