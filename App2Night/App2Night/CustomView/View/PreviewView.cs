@@ -1,7 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 
-namespace App2Night.CustomView
+namespace App2Night.CustomView.View
 {
     public class PreviewView : ContentView
     {

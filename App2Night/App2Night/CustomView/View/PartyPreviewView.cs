@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Globalization;
-using System.Linq;
 using App2Night.DependencyService;
 using PartyUp.Model.Enum;
 using PartyUp.Model.Model;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
-namespace App2Night.CustomView
+namespace App2Night.CustomView.View
 {
     public class PartyPreviewView : PreviewView
     {
@@ -35,7 +34,8 @@ namespace App2Night.CustomView
                 new Position(userCoordinates.Latitude, userCoordinates.Longitude),
                 Distance.FromMiles(0.3)))
             {
-                IsShowingUser = true
+                IsShowingUser = true,
+                HeightRequest = 200
             }); 
 
             var view = new ScrollView

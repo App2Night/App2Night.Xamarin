@@ -1,67 +1,72 @@
-﻿using System;
+﻿using App2Night.CustomView.View;
 using PartyUp.Model.Model;
 using Xamarin.Forms;
 
-namespace App2Night.CustomView
+namespace App2Night.CustomView.Template
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class PartyTemplate : ViewCell
     {
-        private RoundImage _pictureImage = new RoundImage("App2Night.Data.partydummi.jpg");
-
-        private Label _musicGenreLabel = new Label
+        private RoundImage _pictureImage = new RoundImage("App2Night.Data.Image.flo.png")
         {
-            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.Center
         };
 
         private Label _nameLabel = new Label
         {
-            HorizontalOptions = LayoutOptions.Start,
-            FontSize = 16
+            HorizontalOptions = LayoutOptions.Center,
+            FontSize = 20
         };
 
-        private Label _dateLabel = new Label
+        private ContentView _content = new ContentView();
+
+        protected Xamarin.Forms.View Content
         {
-            HorizontalOptions = LayoutOptions.Start
-        };
+            get { return _content.Content; }
+            set { _content.Content = value; }
+        }
+
+
+        private Grid _grid;
+        protected override void OnPropertyChanged(string propertyName = null)
+        {
+            base.OnPropertyChanged(propertyName);
+            if (propertyName == "Parent" && Parent !=null )
+            {
+                _grid.ColumnDefinitions[0].Width = ((ListView)Parent).RowHeight * 0.8;
+            }
+
+        }
 
         public PartyTemplate()
         {
             _nameLabel.SetBinding(Label.TextProperty, nameof(Party.Name));
-            _dateLabel.SetBinding(Label.TextProperty, nameof(Party.Date), stringFormat: "{0:dd MM yyyy}");
-            _musicGenreLabel.SetBinding(Label.TextProperty, nameof(Party.MusicGenre));
-            View = new Grid
+            _grid= new Grid
             {
                 Padding = new Thickness(5),
+                VerticalOptions = LayoutOptions.Center,
                 ColumnDefinitions = new ColumnDefinitionCollection
                 {
-                    new ColumnDefinition {Width = new GridLength(20, GridUnitType.Star)},
-                    new ColumnDefinition {Width = new GridLength(30, GridUnitType.Star)},
-                    new ColumnDefinition {Width = new GridLength(10, GridUnitType.Star)},
-                    new ColumnDefinition {Width = new GridLength(30, GridUnitType.Star)}
+                    new ColumnDefinition {Width = new GridLength(150, GridUnitType.Absolute)},
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+               
                 },
                 RowDefinitions = new RowDefinitionCollection
                 {
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
                 },
                 Children =
                 {
-                    {
-                        _pictureImage,
-                        0, 0
-                    },
-                    {
-                        _nameLabel,
-                        1, 0
-                    },
-                    {
-                        _musicGenreLabel, 2, 0
-                    },
-                    {
-                        _dateLabel,
-                        3, 0
-                    },
+                    {_pictureImage,0, 0},
+                    {_nameLabel,1, 0},
+                    {_content,1,1}
                 }
             };
+            Grid.SetRowSpan(_pictureImage,2);
+
+            View = _grid;
         }
     }
 }

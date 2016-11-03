@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using MvvmNano;
-using PartyUp.Model.Model;
 using Xamarin.Forms;
 
-namespace App2Night.CustomView
+namespace App2Night.CustomView.View
 {
     public class AbstractGallerieView : CustomScrollView
     {
@@ -104,8 +103,8 @@ namespace App2Night.CustomView
 
         protected virtual void ArrengeElements()
         {
-            
 
+            
             //Clear the grid
             ContentGrid.Padding = Spacing;
             ContentGrid.RowDefinitions.Clear();

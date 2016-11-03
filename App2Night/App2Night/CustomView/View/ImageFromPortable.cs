@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using App2Night.CustomView.Template;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 
@@ -29,7 +30,7 @@ namespace App2Night.CustomView.View
 
         void CreateBitmap()
         {
-            var assembly = typeof(QuadraticPartyTemplate).GetTypeInfo().Assembly;
+            var assembly = typeof(QuadraticPartyTemplate).GetTypeInfo().Assembly; 
             Stream stream = assembly.GetManifestResourceStream(_imagePath);
             using (var s = new SKManagedStream(stream))
             { 
@@ -41,8 +42,8 @@ namespace App2Night.CustomView.View
                     IntPtr length;
                     var result = codec.GetPixels(bitmap.Info, bitmap.GetPixels(out length));
                     if (!(result == SKCodecResult.Success || result == SKCodecResult.IncompleteInput)) 
-                    {
-                        throw new ArgumentException("Unable to load bitmap from provided data");
+                    { 
+                        //throw new ArgumentException("Unable to load bitmap from provided data");
                     }
                 }
             }

@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Xamarin.Forms;
 
-namespace App2Night.CustomView
+namespace App2Night.CustomView.View
 {
     public class SwipeView : ContentView
     {

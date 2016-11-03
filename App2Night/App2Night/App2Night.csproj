@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="CustomPage\ContentPageWithPreview.cs" />
+    <Compile Include="CustomView\Template\HistoryTemplate.cs" />
     <Compile Include="CustomView\Template\QuadraticPartyTemplate.cs" />
     <Compile Include="CustomView\View\AbstractGallerieView.cs" />
     <Compile Include="CustomView\View\CustomButton.cs" />
@@ -84,6 +85,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="CustomView\Page\" />
+    <Folder Include="Data\Image\" />
     <Folder Include="Model\" />
   </ItemGroup>
   <ItemGroup>
@@ -157,8 +159,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Data\partydummi.jpg" />
-    <EmbeddedResource Include="Data\flo.jpg" />
     <Content Include="Resource\2492718.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

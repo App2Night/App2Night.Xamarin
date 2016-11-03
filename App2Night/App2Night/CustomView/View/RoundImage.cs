@@ -1,9 +1,8 @@
-﻿using App2Night.CustomView.View;
-using SkiaSharp;
+﻿using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 
-namespace App2Night.CustomView
+namespace App2Night.CustomView.View
 {
     public class RoundImage : ImageFromPortable
     {

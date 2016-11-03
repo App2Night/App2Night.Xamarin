@@ -1,7 +1,7 @@
 ﻿using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
-namespace App2Night.CustomView
+namespace App2Night.CustomView.View
 {
     public class MapWrapper : ContentView
     {

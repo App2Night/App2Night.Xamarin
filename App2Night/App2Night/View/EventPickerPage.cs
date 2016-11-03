@@ -1,8 +1,11 @@
 ﻿using System.Collections.Generic;
 using App2Night.CustomView;
+using App2Night.CustomView.Template;
+using App2Night.CustomView.View;
 using App2Night.ViewModel;
 using MvvmNano.Forms;
 using PartyUp.Model.Model;
+using Xamarin.Forms;
 
 namespace App2Night.View
 {
@@ -24,25 +27,26 @@ namespace App2Night.View
 
 
             //Content = eventListView;
-
-            var swipeView =  
-                 new SwipeView();
-
-           
             var dummiParties = new List<Party>();
             for (int i = 0; i < 12; i++)
             {
                 dummiParties.Add(new Party() {Name = "PartyNr: " + (i+1)});
             }
-            var gallerieView = new VerticalGallerieView
+           
+            var listView = new ListView
             {
-                Columns = 2,
-                Template = typeof(QuadraticPartyTemplate),
-                ItemSource = dummiParties,
-                
+                ItemTemplate = new DataTemplate(typeof(PartyTemplate)),
+                ItemsSource = dummiParties,
+                RowHeight = 100,
             };
+
+            var swipeView =  
+                 new SwipeView();
+
+           
+            
             BindToViewModel(swipeView, SwipeView.ItemSourceProperty, vm => vm.Events);
-            Content = gallerieView;
+            Content = listView;
         }
     }
 }

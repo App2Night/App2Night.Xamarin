@@ -1,18 +1,14 @@
-﻿using System;
-using System.IO;
-using System.Reflection;
-using App2Night.CustomView.View;
-using SkiaSharp;
+﻿using App2Night.CustomView.View;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 
-namespace App2Night.CustomView
+namespace App2Night.CustomView.Template
 {
     public class QuadraticPartyTemplate : Grid
     {
         public QuadraticPartyTemplate()
         {
-            SKCanvasView dummiImage = new ImageFromPortable("App2Night.Data.partydummi.jpg");
+            SKCanvasView dummiImage = new ImageFromPortable("App2Night.Data.Image.flo.png");
               
 
             var titleLabel = new Label()

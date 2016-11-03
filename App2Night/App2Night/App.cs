@@ -41,7 +41,7 @@ namespace App2Night
                         new Setter
                         {
                             Property = Xamarin.Forms.View.MarginProperty,
-                            Value = 4,
+                            Value = 0,
                         },
                     },
                    

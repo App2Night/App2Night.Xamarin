@@ -2,6 +2,8 @@
 using System.Linq;
 using App2Night.CustomPage;
 using App2Night.CustomView;
+using App2Night.CustomView.Template;
+using App2Night.CustomView.View;
 using App2Night.ViewModel;
 using PartyUp.Model.Model;
 using Xamarin.Forms;
@@ -16,7 +18,7 @@ namespace App2Night.View
             HeightRequest = 200
         };
 
-        RoundImage profilePicture = new RoundImage("App2Night.Data.flo.jpg")
+        RoundImage profilePicture = new RoundImage("App2Night.Data.Image.flo.png")
         {
             HeightRequest = 100,
             WidthRequest = 100,
@@ -28,16 +30,19 @@ namespace App2Night.View
         {
             MaxRows = 3,
             ElementSize = 100,
+            Template = typeof(QuadraticPartyTemplate)
         };
 
         private HorizontalGallerieView interestingPartieGallerie = new HorizontalGallerieView
         {
-            ElementSize = 150
+            ElementSize = 150,
+            Template = typeof(QuadraticPartyTemplate)
         };
 
         private HorizontalGallerieView myPartieGallerie = new HorizontalGallerieView
         {
-            ElementSize = 150
+            ElementSize = 150,
+            Template = typeof(QuadraticPartyTemplate)
         };
 
         public DashboardPage()
