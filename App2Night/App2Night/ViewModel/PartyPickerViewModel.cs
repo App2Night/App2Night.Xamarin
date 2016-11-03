@@ -7,13 +7,13 @@ using PartyUp.Service.Interface;
 
 namespace App2Night.ViewModel
 {
-    public class EventPickerViewModel : MvvmNanoViewModel
+    public class PartyPickerViewModel : MvvmNanoViewModel
     {
         private Party _selectedParty = null;
         public ObservableCollection<Party> Events => MvvmNanoIoC.Resolve<IDataService>().Partys;
 
 
-        public EventPickerViewModel()
+        public PartyPickerViewModel()
         {
             Events.CollectionChanged += Events_CollectionChanged;
         }
@@ -31,7 +31,7 @@ namespace App2Night.ViewModel
                 if (value != null)
                 {
                     _selectedParty = value;
-                    NavigateTo<EventViewModel, Party>(value);
+                    NavigateTo<PartyViewModel, Party>(value);
                     _selectedParty = null;
                     NotifyPropertyChanged(nameof(SelectedParty));
                 }

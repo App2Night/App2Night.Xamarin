@@ -60,8 +60,9 @@
     <Compile Include="ViewModel\AboutViewModel.cs" />
     <Compile Include="ViewModel\CreatePartyViewModel.cs" />
     <Compile Include="ViewModel\DashboardViewModel.cs" />
-    <Compile Include="ViewModel\EventViewModel.cs" />
+    <Compile Include="ViewModel\PartyViewModel.cs" />
     <Compile Include="ViewModel\HistoryViewModel.cs" />
+    <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\NavigationViewModel.cs" />
     <Compile Include="ViewModel\SettingViewModel.cs" />
     <Compile Include="ViewModel\Subpages\EditPartyViewModel.cs" />
@@ -69,13 +70,14 @@
     <Compile Include="ViewModel\Subpages\MyPartysViewModel.cs" />
     <Compile Include="ViewModel\Subpages\ParticipantViewModel.cs" />
     <Compile Include="ViewModel\TestViewModel.cs" />
-    <Compile Include="ViewModel\EventPickerViewModel.cs" />
+    <Compile Include="ViewModel\PartyPickerViewModel.cs" />
     <Compile Include="View\AboutPage.cs" />
     <Compile Include="View\CreatePartyPage.cs" />
     <Compile Include="View\DashboardPage.cs" />
-    <Compile Include="View\EventPage.cs" />
-    <Compile Include="View\EventPickerPage.cs" />
+    <Compile Include="View\PartyPage.cs" />
+    <Compile Include="View\PartyPickerPage.cs" />
     <Compile Include="View\HistoryPage.cs" />
+    <Compile Include="View\LoginPage.cs" />
     <Compile Include="View\NavigationPage.cs" />
     <Compile Include="View\SettingPage.cs" />
     <Compile Include="View\Subpages\EditPartyPage.cs" />
@@ -172,6 +174,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\Image\default.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\Image\a2n_app_color.svg" />
+    <Content Include="Data\Image\a2n_app_goldenratio_color.svg" />
+    <Content Include="Data\Image\a2n_app_goldenratio_mono.svg" />
+    <Content Include="Data\Image\a2n_app_mono.svg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Forms.2.3.3.163-pre3\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.3.163-pre3\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10+xamarinmac20\Xamarin.Forms.targets')" />
