@@ -6,7 +6,7 @@ namespace App2Night.CustomView
 {
     public class PartyTemplate : ViewCell
     {
-        private RoundImage _pictureImage = new RoundImage(null);
+        private RoundImage _pictureImage = new RoundImage("App2Night.Data.partydummi.jpg");
 
         private Label _musicGenreLabel = new Label
         {

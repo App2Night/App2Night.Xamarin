@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using App2Night.CustomPage;
 using App2Night.CustomView;
 using App2Night.ViewModel;
-using MvvmNano.Forms;
 using PartyUp.Model.Model;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
@@ -19,7 +16,7 @@ namespace App2Night.View
             HeightRequest = 200
         };
 
-        RoundImage profilePicture = new RoundImage(null)
+        RoundImage profilePicture = new RoundImage("App2Night.Data.flo.jpg")
         {
             HeightRequest = 100,
             WidthRequest = 100,
@@ -27,18 +24,18 @@ namespace App2Night.View
             EdgeColor = Color.Maroon
         }; 
 
-        private GallerieView historyGallerieView = new GallerieView
+        private HorizontalGallerieView historyGallerieView = new HorizontalGallerieView
         {
             MaxRows = 3,
             ElementSize = 100,
         };
 
-        private GallerieView interestingPartieGallerie = new GallerieView
+        private HorizontalGallerieView interestingPartieGallerie = new HorizontalGallerieView
         {
             ElementSize = 150
         };
 
-        private GallerieView myPartieGallerie = new GallerieView
+        private HorizontalGallerieView myPartieGallerie = new HorizontalGallerieView
         {
             ElementSize = 150
         };
@@ -46,13 +43,12 @@ namespace App2Night.View
         public DashboardPage()
         {
             //Dummy elements
-            var dummys = new List<string>();
+            var dummys = new List<Party>();
             for (int i = 0; i < 40; i++)
             {
-                dummys.Add("Dummy " + (i + 1));
+                dummys.Add(new Party {Name = "Dummy " + (i + 1)});
             }
-            myPartieGallerie.ItemSource = dummys.Where(o => dummys.IndexOf(o) < 2);
-
+            myPartieGallerie.ItemSource = dummys.Where(o => dummys.IndexOf(o) < 2); 
             interestingPartieGallerie.ItemSource = dummys.Where(o => dummys.IndexOf(o) < 9);
             historyGallerieView.ItemSource = dummys;
 

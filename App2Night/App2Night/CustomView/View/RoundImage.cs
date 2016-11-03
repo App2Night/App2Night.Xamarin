@@ -1,10 +1,11 @@
-﻿using SkiaSharp;
+﻿using App2Night.CustomView.View;
+using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
 
 namespace App2Night.CustomView
 {
-    public class RoundImage : SKCanvasView
+    public class RoundImage : ImageFromPortable
     {
         public bool FlatBottom { get; set; } = false;
         public bool Edge { get; set; } = true;
@@ -21,7 +22,7 @@ namespace App2Night.CustomView
             _lastKnownWidth = width;
             _lastKnownHeight = height;
 
-            base.OnPaintSurface(e);
+          
 
             //Rectangle representing the view
             SKRect rect = new SKRect(0, 0, width, height);
@@ -43,13 +44,13 @@ namespace App2Night.CustomView
 
 
             e.Surface.Canvas.ClipPath(path);
-
-            //Test content, to be replaced with image
-            SKPaint testPaint = new SKPaint();
-            testPaint.IsAntialias = true;
-            testPaint.Style = SKPaintStyle.Fill;
-            testPaint.Color = Color.Green.ToSKColor();
-            e.Surface.Canvas.DrawRect(rect, testPaint);
+            base.OnPaintSurface(e);
+            ////Test content, to be replaced with image
+            //SKPaint testPaint = new SKPaint();
+            //testPaint.IsAntialias = true;
+            //testPaint.Style = SKPaintStyle.Fill;
+            //testPaint.Color = Color.Green.ToSKColor();
+            //e.Surface.Canvas.DrawRect(rect, testPaint);
 
             if (Edge)
             {
@@ -62,7 +63,7 @@ namespace App2Night.CustomView
             }
         }
 
-        public RoundImage(ImageSource source)
+        public RoundImage(string sourcePath) : base(sourcePath)
         {
             _lastKnownHeight = 0;
             //BackgroundColor = Color.Gray;

@@ -37,17 +37,21 @@
   <ItemGroup>
     <Compile Include="App.cs" />
     <Compile Include="CustomPage\ContentPageWithPreview.cs" />
-    <Compile Include="CustomView\CustomButton.cs" />
-    <Compile Include="CustomView\MapWrapper.cs" />
-    <Compile Include="CustomView\CustomScrollView.cs" />
-    <Compile Include="CustomView\GallerieView.cs" />
-    <Compile Include="CustomView\ListPartyView.cs" />
-    <Compile Include="CustomView\PartyPreviewView.cs" />
-    <Compile Include="CustomView\PartyTemplate.cs" />
-    <Compile Include="CustomView\PreviewView.cs" />
-    <Compile Include="CustomView\RoundImage.cs" />
-    <Compile Include="CustomView\SwipeView.cs" />
-    <Compile Include="CustomView\EnhancedContainer.cs" />
+    <Compile Include="CustomView\Template\QuadraticPartyTemplate.cs" />
+    <Compile Include="CustomView\View\AbstractGallerieView.cs" />
+    <Compile Include="CustomView\View\CustomButton.cs" />
+    <Compile Include="CustomView\View\ImageFromPortable.cs" />
+    <Compile Include="CustomView\View\MapWrapper.cs" />
+    <Compile Include="CustomView\View\CustomScrollView.cs" />
+    <Compile Include="CustomView\View\HorizontalGallerieView.cs" />
+    <Compile Include="CustomView\View\ListPartyView.cs" />
+    <Compile Include="CustomView\View\PartyPreviewView.cs" />
+    <Compile Include="CustomView\Template\PartyTemplate.cs" />
+    <Compile Include="CustomView\View\PreviewView.cs" />
+    <Compile Include="CustomView\View\RoundImage.cs" />
+    <Compile Include="CustomView\View\SwipeView.cs" />
+    <Compile Include="CustomView\View\EnhancedContainer.cs" />
+    <Compile Include="CustomView\View\VerticalGallerieView.cs" />
     <Compile Include="DependencyService\IUserLocationService.cs" />
     <Compile Include="DependencyService\IAndroidAppLookupService.cs" />
     <Compile Include="DependencyService\IConnectionService.cs" />
@@ -79,6 +83,7 @@
     <Compile Include="View\Subpages\ParticipantPage.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="CustomView\Page\" />
     <Folder Include="Model\" />
   </ItemGroup>
   <ItemGroup>
@@ -152,6 +157,8 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Data\partydummi.jpg" />
+    <EmbeddedResource Include="Data\flo.jpg" />
     <Content Include="Resource\2492718.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

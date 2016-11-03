@@ -30,7 +30,7 @@ namespace App2Night.CustomView
             };
             // TODO Handle BtnClicked
             routeBtn.Clicked += CalculateRoute;
-            Coordinates userCoordinates = _userLocationService.GetUserCoordinates();
+            Coordinates userCoordinates = _userLocationService.GetUserCoordinates(); 
             map = new MapWrapper(new Map(MapSpan.FromCenterAndRadius(
                 new Position(userCoordinates.Latitude, userCoordinates.Longitude),
                 Distance.FromMiles(0.3)))
