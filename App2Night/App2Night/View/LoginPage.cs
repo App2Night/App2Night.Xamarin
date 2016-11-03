@@ -8,36 +8,42 @@ namespace App2Night.View
 {
     public class LoginPage : MvvmNanoContentPage<LoginViewModel>
     {
-        private CustomButton _regButton = new CustomButton()
+        private readonly CustomButton _regButton = new CustomButton()
         {
             HorizontalOptions = LayoutOptions.Start,
             IsVisible = false,
             Text = "\uf061",
-            
         };
-        private Entry _namEntry = new Entry
+        private readonly Entry _namEntry = new Entry
         {
             HorizontalOptions = LayoutOptions.Center,
             WidthRequest = 300,
             Placeholder = "Name"
         };
 
-        private Entry _passwordEntry = new Entry
+        private readonly Entry _passwordEntry = new Entry
         {
             IsPassword = true,
             HorizontalOptions = LayoutOptions.Center,
             WidthRequest = 300,
-            Placeholder = "Email"
+            Placeholder = "Password"
         };
 
-        private CustomButton _signUpBtn = new CustomButton
+        private readonly CustomButton _signUpBtn = new CustomButton
         {
             HorizontalOptions = LayoutOptions.Center,
-            Text = "Moechten Sie sich registrieren?",
+            Text = "registrieren?",
             Margin = new Thickness(0,10,0,0)
         };
 
-        private ImageFromPortable image = new ImageFromPortable("App2Night.Data.Image.default.png")
+        private Label _textLabel = new Label
+        {
+            Text = "Möchten sie sich ",
+            Margin = new Thickness(5, 10, 0, 0),
+            HorizontalOptions = LayoutOptions.Start
+        };
+
+        private readonly ImageFromPortable _image = new ImageFromPortable("App2Night.Data.Image.default.png")
         {
             HeightRequest = 256,
             WidthRequest = 100,
@@ -50,8 +56,9 @@ namespace App2Night.View
             // set btn 
             _regButton.ButtonLabel.FontSize = 30;
             _regButton.ButtonLabel.FontFamily = "FontAwesome";
-            _namEntry.TextChanged += (sender, args) => SetBtnVisible(sender, args);
+            _namEntry.TextChanged += SetBtnVisible;
             _passwordEntry.TextChanged += SetBtnVisible;
+            _regButton.ButtonTapped += Login;
             _signUpBtn.ButtonLabel.TextColor = Color.Blue;
             var grid = new Grid
             {
@@ -70,17 +77,22 @@ namespace App2Night.View
                 },
                 Children =
                 {
-                    {image,0,0 },
+                    //{_image,0,0 },
                     {_namEntry, 1, 1},
                     {_passwordEntry, 1, 2},
                     {_signUpBtn,1,3 },
+                    {_textLabel,1,3 },
                     {_regButton,2,1}
                 }
             };
-            Grid.SetColumnSpan(image, 3);
+            Grid.SetColumnSpan(_image, 3);
             Content = grid;
         }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="o"></param>
+        /// <param name="s"></param>
         private void SetBtnVisible(object o, TextChangedEventArgs s)
         {
             if (_namEntry.Text != null && _passwordEntry.Text != null)
@@ -98,6 +110,11 @@ namespace App2Night.View
             {
                 _regButton.IsVisible = false;
             }
+        }
+
+        private void Login(object c, EventArgs args) 
+        {
+            
         }
     }
 }
