@@ -4,6 +4,9 @@
     {
         All,
         Rock,
-        Pop
+        Pop,
+        HipHop,
+        Rap,
+        Electro
     }
 }
