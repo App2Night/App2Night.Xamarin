@@ -22,7 +22,7 @@ namespace App2Night.View
             Title = "History";
             var listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
-                RowHeight = 100,
+                RowHeight = 150,
 
                 ItemTemplate = new DataTemplate(typeof(HistoryTemplate)),
                 ItemsSource = new []

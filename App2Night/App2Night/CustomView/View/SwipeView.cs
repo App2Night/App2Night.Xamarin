@@ -10,16 +10,16 @@ namespace App2Night.CustomView.View
     {
         private Xamarin.Forms.View _topView => _mainGrid.Children.LastOrDefault(); 
 
-        public static BindableProperty ItemSourceProperty =
-            BindableProperty.Create(nameof(ItemSource), typeof(IEnumerable<object>), typeof(SwipeView),
+        public static BindableProperty ItemsSourceProperty =
+            BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable<object>), typeof(SwipeView),
                 propertyChanged: (bindable, value, newValue) => ((SwipeView)bindable).CollectionSet());
 
         private void CollectionSet()
         {
             AllCards.Clear();
             _mainGrid.Children.Clear();
-            if (ItemSource == null) return; 
-            foreach (object o in ItemSource)
+            if (ItemsSource == null) return; 
+            foreach (object o in ItemsSource)
             {
                 Xamarin.Forms.View card;
                 if (_templateType != null)
@@ -57,10 +57,10 @@ namespace App2Night.CustomView.View
             }
         }
 
-        public IEnumerable<object> ItemSource
+        public IEnumerable<object> ItemsSource
         {
-            get { return (IEnumerable<object>)GetValue(ItemSourceProperty); }
-            set { SetValue(ItemSourceProperty, value); }
+            get { return (IEnumerable<object>)GetValue(ItemsSourceProperty); }
+            set { SetValue(ItemsSourceProperty, value); }
         }
 
         private Type _templateType;

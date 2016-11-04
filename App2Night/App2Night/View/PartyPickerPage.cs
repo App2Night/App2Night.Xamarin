@@ -12,30 +12,11 @@ namespace App2Night.View
     public class PartyPickerPage : MvvmNanoContentPage<PartyPickerViewModel>
     {
         public PartyPickerPage()
-        {
-            //var eventListView = new ListPartyView(ListViewCachingStrategy.RecycleElement);
-            //BindToViewModel(eventListView, ListPartyView.ItemsSourceProperty, vm => vm.Events);
-            //BindToViewModel(eventListView, ListPartyView.SelectedItemProperty, vm => vm.SelectedParty);
-
-            //eventListView.ItemTemplate  = new DataTemplate(() =>
-            //{
-            //    var nameCell = new TextCell();
-            //    nameCell.SetBinding(TextCell.TextProperty, "Name"); 
-            //    return nameCell;
-            //}); 
-             
-
-            //Content = eventListView;
-            var dummiParties = new List<Party>();
-            for (int i = 0; i < 12; i++)
-            {
-                dummiParties.Add(new Party() {Name = "PartyNr: " + (i+1)});
-            }
+        {  
            
             var listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
-                ItemTemplate = new DataTemplate(typeof(PartyTemplate)),
-                ItemsSource = dummiParties,
+                ItemTemplate = new DataTemplate(typeof(PartyTemplate)), 
                 RowHeight = 100,
             };
 
@@ -43,8 +24,22 @@ namespace App2Night.View
                  new SwipeView();
 
            
-            
-            BindToViewModel(swipeView, SwipeView.ItemSourceProperty, vm => vm.Events);
+            var changeViewToolbarItem = new ToolbarItem()
+            {
+                Text = "ToOtherView",
+                Command = new Command(() =>
+                {
+                    if (Content == swipeView)
+                        Content = listView;
+                    else
+                        Content = swipeView;
+                })
+            };
+            ToolbarItems.Add(changeViewToolbarItem);
+
+            BindToViewModel(swipeView, SwipeView.ItemsSourceProperty, vm => vm.Events);
+            BindToViewModel(listView, ListView.ItemsSourceProperty, vm => vm.Events);
+
             Content = listView;
         }
     }

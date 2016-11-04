@@ -29,6 +29,7 @@ namespace App2Night.View
         private HorizontalGallerieView historyGallerieView = new HorizontalGallerieView
         {
             Columns = 3,
+            Rows = 2, 
             Template = typeof(QuadraticPartyTemplate)
         };
 

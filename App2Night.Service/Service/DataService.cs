@@ -104,12 +104,36 @@ namespace App2Night.Service.Service
 
                 //Populate Partys with new data.
                 Partys.Clear();
-                foreach (Party party in syncResult.Data)
+                PopulatePartys(syncResult.Data);
+            }
+            else
+            {
+                var dummyList = new List<Party>();
+                for (int i = 0; i < 10; i++)
                 {
-                    Partys.Add(party);
+                    dummyList.Add(new Party
+                    {
+                        Name = "Test Party" + (i+1),
+                        Date = DateTime.Today.AddDays(i).AddMonths(i) 
+                    });
+                }
+                //TODO Replace with real caching
+                if (dummyList.Count > 0)
+                {
+                    syncResult.Data = dummyList;
+                    syncResult.IsCached = true;
+                    PopulatePartys(syncResult.Data);
                 }
             }
             return syncResult;
-        } 
+        }
+
+        void PopulatePartys(IEnumerable<Party> parties)
+        {
+            foreach (Party party in parties)
+            {
+                Partys.Add(party);
+            }
+        }
     }
 }
