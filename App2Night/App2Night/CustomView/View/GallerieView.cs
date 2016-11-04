@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using MvvmNano;
 using Xamarin.Forms;
 
 namespace App2Night.CustomView.View
 {
-    public class AbstractGallerieView : CustomScrollView
+    public class GallerieView : CustomScrollView
     {
         private double _spacing = 5;
         protected Grid ContentGrid = new Grid(); 
@@ -32,14 +34,45 @@ namespace App2Night.CustomView.View
 
 
         public static BindableProperty ItemSourceProperty = BindableProperty.Create(nameof(ItemSource), typeof(IEnumerable<object>), typeof(HorizontalGallerieView),
-            propertyChanged: (bindable, value, newValue) => ((AbstractGallerieView)bindable).GenerateElemets());
+            propertyChanged: (bindable, value, newValue) => ((GallerieView)bindable).CollectionSet((IEnumerable<object>) value, (IEnumerable<object>) newValue));
         public IEnumerable<object> ItemSource
         {
             get { return (IEnumerable<object>)GetValue(ItemSourceProperty); }
             set { SetValue(ItemSourceProperty, value); }
         }
 
-        public AbstractGallerieView()
+        void CollectionSet(IEnumerable<object> oldCollection, IEnumerable<object> newCollection)
+        {
+            if (oldCollection != null)
+            {
+                //Check if old collection is observable and remove handler if it is.
+                bool isOldObservableCollection = oldCollection.GetType().GetGenericTypeDefinition() ==
+                                                 typeof (ObservableCollection<>);
+                if (isOldObservableCollection)
+                {
+                    ((INotifyCollectionChanged)oldCollection).CollectionChanged -= OnCollectionChanged;
+                }
+            }
+
+            if (newCollection != null)
+            {
+                //Check if new collection is observable and add handler if it is.
+                bool isNewObservableCollection = newCollection.GetType().GetGenericTypeDefinition() ==
+                                                 typeof(ObservableCollection<>);
+                if (isNewObservableCollection)
+                {
+                    ((INotifyCollectionChanged)newCollection).CollectionChanged += OnCollectionChanged;
+                }
+                GenerateElemets();
+            } 
+        }
+
+        private void OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs notifyCollectionChangedEventArgs)
+        {
+            GenerateElemets();
+        }
+
+        public GallerieView()
         {
             GenerateElemets();
             Content = ContentGrid;
@@ -66,6 +99,7 @@ namespace App2Night.CustomView.View
                 gestureRekognizer.Tapped += GestureRekognizerOnTapped;
                 view.GestureRecognizers.Add(gestureRekognizer);
             }
+            ArrengeElements();
         }
 
         /// <summary>

@@ -2,7 +2,7 @@
 
 namespace App2Night.CustomView.View
 {
-    public class VerticalGallerieView : AbstractGallerieView
+    public class VerticalGallerieView : GallerieView
     {
         public int Columns { get; set; } = 3;
 

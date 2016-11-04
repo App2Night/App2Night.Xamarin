@@ -4,97 +4,53 @@ using Xamarin.Forms;
 
 namespace App2Night.CustomView.View
 {  
-    public class HorizontalGallerieView : AbstractGallerieView
-    {  
-        public double ElementSize { get; set; } = 100;
-        public int MaxRows { get; set; } = 1;
-        public bool FitRows { get; set; } = false;
+    public class HorizontalGallerieView : GallerieView
+    {   
         public int Columns { get; set; } = 2;
-
-
+        public int Rows { get; set; } = 1;
 
         protected override void ArrengeElements()
         {
-            if (Height <= 0) return;
+            if (Height < 0 || Width < 0) return;
             if (ContentGrid.Children.Count == 0) return;
-            base.ArrengeElements(); 
+            base.ArrengeElements();
 
-            //Gallerie view can take a given ElementSize or calculate 
-            //the actualElementSize based on a maxElementSize and the Height ob the view.
-            int rows = MaxRows;
-            double actualElementSize = ElementSize;
-            if (!FitRows)
+            //Calculate the size of an element.
+            double elementSize = (Width
+                                  - Spacing*2 //Left and right spacing
+                                  - Spacing*(Columns - 1)) //Spacing between columns
+                                 /Columns;
+
+            int neededRows = Rows;
+            int maxRows = (int) Math.Ceiling(ContentGrid.Children.Count()/(double) Columns);
+            if (maxRows < neededRows) neededRows = maxRows;
+
+            //Elements in a row
+            int elementsPerRow = (int) Math.Ceiling( ContentGrid.Children.Count()/ (double)neededRows);
+
+            for (int i = 0; i < elementsPerRow; i++)
             {
-                //Calculate how many rows are needed
-                int visibleElementsPerRow = (int)Math.Ceiling(Width / actualElementSize);
-                int neededRows = 0;
-                int tmpElementCount = ItemSource.Count();
-                for (int i = 0; i < rows; i++)
+                ContentGrid.ColumnDefinitions.Add(new ColumnDefinition {Width = new GridLength(elementSize, GridUnitType.Absolute)});
+            }
+            for (int i = 0; i < neededRows; i++) 
+            {
+                ContentGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(elementSize, GridUnitType.Absolute) }); 
+            }
+            int tmpRowCounter = 0;
+            int tmpColumnCounter = 0;
+            foreach (Xamarin.Forms.View view in ContentGrid.Children)
+            {
+                view.HeightRequest = elementSize;
+                view.WidthRequest = elementSize;
+                if (tmpColumnCounter == elementsPerRow)
                 {
-                    if (tmpElementCount > visibleElementsPerRow)
-                    {
-                        neededRows++;
-                        tmpElementCount -= visibleElementsPerRow;
-                    }
-                    else
-                        break;
-                } 
-                rows = neededRows == 0 ? 1 : neededRows;
-                HeightRequest = (rows - 1) * Spacing + Spacing * 2 + rows * ElementSize;
-            }
-            else
-            {
-                double rowsRaw = (Height - Spacing * 2) / (ElementSize);
-                rows = (int)Math.Ceiling(rowsRaw);
-                actualElementSize = (Height - Spacing * 2 - (Spacing * (rows - 1))) / rows;
-            }
-            if (rows == 0) return;
-
-            //Create the rows
-            CreateGridRows(rows);
-
-            //Create the columns
-            CreateGridColumns(rows, actualElementSize);
-
-            //Position the elements
-            PositionElementsInGrid(); 
-        }
-
-        private void CreateGridColumns(int rows, double actualElementSize)
-        {
-            var columns = (int)Math.Ceiling(ItemSource.Count() / (double)rows);
-            for (int i = 0; i < columns; i++)
-            {
-                ContentGrid.ColumnDefinitions.Add(new ColumnDefinition()
-                {
-                    Width = new GridLength(actualElementSize, GridUnitType.Absolute)
-                });
-            }
-        }
-
-        void CreateGridRows(int rows)
-        {
-            for (int i = 0; i < rows; i++)
-            {
-                ContentGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-            }
-        }
-
-        void PositionElementsInGrid()
-        {
-            int columnCount = 0;
-            int row = 0; 
-            foreach (Xamarin.Forms.View o in ContentGrid.Children)
-            {
-                if (ContentGrid.ColumnDefinitions.Count <= columnCount)
-                {
-                    columnCount = 0;
-                    row++;
+                    tmpRowCounter++;
+                    tmpColumnCounter = 0;
                 }
-                Grid.SetRow(o, row);
-                Grid.SetColumn(o, columnCount);
-                columnCount++;
-            }
+                Grid.SetColumn(view, tmpColumnCounter);
+                Grid.SetRow(view, tmpRowCounter);
+                tmpColumnCounter++;
+            } 
         }
 
         public HorizontalGallerieView()

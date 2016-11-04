@@ -21,21 +21,7 @@ namespace App2Night.Service.Service
             _clientService = clientService;
         }
 
-        public ObservableCollection<Party> Partys 
-        {
-            get
-            {
-                var result = new ObservableCollection<Party>();
-                for (int i = 0; i < 9; i++)
-                {
-                    result.Add(new Party
-                    {
-                        Name = "Test event " + (i + 1) + " !"
-                    });
-                }
-                return result;
-            } 
-        }
+        public ObservableCollection<Party> Partys { get; } = new ObservableCollection<Party>();
 
         public Task WipeData()
         {

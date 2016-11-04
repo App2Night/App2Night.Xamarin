@@ -20,9 +20,7 @@ namespace App2Night.CustomView.View
         private readonly TapGestureRecognizer _closeTapGestureRecognizer = new TapGestureRecognizer();
 
         public PartyPreviewView(Party party, double parentHeight, double parentWidth) : base(party.Name, party)
-        {
-
-            
+        { 
             BackgroundColor = Color.White;
             // set button to calculate route
             var routeBtn = new Button

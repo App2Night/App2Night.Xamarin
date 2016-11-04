@@ -23,8 +23,7 @@ namespace App2Night.View
             //    nameCell.SetBinding(TextCell.TextProperty, "Name"); 
             //    return nameCell;
             //}); 
-
-
+             
 
             //Content = eventListView;
             var dummiParties = new List<Party>();
@@ -33,7 +32,7 @@ namespace App2Night.View
                 dummiParties.Add(new Party() {Name = "PartyNr: " + (i+1)});
             }
            
-            var listView = new ListView
+            var listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 ItemTemplate = new DataTemplate(typeof(PartyTemplate)),
                 ItemsSource = dummiParties,

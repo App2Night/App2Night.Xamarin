@@ -1,8 +1,6 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System; 
 using App2Night.CustomView.View;
-using App2Night.ViewModel;
-using Java.Lang;
+using App2Night.ViewModel; 
 using MvvmNano.Forms;
 using Xamarin.Forms;
 

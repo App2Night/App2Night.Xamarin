@@ -20,9 +20,10 @@ namespace App2Night.View
         public HistoryPage()
         {
             Title = "History";
-            var listView = new ListView()
+            var listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 RowHeight = 100,
+
                 ItemTemplate = new DataTemplate(typeof(HistoryTemplate)),
                 ItemsSource = new []
                 {

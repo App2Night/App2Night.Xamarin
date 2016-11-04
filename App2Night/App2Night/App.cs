@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using Acr.UserDialogs;
 using App2Night.DependencyService;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
@@ -9,6 +10,7 @@ using MvvmNano.Forms;
 using PartyUp.Service.Interface;
 using PartyUp.Service.Service;
 using Xamarin.Forms;
+using Color = System.Drawing.Color;
 
 namespace App2Night
 {
@@ -39,7 +41,7 @@ namespace App2Night
                         new Setter
                         {
                             Property = Xamarin.Forms.View.HorizontalOptionsProperty,
-                            Value = LayoutOptions.Center, 
+                            Value = LayoutOptions.Center,
                         },
                         new Setter
                         {
@@ -47,7 +49,7 @@ namespace App2Night
                             Value = 0,
                         },
                     },
-                   
+
                 },
                 {"Test", new Style(typeof(Label))
                 }
@@ -68,8 +70,28 @@ namespace App2Night
             AddSiteToDetailPages(new MasterDetailData(typeof(AboutViewModel), "About"));
 
             //SetUpMainPage<LoginViewModel>();
+            Device.BeginInvokeOnMainThread((async () => await StartupSync()));
 
-        }  
+        }
+
+        public async Task StartupSync()
+        {
+            //UserDialogs.Instance.ShowLoading("Starting session.");
+            var result = await MvvmNanoIoC.Resolve<IDataService>().RequestToken("test", "test");
+            UserDialogs.Instance.Toast(
+            new ToastConfig("Token request finished " + (result.Success ? "" : "un") + "successfull.")
+            {
+                BackgroundColor = result.Success ? System.Drawing.Color.LawnGreen : System.Drawing.Color.LightCoral
+            });
+            //UserDialogs.Instance.Loading("Loading partys.");
+            await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys();
+            // UserDialogs.Instance.HideLoading();
+            UserDialogs.Instance.Toast(new ToastConfig("Loading parties finished " + (result.Success ? "" : "un") + "successfull.")
+            {
+                BackgroundColor = result.Success ? System.Drawing.Color.LawnGreen : Color.LightCoral
+            });
+             
+        }
 
         private void RegisterInterfaces()
         {

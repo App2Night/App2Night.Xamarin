@@ -1,4 +1,5 @@
-﻿using Android.App;
+﻿using Acr.UserDialogs;
+using Android.App;
 using Android.Content.PM;
 using Android.OS;
 using HockeyApp.Android;
@@ -17,6 +18,7 @@ namespace App2Night.Droid
             CrashManager.Register(this, "3aca0e171a5443c090b3e064f2e5ce4b");
             UpdateManager.Register(this, "3aca0e171a5443c090b3e064f2e5ce4b");
             MetricsManager.Register(Application, "3aca0e171a5443c090b3e064f2e5ce4b");
+            UserDialogs.Init(this);
             Xamarin.FormsMaps.Init(this, bundle);
             LoadApplication(new App());
             
