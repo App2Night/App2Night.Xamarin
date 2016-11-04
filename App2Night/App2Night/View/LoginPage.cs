@@ -8,6 +8,7 @@ namespace App2Night.View
 {
     public class LoginPage : MvvmNanoContentPage<LoginViewModel>
     {
+        #region Nodes
         private readonly CustomButton _loginButton = new CustomButton()
         {
             HorizontalOptions = LayoutOptions.Start,
@@ -51,7 +52,7 @@ namespace App2Night.View
             Margin = new Thickness(10, 10, 0, 0)
         };
 
-        private Label _acceptLabel = new Label
+        private readonly Label _acceptLabel = new Label
         {
             Text = "Hiermit bestätige ich das bla bla bla bla bla bla viel Recht,bla bla bla bla bla bla, ob du behindert bist hab ich gefragt",
             HorizontalOptions = LayoutOptions.Center,
@@ -66,13 +67,18 @@ namespace App2Night.View
             Margin = new Thickness(10),
         };
 
-        private Switch _acceptSwitch = new Switch
+        private readonly Switch _acceptSwitch = new Switch
         {
             HorizontalOptions = LayoutOptions.Center,
             Margin = new Thickness(0, 25, 0, 0),
             IsVisible = false
         };
 
+        private readonly CustomButton _moreInfButton = new CustomButton
+        {
+            
+        };
+        #endregion
         public LoginPage()
         {
             Title = "Login";
@@ -115,9 +121,6 @@ namespace App2Night.View
                     {_acceptSwitch,1,5 },
                     { _registerLabel, 1, 6},
                     {_signUpBtn, 2, 6},
-                    
-
-
                     {_loginButton, 3, 1}
                 }
             };
@@ -129,7 +132,7 @@ namespace App2Night.View
             Grid.SetColumnSpan(_acceptSwitch, 2);
             Content = grid;
         }
-
+        #region Events
         /// <summary>
         /// Sets the login btn visible. Only if the necassary inputs available, the <code>_loginBtn</code> is visible.
         /// </summary>
@@ -139,14 +142,7 @@ namespace App2Night.View
         {
             if (_nameEntry.Text != null && _passwordEntry.Text != null)
             {
-                if (_nameEntry.Text.Length > 0 && _passwordEntry.Text.Length > 0)
-                {
-                    _loginButton.IsVisible = true;
-                }
-                else
-                {
-                    _loginButton.IsVisible = false;
-                }
+                _loginButton.IsVisible = (_nameEntry.Text.Length > 0 && _passwordEntry.Text.Length > 0 ? true : false);
             }
             else
             {
@@ -163,6 +159,14 @@ namespace App2Night.View
         {
             Animation animation = new Animation(d => { _loginButton.ButtonLabel.TranslationX = d*100; }, 0, 1);
             animation.Commit(this, "StartOpeningAnimation");
+            if (_signUpBtn.IsToggled)
+            {
+                // TODO Handle Input
+            }
+            else
+            {
+                // TODO Handle Login
+            }
         }
 
         /// <summary>
@@ -252,7 +256,7 @@ namespace App2Night.View
                 });
             }
         }
-
+        #endregion
         /// <summary>
         /// Changes the scale of the switch, if its triggered.
         /// </summary>
