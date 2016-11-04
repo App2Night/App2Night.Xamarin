@@ -1,10 +1,11 @@
-﻿using App2Night.ViewModel;
+﻿using App2Night.CustomPage;
+using App2Night.ViewModel;
 using MvvmNano.Forms;
 using Xamarin.Forms;
 
 namespace App2Night.View
 {
-    public class AboutPage : MvvmNanoContentPage<AboutViewModel>
+    public class AboutPage : ContentPageWithInfo<AboutViewModel>
     {
         public AboutPage()
         {

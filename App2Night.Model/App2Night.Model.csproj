@@ -40,6 +40,7 @@
     <Compile Include="Enum\MusicGenre.cs" />
     <Compile Include="Model\Party.cs" />
     <Compile Include="Model\Location.cs" />
+    <Compile Include="Enum\PartyType.cs" />
     <Compile Include="Model\Result.cs" />
     <Compile Include="Model\Token.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

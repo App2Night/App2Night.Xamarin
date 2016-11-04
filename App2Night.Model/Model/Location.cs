@@ -10,6 +10,7 @@ namespace PartyUp.Model.Model
         public int HouseNumber { get; set; }
         public string HouseNumberAdditional { get; set; }
         public int Zipcode { get; set; }
-        public Coordinates Coordinates { get; set; }
+        public long Latitude { get; set; }
+        public long Longitude { get; set; }
     }
 }

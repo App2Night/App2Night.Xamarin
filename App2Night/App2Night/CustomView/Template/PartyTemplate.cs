@@ -40,6 +40,12 @@ namespace App2Night.CustomView.Template
 
         }
 
+        protected override void OnBindingContextChanged()
+        {
+            base.OnBindingContextChanged();
+            var test = BindingContext;
+        }
+
         public PartyTemplate()
         {
             _nameLabel.SetBinding(Label.TextProperty, nameof(Party.Name));

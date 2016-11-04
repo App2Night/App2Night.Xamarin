@@ -7,7 +7,7 @@ using HockeyApp.Android.Metrics;
 
 namespace App2Night.Droid
 {
-    [Activity(Label = "App2Night", Icon = "@drawable/icon", Theme = "@style/MyTheme", MainLauncher = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "App2Night", Icon = "@drawable/icon", Theme = "@style/MyTheme", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
     {
         protected override void OnCreate(Bundle bundle)
@@ -20,9 +20,7 @@ namespace App2Night.Droid
             MetricsManager.Register(Application, "3aca0e171a5443c090b3e064f2e5ce4b");
             UserDialogs.Init(this);
             Xamarin.FormsMaps.Init(this, bundle);
-            LoadApplication(new App());
-            
-          
+            LoadApplication(new App()); 
         }
 
         protected override void OnResume()

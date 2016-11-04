@@ -9,6 +9,7 @@ using MvvmNano;
 using MvvmNano.Forms;
 using PartyUp.Service.Interface;
 using PartyUp.Service.Service;
+using Plugin.Connectivity;
 using Xamarin.Forms;
 using Color = System.Drawing.Color;
 
@@ -71,24 +72,18 @@ namespace App2Night
 
         public async Task StartupSync()
         {
-            if (!Xamarin.Forms.DependencyService.Get<IConnectionService>().IsOnline())
+            if (CrossConnectivity.Current.IsConnected)
             {
+                UserDialogs.Instance.ShowLoading("Starting session.");
+                var tokenResult = await MvvmNanoIoC.Resolve<IDataService>().RequestToken("test", "test");
                 UserDialogs.Instance.Toast(
-                    new ToastConfig("Not online.")
-                    {
-                        BackgroundColor = System.Drawing.Color.LightCoral
-                    });
-                return;
-            }
-            UserDialogs.Instance.ShowLoading("Starting session.");
-            var result = await MvvmNanoIoC.Resolve<IDataService>().RequestToken("test", "test");
-            UserDialogs.Instance.Toast(
-            new ToastConfig("Token request finished " + (result.Success ? "" : "un") + "successfull.")
-            {
-                BackgroundColor = result.Success ? System.Drawing.Color.LawnGreen : System.Drawing.Color.LightCoral
-            });
-            UserDialogs.Instance.Loading("Loading partys.");
-            await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys();
+                new ToastConfig("Token request finished " + (tokenResult.Success ? "" : "un") + "successfull.")
+                {
+                    BackgroundColor = tokenResult.Success ?  Color.LawnGreen : Color.LightCoral
+                });
+            }  
+            UserDialogs.Instance.ShowLoading("Loading partys.");
+            var result = await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys();
             UserDialogs.Instance.HideLoading();
             UserDialogs.Instance.Toast(new ToastConfig("Loading parties finished " + (result.Success ? "" : "un") + "successfull.")
             {
