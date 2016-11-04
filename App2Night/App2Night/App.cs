@@ -71,7 +71,15 @@ namespace App2Night
 
         public async Task StartupSync()
         {
-
+            if (!Xamarin.Forms.DependencyService.Get<IConnectionService>().IsOnline())
+            {
+                UserDialogs.Instance.Toast(
+                    new ToastConfig("Not online.")
+                    {
+                        BackgroundColor = System.Drawing.Color.LightCoral
+                    });
+                return;
+            }
             UserDialogs.Instance.ShowLoading("Starting session.");
             var result = await MvvmNanoIoC.Resolve<IDataService>().RequestToken("test", "test");
             UserDialogs.Instance.Toast(

@@ -102,6 +102,7 @@ namespace App2Night.CustomView.View
 
         public EnhancedContainer()
         {
+            _moreBtn.ButtonLabel.FontSize = 18;
             if (string.IsNullOrEmpty(ButtonText))
                 ButtonText = "\uf061";
             ColorChanged(this, SeperatorColor, SeperatorColor);
@@ -129,9 +130,18 @@ namespace App2Night.CustomView.View
         {
             if (Command != null)
             {
-                await _moreBtn.ScaleTo(1.6, 25U);
-                await _moreBtn.ScaleTo(1, 300U, Easing.BounceIn);
-
+                var animation = new Animation(d =>
+                {
+                    _moreBtn.Scale = d;
+                },1, 1.6);
+                var nextAnimation = new Animation(d =>
+                {
+                    _moreBtn.Scale = d;
+                },1.6, 1);
+                animation.Commit(this, "Scale", finished: delegate
+                {
+                    nextAnimation.Commit(this, "Descale");
+                });
                 Command.Execute(null);
             }
         }
