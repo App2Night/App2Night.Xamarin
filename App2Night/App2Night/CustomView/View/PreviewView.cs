@@ -1,7 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 
-namespace App2Night.CustomView
+namespace App2Night.CustomView.View
 {
     public class PreviewView : ContentView
     {
@@ -36,6 +36,7 @@ namespace App2Night.CustomView
 
         public void StartOpeningAnimation(uint length = 500U)
         {
+            _titleLabel.SetBinding(Label.TextProperty, "Name");
             _closeButton.ButtonLabel.Rotation = 180;
             Animation openingAnimation = new Animation(d =>
             {
@@ -56,6 +57,7 @@ namespace App2Night.CustomView
 
         public PreviewView(string title, object item)
         {
+            BindingContext = item;
             _moreButton.ButtonLabel.FontFamily = "FontAwesome";
             _closeButton.ButtonLabel.FontFamily = "FontAwesome";
             Item = item;

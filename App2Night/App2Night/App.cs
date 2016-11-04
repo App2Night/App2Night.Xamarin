@@ -1,11 +1,16 @@
 ﻿using System.Threading.Tasks;
+using Acr.UserDialogs;
 using App2Night.DependencyService;
+using App2Night.Model.Model;
+using App2Night.Service.Interface;
+using App2Night.Service.Service;
 using App2Night.ViewModel;
 using MvvmNano;
 using MvvmNano.Forms;
 using PartyUp.Service.Interface;
 using PartyUp.Service.Service;
 using Xamarin.Forms;
+using Color = System.Drawing.Color;
 
 namespace App2Night
 {
@@ -30,21 +35,16 @@ namespace App2Night
                     {
                         new Setter
                         {
-                            Property = Xamarin.Forms.View.VerticalOptionsProperty,
-                            Value = LayoutOptions.Center
+                            Property = Label.HorizontalTextAlignmentProperty,
+                            Value = TextAlignment.Center
                         },
                         new Setter
                         {
-                            Property = Xamarin.Forms.View.HorizontalOptionsProperty,
-                            Value = LayoutOptions.Center, 
-                        },
-                        new Setter
-                        {
-                            Property = Xamarin.Forms.View.MarginProperty,
-                            Value = 4,
-                        },
-                    },
-                   
+                            Property = Label.VerticalTextAlignmentProperty,
+                            Value = TextAlignment.Center,
+                        }
+                    }
+
                 },
                 {"Test", new Style(typeof(Label))
                 }
@@ -55,33 +55,52 @@ namespace App2Night
         {
             RegisterInterfaces();
 
-            base.OnStart(); 
+            base.OnStart();
             SetUpMasterDetailPage<NavigationViewModel>();
-            AddSiteToDetailPages(new MasterDetailData(typeof(DashboardViewModel), "Dashboard")); 
-            AddSiteToDetailPages(new MasterDetailData(typeof(EventPickerViewModel), "Pick a party"));
+            AddSiteToDetailPages(new MasterDetailData(typeof(DashboardViewModel), "Dashboard"));
+            AddSiteToDetailPages(new MasterDetailData(typeof(PartyPickerViewModel), "Pick a party"));
             AddSiteToDetailPages(new MasterDetailData(typeof(CreatePartyViewModel), "Create"));
             AddSiteToDetailPages(new MasterDetailData(typeof(HistoryViewModel), "History"));
             AddSiteToDetailPages(new MasterDetailData(typeof(SettingViewModel), "Setting"));
-            AddSiteToDetailPages(new MasterDetailData(typeof(AboutViewModel),"About"));
-            
-            Device.BeginInvokeOnMainThread(async ()=>
-            {
-                await StartupSync();
-            });
+            AddSiteToDetailPages(new MasterDetailData(typeof(AboutViewModel), "About"));
 
+            //SetUpMainPage<LoginViewModel>();
+            Device.BeginInvokeOnMainThread((async () => await StartupSync()));
 
-        } 
+        }
 
-        private async Task StartupSync()
+        public async Task StartupSync()
         {
-            var token = await MvvmNanoIoC.Resolve<IClientService>().GetToken("test", "test");
-            await MvvmNanoIoC.Resolve<ICacheService>().RefreshPartys();
+            if (!Xamarin.Forms.DependencyService.Get<IConnectionService>().IsOnline())
+            {
+                UserDialogs.Instance.Toast(
+                    new ToastConfig("Not online.")
+                    {
+                        BackgroundColor = System.Drawing.Color.LightCoral
+                    });
+                return;
+            }
+            UserDialogs.Instance.ShowLoading("Starting session.");
+            var result = await MvvmNanoIoC.Resolve<IDataService>().RequestToken("test", "test");
+            UserDialogs.Instance.Toast(
+            new ToastConfig("Token request finished " + (result.Success ? "" : "un") + "successfull.")
+            {
+                BackgroundColor = result.Success ? System.Drawing.Color.LawnGreen : System.Drawing.Color.LightCoral
+            });
+            UserDialogs.Instance.Loading("Loading partys.");
+            await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys();
+            UserDialogs.Instance.HideLoading();
+            UserDialogs.Instance.Toast(new ToastConfig("Loading parties finished " + (result.Success ? "" : "un") + "successfull.")
+            {
+                BackgroundColor = result.Success ? System.Drawing.Color.LawnGreen : Color.LightCoral
+            });
+             
         }
 
         private void RegisterInterfaces()
         {
             MvvmNanoIoC.Register<IClientService, ClientService>();
-            MvvmNanoIoC.RegisterAsSingleton<ICacheService, CacheService>();
+            MvvmNanoIoC.RegisterAsSingleton<IDataService, DataService>();
         }
     }
 }

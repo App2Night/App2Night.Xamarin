@@ -2,6 +2,8 @@
 using System.Threading.Tasks;
 using App2Night.CustomPage;
 using App2Night.CustomView;
+using App2Night.CustomView.Template;
+using App2Night.CustomView.View;
 using App2Night.ViewModel;
 using MvvmNano.Forms;
 using PartyUp.Model.Enum;
@@ -12,14 +14,18 @@ namespace App2Night.View
 {
     public class HistoryPage : ContentPageWithPreview<HistoryViewModel>
     {
+        /// <summary>
+        /// Lists the Parties in a ListView. 
+        /// </summary>
         public HistoryPage()
         {
             Title = "History";
-            var listView = new ListView()
+            var listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
-                RowHeight = 100,
-                ItemTemplate = new DataTemplate(typeof(PartyTemplate)),
-                ItemsSource = new Party[]
+                RowHeight = 150,
+
+                ItemTemplate = new DataTemplate(typeof(HistoryTemplate)),
+                ItemsSource = new []
                 {
                     new Party
                     {
@@ -47,13 +53,15 @@ namespace App2Night.View
         }
 
         /// <summary>
-        /// Gets fired if a partie item gets tapped on.
+        /// Gets fired if a partie item gets tapped on. 
+        /// Focus of the Item is null.
         /// Will display the party info view.
         /// </summary> 
-        private async void PartieSelected(object sender, object o)
+        private void PartieSelected(object sender, object o)
         {
             var listView = (ListView) sender;
             var party = (Party) listView.SelectedItem;
+            listView.SelectedItem = null;
             PreviewItemSelected<Party, PartyPreviewView>(party, new object[] {Width, Height});
         }
     }

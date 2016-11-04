@@ -17,7 +17,7 @@ namespace PartyUp.Service.Service
     public class ClientService : IClientService
     { 
 
-        public async Task<Result<TExpectedType>> SendRequest<TExpectedType>(string uri,RestType restType, bool cacheData = false, string query = "", object bodyParameter = null)
+        public async Task<Result<TExpectedType>> SendRequest<TExpectedType>(string uri,RestType restType, bool cacheData = false, string query = "", object bodyParameter = null, string token = null)
         {
             Result<TExpectedType> result = new Result<TExpectedType>();
             
@@ -29,42 +29,51 @@ namespace PartyUp.Service.Service
             {
                 using (HttpClient client = GetClient())
                 {
-                    HttpResponseMessage response;
+                    if (!string.IsNullOrEmpty(token))
+                    {
+                        client.DefaultRequestHeaders.Add("Authorization", "Baerer " + token);
+                    }
+                    HttpResponseMessage requestResult;
 
-                    //Execute the request with the proper request type.
                     Stopwatch timer = new Stopwatch();
                     timer.Start();
                     uri = "api/" + uri;
+
+                    //Execute the request with the proper request type. 
                     switch (restType)
                     {
                         case RestType.Post: 
-                            response = await client.PostAsync(uri, new StringContent(
+                            requestResult = await client.PostAsync(uri, new StringContent(
                                 JsonConvert.SerializeObject(bodyParameter), Encoding.UTF8, "application/json"));
                             break;
                         case RestType.Get:
-                            response = await client.GetAsync(uri);
+                            requestResult = await client.GetAsync(uri);
                             break;
                         case RestType.Put:
-                            response = await client.PutAsync(uri, new StringContent(
+                            requestResult = await client.PutAsync(uri, new StringContent(
                                 JsonConvert.SerializeObject(bodyParameter), Encoding.UTF8, "application/json"));
                             break;
                         case RestType.Delete:
-                            response = await client.DeleteAsync(uri);
+                            requestResult = await client.DeleteAsync(uri);
                             break;
                         default:
                             throw new Exception("Unexpected RestType " + restType);
                     }
-                    result.StatusCode = (int) response.StatusCode;
+                    result.StatusCode = (int)requestResult.StatusCode;
                     Debug.WriteLine("Request excequted in: " + timer.Elapsed.ToString("c"));
                     //Check wheter or not the request was successfull.
-                    if (response.IsSuccessStatusCode)
-                    { 
-                        string resultAsString = await response.Content.ReadAsStringAsync();
-                        //Deserialize the json if one exists. 
-                        if (!string.IsNullOrEmpty(resultAsString))
+                    if (requestResult.IsSuccessStatusCode)
+                    {
+                        result.Success = true;
+                        if (requestResult.Content != null)
                         {
-                            result.Data = JsonConvert.DeserializeObject<TExpectedType>(resultAsString); 
-                        }  
+                             string resultAsString = await requestResult.Content.ReadAsStringAsync();
+                            //Deserialize the json if one exists. 
+                            if (!string.IsNullOrEmpty(resultAsString))
+                            {
+                                result.Data = JsonConvert.DeserializeObject<TExpectedType>(resultAsString);
+                            } 
+                        }
                     } 
                 }
             }
@@ -73,6 +82,12 @@ namespace PartyUp.Service.Service
                 result.RequestFailedToException = true;
             } 
             return result;
+        } 
+
+        public async Task<Result> SendRequest(string uri, RestType restType, bool cacheData = false, string query = "", object bodyParameter = null,
+            string token = null)
+        {
+            return await SendRequest<Type>(uri, restType, cacheData, query, bodyParameter, token);
         }
 
         public async Task<Result<Token>> GetToken(string username, string password)
@@ -82,6 +97,8 @@ namespace PartyUp.Service.Service
             {
                 using (var client = GetClient())
                 {
+                    client.BaseAddress = new Uri("http://app2nightuser.azurewebsites.net/");
+                    client.DefaultRequestHeaders.Host = "app2nightuser.azurewebsites.net";
                     client.DefaultRequestHeaders.Accept.Clear(); 
                     var query = "client_id=nativeApp&" +
                                 "client_secret=secret&" +
@@ -93,9 +110,10 @@ namespace PartyUp.Service.Service
                     var content = new StringContent(
                         query, Encoding.UTF8, "application/x-www-form-urlencoded");
                     var requestResult = await client.PostAsync("connect/token", content);
-
+                    result.StatusCode = (int)requestResult.StatusCode;
                     if (requestResult.IsSuccessStatusCode)
                     {
+                        result.Success = true;
                         var response = await requestResult.Content.ReadAsStringAsync(); 
                         result.Data = JsonConvert.DeserializeObject<Token>(response);
                     }

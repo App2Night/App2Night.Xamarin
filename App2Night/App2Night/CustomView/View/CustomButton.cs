@@ -2,7 +2,7 @@
 using MvvmNano;
 using Xamarin.Forms;
 
-namespace App2Night.CustomView
+namespace App2Night.CustomView.View
 {
     public class CustomButton : ContentView
     {

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using App2Night.CustomView;
+using App2Night.CustomView.View;
 using MvvmNano;
 using MvvmNano.Forms;
 using PartyUp.Model.Model;

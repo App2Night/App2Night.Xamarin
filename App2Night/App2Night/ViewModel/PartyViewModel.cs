@@ -3,7 +3,7 @@ using PartyUp.Model.Model;
 
 namespace App2Night.ViewModel
 {
-    public class EventViewModel : MvvmNanoViewModel<Party>
+    public class PartyViewModel : MvvmNanoViewModel<Party>
     {
         public Party Party { get; private set; }
 

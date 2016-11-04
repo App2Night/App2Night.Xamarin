@@ -2,7 +2,7 @@
 using MvvmNano;
 using Xamarin.Forms;
 
-namespace App2Night.CustomView
+namespace App2Night.CustomView.View
 {
     public class EnhancedContainer : Grid
     {
@@ -63,19 +63,25 @@ namespace App2Night.CustomView
         public string ButtonText
         {
             get { return _moreBtn.ButtonLabel.Text; }
-            set { _moreBtn.ButtonLabel.Text = value; }
+            set
+            {
+                
+                    _moreBtn.ButtonLabel.FontFamily = "FontAwesome";
+                _moreBtn.ButtonLabel.Text = value;
+            }
         }
 
         Label _nameLabel = new Label()
         {
             HorizontalOptions = LayoutOptions.Start,
-            FontSize = 20
+            FontSize = 20,
+            Margin = 4
         };
 
         CustomButton _moreBtn = new CustomButton 
         {
             HorizontalOptions = LayoutOptions.End, 
-            WidthRequest = 100,
+            WidthRequest = 50,
             IsVisible = false
         };
         BoxView _topBoxView = new BoxView() {IsVisible = false};
@@ -96,6 +102,9 @@ namespace App2Night.CustomView
 
         public EnhancedContainer()
         {
+            _moreBtn.ButtonLabel.FontSize = 18;
+            if (string.IsNullOrEmpty(ButtonText))
+                ButtonText = "\uf061";
             ColorChanged(this, SeperatorColor, SeperatorColor);
             _moreBtn.ButtonTapped += MoreBtnOnButtonTapped;
 
@@ -121,9 +130,18 @@ namespace App2Night.CustomView
         {
             if (Command != null)
             {
-                await _moreBtn.ScaleTo(1.6, 25U);
-                await _moreBtn.ScaleTo(1, 300U, Easing.BounceIn);
-
+                var animation = new Animation(d =>
+                {
+                    _moreBtn.Scale = d;
+                },1, 1.6);
+                var nextAnimation = new Animation(d =>
+                {
+                    _moreBtn.Scale = d;
+                },1.6, 1);
+                animation.Commit(this, "Scale", finished: delegate
+                {
+                    nextAnimation.Commit(this, "Descale");
+                });
                 Command.Execute(null);
             }
         }
