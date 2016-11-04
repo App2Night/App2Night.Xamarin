@@ -35,20 +35,15 @@ namespace App2Night
                     {
                         new Setter
                         {
-                            Property = Xamarin.Forms.View.VerticalOptionsProperty,
-                            Value = LayoutOptions.Center
+                            Property = Label.HorizontalTextAlignmentProperty,
+                            Value = TextAlignment.Center
                         },
                         new Setter
                         {
-                            Property = Xamarin.Forms.View.HorizontalOptionsProperty,
-                            Value = LayoutOptions.Center,
-                        },
-                        new Setter
-                        {
-                            Property = Xamarin.Forms.View.MarginProperty,
-                            Value = 0,
-                        },
-                    },
+                            Property = Label.VerticalTextAlignmentProperty,
+                            Value = TextAlignment.Center,
+                        }
+                    }
 
                 },
                 {"Test", new Style(typeof(Label))
@@ -76,16 +71,17 @@ namespace App2Night
 
         public async Task StartupSync()
         {
-            //UserDialogs.Instance.ShowLoading("Starting session.");
+
+            UserDialogs.Instance.ShowLoading("Starting session.");
             var result = await MvvmNanoIoC.Resolve<IDataService>().RequestToken("test", "test");
             UserDialogs.Instance.Toast(
             new ToastConfig("Token request finished " + (result.Success ? "" : "un") + "successfull.")
             {
                 BackgroundColor = result.Success ? System.Drawing.Color.LawnGreen : System.Drawing.Color.LightCoral
             });
-            //UserDialogs.Instance.Loading("Loading partys.");
+            UserDialogs.Instance.Loading("Loading partys.");
             await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys();
-            // UserDialogs.Instance.HideLoading();
+            UserDialogs.Instance.HideLoading();
             UserDialogs.Instance.Toast(new ToastConfig("Loading parties finished " + (result.Success ? "" : "un") + "successfull.")
             {
                 BackgroundColor = result.Success ? System.Drawing.Color.LawnGreen : Color.LightCoral

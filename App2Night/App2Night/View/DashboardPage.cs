@@ -79,7 +79,7 @@ namespace App2Night.View
             EnhancedContainer userInfoContainer = new EnhancedContainer
             {
                 Name = "User",
-                ButtonText = "Edit",
+                ButtonText = "\uf0ad",
                 Content = userInfoView
             };
             BindToViewModel(userInfoContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToUserEditCommand);
@@ -87,12 +87,11 @@ namespace App2Night.View
             //Interesting partie view
             var interestingPartieContainer = new EnhancedContainer
             {
-                Name = "Events near you",
-                ButtonText = "More",
+                Name = "Events near you", 
                 Content = interestingPartieGallerie
             };
-            //interestingPartieGallerie.PositionSelected += PartieSelected;
-            BindToViewModel(interestingPartieGallerie, CarouselView.ItemsSourceProperty, vm => vm.InterestingPartiesForUser);
+            interestingPartieGallerie.ElementTapped += PartieSelected;
+            BindToViewModel(interestingPartieGallerie, GallerieView.ItemSourceProperty, vm => vm.InterestingPartiesForUser);
             BindToViewModel(interestingPartieContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToPartyPicker);
 
             //Users parties view
@@ -108,8 +107,7 @@ namespace App2Night.View
             //Partie history
             var historyContainer = new EnhancedContainer
             {
-                Name = "History",
-                ButtonText = "More",
+                Name = "History", 
                 Content = historyGallerieView
             };
             BindToViewModel(historyContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToHistoryCommand);

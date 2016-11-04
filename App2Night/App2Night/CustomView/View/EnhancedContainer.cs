@@ -63,19 +63,25 @@ namespace App2Night.CustomView.View
         public string ButtonText
         {
             get { return _moreBtn.ButtonLabel.Text; }
-            set { _moreBtn.ButtonLabel.Text = value; }
+            set
+            {
+                
+                    _moreBtn.ButtonLabel.FontFamily = "FontAwesome";
+                _moreBtn.ButtonLabel.Text = value;
+            }
         }
 
         Label _nameLabel = new Label()
         {
             HorizontalOptions = LayoutOptions.Start,
-            FontSize = 20
+            FontSize = 20,
+            Margin = 4
         };
 
         CustomButton _moreBtn = new CustomButton 
         {
             HorizontalOptions = LayoutOptions.End, 
-            WidthRequest = 100,
+            WidthRequest = 50,
             IsVisible = false
         };
         BoxView _topBoxView = new BoxView() {IsVisible = false};
@@ -96,6 +102,8 @@ namespace App2Night.CustomView.View
 
         public EnhancedContainer()
         {
+            if (string.IsNullOrEmpty(ButtonText))
+                ButtonText = "\uf061";
             ColorChanged(this, SeperatorColor, SeperatorColor);
             _moreBtn.ButtonTapped += MoreBtnOnButtonTapped;
 

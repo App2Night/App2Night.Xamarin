@@ -1,13 +1,9 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Drawing;
-using System.Threading.Tasks;
-using Acr.UserDialogs;
 using App2Night.Service.Interface;
 using App2Night.ViewModel.Subpages;
 using MvvmNano;
 using PartyUp.Model.Model;
-using PartyUp.Service.Interface;
 
 namespace App2Night.ViewModel
 {
