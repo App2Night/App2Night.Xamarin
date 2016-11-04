@@ -1,10 +1,11 @@
-﻿using App2Night.ViewModel;
+﻿using App2Night.CustomPage;
+using App2Night.ViewModel;
 using MvvmNano.Forms;
 using Xamarin.Forms;
 
 namespace App2Night.View
 {
-    public class SettingPage : MvvmNanoContentPage<SettingViewModel> { 
+    public class SettingPage : ContentPageWithInfo<SettingViewModel> { 
         BoxView _topBoxView = new BoxView
         {
             HeightRequest = 1

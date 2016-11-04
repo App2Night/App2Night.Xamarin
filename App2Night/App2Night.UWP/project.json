@@ -5,6 +5,7 @@
     "Microsoft.NETCore.UniversalWindowsPlatform": "5.0.0",
     "Portable.Ninject": "3.3.0",
     "SkiaSharp.Views.Forms": "1.54.1-beta1",
+    "Xam.Plugin.Connectivity": "2.2.12",
     "Xamarin.Forms": "2.3.3.166-pre4",
     "Xamarin.Forms.Maps": "2.3.2.127"
   },

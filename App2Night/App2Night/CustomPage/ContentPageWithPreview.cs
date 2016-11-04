@@ -10,7 +10,7 @@ using Xamarin.Forms;
 
 namespace App2Night.CustomPage
 {
-    public class ContentPageWithPreview<TViewModel> : MvvmNanoContentPage<TViewModel> where TViewModel : MvvmNanoViewModel
+    public class ContentPageWithPreview<TViewModel> : ContentPageWithInfo<TViewModel> where TViewModel : MvvmNanoViewModel
     {
         private readonly ContentView _previewContainer1 = new ContentView
         {
