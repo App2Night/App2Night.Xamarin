@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using App2Night.Model.Model;
-using PartyUp.Model.Model;
 
 namespace App2Night.Service.Interface
 {
@@ -17,7 +16,7 @@ namespace App2Night.Service.Interface
         Task WipeData();
 
         /// <summary>
-        /// Returns the current <see cref="PartyUp.Model.Model.User"/>.
+        /// Returns the current <see cref="Model.Model.User"/>.
         /// </summary>
         User User { get; }
 

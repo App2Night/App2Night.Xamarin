@@ -1,14 +1,11 @@
-﻿ 
-
-using App2Night.DependencyService;
-using App2Night.Helper;
+﻿using App2Night.Helper;
 using MvvmNano;
 using MvvmNano.Forms;
 using Plugin.Connectivity;
 using Plugin.Connectivity.Abstractions;
 using Xamarin.Forms;
 
-namespace App2Night.CustomPage
+namespace App2Night.CustomView.Page
 {
     public class ContentPageWithInfo<TViewModel> : MvvmNanoContentPage<TViewModel> where TViewModel : MvvmNanoViewModel
     {

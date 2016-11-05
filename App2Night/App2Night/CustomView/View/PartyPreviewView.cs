@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using App2Night.DependencyService;
-using PartyUp.Model.Enum;
-using PartyUp.Model.Model;
+using App2Night.Model.Model;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 

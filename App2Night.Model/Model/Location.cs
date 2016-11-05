@@ -1,6 +1,4 @@
-﻿using PartyUp.Model.Enum;
-
-namespace PartyUp.Model.Model
+﻿namespace App2Night.Model.Model
 {
     public class Location
     {

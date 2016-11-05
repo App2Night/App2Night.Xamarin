@@ -3,7 +3,7 @@ using System.Net;
 using SystemConfiguration;
 using CoreFoundation;
 
-namespace PartyUp.iOS
+namespace App2Night.iOS
 {
     public enum NetworkStatus
     {

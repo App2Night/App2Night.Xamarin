@@ -1,9 +1,8 @@
 ﻿using System;
-using App2Night.Model.Model;
+using App2Night.Model.Enum;
 using Newtonsoft.Json;
-using PartyUp.Model.Enum;
 
-namespace PartyUp.Model.Model
+namespace App2Night.Model.Model
 {
     public class Party
     {

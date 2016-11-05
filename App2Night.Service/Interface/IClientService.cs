@@ -1,9 +1,7 @@
 ﻿using System.Threading.Tasks;
 using App2Night.Model.Model;
-using PartyUp.Model.Model;
-using PartyUp.Service.Service;
 
-namespace PartyUp.Service.Interface
+namespace App2Night.Service.Interface
 {
     public interface IClientService
     {

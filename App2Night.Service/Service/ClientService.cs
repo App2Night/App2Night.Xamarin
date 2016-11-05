@@ -5,11 +5,10 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using App2Night.Model.Model;
+using App2Night.Service.Interface;
 using Newtonsoft.Json;
-using PartyUp.Model.Model;
-using PartyUp.Service.Interface;  
 
-namespace PartyUp.Service.Service
+namespace App2Night.Service.Service
 {
 
     //TODO CLIENT Add the correct nuget package

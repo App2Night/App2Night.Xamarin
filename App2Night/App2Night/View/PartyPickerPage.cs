@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using App2Night.CustomPage;
 using App2Night.CustomView;
+using App2Night.CustomView.Page;
 using App2Night.CustomView.Template;
 using App2Night.CustomView.View;
 using App2Night.ViewModel;
 using MvvmNano.Forms;
-using PartyUp.Model.Model;
 using Xamarin.Forms;
 
 namespace App2Night.View

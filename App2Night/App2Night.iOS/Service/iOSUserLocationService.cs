@@ -1,12 +1,11 @@
 ﻿using System;
 using App2Night.DependencyService;
+using App2Night.iOS.Service;
+using App2Night.Model.Model;
 using CoreLocation;
-using MapKit;
-using PartyUp.iOS.Service;
-using PartyUp.Model.Enum;
 
 [assembly: Xamarin.Forms.Dependency(typeof(iOSUserLocationService))]
-namespace PartyUp.iOS.Service
+namespace App2Night.iOS.Service
 {
     public class iOSUserLocationService : IUserLocationService
     {

@@ -2,12 +2,9 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using App2Night.Model.Enum;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
-using PartyUp.Model.Enum; 
-using PartyUp.Model.Model;
-using PartyUp.Service.Interface;
-using PartyUp.Service.Service;
 
 namespace App2Night.Service.Service
 {
@@ -111,11 +108,11 @@ namespace App2Night.Service.Service
                 var dummyList = new List<Party>();
                 for (int i = 0; i < 10; i++)
                 {
-                    dummyList.Add(new Party
-                    {
-                        Name = "Test Party" + (i+1),
-                        Date = DateTime.Today.AddDays(i).AddMonths(i) 
-                    });
+                    //dummyList.Add(new Party
+                    //{
+                    //    Name = "Test Party" + (i + 1),
+                    //    Date = DateTime.Today.AddDays(i).AddMonths(i)
+                    //});
                 }
                 //TODO Replace with real caching
                 if (dummyList.Count > 0)

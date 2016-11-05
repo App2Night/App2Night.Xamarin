@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using App2Night;
-using Foundation;
+﻿using Foundation;
 using HockeyApp.iOS;
 using UIKit;
 
-namespace PartyUp.iOS
+namespace App2Night.iOS
 {
     // The UIApplicationDelegate for the application. This class is responsible for launching the 
     // User Interface of the application, as well as listening (and optionally responding) to 

@@ -1,8 +1,7 @@
-﻿using App2Night.DependencyService;
-using PartyUp.iOS.Service;
+﻿using App2Night.iOS.Service;
 
 [assembly: Xamarin.Forms.Dependency(typeof(iOSConnectionService))]
-namespace PartyUp.iOS.Service
+namespace App2Night.iOS.Service
 {
     public class iOSConnectionService : IConnectionService
     {

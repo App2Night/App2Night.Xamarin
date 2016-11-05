@@ -1,6 +1,6 @@
-﻿using App2Night.ViewModel.Subpages;
+﻿using App2Night.Model.Enum;
+using App2Night.ViewModel.Subpages;
 using MvvmNano.Forms;
-using PartyUp.Model.Enum;
 using Xamarin.Forms;
 
 namespace App2Night.View.Subpages

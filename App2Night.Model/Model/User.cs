@@ -1,7 +1,7 @@
 ﻿using System.Collections.ObjectModel;
-using PartyUp.Model.Enum;
+using App2Night.Model.Enum;
 
-namespace PartyUp.Model.Model
+namespace App2Night.Model.Model
 {
     public class User
     {

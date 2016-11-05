@@ -1,4 +1,4 @@
-﻿namespace PartyUp.UWP
+﻿namespace App2Night.UWP
 {
     public sealed partial class MainPage
     {

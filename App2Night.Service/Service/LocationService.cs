@@ -1,6 +1,6 @@
-﻿using PartyUp.Service.Interface;
+﻿using App2Night.Service.Interface;
 
-namespace PartyUp.Service.Service
+namespace App2Night.Service.Service
 {
     public class LocationService : ILocationService
     {

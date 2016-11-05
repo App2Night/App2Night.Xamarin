@@ -1,5 +1,5 @@
-﻿using MvvmNano;
-using PartyUp.Model.Model;
+﻿using App2Night.Model.Model;
+using MvvmNano;
 
 namespace App2Night.ViewModel
 {

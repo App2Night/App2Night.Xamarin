@@ -7,8 +7,6 @@ using App2Night.Service.Service;
 using App2Night.ViewModel;
 using MvvmNano;
 using MvvmNano.Forms;
-using PartyUp.Service.Interface;
-using PartyUp.Service.Service;
 using Plugin.Connectivity;
 using Xamarin.Forms;
 using Color = System.Drawing.Color;
@@ -47,8 +45,19 @@ namespace App2Night
                     }
 
                 },
-                {"Test", new Style(typeof(Label))
-                }
+                {new Style(typeof(ContentPage))
+                {
+                    Setters =
+                    {
+                         new Setter
+                            {
+                                Property =  ContentPage.BackgroundColorProperty,
+                                Value = Color.Black,
+                            }
+                    }
+}   
+                }   
+                    
             };
         }
 

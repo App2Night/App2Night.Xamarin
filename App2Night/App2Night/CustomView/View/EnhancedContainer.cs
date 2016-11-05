@@ -1,11 +1,25 @@
 ﻿using System;
+using System.Diagnostics;
 using MvvmNano;
 using Xamarin.Forms;
 
 namespace App2Night.CustomView.View
 {
     public class EnhancedContainer : Grid
-    {
+    { 
+        public static BindableProperty NoContentWarnignVisibleProperty = BindableProperty.Create(nameof(NoContentWarnignVisibleProperty), typeof(bool), typeof(EnhancedContainer), false, propertyChanged: NoContentWarningChanged );
+
+        private static void NoContentWarningChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var thisView = (EnhancedContainer)bindable;
+            thisView._nothingHereView.IsVisible = (bool) newValue && thisView.NoContentWarningVisible;
+        }
+
+        public bool NoContentWarnignVisible
+        {
+            get { return (bool)GetValue(NoContentWarnignVisibleProperty); }
+            set { SetValue(NoContentWarnignVisibleProperty, value); }
+        } 
 
         public static BindableProperty CommandProperty = BindableProperty.Create(nameof(CommandProperty), typeof(MvvmNanoCommand), typeof(EnhancedContainer),
             propertyChanged: CommandAssigned);
@@ -32,7 +46,14 @@ namespace App2Night.CustomView.View
             thisEnhancedContainer._topBoxView.Color = newValue;
             thisEnhancedContainer._middleBoxView.Color = newValue;
             thisEnhancedContainer._bottomBoxView.Color = newValue;
-        } 
+        }
+
+        StackLayout _nothingHereView = new StackLayout
+        {
+            HorizontalOptions = LayoutOptions.Center,
+            Margin = new Thickness(0,50)
+        };
+        Label _noContentText = new Label {Text = "No data loaded."}; 
 
         public Color SeperatorColor
         {
@@ -48,12 +69,18 @@ namespace App2Night.CustomView.View
             set
             {
                 if (_content!= null)
-                    Children.Remove(_content);
+                    Children.Remove(_content); 
                 _content = value;
-                Children.Add(_content, 0, 3);
+                if (_content != null)
+                {
+                    Children.Add(_content, 0, 3); 
+                }
+                   
             }
         }
 
+        public bool NoContentWarningVisible { get; set; } = true;
+         
         public string Name
         {
             get { return _nameLabel.Text; }
@@ -97,11 +124,28 @@ namespace App2Night.CustomView.View
                 RowDefinitions[1].Height = new GridLength(value, GridUnitType.Absolute);
             }
         }
-         
+
+        public string ContentMissingText
+        {
+            get { return _noContentText.Text; }
+            set { _noContentText.Text = value; }
+        }
+
         private int _headerHeight = 40;
+
+       
 
         public EnhancedContainer()
         {
+            _nothingHereView.Children.Add(new Label
+            {
+                FontFamily = "FontAwesome",
+                Text = "\uf11a",
+                FontSize = 100,
+                FontAttributes = FontAttributes.Bold
+            });
+            _nothingHereView.Children.Add(_noContentText);
+
             _moreBtn.ButtonLabel.FontSize = 18;
             if (string.IsNullOrEmpty(ButtonText))
                 ButtonText = "\uf061";
@@ -124,6 +168,7 @@ namespace App2Night.CustomView.View
             Children.Add(_bottomBoxView, 0, 4);
             Children.Add(_nameLabel, 0, 1);
             Children.Add(_moreBtn, 0, 1);
+            Children.Add(_nothingHereView, 0, 3);
         }
 
         private async void MoreBtnOnButtonTapped(object sender, EventArgs eventArgs)

@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using App2Night.CustomView;
 using App2Night.CustomView.View;
 using MvvmNano;
-using MvvmNano.Forms;
-using PartyUp.Model.Model;
 using Xamarin.Forms;
 
-namespace App2Night.CustomPage
+namespace App2Night.CustomView.Page
 {
     public class ContentPageWithPreview<TViewModel> : ContentPageWithInfo<TViewModel> where TViewModel : MvvmNanoViewModel
     {

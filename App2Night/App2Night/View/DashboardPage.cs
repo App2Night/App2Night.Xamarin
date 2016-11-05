@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using App2Night.CustomPage;
 using App2Night.CustomView;
+using App2Night.CustomView.Page;
 using App2Night.CustomView.Template;
 using App2Night.CustomView.View;
+using App2Night.Helper.ValueConverter;
+using App2Night.Model.Model;
 using App2Night.ViewModel;
-using PartyUp.Model.Model;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -58,8 +59,9 @@ namespace App2Night.View
                 Children =
                 {
                     profilePicture
-                }
-            };
+                } 
+                
+            }; 
             var usernameLabel = new Label() {Text = "Hans Peter XXL"};
             var joinedAtLabel = new Label() {Text = "Dabei seit: 30.10.2016"};
             var profileDetails = new List<Xamarin.Forms.View>
@@ -81,8 +83,9 @@ namespace App2Night.View
             {
                 Name = "User",
                 ButtonText = "\uf0ad",
-                Content = userInfoView
-            };
+                Content = userInfoView,
+                NoContentWarnignVisible = false
+            }; 
             BindToViewModel(userInfoContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToUserEditCommand);
 
             //Interesting partie view
@@ -94,6 +97,7 @@ namespace App2Night.View
             interestingPartieGallerie.ElementTapped += PartieSelected;
             BindToViewModel(interestingPartieGallerie, GallerieView.ItemSourceProperty, vm => vm.InterestingPartiesForUser);
             BindToViewModel(interestingPartieContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToPartyPicker);
+            BindToViewModel(interestingPartieContainer, EnhancedContainer.NoContentWarnignVisibleProperty, vm => vm.InterestingPartiesForUser, converter: new ListEmptyConverter());
 
             //Users parties view
             var myPartiesContainer = new EnhancedContainer
@@ -104,6 +108,7 @@ namespace App2Night.View
             myPartieGallerie.ElementTapped +=PartieSelected;
             BindToViewModel(myPartiesContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToMyPartiesCommand);
             BindToViewModel(myPartieGallerie, GallerieView.ItemSourceProperty, vm => vm.NextPartiesForUser);
+            BindToViewModel(myPartiesContainer, EnhancedContainer.NoContentWarnignVisibleProperty, vm => vm.NextPartiesForUser, converter: new ListEmptyConverter());
 
             //Partie history
             var historyContainer = new EnhancedContainer
@@ -114,6 +119,7 @@ namespace App2Night.View
             BindToViewModel(historyContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToHistoryCommand);
             historyGallerieView.ElementTapped += PartieSelected;
             BindToViewModel(historyGallerieView, GallerieView.ItemSourceProperty, vm => vm.PartyHistory);
+            BindToViewModel(historyContainer, EnhancedContainer.NoContentWarnignVisibleProperty, vm => vm.PartyHistory, converter: new ListEmptyConverter());
 
             //Main layout
             var mainLayout = new StackLayout()

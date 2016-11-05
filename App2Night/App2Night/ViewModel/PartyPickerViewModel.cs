@@ -1,9 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using App2Night.Model.Model;
 using App2Night.Service.Interface;
 using MvvmNano;
-using PartyUp.Model.Model;
-using PartyUp.Service.Interface;
 
 namespace App2Night.ViewModel
 {

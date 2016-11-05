@@ -1,4 +1,4 @@
-﻿using App2Night.CustomPage;
+﻿using App2Night.CustomView.Page;
 using App2Night.ViewModel;
 using MvvmNano.Forms;
 using Xamarin.Forms;

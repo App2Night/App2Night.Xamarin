@@ -6,8 +6,9 @@ using Android.Locations;
 using Android.OS;
 using App2Night.DependencyService;
 using App2Night.Droid.Service;
-using PartyUp.Model.Enum;
+using App2Night.Model.Model;
 using Application = Android.App.Application;
+using Location = Android.Locations.Location;
 
 [assembly: Xamarin.Forms.Dependency(typeof(AndroidUserLocationService))]
 

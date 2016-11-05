@@ -1,5 +1,5 @@
 ﻿using App2Night.CustomView.View;
-using PartyUp.Model.Model;
+using App2Night.Model.Model;
 using Xamarin.Forms;
 
 namespace App2Night.CustomView.Template

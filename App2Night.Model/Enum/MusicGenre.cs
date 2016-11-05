@@ -1,4 +1,4 @@
-﻿namespace PartyUp.Model.Enum
+﻿namespace App2Night.Model.Enum
 {
     public enum MusicGenre
     {
