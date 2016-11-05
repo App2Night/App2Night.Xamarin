@@ -91,7 +91,6 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Reachability.cs" />
-    <Compile Include="Service\iOSConnectionService.cs" />
     <Compile Include="Service\iOSUserLocationService.cs" />
     <None Include="app.config" />
     <None Include="Entitlements.plist" />

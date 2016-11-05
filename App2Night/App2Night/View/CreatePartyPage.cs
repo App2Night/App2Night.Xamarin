@@ -25,11 +25,17 @@ namespace App2Night.View
             Text = "\uf00d",
             ButtonLabel = { FontFamily = "FontAwesome",FontSize = 50},
         };
-        private Grid _grid;
+
+        private ImageFromPortable _image = new ImageFromPortable(null)
+        {
+            HeightRequest = 100,
+            WidthRequest = 100,
+            ImagePath = ""
+        };
         public CreatePartyPage()
         {
             Title = "Create Party";
-            _grid = new Grid
+            Content = new Grid
             {
                 Padding = new Thickness(10),
                 ColumnDefinitions = new ColumnDefinitionCollection
@@ -73,34 +79,20 @@ namespace App2Night.View
                         HorizontalOptions = LayoutOptions.Start
                     },0,3 },
 
-                    {_entryName,1,0 },
-                    {_descriptionEntry,1,1 },
-                    {_datePicker,1,2 },
-                    {_musicGenreSwitch,1,3 },
+                    {_image,0,0 },
 
-                    {_cancelButton,0,4 },
-                    {_acceptButton,1,4 }
+                    {_entryName,1,1 },
+                    {_descriptionEntry,1,2 },
+                    {_datePicker,1,3 },
+                    {_musicGenreSwitch,1,4 },
+
+                    {_cancelButton,0,5 },
+                    {_acceptButton,1,5 }
                 }
             };
-            Content = _grid;
+            Grid.SetColumnSpan(_image,2);
         }
-        //TODO handle start animation
-        private void Animation(Grid grid)
-        {
-            var animation = new Animation(d =>
-            {
-                grid.HeightRequest = d * Height;
-            }, 0, 1);
-            animation.Commit(this, "startAnimation", length: 1000U, easing: Easing.BounceIn);
-        }
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            Animation(_grid);
-
-        }
-
+        
         public override void Dispose()
         {
             base.Dispose();
