@@ -48,7 +48,8 @@ namespace App2Night.CustomView.View
         }
 
         void CreateBitmap()
-        { 
+        {
+            if (string.IsNullOrEmpty(ImagePath)) return;
             Task.Run(() => 
             {
                 Stopwatch streamBitmapWatch = new Stopwatch();
