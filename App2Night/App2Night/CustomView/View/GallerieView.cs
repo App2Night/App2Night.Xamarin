@@ -34,7 +34,8 @@ namespace App2Night.CustomView.View
 
 
         public static BindableProperty ItemSourceProperty = BindableProperty.Create(nameof(ItemSource), typeof(IEnumerable<object>), typeof(HorizontalGallerieView),
-            propertyChanged: (bindable, value, newValue) => ((GallerieView)bindable).CollectionSet((IEnumerable<object>) value, (IEnumerable<object>) newValue));
+            propertyChanged: (bindable, value, newValue) =>
+            ((GallerieView)bindable).CollectionSet((IEnumerable<object>) value, (IEnumerable<object>) newValue));
         public IEnumerable<object> ItemSource
         {
             get { return (IEnumerable<object>)GetValue(ItemSourceProperty); }

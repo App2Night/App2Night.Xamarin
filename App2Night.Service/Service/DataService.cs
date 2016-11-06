@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using App2Night.Model.Enum;
 using App2Night.Model.Model;
@@ -18,7 +19,11 @@ namespace App2Night.Service.Service
             _clientService = clientService;
         }
 
-        public ObservableCollection<Party> Partys { get; } = new ObservableCollection<Party>();
+        public ObservableCollection<Party> InterestingPartys { get; } = new ObservableCollection<Party>();
+        public ObservableCollection<Party> SelectedPartys { get; } = new ObservableCollection<Party>();
+        public ObservableCollection<Party> PartyHistory { get; } = new ObservableCollection<Party>();
+
+        public event EventHandler PartiesUpdated;
 
         public Task WipeData()
         {
@@ -97,15 +102,11 @@ namespace App2Night.Service.Service
             //Check if the request was a success
             if (syncResult.Success)
             {
-                //TODO cache data
-
-                //Populate Partys with new data.
-                Partys.Clear();
-                PopulatePartys(syncResult.Data);
+                //TODO cache data 
             }
             else
             {
-                var dummyList = new List<Party>();
+                var cachedData = new List<Party>();
                 for (int i = 0; i < 10; i++)
                 {
                     //dummyList.Add(new Party
@@ -115,22 +116,29 @@ namespace App2Night.Service.Service
                     //});
                 }
                 //TODO Replace with real caching
-                if (dummyList.Count > 0)
+                if (cachedData.Count > 0)
                 {
-                    syncResult.Data = dummyList;
-                    syncResult.IsCached = true;
-                    PopulatePartys(syncResult.Data);
+                    syncResult.Data = cachedData; 
+                    syncResult.IsCached = true; 
                 }
             }
+            if (syncResult.Data != null)
+            {
+                PopulateObservableCollection(InterestingPartys, syncResult.Data);
+                PopulateObservableCollection(PartyHistory, syncResult.Data);
+                PopulateObservableCollection(SelectedPartys, syncResult.Data);
+            }
+            PartiesUpdated?.Invoke(this, EventArgs.Empty);
             return syncResult;
         }
 
-        void PopulatePartys(IEnumerable<Party> parties)
+        void PopulateObservableCollection<TObservable>(TObservable collection, IEnumerable<Party> newObjects) where TObservable : ObservableCollection<Party>
         {
-            foreach (Party party in parties)
+            collection.Clear();
+            foreach (Party party in newObjects)
             {
-                Partys.Add(party);
+                collection.Add(party);
             }
-        }
+        } 
     }
 }

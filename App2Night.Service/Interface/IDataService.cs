@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using App2Night.Model.Model;
@@ -10,6 +11,8 @@ namespace App2Night.Service.Interface
     /// </summary>
     public interface IDataService
     {
+        event EventHandler PartiesUpdated;
+
         /// <summary>
         /// Clears all data from the device storage and current objects, including the logged in user.
         /// </summary>
@@ -24,10 +27,22 @@ namespace App2Night.Service.Interface
         /// Returns a cached collection of all <see cref="Party"/> filtered by last applied search criteria.
         /// </summary>
         /// <returns><see cref="ObservableCollection{Party}"/></returns>
-        ObservableCollection<Party> Partys { get; }
+        ObservableCollection<Party> InterestingPartys { get; }
 
         /// <summary>
-        /// Refresh the <see cref="Partys"/> collection.
+        /// Returns a cached collection of all <see cref="Party"/> filtered by last applied search criteria.
+        /// </summary>
+        /// <returns><see cref="ObservableCollection{Party}"/></returns>
+        ObservableCollection<Party> SelectedPartys { get; }
+
+        /// <summary>
+        /// Returns a cached collection of all <see cref="Party"/> filtered by last applied search criteria.
+        /// </summary>
+        /// <returns><see cref="ObservableCollection{Party}"/></returns>
+        ObservableCollection<Party> PartyHistory { get; }
+
+        /// <summary>
+        /// Refresh the <see cref="InterestingPartys"/> collection.
         /// </summary> 
         Task<Result> RefreshPartys();
 

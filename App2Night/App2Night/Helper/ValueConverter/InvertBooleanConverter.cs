@@ -6,12 +6,11 @@ using Xamarin.Forms;
 
 namespace App2Night.Helper.ValueConverter
 {
-    public class ListEmptyConverter : IValueConverter
+    public class InvertBooleanConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var list = (IEnumerable<object>)value;
-            return !list.Any();
+            return !(bool)value;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

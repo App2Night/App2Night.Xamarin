@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System; 
 using MvvmNano;
 using Xamarin.Forms;
 
@@ -7,15 +6,23 @@ namespace App2Night.CustomView.View
 {
     public class EnhancedContainer : Grid
     { 
-        public static BindableProperty NoContentWarnignVisibleProperty = BindableProperty.Create(nameof(NoContentWarnignVisibleProperty), typeof(bool), typeof(EnhancedContainer), false, propertyChanged: NoContentWarningChanged );
+        public static BindableProperty NoContentWarnignVisibleProperty = BindableProperty.Create(nameof(ContentWarningVisible), typeof(bool), typeof(EnhancedContainer), false, propertyChanged: NoContentWarningChanged );
 
         private static void NoContentWarningChanged(BindableObject bindable, object oldValue, object newValue)
         {
             var thisView = (EnhancedContainer)bindable;
-            thisView._nothingHereView.IsVisible = (bool) newValue && thisView.NoContentWarningVisible;
+            bool visible = (bool)newValue && thisView.NoContentWarningVisible;
+            thisView.SetNoContentViewVisiblity(visible);
         }
 
-        public bool NoContentWarnignVisible
+        void SetNoContentViewVisiblity(bool visible)
+        {
+            _noContentView.IsVisible = visible;
+            if (_content != null)
+                _content.IsVisible = !visible;
+        }
+
+        public bool ContentWarningVisible
         {
             get { return (bool)GetValue(NoContentWarnignVisibleProperty); }
             set { SetValue(NoContentWarnignVisibleProperty, value); }
@@ -48,10 +55,10 @@ namespace App2Night.CustomView.View
             thisEnhancedContainer._bottomBoxView.Color = newValue;
         }
 
-        StackLayout _nothingHereView = new StackLayout
+        StackLayout _noContentView = new StackLayout
         {
             HorizontalOptions = LayoutOptions.Center,
-            Margin = new Thickness(0,50)
+            Padding = new Thickness(0,20)
         };
         Label _noContentText = new Label {Text = "No data loaded."}; 
 
@@ -79,8 +86,16 @@ namespace App2Night.CustomView.View
             }
         }
 
-        public bool NoContentWarningVisible { get; set; } = true;
-         
+        public bool NoContentWarningVisible
+        {
+            get { return _noContentWarningVisible; }
+            set
+            {
+                _noContentWarningVisible = value;
+                SetNoContentViewVisiblity(value); 
+            }
+        }
+
         public string Name
         {
             get { return _nameLabel.Text; }
@@ -132,25 +147,40 @@ namespace App2Night.CustomView.View
         }
 
         private int _headerHeight = 40;
+        private bool _noContentWarningVisible = true;
 
-       
 
         public EnhancedContainer()
         {
-            _nothingHereView.Children.Add(new Label
+            var noContentViewContainer = new Grid
+            {
+                //BackgroundColor = Color.White.MultiplyAlpha(0.5), 
+                Children = {_noContentView}
+            };
+            _noContentView.Children.Add(new Label
             {
                 FontFamily = "FontAwesome",
                 Text = "\uf11a",
                 FontSize = 100,
                 FontAttributes = FontAttributes.Bold
             });
-            _nothingHereView.Children.Add(_noContentText);
-
+            _noContentView.Children.Add(_noContentText);
+            SetNoContentViewVisiblity(ContentWarningVisible); 
+            _moreBtn.ButtonTapped += MoreBtnOnButtonTapped;
             _moreBtn.ButtonLabel.FontSize = 18;
+
+            TapGestureRecognizer noContentViewGesture = new TapGestureRecognizer
+            {
+                Command = new Command(() =>
+                {
+                    MoreBtnOnButtonTapped(null, EventArgs.Empty);
+                })
+            };
+            noContentViewContainer.GestureRecognizers.Add(noContentViewGesture);
+
             if (string.IsNullOrEmpty(ButtonText))
                 ButtonText = "\uf061";
-            ColorChanged(this, SeperatorColor, SeperatorColor);
-            _moreBtn.ButtonTapped += MoreBtnOnButtonTapped;
+            ColorChanged(this, SeperatorColor, SeperatorColor); 
 
            RowSpacing = 0;
 
@@ -168,10 +198,10 @@ namespace App2Night.CustomView.View
             Children.Add(_bottomBoxView, 0, 4);
             Children.Add(_nameLabel, 0, 1);
             Children.Add(_moreBtn, 0, 1);
-            Children.Add(_nothingHereView, 0, 3);
-        }
+            Children.Add(noContentViewContainer, 0, 3);
+        } 
 
-        private async void MoreBtnOnButtonTapped(object sender, EventArgs eventArgs)
+        private void MoreBtnOnButtonTapped(object sender, EventArgs eventArgs)
         {
             if (Command != null)
             {

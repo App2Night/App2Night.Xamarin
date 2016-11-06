@@ -24,25 +24,9 @@ namespace App2Night.View
             {
                 RowHeight = 150,
 
-                ItemTemplate = new DataTemplate(typeof(HistoryTemplate)),
-                ItemsSource = new []
-                {
-                    new Party
-                    {
-                        Name = "DH goes Party",
-                        MusicGenre = MusicGenre.Rock,
-                        Date = DateTime.Now.AddDays(30)
-                    },
-                    new Party(),
-                    new Party(),
-                    new Party(),
-                    new Party(),
-                    new Party(),
-                    new Party(),
-                    new Party(),
-                    new Party(),
-                }
+                ItemTemplate = new DataTemplate(typeof(HistoryTemplate))
             };
+            BindToViewModel(listView, ListView.ItemsSourceProperty, vm => vm.Parties);
             listView.ItemTapped += PartieSelected;
             var mainScroll = new ScrollView
             {

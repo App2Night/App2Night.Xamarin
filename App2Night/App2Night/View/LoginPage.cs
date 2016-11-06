@@ -132,7 +132,7 @@ namespace App2Night.View
             Grid.SetColumnSpan(_acceptSwitch, 2);
             Content = grid;
         }
-        #region Events
+        #region Parties
         /// <summary>
         /// Sets the login btn visible. Only if the necassary inputs available, the <code>_loginBtn</code> is visible.
         /// </summary>

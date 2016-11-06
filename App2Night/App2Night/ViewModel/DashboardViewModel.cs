@@ -1,17 +1,26 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
 using App2Night.ViewModel.Subpages;
-using MvvmNano;
+using MvvmNano; 
 
 namespace App2Night.ViewModel
-{
+{ 
     public class DashboardViewModel : MvvmNanoViewModel
     {
-        public ObservableCollection<Party> InterestingPartiesForUser => MvvmNanoIoC.Resolve<IDataService>().Partys;
-        public ObservableCollection<Party> PartyHistory => MvvmNanoIoC.Resolve<IDataService>().Partys;
-        public ObservableCollection<Party> NextPartiesForUser => MvvmNanoIoC.Resolve<IDataService>().Partys;
+        public bool InterestingPartieAvailable { get; set; }
+        public bool PartyHistoryAvailable { get; set; }
+        public bool SelectedpartiesAvailable { get; set; } 
+
+
+        public ObservableCollection<Party> InterestingPartiesForUser  => MvvmNanoIoC.Resolve<IDataService>().InterestingPartys;
+        public ObservableCollection<Party> PartyHistory => MvvmNanoIoC.Resolve<IDataService>().PartyHistory;
+        public ObservableCollection<Party> Selectedparties => MvvmNanoIoC.Resolve<IDataService>().SelectedPartys;
 
         public MvvmNanoCommand MoveToUserEditCommand => new MvvmNanoCommand(() => NavigateTo<EditProfileViewModel>());
         public MvvmNanoCommand MoveToMyPartiesCommand => new MvvmNanoCommand(() => NavigateTo<MyPartysViewModel>());
@@ -20,12 +29,26 @@ namespace App2Night.ViewModel
 
         public DashboardViewModel()
         {
-            InterestingPartiesForUser.CollectionChanged += (sender, args) =>
-            {
-                Debug.WriteLine("Change!!!!");
-            };
+            MvvmNanoIoC.Resolve<IDataService>().PartiesUpdated +=  OnPartiesUpdated;
+            SetAvailabilitys();
+        } 
+
+        private void OnPartiesUpdated(object sender, EventArgs eventArgs)
+        {
+            SetAvailabilitys();
         }
 
-        
+        public override void Initialize()
+        {
+            base.Initialize();
+            SetAvailabilitys();
+        }
+
+        void SetAvailabilitys()
+        {
+            InterestingPartieAvailable = InterestingPartiesForUser.Any();
+            PartyHistoryAvailable = PartyHistory.Any();
+            SelectedpartiesAvailable = Selectedparties.Any(); 
+        }
     }
 }

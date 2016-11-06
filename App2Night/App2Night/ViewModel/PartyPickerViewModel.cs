@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections;
+using System.Collections.ObjectModel;
 using System.Diagnostics;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
@@ -9,18 +11,18 @@ namespace App2Night.ViewModel
     public class PartyPickerViewModel : MvvmNanoViewModel
     {
         private Party _selectedParty = null;
-        public ObservableCollection<Party> Events => MvvmNanoIoC.Resolve<IDataService>().Partys;
+        public ObservableCollection<Party> Parties => MvvmNanoIoC.Resolve<IDataService>().InterestingPartys;
 
 
         public PartyPickerViewModel()
         {
-            Events.CollectionChanged += Events_CollectionChanged;
+            MvvmNanoIoC.Resolve<IDataService>().PartiesUpdated += OnPartiesUpdated;
         }
 
-        private void Events_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        private void OnPartiesUpdated(object sender, EventArgs eventArgs)
         {
-            Debug.WriteLine("CHANGE!!!");
-        }
+             
+        } 
 
         public Party SelectedParty
         {

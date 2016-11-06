@@ -37,8 +37,8 @@ namespace App2Night.View
             };
             ToolbarItems.Add(changeViewToolbarItem);
 
-            BindToViewModel(swipeView, SwipeView.ItemsSourceProperty, vm => vm.Events);
-            BindToViewModel(listView, ListView.ItemsSourceProperty, vm => vm.Events);
+            BindToViewModel(swipeView, SwipeView.ItemsSourceProperty, vm => vm.Parties);
+            BindToViewModel(listView, ListView.ItemsSourceProperty, vm => vm.Parties);
 
             Content = listView;
         }
