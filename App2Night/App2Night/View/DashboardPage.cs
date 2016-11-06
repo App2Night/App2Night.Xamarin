@@ -92,7 +92,9 @@ namespace App2Night.View
             var interestingPartieContainer = new EnhancedContainer
             {
                 Name = "Parties near you", 
-                Content = interestingPartieGallerie
+                Content = interestingPartieGallerie,
+                ContentMissingText = "There are no parties that fit your interests.\n" +
+                                     "Try to modify your search filters."
             };
             interestingPartieGallerie.ElementTapped += PartieSelected;
             BindToViewModel(interestingPartieGallerie, GallerieView.ItemSourceProperty, vm => vm.InterestingPartiesForUser);
@@ -103,7 +105,9 @@ namespace App2Night.View
             var myPartiesContainer = new EnhancedContainer
             {
                 Name = "MyEvents",
-                Content = myPartieGallerie
+                Content = myPartieGallerie,
+                ContentMissingText = "You didn't enter a party yet.\n" +
+                                     "Tab to start searching."
             };
             myPartieGallerie.ElementTapped +=PartieSelected;
             BindToViewModel(myPartiesContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToMyPartiesCommand);
@@ -114,7 +118,9 @@ namespace App2Night.View
             var historyContainer = new EnhancedContainer
             {
                 Name = "History", 
-                Content = historyGallerieView
+                Content = historyGallerieView,
+                ContentMissingText = "You didn't attend to a party yet!\n" +
+                                     "Former parties will be visible here."
             };
             BindToViewModel(historyContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToHistoryCommand);
             historyGallerieView.ElementTapped += PartieSelected;

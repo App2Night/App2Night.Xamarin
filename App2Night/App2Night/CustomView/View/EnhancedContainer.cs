@@ -153,8 +153,7 @@ namespace App2Night.CustomView.View
         public EnhancedContainer()
         {
             var noContentViewContainer = new Grid
-            {
-                //BackgroundColor = Color.White.MultiplyAlpha(0.5), 
+            { 
                 Children = {_noContentView}
             };
             _noContentView.Children.Add(new Label
