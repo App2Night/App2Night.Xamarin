@@ -1,4 +1,5 @@
-﻿using App2Night.CustomView.Page;
+﻿using System;
+using App2Night.CustomView.Page;
 using App2Night.CustomView.View;
 using App2Night.ViewModel;
 using Xamarin.Forms;
@@ -30,10 +31,12 @@ namespace App2Night.View
         {
             HeightRequest = 100,
             WidthRequest = 100,
-            ImagePath = ""
+            ImagePath = "App2Night.Data.Image.default.png"
         };
         public CreatePartyPage()
         {
+            _acceptButton.ButtonTapped += Accept;
+            _cancelButton.ButtonTapped += Cancel;
             Title = "Create Party";
             Content = new Grid
             {
@@ -59,25 +62,25 @@ namespace App2Night.View
                     {
                         Text = "Name",
                         HorizontalOptions = LayoutOptions.Start
-                    },0,0 },
+                    },0,1 },
                     {
                         new Label
                     {
                         Text = "Description",
                         HorizontalOptions = LayoutOptions.Start
-                    },0,1 },
+                    },0,2 },
                     {
                         new Label
                     {
                         Text = "Date",
                         HorizontalOptions = LayoutOptions.Start
-                    },0,2 },
+                    },0,3 },
                     {
                         new Label
                     {
                         Text = "Music Genre",
                         HorizontalOptions = LayoutOptions.Start
-                    },0,3 },
+                    },0,4 },
 
                     {_image,0,0 },
 
@@ -92,10 +95,39 @@ namespace App2Night.View
             };
             Grid.SetColumnSpan(_image,2);
         }
-        
+
+        private void Accept(Object o, EventArgs e)
+        {
+            TappedAnimation(_acceptButton);
+        }
+
+        private void Cancel(Object o, EventArgs e)
+        {
+            TappedAnimation(_cancelButton);
+        }
+
+        private void TappedAnimation(Xamarin.Forms.View view)
+        {
+            var animation = new Animation(d =>
+            {
+                view.Scale = d;
+            }, 1, 1.6);
+            var nextAnimation = new Animation(d =>
+            {
+                view.Scale = d;
+            }, 1.6, 1);
+            animation.Commit(this, "Scale", finished: delegate
+            {
+                nextAnimation.Commit(this, "Descale");
+            });
+        }
+
         public override void Dispose()
         {
             base.Dispose();
+            _acceptButton.ButtonTapped -= Accept;
+            _cancelButton.ButtonTapped -= Cancel;
+
         }
     }
 }
