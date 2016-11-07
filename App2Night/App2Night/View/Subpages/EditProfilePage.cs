@@ -1,5 +1,9 @@
-﻿using App2Night.Model.Enum;
+﻿using System;
+using App2Night.CustomView.View;
+using App2Night.CustomViews;
+using App2Night.Model.Enum;
 using App2Night.ViewModel.Subpages;
+using MvvmNano;
 using MvvmNano.Forms;
 using Xamarin.Forms;
 
@@ -25,26 +29,26 @@ namespace App2Night.View.Subpages
             get { return _addressEntry.Text; }
             set { _addressEntry.Text = value; }
         }
+
         // TODO Set Style of Entry
-        Entry _nameEntry = new Entry();
+        readonly Entry _nameEntry = new Entry();
 
-        Entry _emailEntry = new Entry();
+        readonly Entry _emailEntry = new Entry();
 
-        Entry _addressEntry = new Entry();
+        readonly Entry _addressEntry = new Entry();
 
-        Picker _genderPicker = new Picker
+        readonly EnumBindablePicker<Gender> _genderPicker = new EnumBindablePicker<Gender>();
+
+        private readonly CustomButton _cancelBtn = new CustomButton
         {
-            Items = {Gender.Unkown.ToString(), Gender.Men.ToString(), Gender.Woman.ToString()},
+            Text = "\uf00d",
+            ButtonLabel = { FontFamily = "FontAwesome", FontSize = 50 },
         };
 
-        Button cancelBtn = new Button
+        private readonly CustomButton _okBtn = new CustomButton
         {
-            Text = "Cancel"
-        };
-
-        Button okBtn = new Button
-        {
-            Text = "Ok"
+            Text = "\uf00c",
+            ButtonLabel = { FontFamily = "FontAwesome", FontSize = 50 },
         };
 
         /// <summary>
@@ -52,26 +56,15 @@ namespace App2Night.View.Subpages
         /// </summary>
         public EditProfilePage()
         {
+            // set title and add Command for ViewModel
             Title = "Edit Profile";
-            BindToViewModel(cancelBtn, Button.CommandProperty, vm => vm.MoveToCancelCommand);
-            BindToViewModel(okBtn, Button.CommandProperty, vm => vm.MoveTOkCommand);
-            // TODO Handle Gender
-            _genderPicker.SelectedIndexChanged += (sender, args) =>
-            {
-                if (_genderPicker.SelectedIndex == 0)
-                {
-
-                }
-                else if (_genderPicker.SelectedIndex == 1)
-                {
-
-                }
-                else
-                {
-
-                }
-            };
-            var stackPane = new Grid()
+            BindToViewModel(_cancelBtn, EditPartyPage.ContentProperty, vm => vm.MoveToCancelCommand);
+            BindToViewModel(_okBtn, CustomButton.CommandProperty, vm => vm.MoveTOkCommand);
+            _okBtn.ButtonTapped += OnOkBtnTapped;
+            // add eventHandler to change gender of user
+            _genderPicker.SelectedIndexChanged += SelectGender;
+            // set Content with two grids. first one contains all information about the user. last one has a cancel and ok btn.
+            Content = new Grid()
             {
                 RowDefinitions = new RowDefinitionCollection
                 {
@@ -84,6 +77,7 @@ namespace App2Night.View.Subpages
                     {
                         new Grid
                         {
+                            Padding = new Thickness(10),
                             RowDefinitions = new RowDefinitionCollection
                             {
                                 new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
@@ -102,7 +96,7 @@ namespace App2Night.View.Subpages
                                     new Label
                                     {
                                         Text = "Name",
-                                        HorizontalOptions = LayoutOptions.Start
+                                        HorizontalOptions = LayoutOptions.Start,
                                     },
                                     0, 0
                                 },
@@ -157,19 +151,38 @@ namespace App2Night.View.Subpages
                             },
                             Children =
                             {
-                                {cancelBtn, 0, 0},
-                                {okBtn, 1, 0},
+                                {_cancelBtn, 0, 0},
+                                {_okBtn, 1, 0},
                             }
                         },
                         0, 2
                     }
                 }
             };
-            Content = new ContentView()
+        }
+
+        private void OnOkBtnTapped(object sender, EventArgs e)
+        {
+            // TODO handle tap
+        }
+
+        private void SelectGender(object o, EventArgs e)
+        {
+            if (_genderPicker.SelectedIndex == 0)
             {
-                Content = stackPane,
-                BackgroundColor = Color.White
-            };
+            }
+            else if (_genderPicker.SelectedIndex == 1)
+            {
+            }
+            else
+            {
+            }
+        }
+
+        public override void Dispose()
+        {
+            base.Dispose();
+            _okBtn.ButtonTapped -= OnOkBtnTapped;
         }
     }
 }
