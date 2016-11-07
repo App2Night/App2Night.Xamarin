@@ -62,6 +62,7 @@ namespace App2Night.CustomView.View
             _closeButton.ButtonLabel.FontFamily = "FontAwesome";
             Item = item;
             _closeButton.ButtonTapped += CloseButtonOnButtonTapped;
+            _moreButton.ButtonTapped += MoreButtonOnTapped;
             _titleLabel.Text = title;
             var mainGrid = new Grid
             {
@@ -85,6 +86,15 @@ namespace App2Night.CustomView.View
                 }
             };
             base.Content = mainGrid;
+        }
+
+        private void MoreButtonOnTapped(object sender, EventArgs e)
+        {
+            Animation moveAnimation = new Animation(d =>
+            {
+                _moreButton.TranslationX = d*100;
+            },0,1);
+            moveAnimation.Commit(this,"MoveMoreButton", length:1000U, finished: (d, b) =>_moreButton.TranslationX = 0);
         }
 
         private void CloseButtonOnButtonTapped(object sender, EventArgs eventArgs)

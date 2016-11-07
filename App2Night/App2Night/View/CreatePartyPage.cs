@@ -1,6 +1,8 @@
 ﻿using System;
 using App2Night.CustomView.Page;
 using App2Night.CustomView.View;
+using App2Night.CustomViews;
+using App2Night.Model.Enum;
 using App2Night.ViewModel;
 using Xamarin.Forms;
 
@@ -12,18 +14,20 @@ namespace App2Night.View
         private Entry _descriptionEntry = new Entry();
         private readonly DatePicker _datePicker = new DatePicker
         {
-            MinimumDate = System.DateTime.Now,
-            MaximumDate = System.DateTime.Now.AddMonths(12)
+            MinimumDate = DateTime.Now,
+            MaximumDate = DateTime.Now.AddMonths(12)
         };
-        private Picker _musicGenreSwitch = new Picker();
+
+        private TimePicker _timePicker = new TimePicker();
+        private EnumBindablePicker<MusicGenre> _musicGenreSwitch = new EnumBindablePicker<MusicGenre>();
         private CustomButton _cancelButton = new CustomButton
         {
-            Text = "\uf00c",
+            Text = "\uf00d",
             ButtonLabel ={FontFamily = "FontAwesome", FontSize = 50},
         };
         private CustomButton _acceptButton = new CustomButton
         {
-            Text = "\uf00d",
+            Text = "\uf00c",
             ButtonLabel = { FontFamily = "FontAwesome",FontSize = 50},
         };
 
@@ -35,9 +39,11 @@ namespace App2Night.View
         };
         public CreatePartyPage()
         {
+            // add eventHandler to CustomBtn
             _acceptButton.ButtonTapped += Accept;
             _cancelButton.ButtonTapped += Cancel;
             Title = "Create Party";
+            // set Content
             Content = new Grid
             {
                 Padding = new Thickness(10),
@@ -78,19 +84,26 @@ namespace App2Night.View
                     {
                         new Label
                     {
-                        Text = "Music Genre",
+                        Text = "Time",
                         HorizontalOptions = LayoutOptions.Start
                     },0,4 },
+                    {
+                        new Label
+                    {
+                        Text = "Music Genre",
+                        HorizontalOptions = LayoutOptions.Start
+                    },0,5 },
 
                     {_image,0,0 },
 
                     {_entryName,1,1 },
                     {_descriptionEntry,1,2 },
                     {_datePicker,1,3 },
-                    {_musicGenreSwitch,1,4 },
+                    {_timePicker,1,4 },
+                    {_musicGenreSwitch,1,5 },
 
-                    {_cancelButton,0,5 },
-                    {_acceptButton,1,5 }
+                    {_cancelButton,1,6 },
+                    {_acceptButton,0,6 }
                 }
             };
             Grid.SetColumnSpan(_image,2);
@@ -104,6 +117,9 @@ namespace App2Night.View
         private void Cancel(Object o, EventArgs e)
         {
             TappedAnimation(_cancelButton);
+            _entryName.Text = "";
+            _descriptionEntry.Text = "";
+            _datePicker.Date  = DateTime.Now;
         }
 
         private void TappedAnimation(Xamarin.Forms.View view)

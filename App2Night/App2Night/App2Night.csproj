@@ -36,6 +36,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="App.cs" />
+    <Compile Include="CustomViews\EnumBindablePicker.cs" />
     <Compile Include="CustomView\Page\ContentPageWithInfo.cs" />
     <Compile Include="CustomView\Page\ContentPageWithPreview.cs" />
     <Compile Include="CustomView\Template\HistoryTemplate.cs" />
