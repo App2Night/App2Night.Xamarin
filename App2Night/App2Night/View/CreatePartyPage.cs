@@ -17,7 +17,12 @@ namespace App2Night.View
             MinimumDate = DateTime.Now,
             MaximumDate = DateTime.Now.AddMonths(12)
         };
-
+        StackLayout _noContentView = new StackLayout
+        {
+            HorizontalOptions = LayoutOptions.Center,
+            Padding = new Thickness(0, 20)
+        };
+        Label _noContentText = new Label { Text = "Click Here to Load image"};
         private TimePicker _timePicker = new TimePicker();
         private EnumBindablePicker<MusicGenre> _musicGenreSwitch = new EnumBindablePicker<MusicGenre>();
         private CustomButton _cancelButton = new CustomButton
@@ -43,6 +48,15 @@ namespace App2Night.View
             _acceptButton.ButtonTapped += Accept;
             _cancelButton.ButtonTapped += Cancel;
             Title = "Create Party";
+            _noContentView.Children.Add(new Label
+            {
+                FontFamily = "FontAwesome",
+                Text = "\uf11a",
+                FontSize = 100,
+                FontAttributes = FontAttributes.Bold
+            });
+            _noContentView.Children.Add(_noContentText);
+            _image.IsVisible = false;
             // set Content
             Content = new Grid
             {
@@ -101,12 +115,13 @@ namespace App2Night.View
                     {_datePicker,1,3 },
                     {_timePicker,1,4 },
                     {_musicGenreSwitch,1,5 },
-
+                    {_noContentView,0,0 },
                     {_cancelButton,1,6 },
                     {_acceptButton,0,6 }
                 }
             };
             Grid.SetColumnSpan(_image,2);
+            Grid.SetColumnSpan(_noContentView, 2);
         }
 
         private void Accept(Object o, EventArgs e)
