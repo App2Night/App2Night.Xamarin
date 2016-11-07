@@ -27,11 +27,10 @@ namespace App2Night.View
             ButtonLabel = { FontFamily = "FontAwesome",FontSize = 50},
         };
 
-        private ImageFromPortable _image = new ImageFromPortable(null)
+        private ImageFromPortable _image = new ImageFromPortable("App2Night.Data.Image.default.png")
         {
             HeightRequest = 100,
-            WidthRequest = 100,
-            ImagePath = "App2Night.Data.Image.default.png"
+            WidthRequest = 100 
         };
         public CreatePartyPage()
         {

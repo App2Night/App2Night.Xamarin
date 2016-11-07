@@ -20,6 +20,7 @@ namespace App2Night
 
         public App()
         {
+            MainPage = new ContentPage();
             //It is possible (even if it is unlikely) that Google Maps is not installed on the device.
             //Check if it is installed on start.
             if (Device.OS == TargetPlatform.Android)

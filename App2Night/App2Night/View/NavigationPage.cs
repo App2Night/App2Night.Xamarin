@@ -9,12 +9,16 @@ namespace App2Night.View
     {
         public NavigationPage()
         {
+            Title = "Menü";
             var syncButton = new CustomButton
             {
                 Text = "Sync \uf0e2",
                 
                 Margin = new Thickness(0,20)
             };
+
+            DetailListView.RowHeight = 40;
+
             syncButton.ButtonLabel.FontSize = 40;
             syncButton.ButtonLabel.FontFamily = "FontAwesome";
             BindToViewModel(syncButton, CustomButton.CommandProperty, o => o.SyncCommand);

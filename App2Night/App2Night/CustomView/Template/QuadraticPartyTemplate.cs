@@ -9,7 +9,7 @@ namespace App2Night.CustomView.Template
     {
         public QuadraticPartyTemplate()
         {
-            SKCanvasView image = new ImageFromPortable("App2Night.Data.Image.default.png"); 
+            var image = new ImageFromPortable("App2Night.Data.Image.default.png"); 
 
             var titleLabel = new Label()
             {

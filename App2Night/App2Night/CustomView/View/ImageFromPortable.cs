@@ -7,15 +7,18 @@ using System.Threading.Tasks;
 using App2Night.CustomView.Template;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
+using Xamarin.Forms;
 
 namespace App2Night.CustomView.View
 {
+
     public enum FileType
     {
         Svg,
         Image
     }
 
+#if __MOBILE__
     public class ImageFromPortable : SKCanvasView
     {
         private FileType FileType
@@ -50,15 +53,16 @@ namespace App2Night.CustomView.View
         void CreateBitmap()
         {
             if (string.IsNullOrEmpty(ImagePath)) return;
-            Task.Run(() => 
-            {
-                Stopwatch streamBitmapWatch = new Stopwatch();
+            if (Device.OS == TargetPlatform.Windows) return;
+
+            //Task.Run(() => 
+            //{
+            Stopwatch streamBitmapWatch = new Stopwatch();
                 streamBitmapWatch.Start();
                 var assembly = typeof (QuadraticPartyTemplate).GetTypeInfo().Assembly;
                 Stream stream = assembly.GetManifestResourceStream(_imagePath);
 
-
-                using (var s = new SKManagedStream(stream))
+            using (var s = new SKManagedStream(stream))
                 {
                     if (FileType == FileType.Image)
                     {
@@ -85,7 +89,7 @@ namespace App2Night.CustomView.View
                 }
                 Debug.WriteLine("INFO: Encoding Bitmap took: " + streamBitmapWatch.ElapsedMilliseconds);
                 InvalidateSurface();
-            }); 
+            //}); 
         }
 
         protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
@@ -106,4 +110,14 @@ namespace App2Night.CustomView.View
             }
         }
     }
+#else
+    public class ImageFromPortable : ContentView
+    {
+      
+        public ImageFromPortable(string imagePath)
+        { 
+            BackgroundColor = Color.Green;
+        } 
+    }
+#endif
 }

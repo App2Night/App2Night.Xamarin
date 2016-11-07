@@ -1,4 +1,7 @@
-﻿namespace App2Night.UWP
+﻿using System;
+using System.Diagnostics;
+
+namespace App2Night.UWP
 {
     public sealed partial class MainPage
     {
@@ -6,7 +9,15 @@
         {
             this.InitializeComponent();
 
-            LoadApplication(new App2Night.App());
+
+            try
+            {
+                LoadApplication(new App2Night.App());
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
         }
     }
 }

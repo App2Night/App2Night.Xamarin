@@ -14,8 +14,11 @@ namespace App2Night.CustomView.View
         private int _lastKnownWidth;
         private int _lastKnownHeight;
 
+#if __MOBILE__
+
         protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
         {
+            if(Device.OS == TargetPlatform.Windows) return;
             int width = e.Info.Width;
             int height = e.Info.Height;
             _lastKnownWidth = width;
@@ -61,6 +64,7 @@ namespace App2Night.CustomView.View
                 e.Surface.Canvas.DrawPath(path, edgePaint);
             }
         }
+#endif
 
         public RoundImage(string sourcePath) : base(sourcePath)
         {
