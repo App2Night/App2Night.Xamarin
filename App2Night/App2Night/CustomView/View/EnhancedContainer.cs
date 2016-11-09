@@ -1,6 +1,7 @@
 ﻿using System; 
 using MvvmNano;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
 namespace App2Night.CustomView.View
 {
@@ -44,7 +45,7 @@ namespace App2Night.CustomView.View
 
 
         public static BindableProperty SeperatorColorProperty = BindableProperty.Create(nameof(SeperatorColor),
-            typeof(Color), typeof(EnhancedContainer), Color.Accent,
+            typeof(Color), typeof(EnhancedContainer), (Color)Application.Current.Resources["DarkPrimaryColor"],
             propertyChanged: (bindable, value, newValue) => ColorChanged(bindable, (Color) value, (Color) newValue));
 
         private static void ColorChanged(BindableObject bindable, Color oldValue, Color newValue)
@@ -60,7 +61,7 @@ namespace App2Night.CustomView.View
             HorizontalOptions = LayoutOptions.Center,
             Padding = new Thickness(0,20)
         };
-        Label _noContentText = new Label {Text = "No data loaded."}; 
+        Label _noContentText = new Label {Text = "No data loaded." }; 
 
         public Color SeperatorColor
         {
@@ -116,17 +117,19 @@ namespace App2Night.CustomView.View
         Label _nameLabel = new Label()
         {
             HorizontalOptions = LayoutOptions.Start,
-            FontSize = 20,
-            Margin = 4
+            FontSize = 23,
+            Margin = new Thickness(4, 10),
+            Style = (Style)Application.Current.Resources["AccentLabel"]
         };
 
         CustomButton _moreBtn = new CustomButton 
         {
-            HorizontalOptions = LayoutOptions.End, 
+            HorizontalOptions = LayoutOptions.End,
+            VerticalOptions = LayoutOptions.Center,
             WidthRequest = 50,
             IsVisible = false
         };
-        BoxView _topBoxView = new BoxView() {IsVisible = false};
+        BoxView _topBoxView = new BoxView();
         BoxView _middleBoxView = new BoxView();
         BoxView _bottomBoxView = new BoxView();
 
@@ -146,9 +149,32 @@ namespace App2Night.CustomView.View
             set { _noContentText.Text = value; }
         }
 
-        private int _headerHeight = 40;
-        private bool _noContentWarningVisible = true;
+        public bool TopSpacerVisible
+        {
+            get { return _topBoxView.IsVisible; }
+            set
+            { 
+                _topBoxView.IsVisible = value;
+                RowDefinitions[0].Height = 0;
+            }
+        }
 
+        public double SpacerSize
+        {
+            get { return _spacerSize; }
+            set
+            {
+                _spacerSize = value;
+                RowDefinitions[0].Height = TopSpacerVisible ?  value : 0;
+                RowDefinitions[2].Height = value;
+                RowDefinitions[4].Height = value;
+            }
+        }
+
+        private double _spacerSize = 1;
+
+        private int _headerHeight = 40;
+        private bool _noContentWarningVisible = true;  
 
         public EnhancedContainer()
         {
@@ -156,6 +182,8 @@ namespace App2Night.CustomView.View
             { 
                 Children = {_noContentView}
             };
+            _moreBtn.ButtonLabel.Style = (Style) Application.Current.Resources["AccentLabel"];
+            _topBoxView.IsVisible = false;
             _noContentView.Children.Add(new Label
             {
                 FontFamily = "FontAwesome",
@@ -166,8 +194,7 @@ namespace App2Night.CustomView.View
             _noContentView.Children.Add(_noContentText);
             SetNoContentViewVisiblity(ContentWarningVisible); 
             _moreBtn.ButtonTapped += MoreBtnOnButtonTapped;
-            _moreBtn.ButtonLabel.FontSize = 18;
-
+            _moreBtn.ButtonLabel.FontSize = 25; 
             TapGestureRecognizer noContentViewGesture = new TapGestureRecognizer
             {
                 Command = new Command(() =>
@@ -179,26 +206,27 @@ namespace App2Night.CustomView.View
 
             if (string.IsNullOrEmpty(ButtonText))
                 ButtonText = "\uf061";
-            ColorChanged(this, SeperatorColor, SeperatorColor); 
-
-           RowSpacing = 0;
-
+            ColorChanged(this, SeperatorColor, SeperatorColor);  
+            RowSpacing = 0; 
             RowDefinitions = new RowDefinitionCollection
             { 
-                new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
-                new RowDefinition {Height = new GridLength(HeaderHeight, GridUnitType.Absolute)},
-                new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
+                new RowDefinition {Height = new GridLength(TopSpacerVisible ? _spacerSize : 0, GridUnitType.Absolute)},
                 new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
-                new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
+                new RowDefinition {Height = new GridLength(_spacerSize, GridUnitType.Absolute)},
+                new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
+                new RowDefinition {Height = new GridLength(_spacerSize, GridUnitType.Absolute)},
             };
 
             Children.Add(_topBoxView, 0, 0);
-            Children.Add(_middleBoxView, 0, 2);
-            Children.Add(_bottomBoxView, 0, 4);
+            Children.Add(new BoxView() {Color = (Color)Application.Current.Resources["PrimaryColor"] }, 0, 1);
             Children.Add(_nameLabel, 0, 1);
             Children.Add(_moreBtn, 0, 1);
-            Children.Add(noContentViewContainer, 0, 3);
-        } 
+            Children.Add(_middleBoxView, 0, 2);
+            Children.Add(noContentViewContainer, 0, 3); 
+            Children.Add(_bottomBoxView, 0, 4);
+
+            SpacerSize = _spacerSize; 
+        }
 
         private void MoreBtnOnButtonTapped(object sender, EventArgs eventArgs)
         {

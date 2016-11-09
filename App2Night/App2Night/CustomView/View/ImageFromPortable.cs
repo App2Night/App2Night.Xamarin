@@ -17,8 +17,7 @@ namespace App2Night.CustomView.View
         Svg,
         Image
     }
-
-#if __MOBILE__
+     
     public class ImageFromPortable : SKCanvasView
     {
         private FileType FileType
@@ -66,21 +65,22 @@ namespace App2Night.CustomView.View
                 {
                     if (FileType == FileType.Image)
                     {
-                        using (var codec = SKCodec.Create(s))
+                    
+                    using (var codec = SKCodec.Create(s))
+                    { 
+                        var info = codec.Info;
+
+                        bitmap = new SKBitmap(info.Width, info.Height, info.ColorType
+                            /*SKImageInfo.PlatformColorType*/,
+                            info.IsOpaque ? SKAlphaType.Opaque : SKAlphaType.Premul);
+
+                        IntPtr length;
+                        var result = codec.GetPixels(bitmap.Info, bitmap.GetPixels(out length));
+                        if (!(result == SKCodecResult.Success || result == SKCodecResult.IncompleteInput))
                         {
-                            var info = codec.Info;
-
-                            bitmap = new SKBitmap(info.Width, info.Height, info.ColorType
-                                /*SKImageInfo.PlatformColorType*/,
-                                info.IsOpaque ? SKAlphaType.Opaque : SKAlphaType.Premul);
-
-                            IntPtr length;
-                            var result = codec.GetPixels(bitmap.Info, bitmap.GetPixels(out length));
-                            if (!(result == SKCodecResult.Success || result == SKCodecResult.IncompleteInput))
-                            {
-                                //throw new ArgumentException("Unable to load bitmap from provided data");
-                            }
+                            //throw new ArgumentException("Unable to load bitmap from provided data");
                         }
+                    }
                     }
                     else
                     {
@@ -97,10 +97,36 @@ namespace App2Night.CustomView.View
             Stopwatch showingBitmap = new Stopwatch();
             showingBitmap.Start();
             base.OnPaintSurface(e);
+
+            var width = e.Info.Width;
+            var height = e.Info.Height;
+            float multiplyer = 0;
+            float xOffset = 0;
+            float yOffset = 0; 
+            if (width > height)
+            {
+                multiplyer = (float)width/bitmap.Width;
+            }
+            else
+            {
+                multiplyer = (float)height /bitmap.Height; 
+            }
+
+            var cHeight = bitmap.Height*multiplyer;
+            var cWidth = bitmap.Width*multiplyer;
+
+            xOffset = (width - bitmap.Width)/2f ;
+            yOffset = (height - bitmap.Height) / 2f;
+            if (xOffset < 0) xOffset = 0;
+            if (yOffset < 0) yOffset = 0;
+
             if (FileType == FileType.Image)
             {
+
                 if (bitmap != null)
-                    e.Surface.Canvas.DrawBitmap(bitmap, new SKRect(0, 0, e.Info.Width, e.Info.Height));
+                {    
+                    e.Surface.Canvas.DrawBitmap(bitmap, new SKRect(0, 0, cWidth, cHeight), new SKPaint() {IsAntialias = true}); 
+                }
                 Debug.WriteLine("INFO: Showing Bitmap took: " + showingBitmap.ElapsedMilliseconds);
 
             } 
@@ -109,15 +135,5 @@ namespace App2Night.CustomView.View
                 //TODO Add svg support
             }
         }
-    }
-#else
-    public class ImageFromPortable : ContentView
-    {
-      
-        public ImageFromPortable(string imagePath)
-        { 
-            BackgroundColor = Color.Green;
-        } 
-    }
-#endif
+    } 
 }

@@ -9,9 +9,11 @@ using App2Night.Model.Model;
 using App2Night.ViewModel;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
+using Xamarin.Forms.Xaml;
 
 namespace App2Night.View
 {
+    [XamlCompilation(XamlCompilationOptions.Compile)]
     public class DashboardPage : ContentPageWithPreview<DashboardViewModel>
     {
         Map _headerMap = new Map()
@@ -19,30 +21,31 @@ namespace App2Night.View
             HeightRequest = 200
         };
 
-        RoundImage profilePicture = new RoundImage("App2Night.Data.Image.default.png")
+        MaskedImage profilePicture = new MaskedImage("App2Night.Data.Image.default.png")
         {
             HeightRequest = 100,
             WidthRequest = 100,
             Margin = new Thickness(10),
-            EdgeColor = Color.Maroon
+            EdgeColor = Color.Maroon,
+            MaskType = MaskType.Round
         }; 
 
         private HorizontalGallerieView historyGallerieView = new HorizontalGallerieView
         {
-            Columns = 3,
-            Rows = 2, 
+            Columns = 2,
+            Rows = 1, 
             Template = typeof(QuadraticPartyTemplate)
         };
 
         private HorizontalGallerieView interestingPartieGallerie = new HorizontalGallerieView
         {
-            Columns = 2,
+            Columns = 1,
             Template = typeof(QuadraticPartyTemplate)
         }; 
 
         private HorizontalGallerieView myPartieGallerie = new HorizontalGallerieView
         {
-            Columns = 2,
+            Columns = 1,
             Template = typeof(QuadraticPartyTemplate)
         }; 
 
@@ -84,7 +87,8 @@ namespace App2Night.View
                 Name = "User",
                 ButtonText = "\uf0ad",
                 Content = userInfoView,
-                NoContentWarningVisible = false
+                NoContentWarningVisible = false,
+                TopSpacerVisible = false
             }; 
             BindToViewModel(userInfoContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToUserEditCommand);
 
@@ -128,31 +132,33 @@ namespace App2Night.View
             BindToViewModel(historyContainer, EnhancedContainer.NoContentWarnignVisibleProperty, vm => vm.PartyHistoryAvailable, converter: new InvertBooleanConverter());
 
             //Main layout
-            var mainLayout = new StackLayout()
-            {
-                Spacing = 0,
+            var mainLayout = new Grid()
+            {  
+                RowSpacing = 0,
+                RowDefinitions =
+                {
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Auto)},
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Auto)},
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Auto)},
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Auto)},
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Auto)},
+
+                },
                 Children =
                 {
                     new MapWrapper(_headerMap),
-                    new BoxView
-                    {
-                        Color = Color.Black,
-                        HeightRequest = 1
-                    },
-                    userInfoContainer,
-                    myPartiesContainer,
-                    interestingPartieContainer,
-                    historyContainer
-                }
+                    {userInfoContainer, 0, 1},
+                    { myPartiesContainer,0, 2},
+                    { interestingPartieContainer,0,3},
+                    { historyContainer,0, 4}
+                } 
             };
 
             var mainScroll = new ScrollView
             {
                 Content = mainLayout,
                 Orientation = ScrollOrientation.Vertical
-            };
-            Grid.SetRowSpan(mainScroll, 2);
-
+            }; 
             Content = mainScroll;
         }
 

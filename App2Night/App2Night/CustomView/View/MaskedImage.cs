@@ -4,17 +4,22 @@ using Xamarin.Forms;
 
 namespace App2Night.CustomView.View
 {
-    public class RoundImage : ImageFromPortable
+    public enum MaskType
     {
-        public bool FlatBottom { get; set; } = false;
+        Round, RoundFlatBottom, RoundCorners
+    }
+
+    public class MaskedImage : ImageFromPortable
+    {
+        public MaskType MaskType { get; set; } = MaskType.RoundCorners;
         public bool Edge { get; set; } = true;
+        public bool DrawGradient { get; set; } = false;
         public double EdgeSize { get; set; } = 10;
         public Color EdgeColor { get; set; } = Color.Accent;
 
         private int _lastKnownWidth;
         private int _lastKnownHeight;
-
-#if __MOBILE__
+         
 
         protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
         {
@@ -22,14 +27,12 @@ namespace App2Night.CustomView.View
             int width = e.Info.Width;
             int height = e.Info.Height;
             _lastKnownWidth = width;
-            _lastKnownHeight = height;
-
-          
+            _lastKnownHeight = height; 
 
             //Rectangle representing the view
             SKRect rect = new SKRect(0, 0, width, height);
             SKPath path = new SKPath();
-            if (FlatBottom)
+            if (MaskType == MaskType.RoundFlatBottom)
             {
                 //Points generated with inkscape
                 path.MoveTo(GetCorrectX(130.148150), GetCorrectY(945));
@@ -38,22 +41,35 @@ namespace App2Night.CustomView.View
                 FixedCubicTo(path, 819.059620, -51.600707, 1054.419800, 219.793510, 1054.419800, 554.575240);
                 FixedCubicTo(path, 1054.419800, 712.181670, 1022.872800, 836.647530, 937.369210, 945);
             }
-            else
+            else if(MaskType == MaskType.Round)
             {
                 path.AddCircle((float) (width/2.0), (float) (height/2.0),
                     (float) ((width > height ? height : width)/2.0));
-            }
-
+            }else if (MaskType == MaskType.RoundCorners)
+            {
+                path.AddRoundedRect(new SKRect(0, 0, e.Info.Width, e.Info.Height), 10, 10);
+            }  
 
             e.Surface.Canvas.ClipPath(path);
             base.OnPaintSurface(e);
-            ////Test content, to be replaced with image
-            //SKPaint testPaint = new SKPaint();
-            //testPaint.IsAntialias = true;
-            //testPaint.Style = SKPaintStyle.Fill;
-            //testPaint.Color = Color.Green.ToSKColor();
-            //e.Surface.Canvas.DrawRect(rect, testPaint);
-
+            if (DrawGradient)
+            {
+                using (var paint = new SKPaint())
+                {
+                    paint.IsAntialias = true;
+                    using (var shader = SKShader.CreateLinearGradient(
+                        new SKPoint(0, e.Info.Height),
+                        new SKPoint(0, 0),
+                        new[] { Color.Black.MultiplyAlpha(0.1).ToSKColor(), Color.Black.MultiplyAlpha(0.5).ToSKColor() },
+                        null,
+                        SKShaderTileMode.Clamp))
+                    {
+                        paint.Shader = shader;
+                        e.Surface.Canvas.DrawPaint(paint);
+                    }
+                }
+            }
+            
             if (Edge)
             {
                 SKPaint edgePaint = new SKPaint();
@@ -63,10 +79,9 @@ namespace App2Night.CustomView.View
                 edgePaint.StrokeWidth = (float) EdgeSize;
                 e.Surface.Canvas.DrawPath(path, edgePaint);
             }
-        }
-#endif
+        } 
 
-        public RoundImage(string sourcePath) : base(sourcePath)
+        public MaskedImage(string sourcePath) : base(sourcePath)
         {
             _lastKnownHeight = 0;
             //BackgroundColor = Color.Gray;

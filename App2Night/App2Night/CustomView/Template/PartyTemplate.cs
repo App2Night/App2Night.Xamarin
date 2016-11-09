@@ -9,7 +9,7 @@ namespace App2Night.CustomView.Template
     /// </summary>
     public class PartyTemplate : ViewCell
     {
-        private RoundImage _pictureImage = new RoundImage("App2Night.Data.Image.default.png")
+        private MaskedImage _pictureImage = new MaskedImage("App2Night.Data.Image.default.png")
         {
             VerticalOptions = LayoutOptions.Center
         };

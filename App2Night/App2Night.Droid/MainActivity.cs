@@ -1,9 +1,14 @@
 ﻿using Acr.UserDialogs;
 using Android.App;
 using Android.Content.PM;
+using Android.Graphics;
+using Android.Graphics.Drawables;
 using Android.OS;
+using Android.Views;
 using HockeyApp.Android;
 using HockeyApp.Android.Metrics;
+using SkiaSharp;
+using Xamarin.Forms.Platform.Android;
 
 namespace App2Night.Droid
 {
@@ -12,9 +17,10 @@ namespace App2Night.Droid
     {
         protected override void OnCreate(Bundle bundle)
         {
+            ToolbarResource = Resource.Layout.toolbar;
             base.OnCreate(bundle);
 
-            global::Xamarin.Forms.Forms.Init(this, bundle);
+            global::Xamarin.Forms.Forms.Init(this, bundle); 
             CrashManager.Register(this, "3aca0e171a5443c090b3e064f2e5ce4b");
             UpdateManager.Register(this, "3aca0e171a5443c090b3e064f2e5ce4b");
             MetricsManager.Register(Application, "3aca0e171a5443c090b3e064f2e5ce4b");

@@ -3268,6 +3268,9 @@ namespace App2Night.Droid
 			// aapt resource value: 0x7f0a0053
 			public const int title_template = 2131361875;
 			
+			// aapt resource value: 0x7f0a00c3
+			public const int toolbar = 2131361987;
+			
 			// aapt resource value: 0x7f0a003d
 			public const int top = 2131361853;
 			
@@ -3588,6 +3591,9 @@ namespace App2Night.Droid
 			
 			// aapt resource value: 0x7f03003f
 			public const int support_simple_spinner_dropdown_item = 2130903103;
+			
+			// aapt resource value: 0x7f030040
+			public const int toolbar = 2130903104;
 			
 			static Layout()
 			{
