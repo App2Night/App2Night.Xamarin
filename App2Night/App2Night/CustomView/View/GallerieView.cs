@@ -9,7 +9,7 @@ namespace App2Night.CustomView.View
 {
     public class GallerieView : CustomScrollView
     {
-        private double _spacing = 5;
+        private double _spacing = 8;
         protected Grid ContentGrid = new Grid(); 
 
         public double Spacing

@@ -15,9 +15,7 @@ namespace App2Night.CustomView.View
         {
             get { return (MvvmNanoCommand)GetValue(CommandProperty); }
             set { SetValue(CommandProperty, value); }
-        }
-
-        private string text;
+        } 
 
         public Label ButtonLabel { get; } = new Label();
 
@@ -29,6 +27,18 @@ namespace App2Night.CustomView.View
             }
 
             set { ButtonLabel.Text = value; }
+        }
+
+        public double FontSize
+        {
+            get { return ButtonLabel.FontSize; }
+            set { ButtonLabel.FontSize = value; }
+        }
+
+        public string FontFamily
+        {
+            get { return ButtonLabel.FontFamily; }
+            set { ButtonLabel.FontFamily = value; }
         }
 
         public CustomButton()

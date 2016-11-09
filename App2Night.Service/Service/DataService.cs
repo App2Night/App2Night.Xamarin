@@ -125,8 +125,16 @@ namespace App2Night.Service.Service
             if (syncResult.Data != null)
             {
                 PopulateObservableCollection(InterestingPartys, syncResult.Data);
-                PopulateObservableCollection(PartyHistory, syncResult.Data);
                 PopulateObservableCollection(SelectedPartys, syncResult.Data);
+
+                var historyData = new List<Party>();
+                foreach (Party party in syncResult.Data)
+                {
+                    Party tempParty = party;
+                    tempParty.Date = DateTime.Today.AddDays(-10);
+                    historyData.Add(tempParty);
+                }
+                PopulateObservableCollection(PartyHistory, historyData);
             }
             PartiesUpdated?.Invoke(this, EventArgs.Empty);
             return syncResult;
