@@ -1,14 +1,42 @@
 ﻿using System;
+using Android.App;
+using Android.Content;
+using App2Night.Droid;
 using Xamarin.Forms;
 
 [assembly: Xamarin.Forms.Dependency(typeof(AndroidLoadImage))]
 namespace App2Night.Droid
 {
-	public class AndroidLoadImage : ILoadImage
+	public class AndroidLoadImage : Java.Lang.Object, ILoadImage
 	{
-		public Image ILoadImage()
+		public event EventHandler<ImageSourceEventArgs> ImageSelected;
+
+		public void LoadImage()
 		{
-			throw new NotImplementedException();
+			MainActivity androidContext = (MainActivity)Forms.Context;
+
+			Intent imageIntent = new Intent();
+			imageIntent.SetType("image/*");
+			imageIntent.SetAction(Intent.ActionGetContent);
+
+			androidContext.ConfigureActivityResultCallback(ImageChooserCallback);
+			androidContext.StartActivityForResult(Intent.CreateChooser(imageIntent, "Select photo"), 0);
+		}
+
+		private void ImageChooserCallback(int requestCode, Result resultCode, Intent data)
+		{
+			if (resultCode == Result.Ok)
+			{
+				if (ImageSelected != null)
+				{
+					Android.Net.Uri uri = data.Data;
+					if (ImageSelected != null)
+					{
+						ImageSource imageSource = ImageSource.FromStream(() => Forms.Context.ContentResolver.OpenInputStream(uri));
+						ImageSelected.Invoke(this, new ImageSourceEventArgs(imageSource));
+					}
+				}
+			}
 		}
 	}
 }

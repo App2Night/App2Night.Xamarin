@@ -20,12 +20,19 @@ namespace App2Night.View
             MinimumDate = DateTime.Now,
             MaximumDate = DateTime.Now.AddMonths(12)
         };
-        StackLayout _noContentView = new StackLayout
+		StackLayout _ContentView = new StackLayout
         {
             HorizontalOptions = LayoutOptions.Center,
             Padding = new Thickness(0, 20)
         };
-        Label _noContentText = new Label { Text = "Click Here to Load image"};
+		Label _ContentText = new Label { Text = "Click Here to Load image"};
+		Label _ContentLabel = new Label
+		{
+			FontFamily = "FontAwesome",
+			Text = "\uf11a",
+			FontSize = 100,
+			FontAttributes = FontAttributes.Bold
+		};
         private TimePicker _timePicker = new TimePicker();
         private EnumBindablePicker<MusicGenre> _musicGenreSwitch = new EnumBindablePicker<MusicGenre>();
         private CustomButton _cancelButton = new CustomButton
@@ -39,7 +46,7 @@ namespace App2Night.View
             ButtonLabel = { FontFamily = "FontAwesome",FontSize = 50},
         };
 
-        private ImageFromPortable _image = new ImageFromPortable("App2Night.Data.Image.default.png")
+		private Image _image = new Image
         {
             HeightRequest = 100,
             WidthRequest = 100 
@@ -52,15 +59,12 @@ namespace App2Night.View
             _cancelButton.ButtonTapped += Cancel;
 			// set tap gesture reconizer
 			_tapGesture.Tapped += LoadImage;
+			// set title of the page
             Title = "Create Party";
-            _noContentView.Children.Add(new Label
-            {
-                FontFamily = "FontAwesome",
-                Text = "\uf11a",
-                FontSize = 100,
-                FontAttributes = FontAttributes.Bold
-            });
-            _noContentView.Children.Add(_noContentText);
+			// set content of _contentView
+			_ContentView.Children.Add(_ContentLabel);
+			_ContentView.Children.Add(_image);
+            _ContentView.Children.Add(_ContentText);
             _image.IsVisible = false;
             // set Content
             Content = new Grid
@@ -112,30 +116,39 @@ namespace App2Night.View
                         Text = "Music Genre",
                         HorizontalOptions = LayoutOptions.Start
                     },0,5 },
-
-                    {_image,0,0 },
-
                     {_entryName,1,1 },
                     {_descriptionEntry,1,2 },
                     {_datePicker,1,3 },
                     {_timePicker,1,4 },
                     {_musicGenreSwitch,1,5 },
-                    {_noContentView,0,0 },
+                    {_ContentView,0,0 },
                     {_cancelButton,1,6 },
                     {_acceptButton,0,6 }
                 }
             };
             Grid.SetColumnSpan(_image,2);
-            Grid.SetColumnSpan(_noContentView, 2);
-			_noContentView.GestureRecognizers.Add(_tapGesture);
+            Grid.SetColumnSpan(_ContentView, 2);
+			_ContentView.GestureRecognizers.Add(_tapGesture);
         }
 		/// <summary>
-		/// Loads the image.
+		/// Loads the image. If image is null, _contentLabel is visible.
 		/// </summary>
 		/// <param name="o">O.</param>
 		/// <param name="e">E.</param>
 		void LoadImage(Object o, EventArgs e) {
-			_noContentText.Text = "is tapped";
+			ILoadImage galleryService = Xamarin.Forms.DependencyService.Get<ILoadImage>();
+			galleryService.ImageSelected += (i, imageSourceEventArgs) => _image.Source = imageSourceEventArgs.ImageSource;
+			galleryService.LoadImage();
+			if (_image.Source != null)
+			{
+				_ContentLabel.IsVisible = false;
+				_image.IsVisible = true;
+			}
+			else
+			{
+				_ContentLabel.IsVisible = true;
+				_image.IsVisible = false;
+			}
 		}
 
 		/// <summary>
