@@ -8,6 +8,9 @@ using Xamarin.Forms;
 
 namespace App2Night.View
 {
+	/// <summary>
+	/// Create party page.
+	/// </summary>
     public class CreatePartyPage : ContentPageWithInfo<CreatePartyViewModel>
     {
         private Entry _entryName = new Entry();
@@ -41,11 +44,14 @@ namespace App2Night.View
             HeightRequest = 100,
             WidthRequest = 100 
         };
+		TapGestureRecognizer _tapGesture = new TapGestureRecognizer();
         public CreatePartyPage()
         {
             // add eventHandler to CustomBtn
             _acceptButton.ButtonTapped += Accept;
             _cancelButton.ButtonTapped += Cancel;
+			// set tap gesture reconizer
+			_tapGesture.Tapped += LoadImage;
             Title = "Create Party";
             _noContentView.Children.Add(new Label
             {
@@ -121,22 +127,43 @@ namespace App2Night.View
             };
             Grid.SetColumnSpan(_image,2);
             Grid.SetColumnSpan(_noContentView, 2);
+			_noContentView.GestureRecognizers.Add(_tapGesture);
         }
+		/// <summary>
+		/// Loads the image.
+		/// </summary>
+		/// <param name="o">O.</param>
+		/// <param name="e">E.</param>
+		void LoadImage(Object o, EventArgs e) {
+			_noContentText.Text = "is tapped";
+		}
 
+		/// <summary>
+		/// Creates new party with the specific values of <see cref="T:App2Night.View.CreatePartyPage"/>.
+		/// </summary>
+		/// <param name="o">O.</param>
+		/// <param name="e">E.</param>
         private void Accept(Object o, EventArgs e)
         {
             TappedAnimation(_acceptButton);
         }
-
-        private void Cancel(Object o, EventArgs e)
+		/// <summary>
+		/// Resets all inputs of <see cref="T:App2Night.View.CreatePartyPage"/>.
+		/// </summary>
+		/// <param name="o">O.</param>
+		/// <param name="e">E.</param>
+        void Cancel(Object o, EventArgs e)
         {
             TappedAnimation(_cancelButton);
             _entryName.Text = "";
             _descriptionEntry.Text = "";
             _datePicker.Date  = DateTime.Now;
         }
-
-        private void TappedAnimation(Xamarin.Forms.View view)
+		/// <summary>
+		/// Tappeds the animation.
+		/// </summary>
+		/// <param name="view">View.</param>
+        void TappedAnimation(Xamarin.Forms.View view)
         {
             var animation = new Animation(d =>
             {
@@ -151,10 +178,18 @@ namespace App2Night.View
                 nextAnimation.Commit(this, "Descale");
             });
         }
-
+		/// <summary>
+		/// Releases all resource used by the <see cref="T:App2Night.View.CreatePartyPage"/> object.
+		/// </summary>
+		/// <remarks>Call <see cref="Dispose"/> when you are finished using the <see cref="T:App2Night.View.CreatePartyPage"/>. The
+		/// <see cref="Dispose"/> method leaves the <see cref="T:App2Night.View.CreatePartyPage"/> in an unusable state. After
+		/// calling <see cref="Dispose"/>, you must release all references to the
+		/// <see cref="T:App2Night.View.CreatePartyPage"/> so the garbage collector can reclaim the memory that the
+		/// <see cref="T:App2Night.View.CreatePartyPage"/> was occupying.</remarks>
         public override void Dispose()
         {
             base.Dispose();
+			// reset event handler
             _acceptButton.ButtonTapped -= Accept;
             _cancelButton.ButtonTapped -= Cancel;
 
