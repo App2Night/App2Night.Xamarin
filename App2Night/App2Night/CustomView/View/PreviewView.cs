@@ -5,23 +5,40 @@ namespace App2Night.CustomView.View
 {
     public class PreviewView : ContentView
     {
+        static Style _labelStyle = new Style(typeof(Label))
+        {
+            BaseResourceKey = "AccentLabel",
+            Setters =
+            {
+                new Setter
+                {
+                    Property = Label.FontSizeProperty,
+                    Value = 23
+                }
+            }
+        }; 
+
         protected readonly object Item;
 
         CustomButton _closeButton = new CustomButton()
         {
             HorizontalOptions = LayoutOptions.Start,
             WidthRequest = 50,
-            Text = "\uf078"
-
+            Text = "\uf078",
+            VerticalOptions = LayoutOptions.Center 
         };
         CustomButton _moreButton = new CustomButton()
         {
             HorizontalOptions = LayoutOptions.End,
             WidthRequest = 50,
-            Text = "\uf061"
+            Text = "\uf061",
+            VerticalOptions = LayoutOptions.Center
         };
 
-        Label _titleLabel = new Label();
+        Label _titleLabel = new Label
+        {
+            Style = _labelStyle
+        };
 
         public new Xamarin.Forms.View Content
         {
@@ -37,6 +54,8 @@ namespace App2Night.CustomView.View
         public void StartOpeningAnimation(uint length = 500U)
         {
             _titleLabel.SetBinding(Label.TextProperty, "Name");
+             
+
             _closeButton.ButtonLabel.Rotation = 180;
             Animation openingAnimation = new Animation(d =>
             {
@@ -60,6 +79,9 @@ namespace App2Night.CustomView.View
             BindingContext = item;
             _moreButton.ButtonLabel.FontFamily = "FontAwesome";
             _closeButton.ButtonLabel.FontFamily = "FontAwesome";
+            _moreButton.ButtonLabel.Style = _labelStyle;
+            _closeButton.ButtonLabel.Style = _labelStyle;
+
             Item = item;
             _closeButton.ButtonTapped += CloseButtonOnButtonTapped;
             _moreButton.ButtonTapped += MoreButtonOnTapped;
@@ -70,14 +92,14 @@ namespace App2Night.CustomView.View
                 RowDefinitions =
                 {
                     new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)}, 
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
+                    new RowDefinition {Height = new GridLength(50, GridUnitType.Absolute)},
                     new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)}, 
                     new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
                 },
                 Children =
                 {
-                    new BoxView { Color = Color.Accent},
-                    {new BoxView { Color = Color.Gray},0,1 },
+                    new BoxView { Color = (Color) Application.Current.Resources["DarkPrimaryColor"]},
+                    {new BoxView {  Color = (Color) Application.Current.Resources["PrimaryTextColor"]},0,1 },
                     {_closeButton,0,1 },
                     { _titleLabel,0,1 },
                     {_moreButton,0,1 },

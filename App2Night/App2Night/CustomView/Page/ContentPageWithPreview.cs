@@ -30,9 +30,9 @@ namespace App2Night.CustomView.Page
         /// </summary> 
         private bool _isPreviewVisible;
         private int _selectedPreviewContainer;
-        private PreviewView _preview; 
+        private PreviewView _preview;
 
-        public ContentView _content = new ContentView();
+        private ContentView _content = new ContentView() ;
 
         public new Xamarin.Forms.View  Content
         {
@@ -41,7 +41,7 @@ namespace App2Night.CustomView.Page
         }
 
         public ContentPageWithPreview()
-        {
+        { 
             base.Content = new Grid
             {
                 RowSpacing = 0,

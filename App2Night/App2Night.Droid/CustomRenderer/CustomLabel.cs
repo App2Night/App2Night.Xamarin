@@ -1,6 +1,8 @@
 using System;
-using System.Reflection.Emit;
-using App2Night.Droid.CustomRenderer; 
+using Android.Graphics;
+using App2Night.Droid.CustomRenderer;
+using Xamarin.Forms;
+using Xamarin.Forms.Platform.Android; 
 
 [assembly: ExportRenderer(typeof(Label), typeof(CustomLabel))]
 namespace App2Night.Droid.CustomRenderer
