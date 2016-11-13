@@ -8,7 +8,7 @@
         public int HouseNumber { get; set; }
         public string HouseNumberAdditional { get; set; }
         public int Zipcode { get; set; }
-        public long Latitude { get; set; }
-        public long Longitude { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
     }
 }

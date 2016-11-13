@@ -21,8 +21,7 @@ namespace App2Night.Droid.Service
         private Coordinates _currentLocation;
         private Location _location;
         public event EventHandler<Coordinates> LocationChanged;
-        public event EventHandler<LocationChangeEventArgs> LocationStatusChanged;
-
+        public event EventHandler<LocationChangeEventArgs> LocationStatusChanged; 
 
         public AndroidUserLocationService()
         {

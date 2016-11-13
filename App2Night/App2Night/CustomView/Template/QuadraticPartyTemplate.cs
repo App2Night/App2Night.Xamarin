@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Diagnostics;
 using App2Night.CustomView.View;
 using App2Night.Helper.ValueConverter;
+using App2Night.Model.Model;
 using App2Night.Service.Interface;
 using MvvmNano;
 using SkiaSharp;
@@ -9,7 +11,7 @@ using Xamarin.Forms;
 
 namespace App2Night.CustomView.Template
 {
-    public class QuadraticPartyTemplate : Frame 
+    public class QuadraticPartyTemplate : Frame
     {
         //MaskedImage image = new MaskedImage("App2Night.Data.Image.default.png")
         //{
@@ -17,17 +19,19 @@ namespace App2Night.CustomView.Template
         //    InputTransparent = true,
         //    DrawGradient = true
         //};
+        Label _distanceLabel;
 
         CachedImage image = new CachedImage()
         {
-            InputTransparent = true 
+            InputTransparent = true,
+            Aspect = Aspect.AspectFill
         };
 
         public QuadraticPartyTemplate()
         {
             BackgroundColor = Color.White;
             Padding = 8;
-            HasShadow = true;  
+            HasShadow = true;
 
             image.SetImage("App2Night.Data.Image.default.png", SourceOrigin.Resource);
 
@@ -38,19 +42,21 @@ namespace App2Night.CustomView.Template
             };
             titleLabel.SetBinding(Label.TextProperty, "Name");
 
-            var distanceLabel = new Label
+            _distanceLabel = new Label
             {
                 Text = "20,4km (Stuttgart)",
                 TextColor = Color.White
-            };  
-            distanceLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
+            };
+            //_distanceLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
+            //_distanceLabel.SetBinding(Label.TextProperty, "DistanceToParty");
+             
 
             var shareIconLabel = new CustomButton
             {
                 FontFamily = "FontAwesome",
                 Text = "\uf1e0",
                 HorizontalOptions = LayoutOptions.End,
-                Margin = new Thickness(8,0)
+                Margin = new Thickness(8, 0)
             };
             shareIconLabel.ButtonLabel.FontSize = 30;
             shareIconLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
@@ -63,11 +69,11 @@ namespace App2Night.CustomView.Template
                 VerticalOptions = LayoutOptions.Start,
                 Margin = 10,
                 FontSize = 50
-            }; 
+            };
             likeButton.ButtonLabel.TextColor = Color.White;
-            likeButton.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter()); 
+            likeButton.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
 
-            
+
             var mainLayoutGrid = new Grid
             {
 
@@ -78,14 +84,53 @@ namespace App2Night.CustomView.Template
                 },
                 Children =
                 {
-                    image, 
-                    distanceLabel,
+                    image,
+                    new BoxView { Color = Color.Black.MultiplyAlpha(0.2), InputTransparent = true},
+                    _distanceLabel,
                     likeButton,
                     {titleLabel, 0, 1},
                     {shareIconLabel, 0, 1}
                 }
             };
-            Content = mainLayoutGrid; 
+            Content = mainLayoutGrid;
         } 
-    } 
+
+        protected override void OnPropertyChanged(string propertyName = null)
+        {
+            base.OnPropertyChanged(propertyName);
+            if (BindingContext != null)
+            {
+                var party = (Party) BindingContext;
+                party.PropertyChanged += (sender, args) =>
+                {
+                    if (party.DistanceToParty == -1)
+                    {
+                        //This is the default falue, distance not measured.
+                        _distanceLabel.Text =
+                            $"{party.Location.CityName}\n{party.Location.StreetName} {party.Location.HouseNumber}{party.Location.HouseNumberAdditional}";
+                    }
+                    else
+                    {
+                        //Show the distance:
+                        var distance = party.DistanceToParty;
+                        var unit = string.Empty;
+                        if (distance > 1) //Check if distance is above one km
+                        {
+                            distance = Math.Round(distance, 3);
+                            unit = "km";
+                        }
+                        else
+                        {
+                            distance = Math.Round(distance*100);
+                            unit = "m";
+                        }
+
+                        _distanceLabel.Text =
+                            $"{distance} {unit}";
+                    }
+                };
+                
+            }
+        }
+    }
 }

@@ -1,10 +1,15 @@
 ﻿using System;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
+using App2Night.Model.Annotations;
 using App2Night.Model.Enum;
 using Newtonsoft.Json;
+using PropertyChanged;
 
 namespace App2Night.Model.Model
 {
-    public class Party
+    [ImplementPropertyChanged]
+    public class Party : INotifyPropertyChanged
     {
         [JsonProperty(PropertyName = "PartyName")]
         public string Name { get; set; }
@@ -16,5 +21,23 @@ namespace App2Night.Model.Model
         public Location Location { get; set; }
         public PartyType PartyType { get; set; }
         public string Description { get; set; }
+
+        [JsonIgnore]
+        public double DistanceToParty { get; set; } = -1;
+
+        [JsonIgnore]
+        public Coordinates Coordinates => new Coordinates()
+        {
+            Latitude = Location.Latitude,
+            Longitude = Location.Longitude
+        };
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        [NotifyPropertyChangedInvocator]
+        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }

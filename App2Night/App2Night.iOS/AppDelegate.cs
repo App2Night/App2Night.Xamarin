@@ -1,5 +1,6 @@
 ﻿using Foundation;
 using HockeyApp.iOS;
+using Plugin.Geolocator;
 using UIKit;
 
 namespace App2Night.iOS
@@ -22,7 +23,8 @@ namespace App2Night.iOS
             global::Xamarin.Forms.Forms.Init();
             Xamarin.FormsMaps.Init();
             LoadApplication(new App());
-
+            var locator = CrossGeolocator.Current;
+            locator.AllowsBackgroundUpdates = true;
             var manager = BITHockeyManager.SharedHockeyManager;
             manager.Configure("3aca0e171a5443c090b3e064f2e5ce4b");
             manager.StartManager();

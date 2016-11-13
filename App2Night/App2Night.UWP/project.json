@@ -9,6 +9,7 @@
     "SkiaSharp.Views": "1.55.0",
     "SkiaSharp.Views.Forms": "1.55.0",
     "Xam.Plugin.Connectivity": "2.2.12",
+    "Xam.Plugin.Geolocator": "3.0.4",
     "Xamarin.Forms": "2.3.2.127",
     "Xamarin.Forms.Maps": "2.3.2.127"
   },

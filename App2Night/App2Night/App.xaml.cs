@@ -1,15 +1,21 @@
 ﻿ 
 
+using System;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.DependencyService;
+using App2Night.Helper;
+using App2Night.Model.Model;
 using App2Night.Service.Interface;
 using App2Night.Service.Service;
 using App2Night.ViewModel;
 using MvvmNano;
 using MvvmNano.Forms;
 using Plugin.Connectivity;
+using Plugin.Geolocator;
+using Plugin.Geolocator.Abstractions;
 using Xamarin.Forms;
+using Xamarin.Forms.Maps;
 
 namespace App2Night
 {
@@ -44,10 +50,37 @@ namespace App2Night
             AddSiteToDetailPages(new MasterDetailData(typeof (SettingViewModel), "Setting"));
             AddSiteToDetailPages(new MasterDetailData(typeof (AboutViewModel), "About"));
 
+            CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
+            
+            MvvmNanoIoC.Resolve<IDataService>().PartiesUpdated += (sender, args) =>
+            {
+                CrossGeolocator.Current.StartListeningAsync(1, 100);
+            };
+
             //SetUpMainPage<LoginViewModel>();
             Device.BeginInvokeOnMainThread((async () => await StartupSync()));
         }
 
+        private void CurrentOnPositionChanged(object sender, PositionEventArgs positionEventArgs)
+        {
+            var dataService = MvvmNanoIoC.Resolve<IDataService>();
+            var position = positionEventArgs.Position;
+            Coordinates userPosition = new Coordinates((float) position.Longitude, (float) position.Latitude);
+            //Update distance to all partys
+            foreach (Party party in dataService.InterestingPartys)
+            {
+                double distance = userPosition.DistanceTo(party.Coordinates);
+                party.DistanceToParty = distance;
+            }
+            foreach (Party party in dataService.SelectedPartys)
+            {
+                double distance = userPosition.DistanceTo(party.Coordinates);
+                party.DistanceToParty = distance;
+            }
+        } 
+        
+
+        //Replace this with a serious sync 
         public async Task StartupSync()
         {
             if (CrossConnectivity.Current.IsConnected)

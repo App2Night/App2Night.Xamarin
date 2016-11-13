@@ -123,9 +123,9 @@ namespace App2Night.Service.Service
                 }
             }
             if (syncResult.Data != null)
-            {
-                PopulateObservableCollection(InterestingPartys, syncResult.Data);
-                PopulateObservableCollection(SelectedPartys, syncResult.Data);
+            { 
+                PopulateObservableCollection(InterestingPartys, syncResult.Data.OrderBy(o => o.Date).Where(o => o.Date >= DateTime.Today));
+                PopulateObservableCollection(SelectedPartys, syncResult.Data.OrderBy(o => o.Date).Where(o => o.Date >= DateTime.Today));
 
                 var historyData = new List<Party>();
                 foreach (Party party in syncResult.Data)
@@ -135,7 +135,7 @@ namespace App2Night.Service.Service
                     historyData.Add(tempParty);
                 }
                 PopulateObservableCollection(PartyHistory, historyData);
-            }
+            } 
             PartiesUpdated?.Invoke(this, EventArgs.Empty);
             return syncResult;
         }
