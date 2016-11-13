@@ -19,15 +19,15 @@ namespace App2Night.CustomView.View
 
         private int _lastKnownWidth;
         private int _lastKnownHeight;
-         
+
 
         protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
         {
-            if(Device.OS == TargetPlatform.Windows) return;
+            base.OnPaintSurface(e); 
             int width = e.Info.Width;
             int height = e.Info.Height;
             _lastKnownWidth = width;
-            _lastKnownHeight = height; 
+            _lastKnownHeight = height;
 
             //Rectangle representing the view
             SKRect rect = new SKRect(0, 0, width, height);
@@ -41,14 +41,15 @@ namespace App2Night.CustomView.View
                 FixedCubicTo(path, 819.059620, -51.600707, 1054.419800, 219.793510, 1054.419800, 554.575240);
                 FixedCubicTo(path, 1054.419800, 712.181670, 1022.872800, 836.647530, 937.369210, 945);
             }
-            else if(MaskType == MaskType.Round)
+            else if (MaskType == MaskType.Round)
             {
-                path.AddCircle((float) (width/2.0), (float) (height/2.0),
-                    (float) ((width > height ? height : width)/2.0));
-            }else if (MaskType == MaskType.RoundCorners)
+                path.AddCircle((float)(width / 2.0), (float)(height / 2.0),
+                    (float)((width > height ? height : width) / 2.0));
+            }
+            else if (MaskType == MaskType.RoundCorners)
             {
-                path.AddRoundedRect(new SKRect(0, 0, e.Info.Width, e.Info.Height), 10, 10);
-            }  
+                path.AddRoundedRect(new SKRect(0, 0, width, height), 10, 10);
+            }
 
             e.Surface.Canvas.ClipPath(path);
             base.OnPaintSurface(e);
@@ -58,7 +59,7 @@ namespace App2Night.CustomView.View
                 {
                     paint.IsAntialias = true;
                     using (var shader = SKShader.CreateLinearGradient(
-                        new SKPoint(0, e.Info.Height),
+                        new SKPoint(0,  height),
                         new SKPoint(0, 0),
                         new[] { Color.Black.MultiplyAlpha(0.1).ToSKColor(), Color.Black.MultiplyAlpha(0.5).ToSKColor() },
                         null,
@@ -69,22 +70,21 @@ namespace App2Night.CustomView.View
                     }
                 }
             }
-            
+
             if (Edge)
             {
                 SKPaint edgePaint = new SKPaint();
                 edgePaint.IsAntialias = true;
                 edgePaint.Style = SKPaintStyle.Stroke;
                 edgePaint.Color = EdgeColor.ToSKColor();
-                edgePaint.StrokeWidth = (float) EdgeSize;
+                edgePaint.StrokeWidth = (float)EdgeSize;
                 e.Surface.Canvas.DrawPath(path, edgePaint);
             }
-        } 
+        }
 
         public MaskedImage(string sourcePath) : base(sourcePath)
         {
-            _lastKnownHeight = 0;
-            //BackgroundColor = Color.Gray;
+            _lastKnownHeight = 0; 
         }
 
         /// <summary>

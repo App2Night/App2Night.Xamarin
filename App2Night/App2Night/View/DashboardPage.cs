@@ -7,6 +7,7 @@ using App2Night.CustomView.View;
 using App2Night.Helper.ValueConverter;
 using App2Night.Model.Model;
 using App2Night.ViewModel;
+using SkiaSharp;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Xaml;
@@ -21,13 +22,13 @@ namespace App2Night.View
             HeightRequest = 200
         };
 
-        MaskedImage profilePicture = new MaskedImage("App2Night.Data.Image.default.png")
+        ImageFromPortable profilePicture = new ImageFromPortable("App2Night.Data.Image.icon_monocolor.svg")
         {
             HeightRequest = 100,
             WidthRequest = 100,
             Margin = new Thickness(10),
-            EdgeColor = Color.Maroon,
-            MaskType = MaskType.Round
+            //EdgeColor = Color.Maroon,
+            //MaskType = MaskType.Round
         }; 
 
         private HorizontalGallerieView historyGallerieView = new HorizontalGallerieView
@@ -61,7 +62,7 @@ namespace App2Night.View
                 },
                 Children =
                 {
-                    profilePicture
+                    profilePicture 
                 } 
                 
             }; 
