@@ -34,6 +34,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Credentials.cs" />
     <Compile Include="Model\Coordinates.cs" />
     <Compile Include="Enum\EventCommitmentState.cs" />
     <Compile Include="Enum\Gender.cs" />

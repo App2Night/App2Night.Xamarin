@@ -4,6 +4,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using App2Night.Model;
 
 namespace App2Night.UWP
 {
@@ -49,7 +50,8 @@ namespace App2Night.UWP
                 rootFrame.NavigationFailed += OnNavigationFailed;
 
                 Xamarin.Forms.Forms.Init(e);
-                Xamarin.FormsMaps.Init("INSERT_AUTHENTICATION_TOKEN_HERE");
+                var bingKey = Credentials.BingKey;
+                Xamarin.FormsMaps.Init(bingKey);
 
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {

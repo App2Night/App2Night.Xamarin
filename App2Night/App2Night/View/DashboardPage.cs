@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using App2Night.CustomView;
 using App2Night.CustomView.Page;
@@ -168,9 +169,21 @@ namespace App2Night.View
             PreviewItemSelected<Party, PartyPreviewView>((Party) o, new object[] {Width, Height});
         }
 
+        private int lastColumns = 1;
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
+
+            //Handle big screens
+            int columns = (int) Math.Ceiling(Width/300); //Available columns
+            if (lastColumns != columns)
+            {
+                lastColumns = columns;
+                historyGallerieView.Columns = columns;
+                interestingPartieGallerie.Columns = columns;
+                myPartieGallerie.Columns = columns;
+            }
+
             profilePicture.HeightRequest = Width/2 - 20;
             profilePicture.WidthRequest = Width/2 - 20; 
         }

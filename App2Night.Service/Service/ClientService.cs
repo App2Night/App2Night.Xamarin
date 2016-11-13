@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
 using Newtonsoft.Json;
+using System.Net.Http;
+using System.Net.Http.Headers;
 
 namespace App2Night.Service.Service
-{
-
-    //TODO CLIENT Add the correct nuget package
-    
+{ 
     public class ClientService : IClientService
     { 
 
@@ -26,7 +23,7 @@ namespace App2Night.Service.Service
 
             try
             {
-                using (HttpClient client = GetClient())
+                using (var client = GetClient())
                 {
                     if (!string.IsNullOrEmpty(token))
                     {

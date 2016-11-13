@@ -165,6 +165,9 @@
       <HintPath>..\..\packages\Xamarin.Forms.2.3.2.127\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Xamarin.Forms.Maps">
+      <HintPath>C:\Users\Konrd\.nuget\packages\Xamarin.Forms.Maps\2.3.2.127\lib\uap10.0\Xamarin.Forms.Maps.dll</HintPath>
+    </Reference>
     <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.2.3.2.127\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Platform.dll</HintPath>
       <Private>True</Private>
@@ -191,9 +194,6 @@
     <Reference Include="Plugin.Connectivity">
       <HintPath>..\..\packages\Xam.Plugin.Connectivity.2.3.0.37-beta\lib\portable-net45+wp80+win8+wpa81\Plugin.Connectivity.dll</HintPath>
     </Reference>
-    <Reference Include="Xamarin.Forms.Maps">
-      <HintPath>..\..\packages\Xamarin.Forms.Maps.2.3.3.166-pre4\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+Xamarin.iOS10\Xamarin.Forms.Maps.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
@@ -204,7 +204,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\Image\icon.svg" />
-    <EmbeddedResource Include="Data\Image\icon_monocolor.svg" />
+    <EmbeddedResource Include="Data\Image\icon_monocolor.svg">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Data\Image\icon_monocolor_white.svg" />
     <EmbeddedResource Include="Data\Image\icon_name_transparent.svg" />
   </ItemGroup>

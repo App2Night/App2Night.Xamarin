@@ -60,40 +60,39 @@ namespace App2Night.CustomView.View
 
         void CreateBitmap()
         {
-            if (string.IsNullOrEmpty(ImagePath)) return;
-
+            if (string.IsNullOrEmpty(ImagePath)) return; 
             Stopwatch streamBitmapWatch = new Stopwatch();
             streamBitmapWatch.Start(); 
             try
             {
-                //var assembly = typeof (QuadraticPartyTemplate).GetTypeInfo().Assembly;
-                //Stream stream = assembly.GetManifestResourceStream(_imagePath); 
+                var assembly = typeof(QuadraticPartyTemplate).GetTypeInfo().Assembly;
+                Stream stream = assembly.GetManifestResourceStream(_imagePath);
 
-                //if (FileType == FileType.Image)
-                //{
-                //    using (var s = new SKManagedStream(stream))
-                //    {
-                //        using (var codec = SKCodec.Create(s))
-                //        {
-                //            var info = codec.Info;
+                if (FileType == FileType.Image)
+                {
+                    using (var s = new SKManagedStream(stream))
+                    {
+                        using (var codec = SKCodec.Create(s))
+                        {
+                            var info = codec.Info;
 
-                //            bitmap = new SKBitmap(info.Width, info.Height, info.ColorType
-                //                /*SKImageInfo.PlatformColorType*/,
-                //                info.IsOpaque ? SKAlphaType.Opaque : SKAlphaType.Premul);
+                            bitmap = new SKBitmap(info.Width, info.Height, info.ColorType
+                                /*SKImageInfo.PlatformColorType*/,
+                                info.IsOpaque ? SKAlphaType.Opaque : SKAlphaType.Premul);
 
-                //            IntPtr length;
-                //            var result = codec.GetPixels(bitmap.Info, bitmap.GetPixels(out length));
-                //            if (!(result == SKCodecResult.Success || result == SKCodecResult.IncompleteInput))
-                //            {
-                //                throw new ArgumentException("Unable to load bitmap from provided data");
-                //            }
-                //        }
-                //    }
-                //}
-                //else 
-                //{ 
-                //    //TODO Add svg support
-                //} 
+                            IntPtr length;
+                            var result = codec.GetPixels(bitmap.Info, bitmap.GetPixels(out length));
+                            if (!(result == SKCodecResult.Success || result == SKCodecResult.IncompleteInput))
+                            {
+                                throw new ArgumentException("Unable to load bitmap from provided data");
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    //TODO Add svg support
+                }
                 InvalidateSurface();
             }
             catch (Exception e)
@@ -165,8 +164,10 @@ namespace App2Night.CustomView.View
                     Debug.WriteLine(exception);
                 }
             }
-            Debug.WriteLine($"INFO: Showing {FileType} took: { showingBitmap.ElapsedMilliseconds} ms.");
 
+            //Debug information to detect long loading times
+            if(showingBitmap.ElapsedMilliseconds > 0)
+                Debug.WriteLine($"INFO: Showing {FileType} took: { showingBitmap.ElapsedMilliseconds} ms."); 
         }
     }
 }
