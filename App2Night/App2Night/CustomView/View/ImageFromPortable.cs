@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System; 
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -60,18 +59,19 @@ namespace App2Night.CustomView.View
 
         void CreateBitmap()
         {
-            if (string.IsNullOrEmpty(ImagePath)) return; 
-            Stopwatch streamBitmapWatch = new Stopwatch();
-            streamBitmapWatch.Start(); 
-            try
+            Task.Run(() =>
             {
-                var assembly = typeof(QuadraticPartyTemplate).GetTypeInfo().Assembly;
-                Stream stream = assembly.GetManifestResourceStream(_imagePath);
-
-                if (FileType == FileType.Image)
+                if (string.IsNullOrEmpty(ImagePath)) return;
+                Stopwatch streamBitmapWatch = new Stopwatch();
+                streamBitmapWatch.Start();
+                try
                 {
-                    using (var s = new SKManagedStream(stream))
+                    var assembly = typeof(QuadraticPartyTemplate).GetTypeInfo().Assembly;
+                    Stream stream = assembly.GetManifestResourceStream(_imagePath);
+
+                    if (FileType == FileType.Image)
                     {
+                        using (var s = new SKManagedStream(stream))
                         using (var codec = SKCodec.Create(s))
                         {
                             var info = codec.Info;
@@ -88,62 +88,75 @@ namespace App2Night.CustomView.View
                             }
                         }
                     }
+                    else
+                    {
+                        //TODO Add svg support
+                    }
+                    Device.BeginInvokeOnMainThread(()=> InvalidateSurface());
                 }
-                else
+                catch (Exception e)
                 {
-                    //TODO Add svg support
+                    Debug.WriteLine(e);
                 }
-                InvalidateSurface();
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-            }
-            finally
-            {
-                Debug.WriteLine("INFO: Encoding Bitmap took: " + streamBitmapWatch.ElapsedMilliseconds);
-            }
+                finally
+                {
+                    Debug.WriteLine("INFO: Encoding Bitmap took: " + streamBitmapWatch.ElapsedMilliseconds);
+                }
+            }); 
         }
 
         protected override void OnPaintSurface(SKPaintSurfaceEventArgs e)
-        {
-            base.OnPaintSurface(e); 
+        { 
+            base.OnPaintSurface(e);
             Stopwatch showingBitmap = new Stopwatch();
             showingBitmap.Start();
             base.OnPaintSurface(e);
 
             var width = e.Info.Width;
             var height = e.Info.Height;
-            
+
 
             if (FileType == FileType.Image)
             {
+                e.Surface.Canvas.Dispose();
+
                 if (bitmap != null)
                 {
-                    float multiplyer = 0;
-                    float xOffset = 0;
-                    float yOffset = 0;
-                    if (width > height)
-                    {
-                        multiplyer = (float)width / bitmap.Width;
-                    }
-                    else
-                    {
-                        multiplyer = (float)height / bitmap.Height;
+                    var assembly = typeof(QuadraticPartyTemplate).GetTypeInfo().Assembly;
+                    Stream stream = assembly.GetManifestResourceStream(_imagePath);
+                    using (var s = new SKManagedStream(stream)) 
+                    using (var bmp = SKBitmap.Decode(s))
+                    { 
+                        e.Surface.Canvas.DrawBitmap(bmp, 400, 400);
                     }
 
-                    var cHeight = bitmap.Height * multiplyer;
-                    var cWidth = bitmap.Width * multiplyer;
+                    //    float multiplyer = 0;
+                    //float xOffset = 0;
+                    //float yOffset = 0;
+                    //if (width < height)
+                    //{
+                    //    multiplyer = (float) width/bitmap.Width;
+                    //}
+                    //else
+                    //{
+                    //    multiplyer = (float) height/bitmap.Height;
+                    //}
 
-                    xOffset = (width - bitmap.Width) / 2f;
-                    yOffset = (height - bitmap.Height) / 2f;
-                    if (xOffset < 0) xOffset = 0;
-                    if (yOffset < 0) yOffset = 0;
-                    e.Surface.Canvas.DrawBitmap(bitmap, new SKRect(0, 0, cWidth, cHeight),
-                        new SKPaint() {IsAntialias = true});
+                    //var cHeight = bitmap.Height*multiplyer;
+                    //var cWidth = bitmap.Width*multiplyer;
+
+                    //xOffset = (width - bitmap.Width)/2f;
+                    //yOffset = (height - bitmap.Height)/2f;
+                    //if (xOffset < 0) xOffset = 0;
+                    //if (yOffset < 0) yOffset = 0;
+                    //var bitmapWidth = bitmap.Info.Width;
+                    //var bitmapHeight = bitmap.Info.Height;
+                    //e.Surface.Canvas.Scale(multiplyer); 
+                    //e.Surface.Canvas.DrawBitmap(bitmap, new SKRect(0, 0, bitmapWidth, bitmapHeight),
+                       // new SKPaint() {IsAntialias = true});
                 }
             }
-            else 
+            else
             {
                 try
                 {
@@ -166,8 +179,8 @@ namespace App2Night.CustomView.View
             }
 
             //Debug information to detect long loading times
-            if(showingBitmap.ElapsedMilliseconds > 0)
-                Debug.WriteLine($"INFO: Showing {FileType} took: { showingBitmap.ElapsedMilliseconds} ms."); 
+            if (showingBitmap.ElapsedMilliseconds > 0)
+                Debug.WriteLine($"INFO: Showing {FileType} took: {showingBitmap.ElapsedMilliseconds} ms.");
         }
     }
 }

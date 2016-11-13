@@ -1,6 +1,8 @@
 ﻿using System;
 using App2Night.CustomView.View;
 using App2Night.Helper.ValueConverter;
+using App2Night.Service.Interface;
+using MvvmNano;
 using SkiaSharp;
 using SkiaSharp.Views.Forms;
 using Xamarin.Forms;
@@ -9,11 +11,16 @@ namespace App2Night.CustomView.Template
 {
     public class QuadraticPartyTemplate : Frame 
     {
-        MaskedImage image = new MaskedImage("App2Night.Data.Image.default.png")
+        //MaskedImage image = new MaskedImage("App2Night.Data.Image.default.png")
+        //{
+        //    Edge = false,
+        //    InputTransparent = true,
+        //    DrawGradient = true
+        //};
+
+        CachedImage image = new CachedImage()
         {
-            Edge = false,
-            InputTransparent = true,
-            DrawGradient = true
+            InputTransparent = true 
         };
 
         public QuadraticPartyTemplate()
@@ -21,6 +28,8 @@ namespace App2Night.CustomView.Template
             BackgroundColor = Color.White;
             Padding = 8;
             HasShadow = true;  
+
+            image.SetImage("App2Night.Data.Image.default.png", SourceOrigin.Resource);
 
             var titleLabel = new Label()
             {

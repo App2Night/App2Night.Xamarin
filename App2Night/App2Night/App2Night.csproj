@@ -38,6 +38,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="CustomView\View\CachedImage.cs" />
     <Compile Include="CustomView\View\EnumBindablePicker.cs" />
     <Compile Include="CustomView\Page\ContentPageWithInfo.cs" />
     <Compile Include="CustomView\Page\ContentPageWithPreview.cs" />

@@ -23,13 +23,11 @@ namespace App2Night.View
             HeightRequest = 200
         };
 
-        ImageFromPortable profilePicture = new ImageFromPortable("App2Night.Data.Image.icon_monocolor.svg")
+        CachedImage profilePicture = new CachedImage()
         {
             HeightRequest = 100,
             WidthRequest = 100,
-            Margin = new Thickness(10),
-            //EdgeColor = Color.Maroon,
-            //MaskType = MaskType.Round
+            Margin = new Thickness(10) 
         }; 
 
         private HorizontalGallerieView historyGallerieView = new HorizontalGallerieView
@@ -53,6 +51,8 @@ namespace App2Night.View
 
         public DashboardPage()
         { 
+            profilePicture.SetImage("App2Night.Data.Image.icon_monocolor.svg", SourceOrigin.Resource);
+
             //User info view
             var userInfoView = new Grid
             {

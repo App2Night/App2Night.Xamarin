@@ -74,6 +74,7 @@ namespace App2Night
         {
             MvvmNanoIoC.Register<IClientService, ClientService>();
             MvvmNanoIoC.RegisterAsSingleton<IDataService, DataService>();
+            MvvmNanoIoC.RegisterAsSingleton<IImageFactory, ImageFactory>();
         }
     }
 }
