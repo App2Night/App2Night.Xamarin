@@ -1,5 +1,7 @@
-﻿using Acr.UserDialogs;
+﻿using System;
+using Acr.UserDialogs;
 using Android.App;
+using Android.Content;
 using Android.Content.PM;
 using Android.Graphics;
 using Android.Graphics.Drawables;
@@ -12,38 +14,45 @@ using Xamarin.Forms.Platform.Android;
 
 namespace App2Night.Droid
 {
-    [Activity(Label = "App2Night", Icon = "@drawable/icon", Theme = "@style/MyTheme", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
-    public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
-    {
-        protected override void OnCreate(Bundle bundle)
-        {
-            ToolbarResource = Resource.Layout.toolbar;
-            base.OnCreate(bundle);
+	[Activity(Label = "App2Night", Icon = "@drawable/icon", Theme = "@style/MyTheme", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+	public class MainActivity : global::Xamarin.Forms.Platform.Android.FormsAppCompatActivity
+	{
+		internal void ConfigureActivityResultCallback(Action<int, Result, Intent> imageChooserCallback)
+		{
+			if (imageChooserCallback == null) throw new ArgumentNullException("imageChooserCallback");
+			_activityResultCallback = imageChooserCallback;
+		}
 
-            global::Xamarin.Forms.Forms.Init(this, bundle); 
-            CrashManager.Register(this, "3aca0e171a5443c090b3e064f2e5ce4b");
-            UpdateManager.Register(this, "3aca0e171a5443c090b3e064f2e5ce4b");
-            MetricsManager.Register(Application, "3aca0e171a5443c090b3e064f2e5ce4b");
-            UserDialogs.Init(this);
-            Xamarin.FormsMaps.Init(this, bundle);
-            LoadApplication(new App()); 
-        }
+		private Action<int, Result, Intent> _activityResultCallback;
+		protected override void OnCreate(Bundle bundle)
+		{
+			ToolbarResource = Resource.Layout.toolbar;
+			base.OnCreate(bundle);
 
-        protected override void OnResume()
-        {
-            base.OnResume();
+			global::Xamarin.Forms.Forms.Init(this, bundle);
+			CrashManager.Register(this, "3aca0e171a5443c090b3e064f2e5ce4b");
+			UpdateManager.Register(this, "3aca0e171a5443c090b3e064f2e5ce4b");
+			MetricsManager.Register(Application, "3aca0e171a5443c090b3e064f2e5ce4b");
+			UserDialogs.Init(this);
+			Xamarin.FormsMaps.Init(this, bundle);
+			LoadApplication(new App());
+		}
 
-            //Start Tracking usage in this activity
-            Tracking.StartUsage(this);
-        }
+		protected override void OnResume()
+		{
+			base.OnResume();
 
-        protected override void OnPause()
-        {
-            //Stop Tracking usage in this activity
-            Tracking.StopUsage(this);
+			//Start Tracking usage in this activity
+			Tracking.StartUsage(this);
+		}
 
-            base.OnPause();
-        }
-    }
+		protected override void OnPause()
+		{
+			//Stop Tracking usage in this activity
+			Tracking.StopUsage(this);
+
+			base.OnPause();
+		}
+	}
 }
 
