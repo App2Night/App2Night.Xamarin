@@ -1,7 +1,4 @@
-﻿ 
-
-using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.DependencyService;
 using App2Night.Helper;
@@ -15,7 +12,6 @@ using Plugin.Connectivity;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using Xamarin.Forms;
-using Xamarin.Forms.Maps;
 
 namespace App2Night
 {
@@ -48,7 +44,7 @@ namespace App2Night
             AddSiteToDetailPages(new MasterDetailData(typeof (CreatePartyViewModel), "Create"));
             AddSiteToDetailPages(new MasterDetailData(typeof (HistoryViewModel), "History"));
             AddSiteToDetailPages(new MasterDetailData(typeof (SettingViewModel), "Setting"));
-            AddSiteToDetailPages(new MasterDetailData(typeof (AboutViewModel), "About"));
+            AddSiteToDetailPages(new MasterDetailData(typeof (AboutTabbedViewModel), "About"));
 
             CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
             

@@ -126,6 +126,7 @@ namespace App2Night.Service.Service
         private HttpClient GetClient()
         {
             HttpClient client = new HttpClient {BaseAddress = new Uri("https://app2nightapi.azurewebsites.net/")};
+            client.Timeout = TimeSpan.FromSeconds(5);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Host = "app2nightapi.azurewebsites.net";
             return client;

@@ -65,7 +65,7 @@
     <Compile Include="Helper\ValueConverter\DateInFutureConverter.cs" />
     <Compile Include="Helper\ValueConverter\InvertBooleanConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel\AboutViewModel.cs" />
+    <Compile Include="ViewModel\AboutTabbedViewModel.cs" />
     <Compile Include="ViewModel\CreatePartyViewModel.cs" />
     <Compile Include="ViewModel\DashboardViewModel.cs" />
     <Compile Include="ViewModel\PartyViewModel.cs" />
@@ -73,13 +73,15 @@
     <Compile Include="ViewModel\LoginViewModel.cs" />
     <Compile Include="ViewModel\NavigationViewModel.cs" />
     <Compile Include="ViewModel\SettingViewModel.cs" />
+    <Compile Include="ViewModel\Subpages\AboutAppViewModel.cs" />
     <Compile Include="ViewModel\Subpages\EditPartyViewModel.cs" />
     <Compile Include="ViewModel\Subpages\EditProfileViewModel.cs" />
     <Compile Include="ViewModel\Subpages\MyPartysViewModel.cs" />
     <Compile Include="ViewModel\Subpages\ParticipantViewModel.cs" />
+    <Compile Include="ViewModel\Subpages\ThirdPartyViewModel.cs" />
     <Compile Include="ViewModel\TestViewModel.cs" />
     <Compile Include="ViewModel\PartyPickerViewModel.cs" />
-    <Compile Include="View\AboutPage.cs" />
+    <Compile Include="View\AboutTabbedPage.cs" />
     <Compile Include="View\CreatePartyPage.cs" />
     <Compile Include="View\DashboardPage.cs" />
     <Compile Include="View\PartyPage.cs" />
@@ -88,11 +90,13 @@
     <Compile Include="View\LoginPage.cs" />
     <Compile Include="View\NavigationPage.cs" />
     <Compile Include="View\SettingPage.cs" />
+    <Compile Include="View\Subpages\AboutAppPage.cs" />
     <Compile Include="View\Subpages\EditPartyPage.cs" />
     <Compile Include="View\Subpages\EditProfilePage.cs" />
     <Compile Include="View\Subpages\MyPartysPage.cs" />
     <Compile Include="View\Subpages\ParticipantPage.cs" />
     <Compile Include="DependencyService\ILoadImage.cs" />
+    <Compile Include="View\Subpages\ThirdPartyPage.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\" />
@@ -175,8 +179,9 @@
       <HintPath>..\..\packages\Xamarin.Forms.2.3.2.127\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xamarin.Forms.Maps">
-      <HintPath>C:\Users\Konrd\.nuget\packages\Xamarin.Forms.Maps\2.3.2.127\lib\uap10.0\Xamarin.Forms.Maps.dll</HintPath>
+    <Reference Include="Xamarin.Forms.Maps, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xamarin.Forms.Maps.2.3.2.127\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Maps.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xamarin.Forms.2.3.2.127\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Platform.dll</HintPath>
