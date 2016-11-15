@@ -12,6 +12,7 @@ namespace App2Night.View
         private readonly CustomButton _loginButton = new CustomButton()
         {
             HorizontalOptions = LayoutOptions.Start,
+			ButtonLabel = { FontFamily = "FontAwesome", FontSize = 30 },
             IsVisible = false,
             Text = "\uf061",
         };
@@ -82,13 +83,12 @@ namespace App2Night.View
         public LoginPage()
         { 
             Title = "Login";
-            // set btn 
+            // set bindings
             BindToViewModel(_loginButton, CustomButton.CommandProperty, vm => vm.StartLoginCommand); 
-            _loginButton.ButtonLabel.FontSize = 30;
-            _loginButton.ButtonLabel.FontFamily = "FontAwesome";
-            _nameEntry.TextChanged += SetBtnVisible;
             BindToViewModel(_nameEntry, Entry.TextProperty, vm => vm.Username);
             BindToViewModel(_passwordEntry, Entry.TextProperty, vm => vm.Password);
+			// set event handler 
+			_nameEntry.TextChanged += SetBtnVisible;
             _passwordEntry.TextChanged += SetBtnVisible;
             _loginButton.ButtonTapped += Login;
             _signUpSwitch.Toggled += Register;
