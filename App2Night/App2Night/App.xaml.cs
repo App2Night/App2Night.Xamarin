@@ -35,8 +35,7 @@ namespace App2Night
 
         protected override void OnStart()
         {
-            RegisterInterfaces();
-
+            RegisterInterfaces(); 
             base.OnStart();
             SetUpMasterDetailPage<NavigationViewModel>();
             AddSiteToDetailPages(new MasterDetailData(typeof (DashboardViewModel), "Dashboard"));
@@ -45,16 +44,22 @@ namespace App2Night
             AddSiteToDetailPages(new MasterDetailData(typeof (HistoryViewModel), "History"));
             AddSiteToDetailPages(new MasterDetailData(typeof (SettingViewModel), "Setting"));
             AddSiteToDetailPages(new MasterDetailData(typeof (AboutTabbedViewModel), "About"));
-
+            MvvmNanoIoC.Resolve<NavigationViewModel>().OpenLogin();
             CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
             
             MvvmNanoIoC.Resolve<IDataService>().PartiesUpdated += (sender, args) =>
             {
                 CrossGeolocator.Current.StartListeningAsync(1, 100);
-            };
+            }; 
+            //SetUpMainPage<LoginViewModel>(); 
+            //Device.BeginInvokeOnMainThread((async () => await StartupSync()));
+        }
 
-            //SetUpMainPage<LoginViewModel>();
-            Device.BeginInvokeOnMainThread((async () => await StartupSync()));
+        protected override void SetUpPresenter()
+        {
+            MvvmNanoIoC.RegisterAsSingleton<IPresenter>(
+                new CustomPresenter(this)
+            );
         }
 
         private void CurrentOnPositionChanged(object sender, PositionEventArgs positionEventArgs)

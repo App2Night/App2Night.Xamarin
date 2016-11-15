@@ -109,11 +109,11 @@ namespace App2Night.Service.Service
                 var cachedData = new List<Party>();
                 for (int i = 0; i < 10; i++)
                 {
-                    //dummyList.Add(new Party
-                    //{
-                    //    Name = "Test Party" + (i + 1),
-                    //    Date = DateTime.Today.AddDays(i).AddMonths(i)
-                    //});
+                    cachedData.Add(new Party
+                    {
+                        Name = "Cached dummy Party bla bla bla bla bla bla party party party" + (i + 1),
+                        Date = DateTime.Today.AddDays(i).AddMonths(i)
+                    });
                 }
                 //TODO Replace with real caching
                 if (cachedData.Count > 0)
@@ -123,18 +123,15 @@ namespace App2Night.Service.Service
                 }
             }
             if (syncResult.Data != null)
-            { 
-                PopulateObservableCollection(InterestingPartys, syncResult.Data.OrderBy(o => o.Date).Where(o => o.Date >= DateTime.Today));
-                PopulateObservableCollection(SelectedPartys, syncResult.Data.OrderBy(o => o.Date).Where(o => o.Date >= DateTime.Today));
-
-                var historyData = new List<Party>();
+            {
                 foreach (Party party in syncResult.Data)
                 {
                     Party tempParty = party;
-                    tempParty.Date = DateTime.Today.AddDays(-10);
-                    historyData.Add(tempParty);
+                    tempParty.Date = DateTime.Today.AddDays(-10); 
                 }
-                PopulateObservableCollection(PartyHistory, historyData);
+                PopulateObservableCollection(InterestingPartys, syncResult.Data.OrderBy(o => o.Date).Where(o => o.Date >= DateTime.Today));
+                PopulateObservableCollection(SelectedPartys, syncResult.Data.OrderBy(o => o.Date).Where(o => o.Date >= DateTime.Today)); 
+                PopulateObservableCollection(PartyHistory, syncResult.Data.OrderBy(o => o.Date).Where(o => o.Date < DateTime.Today));
             } 
             PartiesUpdated?.Invoke(this, EventArgs.Empty);
             return syncResult;

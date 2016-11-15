@@ -9,12 +9,12 @@ namespace App2Night.CustomView.Page
 {
     public class ContentPageWithPreview<TViewModel> : ContentPageWithInfo<TViewModel> where TViewModel : MvvmNanoViewModel
     {
-        private readonly ContentView _previewContainer1 = new ContentView
+        private ContentView _previewContainer1 = new ContentView
         {
             IsVisible = false
         };
 
-        private readonly ContentView _previewContainer2 = new ContentView
+        private ContentView _previewContainer2 = new ContentView
         {
             IsVisible = false
         };
@@ -84,14 +84,20 @@ namespace App2Night.CustomView.Page
 
         private async Task ClosePreview()
         {
+            //Search for the current container
             var currentContainerRef = _selectedPreviewContainer == 0 ? _previewContainer1 : _previewContainer2;
+            //Start closing animation in view 
             _preview.StartClosingAnimataion(ClosingAnimationLength);
+            //Move container out of the view
             await currentContainerRef.TranslateTo(0, _preview.HeightRequest, ClosingAnimationLength, Easing.CubicInOut);
+            //Preview is not longer visible
             _isPreviewVisible = false;
+            //Hide container
+            _previewContainer1.HeightRequest = 0;
             _previewContainer1.IsVisible = false;
-            _previewContainer2.IsVisible = false;
+            _preview = null;
+            _previewContainer1.Content = null;
             _previewContainer1.TranslationY = 0;
-            _previewContainer2.TranslationY = 0;
         }
 
         private async Task ShowPreview(PreviewView view)
@@ -105,12 +111,19 @@ namespace App2Night.CustomView.Page
         private async Task OpenPreview(PreviewView newView)
         {
             _selectedPreviewContainer = 0;
+            //Select previewContainer1 as final container
             _previewContainer1.Content = newView;
+            //Move container to bottom
             _previewContainer1.TranslationY = newView.HeightRequest;
-            _previewContainer1.IsVisible = true;     
+            //Make container visible
+            _previewContainer1.IsVisible = true; 
+            //Start animations in view
             newView.StartOpeningAnimation(OpeningAnimationLength);
+            //Move container up
             await _previewContainer1.TranslateTo(0, 0, OpeningAnimationLength, Easing.CubicInOut);
+            //Preview is visible now
             _isPreviewVisible = true;
+            //Set the preview to the new view.
             _preview = newView;
         }
 

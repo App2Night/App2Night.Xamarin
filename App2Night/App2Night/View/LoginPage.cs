@@ -39,7 +39,7 @@ namespace App2Night.View
             Placeholder = "Password"
         };
 
-        private readonly Switch _signUpBtn = new Switch()
+        private readonly Switch _signUpSwitch = new Switch()
         {
             HorizontalOptions = LayoutOptions.Start,
             Margin = new Thickness(0, 10, 0, 0)
@@ -80,16 +80,19 @@ namespace App2Night.View
         };
         #endregion
         public LoginPage()
-        {
+        { 
             Title = "Login";
             // set btn 
+            BindToViewModel(_loginButton, CustomButton.CommandProperty, vm => vm.StartLoginCommand); 
             _loginButton.ButtonLabel.FontSize = 30;
             _loginButton.ButtonLabel.FontFamily = "FontAwesome";
             _nameEntry.TextChanged += SetBtnVisible;
+            BindToViewModel(_nameEntry, Entry.TextProperty, vm => vm.Username);
+            BindToViewModel(_passwordEntry, Entry.TextProperty, vm => vm.Password);
             _passwordEntry.TextChanged += SetBtnVisible;
             _loginButton.ButtonTapped += Login;
-            _signUpBtn.Toggled += Register;
-            _signUpBtn.Toggled += Toggle;
+            _signUpSwitch.Toggled += Register;
+            _signUpSwitch.Toggled += Toggle;
             var grid = new Grid
             {
                 RowDefinitions = new RowDefinitionCollection()
@@ -120,7 +123,7 @@ namespace App2Night.View
                     {_acceptLabel,1, 4 },
                     {_acceptSwitch,1,5 },
                     { _registerLabel, 1, 6},
-                    {_signUpBtn, 2, 6},
+                    {_signUpSwitch, 2, 6},
                     {_loginButton, 3, 1}
                 }
             };
@@ -159,7 +162,7 @@ namespace App2Night.View
         {
             Animation animation = new Animation(d => { _loginButton.ButtonLabel.TranslationX = d*100; }, 0, 1);
             animation.Commit(this, "StartOpeningAnimation");
-            if (_signUpBtn.IsToggled)
+            if (_signUpSwitch.IsToggled)
             {
                 // TODO Handle Input
             }
@@ -177,7 +180,7 @@ namespace App2Night.View
         private void Register(object c, EventArgs args)
         {
             // check if the switch is triggerd, then it shows up the email entry
-            if (_signUpBtn.IsToggled)
+            if (_signUpSwitch.IsToggled)
             {
                 _emailEntry.Scale = 1;
                 _emailEntry.HeightRequest = 0;
@@ -264,19 +267,31 @@ namespace App2Night.View
         /// <param name="e"></param>
         private async void Toggle(object sender, ToggledEventArgs e)
         {
-            await _signUpBtn.ScaleTo(1.3, easing: Easing.CubicIn);
-            await _signUpBtn.ScaleTo(1, easing: Easing.CubicIn);
+            await _signUpSwitch.ScaleTo(1.3, easing: Easing.CubicIn);
+            await _signUpSwitch.ScaleTo(1, easing: Easing.CubicIn);
         }
 
-        /// <summary>
-        /// Removes the event handler.
-        /// </summary>
-        protected override void OnDisappearing()
+      
+
+        protected override void OnAppearing()
+        {
+            base.OnAppearing();
+            //TODO Remove after mvvm framework gets its update to support modal pages and masterDetailPage
+            ViewModel.CloseViewEvent += (sender, args) =>
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    await Navigation.PopModalAsync();
+                });
+            };
+        }
+
+        public override void Dispose()
         {
             _loginButton.ButtonTapped -= Login;
             _nameEntry.TextChanged -= SetBtnVisible;
             _passwordEntry.TextChanged -= SetBtnVisible;
-            base.OnDisappearing();
-        }
+            base.Dispose();
+        } 
     }
 }

@@ -2,6 +2,7 @@
 using Acr.UserDialogs;
 using App2Night.DependencyService;
 using App2Night.Service.Interface;
+using App2Night.View;
 using MvvmNano;
 
 namespace App2Night.ViewModel
@@ -11,6 +12,14 @@ namespace App2Night.ViewModel
         
 
         public MvvmNanoCommand SyncCommand => new MvvmNanoCommand(async ()=> await Sync());
+
+        public void OpenLogin()
+        {
+            //Check if user is loged in -> Token is available 
+            //If Token is available -> Refresh token
+            //If not -> Open Login! 
+            NavigateTo<LoginViewModel>();
+        }
 
         private async Task Sync()
         {
@@ -22,6 +31,6 @@ namespace App2Night.ViewModel
             {
                 BackgroundColor = result.Success ? System.Drawing.Color.LawnGreen : System.Drawing.Color.LightCoral
             });
-        }
+        } 
     }
 }
