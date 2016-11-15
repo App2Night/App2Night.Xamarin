@@ -17,11 +17,13 @@ namespace App2Night.View
             Text = "\uf061",
         };
 
-        private readonly Entry _nameEntry = new Entry
-        {
-            HorizontalOptions = LayoutOptions.Center,
-            WidthRequest = 300,
-            Placeholder = "Name"
+		private readonly CustomEntry _nameEntry = new CustomEntry
+		{
+			ImageString = "\uf003",
+			HorizontalOptions = LayoutOptions.CenterAndExpand,
+			VerticalOptions = LayoutOptions.CenterAndExpand,
+			WidthRequest = 300
+
         };
 
         private readonly Entry _emailEntry = new Entry
@@ -37,7 +39,8 @@ namespace App2Night.View
             IsPassword = true,
             HorizontalOptions = LayoutOptions.Center,
             WidthRequest = 300,
-            Placeholder = "Password"
+            Placeholder = "Password",
+
         };
 
         private readonly Switch _signUpSwitch = new Switch()
@@ -77,18 +80,21 @@ namespace App2Night.View
 
         private readonly CustomButton _moreInfButton = new CustomButton
         {
-            
+            HorizontalOptions = LayoutOptions.Start,
+			IsVisible = false,
+			Text = "Mehr Informationen",
         };
         #endregion
         public LoginPage()
         { 
             Title = "Login";
+			BackgroundColor = Color.White;
             // set bindings
             BindToViewModel(_loginButton, CustomButton.CommandProperty, vm => vm.StartLoginCommand); 
             BindToViewModel(_nameEntry, Entry.TextProperty, vm => vm.Username);
             BindToViewModel(_passwordEntry, Entry.TextProperty, vm => vm.Password);
 			// set event handler 
-			_nameEntry.TextChanged += SetBtnVisible;
+			_nameEntry.Entry.TextChanged += SetBtnVisible;
             _passwordEntry.TextChanged += SetBtnVisible;
             _loginButton.ButtonTapped += Login;
             _signUpSwitch.Toggled += Register;
@@ -121,8 +127,9 @@ namespace App2Night.View
                     {_passwordEntry, 1, 2},
                     {_emailEntry, 1, 3},
                     {_acceptLabel,1, 4 },
+					//{_moreInfButton,2,4},
                     {_acceptSwitch,1,5 },
-                    { _registerLabel, 1, 6},
+                    {_registerLabel, 1, 6},
                     {_signUpSwitch, 2, 6},
                     {_loginButton, 3, 1}
                 }
@@ -143,9 +150,9 @@ namespace App2Night.View
         /// <param name="s"></param>
         private void SetBtnVisible(object o, TextChangedEventArgs s)
         {
-            if (_nameEntry.Text != null && _passwordEntry.Text != null)
+            if (_nameEntry.Entry.Text != null && _passwordEntry.Text != null)
             {
-                _loginButton.IsVisible = (_nameEntry.Text.Length > 0 && _passwordEntry.Text.Length > 0 ? true : false);
+				_loginButton.IsVisible = (_nameEntry.Entry.Text.Length > 0 && _passwordEntry.Text.Length > 0 ? true : false);
             }
             else
             {
@@ -182,80 +189,37 @@ namespace App2Night.View
             // check if the switch is triggerd, then it shows up the email entry
             if (_signUpSwitch.IsToggled)
             {
-                _emailEntry.Scale = 1;
-                _emailEntry.HeightRequest = 0;
-
-                _acceptLabel.Scale = 1;
-                _acceptLabel.HeightRequest = 0;
-                _acceptLabel.Opacity = 1;
-
-                _acceptSwitch.Scale = 1;
-                _acceptSwitch.HeightRequest = 0;
-                _acceptSwitch.Opacity = 1;
-
                 _emailEntry.IsVisible = true;
                 _acceptLabel.IsVisible = true;
                 _acceptSwitch.IsVisible = true;
-                _emailEntry.Opacity = 1;
-                Animation fadeOutAnimation = new Animation(d =>
+				_moreInfButton.IsVisible = true;
+                Animation fadeInAnimation = new Animation(d =>
                 {
                     // set value 50, the movement of the animation set the HeightRequest
-                    _emailEntry.HeightRequest = d*50;
-                    _acceptSwitch.HeightRequest = d*50;
-                    _acceptLabel.HeightRequest = d*50;
+                    _emailEntry.HeightRequest = d * 50;
+                    _acceptSwitch.HeightRequest = d * 50;
+                    _acceptLabel.HeightRequest = d * 50;
+					_moreInfButton.HeightRequest = d * 50;
                 }, 0, 1);
-                fadeOutAnimation.Commit(this, "StartOpeningAnimation", easing: Easing.BounceOut, length: 1000U);
+                fadeInAnimation.Commit(this, "StartOpeningAnimation", easing: Easing.BounceOut, length: 1000U);
                 _emailEntry.IsVisible = true;
             }
             else
             {
-                // add animation to fade out the email Entry
-                Animation fadeOutAnimation = new Animation(d =>
+				Animation fadeOutAnimation = new Animation(d =>
                 {
-                    _emailEntry.Rotation = d*90;
-                    _acceptLabel.Rotation = d*90;
-                    _acceptSwitch.Rotation = d*90;
-                }, 0, 1);
-                Animation moveAnimation = new Animation(d =>
+                    // set value 50, the movement of the animation set the HeightRequest
+                    _emailEntry.HeightRequest = d * 50;
+					_acceptSwitch.HeightRequest = d * 50;
+					_acceptLabel.HeightRequest = d * 50;
+					_moreInfButton.HeightRequest = d * 50;
+                }, 1, 0);
+                fadeOutAnimation.Commit(this, "Move", easing: Easing.CubicIn, length: 1000U, finished: (d, b) =>
                 {
-                    _emailEntry.TranslationX = d*-(_emailEntry.Width/2 - _emailEntry.Height);
-                    _emailEntry.TranslationY = d*(Height + 100);
-
-                    _acceptSwitch.TranslationX = d * -(_acceptSwitch.Width / 2 - _acceptSwitch.Height);
-                    _acceptSwitch.TranslationY = d * (Height + 100);
-
-                    _acceptLabel.TranslationX = d * -(_acceptLabel.Width / 2 - _acceptLabel.Height);
-                    _acceptLabel.TranslationY = d * (Height + 100);
-                }, 0, 1);
-                fadeOutAnimation.Commit(this, "StartOpeningAnimation", easing: Easing.Linear, length: 1000U);
-                moveAnimation.Commit(this, "Move", easing: Easing.CubicIn, length: 1000U, finished: (d, b) =>
-                {
-                    _emailEntry.Opacity = 0.000000001;
-                    _emailEntry.TranslationX = 0;
-                    _emailEntry.TranslationY = 0;
-                    _emailEntry.Rotation = 0;
-
-                    _acceptSwitch.Opacity = 0.000000001;
-                    _acceptSwitch.TranslationX = 0;
-                    _acceptSwitch.TranslationY = 0;
-                    _acceptSwitch.Rotation = 0;
-
-                    _acceptLabel.Opacity = 0.000000001;
-                    _acceptLabel.TranslationX = 0;
-                    _acceptLabel.TranslationY = 0;
-                    _acceptLabel.Rotation = 0;
-
-                    var emailHeight = _emailEntry.HeightRequest;
-                    var labelHeight = _acceptLabel.HeightRequest;
-                    var switchHeight = _acceptSwitch.HeightRequest;
-                    var close = new Animation(d1 =>
-                    {
-                        _emailEntry.HeightRequest = d1* emailHeight;
-                        _acceptSwitch.HeightRequest = d1 * switchHeight;
-                        _acceptLabel.HeightRequest = d1 * labelHeight;
-
-                    }, 1, 0);
-                    close.Commit(this, "SetSwitchBack", length: 100U);
+					_emailEntry.IsVisible = false;
+					_acceptLabel.IsVisible = false;
+					_acceptSwitch.IsVisible = false;
+					_moreInfButton.IsVisible = false ;
                 });
             }
         }
@@ -289,7 +253,7 @@ namespace App2Night.View
         public override void Dispose()
         {
             _loginButton.ButtonTapped -= Login;
-            _nameEntry.TextChanged -= SetBtnVisible;
+            _nameEntry.Entry.TextChanged -= SetBtnVisible;
             _passwordEntry.TextChanged -= SetBtnVisible;
             base.Dispose();
         } 

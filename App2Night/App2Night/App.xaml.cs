@@ -37,21 +37,22 @@ namespace App2Night
         {
             RegisterInterfaces(); 
             base.OnStart();
-            SetUpMasterDetailPage<NavigationViewModel>();
-            AddSiteToDetailPages(new MasterDetailData(typeof (DashboardViewModel), "Dashboard"));
-            AddSiteToDetailPages(new MasterDetailData(typeof (PartyPickerViewModel), "Pick a party"));
-            AddSiteToDetailPages(new MasterDetailData(typeof (CreatePartyViewModel), "Create"));
-            AddSiteToDetailPages(new MasterDetailData(typeof (HistoryViewModel), "History"));
-            AddSiteToDetailPages(new MasterDetailData(typeof (SettingViewModel), "Setting"));
-            AddSiteToDetailPages(new MasterDetailData(typeof (AboutTabbedViewModel), "About"));
-            MvvmNanoIoC.Resolve<NavigationViewModel>().OpenLogin();
-            CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
+			// Set MasterDetailPage
+            //SetUpMasterDetailPage<NavigationViewModel>();
+            //AddSiteToDetailPages(new MasterDetailData(typeof (DashboardViewModel), "Dashboard"));
+            //AddSiteToDetailPages(new MasterDetailData(typeof (PartyPickerViewModel), "Pick a party"));
+            //AddSiteToDetailPages(new MasterDetailData(typeof (CreatePartyViewModel), "Create"));
+            //AddSiteToDetailPages(new MasterDetailData(typeof (HistoryViewModel), "History"));
+            //AddSiteToDetailPages(new MasterDetailData(typeof (SettingViewModel), "Setting"));
+            //AddSiteToDetailPages(new MasterDetailData(typeof (AboutTabbedViewModel), "About"));
+            //MvvmNanoIoC.Resolve<NavigationViewModel>().OpenLogin();
+            //CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
             
-            MvvmNanoIoC.Resolve<IDataService>().PartiesUpdated += (sender, args) =>
-            {
-                CrossGeolocator.Current.StartListeningAsync(1, 100);
-            }; 
-            //SetUpMainPage<LoginViewModel>(); 
+            //MvvmNanoIoC.Resolve<IDataService>().PartiesUpdated += (sender, args) =>
+            //{
+            //    CrossGeolocator.Current.StartListeningAsync(1, 100);
+            //}; 
+            SetUpMainPage<LoginViewModel>(); 
             //Device.BeginInvokeOnMainThread((async () => await StartupSync()));
         }
 

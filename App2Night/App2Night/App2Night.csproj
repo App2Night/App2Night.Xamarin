@@ -98,6 +98,7 @@
     <Compile Include="View\Subpages\ParticipantPage.cs" />
     <Compile Include="DependencyService\ILoadImage.cs" />
     <Compile Include="View\Subpages\ThirdPartyPage.cs" />
+    <Compile Include="CustomView\View\CustomEntry.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Model\" />
