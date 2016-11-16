@@ -11,12 +11,20 @@ namespace App2Night.CustomView.Template
     {
         public MenuTemplate()
         {
-            var titleLabel = new Label();
+            var titleLabel = new Label
+            { 
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.Center,
+                FontSize = 18
+            };
             titleLabel.SetBinding(Label.TextProperty, "Title");
 
             var iconLabel = new Label
             {
-                FontFamily = "FontAwesome"
+                FontFamily = "FontAwesome",
+                VerticalOptions = LayoutOptions.Center,
+                HorizontalOptions = LayoutOptions.Center,
+                FontSize = 26
             };
             iconLabel.SetBinding(Label.TextProperty, "IconCode");
 

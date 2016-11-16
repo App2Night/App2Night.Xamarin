@@ -50,11 +50,12 @@ namespace App2Night
             //TODO Check if user is already loged in
             MvvmNanoIoC.Resolve<NavigationViewModel>().OpenLogin();
 
+            //TODO Extract this part
             CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged; 
             MvvmNanoIoC.Resolve<IDataService>().PartiesUpdated += (sender, args) =>
             {
                 CrossGeolocator.Current.StartListeningAsync(1, 100);
-            }; 
+            };  
             //Device.BeginInvokeOnMainThread((async () => await StartupSync()));
         }
 
