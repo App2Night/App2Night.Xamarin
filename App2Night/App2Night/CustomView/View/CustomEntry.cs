@@ -3,18 +3,34 @@ using Xamarin.Forms;
 
 namespace App2Night
 {
+	/// <summary>
+	/// Custom entry. Contains an image from FontAwesome and an entry.
+	/// </summary>
 	public class CustomEntry : Grid
 	{
 		// Only FontAwesome images 
-		public string ImageString { 
-			get 
-			{
-				return _ImageLabel.Text;
-			} 
-			set 
-			{
-				_ImageLabel.Text = value;
-			} 
+		public string Image
+		{ 
+			get { return _ImageLabel.Text; } 
+			set { _ImageLabel.Text = value; } 
+		}
+
+		public bool IsPassword 
+		{ 
+			get { return Entry.IsPassword; }
+			set { Entry.IsPassword = value; }
+		}
+
+		public string Placeholder
+		{
+			get { return Entry.Placeholder; }
+			set { Entry.Placeholder = value; }
+		}
+
+		public Keyboard Keyboard
+		{
+			get { return Entry.Keyboard; }
+			set { Entry.Keyboard = value; }
 		}
 
 		public Entry Entry { get; } = new Entry { VerticalOptions = LayoutOptions.Fill};
@@ -30,8 +46,8 @@ namespace App2Night
 		{
 			ColumnDefinitions = new ColumnDefinitionCollection()
 			{ 
-				new ColumnDefinition {Width = new GridLength(1, GridUnitType.Auto)},
-				new ColumnDefinition {Width = new GridLength(1, GridUnitType.Auto)},
+				new ColumnDefinition {Width = new GridLength(10, GridUnitType.Star)},
+				new ColumnDefinition {Width = new GridLength(90, GridUnitType.Star)},
 			};
 			Children.Add(_ImageLabel, 0, 0);
 			Children.Add(Entry, 1, 0);
