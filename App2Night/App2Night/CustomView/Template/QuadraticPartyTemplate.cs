@@ -43,13 +43,11 @@ namespace App2Night.CustomView.Template
             titleLabel.SetBinding(Label.TextProperty, "Name");
 
             _distanceLabel = new Label
-            {
-                Text = "20,4km (Stuttgart)",
+            { 
                 TextColor = Color.White
             };
-            //_distanceLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
-            //_distanceLabel.SetBinding(Label.TextProperty, "DistanceToParty");
-             
+            _distanceLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter()); 
+
 
             var shareIconLabel = new CustomButton
             {
