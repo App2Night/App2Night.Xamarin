@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -39,6 +39,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="CustomPresenter.cs" />
+    <Compile Include="CustomView\Template\MenuTemplate.cs" />
     <Compile Include="CustomView\View\CachedImage.cs" />
     <Compile Include="CustomView\View\EnumBindablePicker.cs" />
     <Compile Include="CustomView\Page\ContentPageWithInfo.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="DependencyService\IAndroidAppLookupService.cs" />
     <Compile Include="Helper\ConvertHelper.cs" />
     <Compile Include="Helper\CoordinateHelper.cs" />
+    <Compile Include="Helper\CustomMasterDetailData.cs" />
     <Compile Include="Helper\ValueConverter\DateInFutureConverter.cs" />
     <Compile Include="Helper\ValueConverter\InvertBooleanConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -100,10 +102,7 @@
     <Compile Include="View\Subpages\ThirdPartyPage.cs" />
     <Compile Include="CustomView\View\CustomEntry.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Model\" />
-    <Folder Include="Resource\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\App2Night.Model\App2Night.Model.csproj">
       <Project>{2CB6E00C-B477-45A4-A455-8BE9A3B0AD49}</Project>

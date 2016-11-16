@@ -40,12 +40,12 @@ namespace App2Night
             
             // Set MasterDetailPage
             SetUpMasterDetailPage<NavigationViewModel>();
-            AddSiteToDetailPages(new MasterDetailData(typeof(DashboardViewModel), "Dashboard"));
-            AddSiteToDetailPages(new MasterDetailData(typeof(PartyPickerViewModel), "Pick a party"));
-            AddSiteToDetailPages(new MasterDetailData(typeof(CreatePartyViewModel), "Create"));
-            AddSiteToDetailPages(new MasterDetailData(typeof(HistoryViewModel), "History"));
-            AddSiteToDetailPages(new MasterDetailData(typeof(SettingViewModel), "Setting"));
-            AddSiteToDetailPages(new MasterDetailData(typeof(AboutTabbedViewModel), "About"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof(DashboardViewModel), "Dashboard", "\uf015"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof(PartyPickerViewModel), "Pick a party", "\uf29b"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof(CreatePartyViewModel), "Create", "\uf271"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof(HistoryViewModel), "History", "\uf187"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof(SettingViewModel), "Setting", "\uf085"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof(AboutTabbedViewModel), "About", "\uf05a"));
 
             //TODO Check if user is already loged in
             MvvmNanoIoC.Resolve<NavigationViewModel>().OpenLogin();
