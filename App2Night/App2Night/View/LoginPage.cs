@@ -88,6 +88,11 @@ namespace App2Night.View
         public LoginPage()
         { 
             Title = "Login";
+
+            //Make sure that the page does not merge in to the status bar on iOS.
+            if(Device.OS == TargetPlatform.iOS) 
+                Padding = new Thickness(0,20,0,0);
+
 			BackgroundColor = Color.White;
             // set bindings
             BindToViewModel(_loginButton, CustomButton.CommandProperty, vm => vm.StartLoginCommand); 
