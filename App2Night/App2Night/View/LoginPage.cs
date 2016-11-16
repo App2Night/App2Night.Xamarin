@@ -91,7 +91,7 @@ namespace App2Night.View
 			BackgroundColor = Color.White;
             // set bindings
             BindToViewModel(_loginButton, CustomButton.CommandProperty, vm => vm.StartLoginCommand); 
-            BindToViewModel(_nameEntry, Entry.TextProperty, vm => vm.Username);
+            BindToViewModel(_nameEntry.Entry, Entry.TextProperty, vm => vm.Username);
             BindToViewModel(_passwordEntry, Entry.TextProperty, vm => vm.Password);
 			// set event handler 
 			_nameEntry.Entry.TextChanged += SetBtnVisible;
@@ -233,22 +233,7 @@ namespace App2Night.View
         {
             await _signUpSwitch.ScaleTo(1.3, easing: Easing.CubicIn);
             await _signUpSwitch.ScaleTo(1, easing: Easing.CubicIn);
-        }
-
-      
-
-        protected override void OnAppearing()
-        {
-            base.OnAppearing();
-            //TODO Remove after mvvm framework gets its update to support modal pages and masterDetailPage
-            ViewModel.CloseViewEvent += (sender, args) =>
-            {
-                Device.BeginInvokeOnMainThread(async () =>
-                {
-                    await Navigation.PopModalAsync();
-                });
-            };
-        }
+        }  
 
         public override void Dispose()
         {

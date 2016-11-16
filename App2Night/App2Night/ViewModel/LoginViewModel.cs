@@ -15,16 +15,12 @@ namespace App2Night.ViewModel
             if (Password != null && Username != null)
             {
                 //TODO remove event when mvvmnano is updated
-                //NavigateTo<DashboardViewModel>();
-                CloseViewEvent?.Invoke(this, EventArgs.Empty);
+                NavigateTo<DashboardViewModel>(); 
             }
             else
             {
                 //TODO information box appears
             }
-        }
-
-        public event EventHandler CloseViewEvent;
-
+        } 
     }
 }
