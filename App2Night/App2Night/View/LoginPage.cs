@@ -101,7 +101,7 @@ namespace App2Night.View
             // set bindings
             BindToViewModel(_loginButton, CustomButton.CommandProperty, vm => vm.StartLoginCommand); 
             BindToViewModel(_nameEntry.Entry, Entry.TextProperty, vm => vm.Username);
-            BindToViewModel(_passwordEntry, Entry.TextProperty, vm => vm.Password);
+            BindToViewModel(_passwordEntry.Entry, Entry.TextProperty, vm => vm.Password);
 			// set event handler 
 			_nameEntry.Entry.TextChanged += SetBtnVisible;
 			_passwordEntry.Entry.TextChanged += SetBtnVisible;
