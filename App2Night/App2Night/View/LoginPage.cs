@@ -19,27 +19,31 @@ namespace App2Night.View
 
 		private readonly CustomEntry _nameEntry = new CustomEntry
 		{
-			ImageString = "\uf003",
+			Image = "\uf2bd",
+			Placeholder = "Username",
 			HorizontalOptions = LayoutOptions.CenterAndExpand,
 			VerticalOptions = LayoutOptions.CenterAndExpand,
 			WidthRequest = 300
 
         };
 
-        private readonly Entry _emailEntry = new Entry
+        private readonly CustomEntry _emailEntry = new CustomEntry
         {
-            HorizontalOptions = LayoutOptions.Center,
+            Image = "\uf003",
+			HorizontalOptions = LayoutOptions.Center,
             WidthRequest = 300,
-            Placeholder = "Email",
-            IsVisible = false
+            Placeholder = "Email Address",
+            IsVisible = false,
+			Keyboard = Keyboard.Email
         };
 
-        private readonly Entry _passwordEntry = new Entry
+        private readonly CustomEntry _passwordEntry = new CustomEntry
         {
             IsPassword = true,
             HorizontalOptions = LayoutOptions.Center,
             WidthRequest = 300,
             Placeholder = "Password",
+			Image = "\uf023"
 
         };
 
@@ -100,7 +104,7 @@ namespace App2Night.View
             BindToViewModel(_passwordEntry, Entry.TextProperty, vm => vm.Password);
 			// set event handler 
 			_nameEntry.Entry.TextChanged += SetBtnVisible;
-            _passwordEntry.TextChanged += SetBtnVisible;
+			_passwordEntry.Entry.TextChanged += SetBtnVisible;
             _loginButton.ButtonTapped += Login;
             _signUpSwitch.Toggled += Register;
             _signUpSwitch.Toggled += Toggle;
@@ -155,9 +159,9 @@ namespace App2Night.View
         /// <param name="s"></param>
         private void SetBtnVisible(object o, TextChangedEventArgs s)
         {
-            if (_nameEntry.Entry.Text != null && _passwordEntry.Text != null)
+            if (_nameEntry.Entry.Text != null && _passwordEntry.Entry.Text != null)
             {
-				_loginButton.IsVisible = (_nameEntry.Entry.Text.Length > 0 && _passwordEntry.Text.Length > 0 ? true : false);
+				_loginButton.IsVisible = (_nameEntry.Entry.Text.Length > 0 && _passwordEntry.Entry.Text.Length > 0 ? true : false);
             }
             else
             {
@@ -244,7 +248,7 @@ namespace App2Night.View
         {
             _loginButton.ButtonTapped -= Login;
             _nameEntry.Entry.TextChanged -= SetBtnVisible;
-            _passwordEntry.TextChanged -= SetBtnVisible;
+			_passwordEntry.Entry.TextChanged -= SetBtnVisible;
             base.Dispose();
         } 
     }
