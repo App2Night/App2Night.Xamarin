@@ -97,11 +97,21 @@ namespace App2Night.CustomView.View
             }
         }
 
+
+        public static BindableProperty NameProperty = BindableProperty.Create(nameof(Name), typeof(string), typeof(EnhancedContainer),
+            propertyChanged: NameChanged);
+
+        private static void NameChanged(BindableObject bindable, object oldValue, object newValue)
+        {
+            var thisView = bindable as EnhancedContainer;
+            thisView._nameLabel.Text = (string) newValue;
+        }
+
         public string Name
         {
-            get { return _nameLabel.Text; }
-            set { _nameLabel.Text = value; }
-        }
+            get { return (string)GetValue(NameProperty); }
+            set { SetValue(NameProperty, value); }
+        } 
 
         public string ButtonText
         {

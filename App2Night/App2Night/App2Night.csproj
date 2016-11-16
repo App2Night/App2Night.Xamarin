@@ -81,6 +81,7 @@
     <Compile Include="ViewModel\Subpages\EditProfileViewModel.cs" />
     <Compile Include="ViewModel\Subpages\MyPartysViewModel.cs" />
     <Compile Include="ViewModel\Subpages\ParticipantViewModel.cs" />
+    <Compile Include="ViewModel\Subpages\ThirdPartyInfoViewModel.cs" />
     <Compile Include="ViewModel\Subpages\ThirdPartyViewModel.cs" />
     <Compile Include="ViewModel\TestViewModel.cs" />
     <Compile Include="ViewModel\PartyPickerViewModel.cs" />
@@ -99,6 +100,7 @@
     <Compile Include="View\Subpages\MyPartysPage.cs" />
     <Compile Include="View\Subpages\ParticipantPage.cs" />
     <Compile Include="DependencyService\ILoadImage.cs" />
+    <Compile Include="View\Subpages\ThirdPartyInfoPage.cs" />
     <Compile Include="View\Subpages\ThirdPartyPage.cs" />
     <Compile Include="CustomView\View\CustomEntry.cs" />
   </ItemGroup>
@@ -223,6 +225,11 @@
     <EmbeddedResource Include="Data\Image\icon_name_transparent.svg" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Data\Licenses\MvvmNano.txt" />
+    <EmbeddedResource Include="Data\Licenses\UserDialogs.txt" />
+    <EmbeddedResource Include="Data\Licenses\MIT.txt" />
+    <EmbeddedResource Include="Data\Licenses\XamPlugin.txt" />
+    <EmbeddedResource Include="Data\Licenses\JsonNet.txt" />
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
