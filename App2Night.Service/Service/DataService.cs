@@ -123,15 +123,10 @@ namespace App2Night.Service.Service
                 }
             }
             if (syncResult.Data != null)
-            {
-                foreach (Party party in syncResult.Data)
-                {
-                    Party tempParty = party;
-                    tempParty.Date = DateTime.Today.AddDays(-10); 
-                }
-                PopulateObservableCollection(InterestingPartys, syncResult.Data.OrderBy(o => o.Date).Where(o => o.Date >= DateTime.Today));
-                PopulateObservableCollection(SelectedPartys, syncResult.Data.OrderBy(o => o.Date).Where(o => o.Date >= DateTime.Today)); 
-                PopulateObservableCollection(PartyHistory, syncResult.Data.OrderBy(o => o.Date).Where(o => o.Date < DateTime.Today));
+            { 
+                PopulateObservableCollection(InterestingPartys, syncResult.Data.OrderBy(o => o.Date).Take(5).Where(o => o.Date >= DateTime.Today));
+                PopulateObservableCollection(SelectedPartys, syncResult.Data.OrderBy(o => o.Date).Take(5).Where(o => o.Date >= DateTime.Today)); 
+                PopulateObservableCollection(PartyHistory, syncResult.Data.OrderBy(o => o.Date).Take(5).Where(o => o.Date < DateTime.Today));
             } 
             PartiesUpdated?.Invoke(this, EventArgs.Empty);
             return syncResult;
