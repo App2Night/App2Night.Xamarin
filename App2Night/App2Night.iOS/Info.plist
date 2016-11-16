@@ -53,5 +53,9 @@
 	<string></string>
 	<key>CFBundleName</key>
 	<string>Appp2Night</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>location</string>
+	</array>
 </dict>
 </plist>
