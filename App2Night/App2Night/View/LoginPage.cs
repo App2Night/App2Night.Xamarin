@@ -103,13 +103,14 @@ namespace App2Night.View
             _signUpSwitch.Toggled += SignUpSwitchToggled; 
             _layoutGrid = new Grid
             {
-                RowSpacing = 3,
+                RowSpacing = 6,
                 ColumnSpacing = 3,
+                Padding = new Thickness(20,0),
                 RowDefinitions = new RowDefinitionCollection()
                 {
                     new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
 
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}, //Image
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)}, //Image
 
                     new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
 
@@ -170,14 +171,14 @@ namespace App2Night.View
         private void SetHeaderHeight()
         {
             if(Height<=0) return;
-            var headerHeight = Height/4;
-            var imageHeight = headerHeight * (2/3.0); 
-            var headerSpacing = (headerHeight - imageHeight) / 2;
-
-            _image.HeightRequest = imageHeight;
-
+            var headerHeight = Height/3;
+            var imageHeight = headerHeight * (2/3.0);
+            var headerSpacing = (headerHeight - imageHeight)/2; 
+           
             _layoutGrid.RowDefinitions[0].Height = headerSpacing;
+            _layoutGrid.RowDefinitions[1].Height = imageHeight;
             _layoutGrid.RowDefinitions[2].Height = headerSpacing;
+
         }
 
         #region Parties  

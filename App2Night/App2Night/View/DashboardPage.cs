@@ -172,7 +172,7 @@ namespace App2Night.View
             base.OnSizeAllocated(width, height);
 
             //Handle big screens
-            int columns = (int) Math.Ceiling(Width/300); //Available columns
+            int columns =  (int) Math.Ceiling((Width-200)/300); //Available columns
             if (lastColumns != columns)
             {
                 lastColumns = columns;
