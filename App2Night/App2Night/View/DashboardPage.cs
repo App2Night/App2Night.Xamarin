@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using App2Night.CustomView.Page;
 using App2Night.CustomView.Template;
 using App2Night.CustomView.View;
+using App2Night.Data.Language;
 using App2Night.Helper.ValueConverter;
 using App2Night.Model.Model;
 using App2Night.ViewModel; 
@@ -64,7 +65,7 @@ namespace App2Night.View
                 } 
                 
             }; 
-            var usernameLabel = new Label() {Text = "Hans Peter XXL"};
+            var usernameLabel = new Label() {Text = AppResources.TestString };
             var joinedAtLabel = new Label() {Text = "Dabei seit: 30.10.2016"};
             var profileDetails = new List<Xamarin.Forms.View>
             {
