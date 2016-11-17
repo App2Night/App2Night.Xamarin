@@ -1,4 +1,5 @@
 ﻿using App2Night.CustomView.View;
+using App2Night.Helper.ValueConverter;
 using App2Night.ViewModel.Subpages;
 using MvvmNano.Forms;
 using Xamarin.Forms;
@@ -23,15 +24,18 @@ namespace App2Night.View.Subpages
             var descriptionLabel = new Label
             {
                 VerticalTextAlignment = TextAlignment.Start,
-                HorizontalTextAlignment = TextAlignment.Start
+                HorizontalTextAlignment = TextAlignment.Start,
+                Margin = 5
             };
             BindToViewModel(descriptionLabel, Label.TextProperty, vm => vm.License.Description);
+            BindToViewModel(descriptionLabel, IsVisibleProperty, vm => vm.License.Description, converter: new StringNotEmptyConverter());
 
             //Label that displays the license text.
             var licenseLabel = new Label
             { 
                 VerticalTextAlignment = TextAlignment.Start,
-                HorizontalTextAlignment = TextAlignment.Start
+                HorizontalTextAlignment = TextAlignment.Start,
+                Margin = 5
             };
             BindToViewModel(licenseLabel, Label.TextProperty, vm => vm.License.LicenseText);
 
@@ -44,9 +48,10 @@ namespace App2Night.View.Subpages
 
             Content = new ScrollView
             {
-                Orientation = ScrollOrientation.Vertical,
+                Orientation = ScrollOrientation.Vertical, 
                 Content = new StackLayout
                 {
+                    Spacing = 0,
                     Children =
                     {
                         descriptionLabel,

@@ -28,8 +28,8 @@ namespace App2Night.Model.Model
         [JsonIgnore]
         public Coordinates Coordinates => new Coordinates()
         {
-            Latitude = Location.Latitude,
-            Longitude = Location.Longitude
+            Latitude = Location!=null ?  Location.Latitude : 0,
+            Longitude = Location != null ? Location.Longitude : 0
         };
 
         public event PropertyChangedEventHandler PropertyChanged;
