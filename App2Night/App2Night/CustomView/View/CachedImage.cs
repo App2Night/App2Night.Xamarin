@@ -30,7 +30,8 @@ namespace App2Night.CustomView.View
                 if(source!=null)
                     _imageFactory.CacheImage(source, imagePath);
             }   
-            Source = source;
+            if(Device.OS != TargetPlatform.Windows)
+                Source = source;
         }
 
         ImageSource RestoreImage(string name)

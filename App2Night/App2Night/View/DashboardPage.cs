@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using App2Night.CustomView;
+using System.Collections.Generic; 
 using App2Night.CustomView.Page;
 using App2Night.CustomView.Template;
 using App2Night.CustomView.View;
 using App2Night.Helper.ValueConverter;
 using App2Night.Model.Model;
-using App2Night.ViewModel;
-using SkiaSharp;
+using App2Night.ViewModel; 
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 using Xamarin.Forms.Xaml;
@@ -51,7 +48,7 @@ namespace App2Night.View
 
         public DashboardPage()
         { 
-            profilePicture.SetImage("App2Night.Data.Image.icon_monocolor.svg", SourceOrigin.Resource);
+            profilePicture.SetImage("App2Night.Data.Image.default.png", SourceOrigin.Resource);
 
             //User info view
             var userInfoView = new Grid

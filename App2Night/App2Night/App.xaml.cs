@@ -51,12 +51,12 @@ namespace App2Night
             MvvmNanoIoC.Resolve<NavigationViewModel>().OpenLogin();
 
             //TODO Extract this part
-            CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged; 
+            CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
             MvvmNanoIoC.Resolve<IDataService>().PartiesUpdated += (sender, args) =>
             {
                 CrossGeolocator.Current.StartListeningAsync(1, 100);
-            };  
-            //Device.BeginInvokeOnMainThread((async () => await StartupSync()));
+            };
+            Device.BeginInvokeOnMainThread((async () => await StartupSync()));
         }
 
         protected override void SetUpPresenter()
@@ -90,22 +90,23 @@ namespace App2Night
         {
             if (CrossConnectivity.Current.IsConnected)
             {
-                UserDialogs.Instance.ShowLoading("Starting session.");
-                var tokenResult = await MvvmNanoIoC.Resolve<IDataService>().RequestToken("test", "test");
+                //UserDialogs.Instance.ShowLoading("Starting session.");
+                //var tokenResult = await MvvmNanoIoC.Resolve<IDataService>().RequestToken("test", "test");
+                //UserDialogs.Instance.Toast(
+                //    new ToastConfig("Token request finished " + (tokenResult.Success ? "" : "un") + "successfull.")
+                //    {
+                //        BackgroundColor = tokenResult.Success ? System.Drawing.Color.LawnGreen : System.Drawing.Color.LightCoral
+                //    });
+                UserDialogs.Instance.ShowLoading("Loading partys.");
+                var result = await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys();
+                UserDialogs.Instance.HideLoading();
                 UserDialogs.Instance.Toast(
-                    new ToastConfig("Token request finished " + (tokenResult.Success ? "" : "un") + "successfull.")
+                    new ToastConfig("Loading parties finished " + (result.Success ? "" : "un") + "successfull.")
                     {
-                        BackgroundColor = tokenResult.Success ? System.Drawing.Color.LawnGreen : System.Drawing.Color.LightCoral
+                        BackgroundColor = result.Success ? System.Drawing.Color.MediumSeaGreen : System.Drawing.Color.LightCoral
                     });
             }
-            UserDialogs.Instance.ShowLoading("Loading partys.");
-            var result = await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys();
-            UserDialogs.Instance.HideLoading();
-            UserDialogs.Instance.Toast(
-                new ToastConfig("Loading parties finished " + (result.Success ? "" : "un") + "successfull.")
-                {
-                    BackgroundColor = result.Success ? System.Drawing.Color.LawnGreen : System.Drawing.Color.LightCoral
-                });
+           
         }
 
         private void RegisterInterfaces()

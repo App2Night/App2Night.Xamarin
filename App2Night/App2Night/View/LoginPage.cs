@@ -8,7 +8,7 @@ namespace App2Night.View
 {
     public class LoginPage : MvvmNanoContentPage<LoginViewModel>
     {
-        #region Nodes
+        #region Views
         private readonly CustomButton _loginButton = new CustomButton()
         {
             HorizontalOptions = LayoutOptions.Start,
@@ -68,11 +68,11 @@ namespace App2Night.View
             IsVisible = false
         };
 
-        private readonly ImageFromPortable _image = new ImageFromPortable("App2Night.Data.Image.default.png")
+        private readonly CachedImage _image = new CachedImage()
         {
             HeightRequest = 256,
             WidthRequest = 100,
-            Margin = new Thickness(10),
+            Margin = new Thickness(10) 
         };
 
         private readonly Switch _acceptSwitch = new Switch
@@ -91,6 +91,7 @@ namespace App2Night.View
         #endregion
         public LoginPage()
         { 
+            _image.SetImage("App2Night.Data.Image.default.png", SourceOrigin.File);
             Title = "Login";
 
             //Make sure that the page does not merge in to the status bar on iOS.
@@ -131,7 +132,7 @@ namespace App2Night.View
                 },
                 Children =
                 {
-                    //{_image,0,0 },
+                    {_image,0,0 },
                     {_nameEntry, 1, 1},
                     {_passwordEntry, 1, 2},
                     {_emailEntry, 1, 3},

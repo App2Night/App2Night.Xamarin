@@ -30,7 +30,7 @@ namespace App2Night.View
             {
                 RowDefinitions =
                 {
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
+                    new RowDefinition {Height = new GridLength(8, GridUnitType.Star)},
                     new RowDefinition {Height = new GridLength(1, GridUnitType.Star)} 
                 },
                 Children =
