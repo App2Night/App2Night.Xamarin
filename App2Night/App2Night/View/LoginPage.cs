@@ -79,7 +79,7 @@ namespace App2Night.View
         {
             HorizontalOptions = LayoutOptions.Start,
 			IsVisible = false,
-			Text = "Mehr Informationen",
+			Text = "I accept the AGB's.",
         };
         #endregion
 
@@ -89,6 +89,7 @@ namespace App2Night.View
         { 
             _image.SetImage("App2Night.Data.Image.icon.png", SourceOrigin.Resource);
             Title = "Login";
+            Padding = new Thickness(0, 20);
 
             //Make sure that the page does not merge in to the status bar on iOS.
             if(Device.OS == TargetPlatform.iOS) 
@@ -103,15 +104,16 @@ namespace App2Night.View
             _signUpSwitch.Toggled += SignUpSwitchToggled; 
             _layoutGrid = new Grid
             {
-                RowSpacing = 3,
-                ColumnSpacing = 3,
+                Padding = new Thickness(20,0),
+                RowSpacing = 4,
+                ColumnSpacing = 5,
                 RowDefinitions = new RowDefinitionCollection()
                 {
                     new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
 
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}, //Image
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)}, //Image
 
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
 
                     new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}, //Username
                     new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}, //Password
@@ -121,7 +123,7 @@ namespace App2Night.View
                     new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}, //Submit Button
                     new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}, //Anonymous Button 
 
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Star)}
+                    new RowDefinition {Height = new GridLength(2, GridUnitType.Star)}
                 },
                 ColumnDefinitions = new ColumnDefinitionCollection
                 {
@@ -170,14 +172,11 @@ namespace App2Night.View
         private void SetHeaderHeight()
         {
             if(Height<=0) return;
-            var headerHeight = Height/4;
-            var imageHeight = headerHeight * (2/3.0); 
-            var headerSpacing = (headerHeight - imageHeight) / 2;
-
-            _image.HeightRequest = imageHeight;
-
-            _layoutGrid.RowDefinitions[0].Height = headerSpacing;
-            _layoutGrid.RowDefinitions[2].Height = headerSpacing;
+            var headerHeight = Height/3.5;
+            var imageHeight = headerHeight * (0.66); 
+            var headerSpacing = headerHeight - imageHeight; 
+            _layoutGrid.RowDefinitions[0].Height = headerSpacing; 
+            _layoutGrid.RowDefinitions[1].Height = imageHeight; 
         }
 
         #region Parties  
@@ -202,13 +201,14 @@ namespace App2Night.View
 
         private async Task CollapseSignupView()
         {
+            var referenceHeight = _emailEntry.Height;
             Animation fadeOutAnimation = new Animation(d =>
             {
                 // set value 50, the movement of the animation set the HeightRequest
-                _emailEntry.HeightRequest = d * 50;
-                _acceptAgbSwitch.HeightRequest = d * 50;
-                _acceptLabel.HeightRequest = d * 50;
-                _agbText.HeightRequest = d * 50;
+                _emailEntry.HeightRequest = d * referenceHeight;
+                _acceptAgbSwitch.HeightRequest = d * referenceHeight;
+                _acceptLabel.HeightRequest = d * referenceHeight;
+                _agbText.HeightRequest = d * referenceHeight;
             }, 1, 0);
             fadeOutAnimation.Commit(this, "Move", easing: Easing.CubicIn, length: 250U, finished: (d, b) =>
             {
@@ -227,13 +227,14 @@ namespace App2Night.View
             _acceptLabel.IsVisible = true;
             _acceptAgbSwitch.IsVisible = true;
             _agbText.IsVisible = true;
+            var referenceHeight = _usernameEntry.Height; 
             Animation fadeInAnimation = new Animation(d =>
             {
                 // set value 50, the movement of the animation set the HeightRequest
-                _emailEntry.HeightRequest = d * 50;
-                _acceptAgbSwitch.HeightRequest = d * 50;
-                _acceptLabel.HeightRequest = d * 50;
-                _agbText.HeightRequest = d * 50;
+                _emailEntry.HeightRequest = d * referenceHeight;
+                _acceptAgbSwitch.HeightRequest = d * referenceHeight;
+                _acceptLabel.HeightRequest = d * referenceHeight;
+                _agbText.HeightRequest = d * referenceHeight;
             }, 0, 1);
             fadeInAnimation.Commit(this, "StartOpeningAnimation", easing: Easing.BounceOut, length: 1000U);
             _emailEntry.IsVisible = true; 
@@ -245,6 +246,7 @@ namespace App2Night.View
         public override void Dispose()
         {   
             base.Dispose();
-        } 
+            _signUpSwitch.Toggled -= SignUpSwitchToggled;
+        }
     }
 }
