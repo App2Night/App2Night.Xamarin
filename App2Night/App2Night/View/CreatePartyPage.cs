@@ -14,7 +14,7 @@ namespace App2Night.View
     /// </summary>
     public class CreatePartyPage : ContentPageWithInfo<CreatePartyViewModel>
     {
-        #region Nodes
+        #region Views
 
         private InputContainer<Entry> _entryName = new InputContainer<Entry>
         {
@@ -73,7 +73,7 @@ namespace App2Night.View
 
         private CustomButton _deleteButton = new CustomButton
         {
-            Text = "\uf00d",
+            Text = "\uf1f8",
             ButtonLabel = {FontFamily = "FontAwesome", FontSize = 50},
         };
 
@@ -108,13 +108,7 @@ namespace App2Night.View
 
         public CreatePartyPage()
         {
-            _map = new MapWrapper(_headerMap);
-			_map.HeightRequest = 250;
-            // add eventHandler to CustomBtn
-            _acceptButton.ButtonTapped += Accept;
-            _deleteButton.ButtonTapped += Delete;
-            //_numberEntry.Input.TextChanged += TextLength;
-            //_zipCodetEntry.Input.TextChanged += TextLength;
+            _map = new MapWrapper(_headerMap); 
             // set tap gesture reconizer
             _tapGesture.Tapped += LoadImage;
             // set title of the page
@@ -187,6 +181,8 @@ namespace App2Night.View
 
             Content = new Grid
             {
+                ColumnSpacing = 0,
+                RowSpacing = 0,
                 ColumnDefinitions =
                 {
                     new ColumnDefinition {Width = new GridLength(0, GridUnitType.Star)},
