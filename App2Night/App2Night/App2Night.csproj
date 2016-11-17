@@ -41,6 +41,7 @@
     <Compile Include="CustomPresenter.cs" />
     <Compile Include="CustomView\Template\MenuTemplate.cs" />
     <Compile Include="CustomView\View\CachedImage.cs" />
+    <Compile Include="CustomView\View\InputContainer.cs" />
     <Compile Include="CustomView\View\EnumBindablePicker.cs" />
     <Compile Include="CustomView\Page\ContentPageWithInfo.cs" />
     <Compile Include="CustomView\Page\ContentPageWithPreview.cs" />
@@ -101,7 +102,6 @@
     <Compile Include="DependencyService\ILoadImage.cs" />
     <Compile Include="View\Subpages\ThirdPartyInfoPage.cs" />
     <Compile Include="View\Subpages\ThirdPartyPage.cs" />
-    <Compile Include="CustomView\View\CustomEntry.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

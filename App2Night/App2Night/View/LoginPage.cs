@@ -17,37 +17,34 @@ namespace App2Night.View
             Text = "\uf061",
         };
 
-		private readonly CustomEntry _nameEntry = new CustomEntry
-		{
+		private readonly InputContainer<Entry> _nameEntry = new InputContainer<Entry>
+        {
 			Image = "\uf2bd",
-			Placeholder = "Username",
+            Input = { Placeholder = "Name"},
 			HorizontalOptions = LayoutOptions.CenterAndExpand,
 			VerticalOptions = LayoutOptions.CenterAndExpand,
 			WidthRequest = 300
 
         };
 
-        private readonly CustomEntry _emailEntry = new CustomEntry
+        private readonly InputContainer<Entry> _emailEntry = new InputContainer<Entry>
         {
             Image = "\uf003",
-			HorizontalOptions = LayoutOptions.Center,
-            WidthRequest = 300,
-            Placeholder = "Email Address",
-            IsVisible = false,
-			Keyboard = Keyboard.Email
-        };
-
-        private readonly CustomEntry _passwordEntry = new CustomEntry
-        {
-            IsPassword = true,
+            Input = { Placeholder = "Email Address", Keyboard = Keyboard.Email },
             HorizontalOptions = LayoutOptions.Center,
             WidthRequest = 300,
-            Placeholder = "Password",
-			Image = "\uf023"
-
+            IsVisible = false,
         };
 
-        private readonly Switch _signUpSwitch = new Switch()
+        private readonly InputContainer<Entry> _passwordEntry = new InputContainer<Entry>
+        {
+            Input = { Placeholder = "Password", IsPassword = true, },
+            HorizontalOptions = LayoutOptions.Center,
+            WidthRequest = 300,
+			Image = "\uf023"
+        };
+
+        private readonly InputContainer<Switch> _signUpSwitch = new InputContainer<Switch>()
         {
             HorizontalOptions = LayoutOptions.Start,
             Margin = new Thickness(0, 10, 0, 0)
@@ -101,14 +98,14 @@ namespace App2Night.View
 			BackgroundColor = Color.White;
             // set bindings
             BindToViewModel(_loginButton, CustomButton.CommandProperty, vm => vm.StartLoginCommand); 
-            BindToViewModel(_nameEntry.Entry, Entry.TextProperty, vm => vm.Username);
-            BindToViewModel(_passwordEntry.Entry, Entry.TextProperty, vm => vm.Password);
+            BindToViewModel(_nameEntry.Input, Entry.TextProperty, vm => vm.Username);
+            BindToViewModel(_passwordEntry.Input, Entry.TextProperty, vm => vm.Password);
 			// set event handler 
-			_nameEntry.Entry.TextChanged += SetBtnVisible;
-			_passwordEntry.Entry.TextChanged += SetBtnVisible;
+			_nameEntry.Input.TextChanged += SetBtnVisible;
+			_passwordEntry.Input.TextChanged += SetBtnVisible;
             _loginButton.ButtonTapped += Login;
-            _signUpSwitch.Toggled += Register;
-            _signUpSwitch.Toggled += Toggle;
+            _signUpSwitch.Input.Toggled += Register;
+            _signUpSwitch.Input.Toggled += Toggle;
             var grid = new Grid
             {
                 RowDefinitions = new RowDefinitionCollection()
@@ -160,9 +157,9 @@ namespace App2Night.View
         /// <param name="s"></param>
         private void SetBtnVisible(object o, TextChangedEventArgs s)
         {
-            if (_nameEntry.Entry.Text != null && _passwordEntry.Entry.Text != null)
+            if (_nameEntry.Input.Text != null && _passwordEntry.Input.Text != null)
             {
-				_loginButton.IsVisible = (_nameEntry.Entry.Text.Length > 0 && _passwordEntry.Entry.Text.Length > 0 ? true : false);
+				_loginButton.IsVisible = (_nameEntry.Input.Text.Length > 0 && _passwordEntry.Input.Text.Length > 0 ? true : false);
             }
             else
             {
@@ -179,7 +176,7 @@ namespace App2Night.View
         {
             Animation animation = new Animation(d => { _loginButton.ButtonLabel.TranslationX = d*100; }, 0, 1);
             animation.Commit(this, "StartOpeningAnimation");
-            if (_signUpSwitch.IsToggled)
+            if (_signUpSwitch.Input.IsToggled)
             {
                 // TODO Handle Input
             }
@@ -197,7 +194,7 @@ namespace App2Night.View
         private void Register(object c, EventArgs args)
         {
             // check if the switch is triggerd, then it shows up the email entry
-            if (_signUpSwitch.IsToggled)
+            if (_signUpSwitch.Input.IsToggled)
             {
                 _emailEntry.IsVisible = true;
                 _acceptLabel.IsVisible = true;
@@ -248,8 +245,8 @@ namespace App2Night.View
         public override void Dispose()
         {
             _loginButton.ButtonTapped -= Login;
-            _nameEntry.Entry.TextChanged -= SetBtnVisible;
-			_passwordEntry.Entry.TextChanged -= SetBtnVisible;
+            _nameEntry.Input.TextChanged -= SetBtnVisible;
+			_passwordEntry.Input.TextChanged -= SetBtnVisible;
             base.Dispose();
         } 
     }
