@@ -9,7 +9,6 @@ using Android.OS;
 using Android.Views;
 using HockeyApp.Android;
 using HockeyApp.Android.Metrics;
-using SkiaSharp;
 using Xamarin.Forms.Platform.Android;
 
 namespace App2Night.Droid
