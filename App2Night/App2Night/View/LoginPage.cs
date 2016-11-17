@@ -13,7 +13,8 @@ namespace App2Night.View
 		private readonly InputContainer<Entry> _usernameEntry = new InputContainer<Entry>
         {
 			Image = "\uf2bd",
-            Input = { Placeholder = "Name"} 
+            Input = { Placeholder = "Name"},
+            ValidationVisible = true
 
         };
 
@@ -22,6 +23,7 @@ namespace App2Night.View
             Image = "\uf003",
             Input = { Placeholder = "Email Address", Keyboard = Keyboard.Email }, 
             IsVisible = false,
+            ValidationVisible = true
         };
 
         private readonly InputContainer<Entry> _passwordEntry = new InputContainer<Entry>
@@ -31,7 +33,8 @@ namespace App2Night.View
                 Placeholder = "Password",
                 IsPassword = true 
             },
-			Image = "\uf023"
+			Image = "\uf023",
+            ValidationVisible = true
         };
 
         private readonly Switch  _signUpSwitch = new Switch()
@@ -95,12 +98,29 @@ namespace App2Night.View
                 Padding = new Thickness(0,20,0,0);
 
 			BackgroundColor = Color.White;
-            // set bindings
-            BindToViewModel(_submitButton, Button.CommandProperty, vm => vm.StartLoginCommand); 
+            //Bindings
+
+            //Buttons
+            BindToViewModel(_submitButton, Button.CommandProperty, vm => vm.StartLoginCommand);
+            BindToViewModel(_submitButton, Button.IsEnabledProperty, vm => vm.CanSubmitForm);
+
             BindToViewModel(_useAnonymousButton, Button.CommandProperty, vm => vm.ContinueAnonymCommand);
+
+            //Entrys
             BindToViewModel(_usernameEntry.Input, Entry.TextProperty, vm => vm.Username);
-            BindToViewModel(_passwordEntry.Input, Entry.TextProperty, vm => vm.Password); 
+            BindToViewModel(_usernameEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidUsername);
+
+            BindToViewModel(_passwordEntry.Input, Entry.TextProperty, vm => vm.Password);
+            BindToViewModel(_passwordEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidPassword);
+
+            BindToViewModel(_emailEntry.Input, Entry.TextProperty, vm => vm.Email);
+            BindToViewModel(_emailEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidEmail);
+             
+            //Events
             _signUpSwitch.Toggled += SignUpSwitchToggled; 
+            _usernameEntry.Input.Completed += UsernameCompleted;
+            _passwordEntry.Input.Completed += PasswordCompleted;
+
             _layoutGrid = new Grid
             {
                 RowSpacing = 6,
@@ -154,6 +174,17 @@ namespace App2Night.View
             Grid.SetColumnSpan(_useAnonymousButton, 2); 
 
             Content = _layoutGrid;
+        }
+
+        private void PasswordCompleted(object sender, EventArgs eventArgs)
+        {
+            if (_signUpSwitch.IsToggled)
+                _emailEntry.Input.Focus();
+        }
+
+        private void UsernameCompleted(object sender, EventArgs eventArgs)
+        {
+            _passwordEntry.Input.Focus();
         }
 
         protected override void OnAppearing()
@@ -246,6 +277,9 @@ namespace App2Night.View
         public override void Dispose()
         {   
             base.Dispose();
+            _signUpSwitch.Toggled -= SignUpSwitchToggled;
+            _usernameEntry.Input.Completed -= UsernameCompleted;
+            _passwordEntry.Input.Completed -= PasswordCompleted;
         } 
     }
 }
