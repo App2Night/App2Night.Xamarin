@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using App2Night.CustomView.View;
 using App2Night.ViewModel;
 using MvvmNano.Forms;
@@ -8,87 +9,85 @@ namespace App2Night.View
 {
     public class LoginPage : MvvmNanoContentPage<LoginViewModel>
     {
-        #region Views
-        private readonly CustomButton _loginButton = new CustomButton()
-        {
-            HorizontalOptions = LayoutOptions.Start,
-			ButtonLabel = { FontFamily = "FontAwesome", FontSize = 30 },
-            IsVisible = false,
-            Text = "\uf061",
-        };
-
-		private readonly InputContainer<Entry> _nameEntry = new InputContainer<Entry>
+        #region Views  
+		private readonly InputContainer<Entry> _usernameEntry = new InputContainer<Entry>
         {
 			Image = "\uf2bd",
-            Input = { Placeholder = "Name"},
-			HorizontalOptions = LayoutOptions.CenterAndExpand,
-			VerticalOptions = LayoutOptions.CenterAndExpand,
-			WidthRequest = 300
+            Input = { Placeholder = "Name"} 
 
         };
 
         private readonly InputContainer<Entry> _emailEntry = new InputContainer<Entry>
         {
             Image = "\uf003",
-            Input = { Placeholder = "Email Address", Keyboard = Keyboard.Email },
-            HorizontalOptions = LayoutOptions.Center,
-            WidthRequest = 300,
+            Input = { Placeholder = "Email Address", Keyboard = Keyboard.Email }, 
             IsVisible = false,
         };
 
         private readonly InputContainer<Entry> _passwordEntry = new InputContainer<Entry>
         {
-            Input = { Placeholder = "Password", IsPassword = true, },
-            HorizontalOptions = LayoutOptions.Center,
-            WidthRequest = 300,
+            Input =
+            {
+                Placeholder = "Password",
+                IsPassword = true 
+            },
 			Image = "\uf023"
         };
 
-        private readonly InputContainer<Switch> _signUpSwitch = new InputContainer<Switch>()
+        private readonly Switch  _signUpSwitch = new Switch()
         {
             HorizontalOptions = LayoutOptions.Start,
-            Margin = new Thickness(0, 10, 0, 0)
+            Margin = new Thickness(0, 10)
         };
 
         private readonly Label _registerLabel = new Label
         {
             Text = "Noch nicht registriert?",
-            HorizontalOptions = LayoutOptions.Start,
-            Margin = new Thickness(10, 10, 0, 0)
+            HorizontalOptions = LayoutOptions.Start, 
         };
 
         private readonly Label _acceptLabel = new Label
         {
             Text = "Hiermit bestätige ich das bla bla bla bla bla bla viel Recht,bla bla bla bla bla bla, ob du behindert bist hab ich gefragt",
-            HorizontalOptions = LayoutOptions.Center,
-            Margin = new Thickness(0, 25, 0, 0),
+            HorizontalOptions = LayoutOptions.Center, 
             IsVisible = false
         };
 
         private readonly CachedImage _image = new CachedImage()
-        {
-            HeightRequest = 256,
-            WidthRequest = 100,
-            Margin = new Thickness(10) 
+        {  
+            Aspect = Aspect.AspectFit
         };
 
-        private readonly Switch _acceptSwitch = new Switch
+        private readonly Switch _acceptAgbSwitch = new Switch
         {
-            HorizontalOptions = LayoutOptions.Center,
-            Margin = new Thickness(0, 25, 0, 0),
-            IsVisible = false
+            HorizontalOptions = LayoutOptions.Center, 
+            IsVisible = false,
+            Margin = new Thickness(0, 10)
         };
 
-        private readonly CustomButton _moreInfButton = new CustomButton
+        private readonly Button _submitButton = new Button
+        {
+            Text = "Submit"
+        };
+
+        private readonly Button _useAnonymousButton = new Button
+        {
+            Text = "Continue anonymous"
+        };
+
+        private readonly CustomButton _agbText = new CustomButton
         {
             HorizontalOptions = LayoutOptions.Start,
 			IsVisible = false,
 			Text = "Mehr Informationen",
         };
         #endregion
+
+        Grid _layoutGrid;
+
         public LoginPage()
         { 
-            _image.SetImage("App2Night.Data.Image.default.png", SourceOrigin.File);
+            _image.SetImage("App2Night.Data.Image.icon.png", SourceOrigin.Resource);
             Title = "Login";
 
             //Make sure that the page does not merge in to the status bar on iOS.
@@ -97,156 +96,154 @@ namespace App2Night.View
 
 			BackgroundColor = Color.White;
             // set bindings
-            BindToViewModel(_loginButton, CustomButton.CommandProperty, vm => vm.StartLoginCommand); 
-            BindToViewModel(_nameEntry.Input, Entry.TextProperty, vm => vm.Username);
-            BindToViewModel(_passwordEntry.Input, Entry.TextProperty, vm => vm.Password);
-			// set event handler 
-			_nameEntry.Input.TextChanged += SetBtnVisible;
-			_passwordEntry.Input.TextChanged += SetBtnVisible;
-            _loginButton.ButtonTapped += Login;
-            _signUpSwitch.Input.Toggled += Register;
-            _signUpSwitch.Input.Toggled += Toggle;
-            var grid = new Grid
+            BindToViewModel(_submitButton, Button.CommandProperty, vm => vm.StartLoginCommand); 
+            BindToViewModel(_useAnonymousButton, Button.CommandProperty, vm => vm.ContinueAnonymCommand);
+            BindToViewModel(_usernameEntry.Input, Entry.TextProperty, vm => vm.Username);
+            BindToViewModel(_passwordEntry.Input, Entry.TextProperty, vm => vm.Password); 
+            _signUpSwitch.Toggled += SignUpSwitchToggled; 
+            _layoutGrid = new Grid
             {
+                RowSpacing = 3,
+                ColumnSpacing = 3,
                 RowDefinitions = new RowDefinitionCollection()
                 {
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
+
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}, //Image
+
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
+
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}, //Username
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}, //Password
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}, //E-Mail
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}, //Accept AGB
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}, //Enable SignUp
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}, //Submit Button
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}, //Anonymous Button 
+
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Star)}
                 },
                 ColumnDefinitions = new ColumnDefinitionCollection
                 {
+                    new ColumnDefinition {Width = new GridLength(0, GridUnitType.Absolute)},
                     new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
-                    new ColumnDefinition {Width = new GridLength(150, GridUnitType.Absolute)},
-                    new ColumnDefinition {Width = new GridLength(150, GridUnitType.Absolute)},
-                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Auto)},
+                    new ColumnDefinition {Width = new GridLength(0, GridUnitType.Absolute)}
                 },
                 Children =
                 {
-                    {_image,0,0 },
-                    {_nameEntry, 1, 1},
-                    {_passwordEntry, 1, 2},
-                    {_emailEntry, 1, 3},
-                    {_acceptLabel,1, 4 },
-					//{_moreInfButton,2,4},
-                    {_acceptSwitch,1,5 },
-                    {_registerLabel, 1, 6},
-                    {_signUpSwitch, 2, 6},
-                    {_loginButton, 3, 1}
+                    {_image, 1, 1 },
+                    {_usernameEntry, 1, 3},
+                    {_passwordEntry, 1, 4},
+                    {_emailEntry, 1, 5}, 
+                    {_agbText, 1, 6},  
+                    {_acceptAgbSwitch,2, 6 },
+                    {_registerLabel, 1, 7},
+                    {_signUpSwitch, 2, 7},
+                    {_submitButton, 1, 8}, 
+                    {_useAnonymousButton, 1, 9} 
                 }
             };
-            Grid.SetColumnSpan(_nameEntry, 2);
+
+            Grid.SetColumnSpan(_image, 2); 
+            Grid.SetColumnSpan(_usernameEntry, 2);
             Grid.SetColumnSpan(_passwordEntry, 2);
             Grid.SetColumnSpan(_emailEntry, 2);
-            Grid.SetColumnSpan(_acceptLabel,2);
-            Grid.SetColumnSpan(_image, 4);
-            Grid.SetColumnSpan(_acceptSwitch, 2);
-            Content = grid;
-        }
-        #region Parties
-        /// <summary>
-        /// Sets the login btn visible. Only if the necassary inputs available, the <code>_loginBtn</code> is visible.
-        /// </summary>
-        /// <param name="o"></param>
-        /// <param name="s"></param>
-        private void SetBtnVisible(object o, TextChangedEventArgs s)
-        {
-            if (_nameEntry.Input.Text != null && _passwordEntry.Input.Text != null)
-            {
-				_loginButton.IsVisible = (_nameEntry.Input.Text.Length > 0 && _passwordEntry.Input.Text.Length > 0 ? true : false);
-            }
-            else
-            {
-                _loginButton.IsVisible = false;
-            }
+            Grid.SetColumnSpan(_submitButton, 2);
+            Grid.SetColumnSpan(_useAnonymousButton, 2); 
+
+            Content = _layoutGrid;
         }
 
-        /// <summary>
-        /// Login the user.
-        /// </summary>
-        /// <param name="c"></param>
-        /// <param name="args"></param>
-        private void Login(object c, EventArgs args)
+        protected override void OnAppearing()
         {
-            Animation animation = new Animation(d => { _loginButton.ButtonLabel.TranslationX = d*100; }, 0, 1);
-            animation.Commit(this, "StartOpeningAnimation");
-            if (_signUpSwitch.Input.IsToggled)
-            {
-                // TODO Handle Input
-            }
-            else
-            {
-                // TODO Handle Login
-            }
+            base.OnAppearing();
+            SetHeaderHeight();
         }
+
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height);
+            SetHeaderHeight();
+        }
+
+        private void SetHeaderHeight()
+        {
+            if(Height<=0) return;
+            var headerHeight = Height/4;
+            var imageHeight = headerHeight * (2/3.0); 
+            var headerSpacing = (headerHeight - imageHeight) / 2;
+
+            _image.HeightRequest = imageHeight;
+
+            _layoutGrid.RowDefinitions[0].Height = headerSpacing;
+            _layoutGrid.RowDefinitions[2].Height = headerSpacing;
+        }
+
+        #region Parties  
 
         /// <summary>
         /// Sets the LoginPage to register the user.
         /// </summary>
         /// <param name="c"></param>
         /// <param name="args"></param>
-        private void Register(object c, EventArgs args)
+        private async void SignUpSwitchToggled(object c, EventArgs args)
         {
             // check if the switch is triggerd, then it shows up the email entry
-            if (_signUpSwitch.Input.IsToggled)
+            if (_signUpSwitch.IsToggled)
             {
-                _emailEntry.IsVisible = true;
-                _acceptLabel.IsVisible = true;
-                _acceptSwitch.IsVisible = true;
-				_moreInfButton.IsVisible = true;
-                Animation fadeInAnimation = new Animation(d =>
-                {
-                    // set value 50, the movement of the animation set the HeightRequest
-                    _emailEntry.HeightRequest = d * 50;
-                    _acceptSwitch.HeightRequest = d * 50;
-                    _acceptLabel.HeightRequest = d * 50;
-					_moreInfButton.HeightRequest = d * 50;
-                }, 0, 1);
-                fadeInAnimation.Commit(this, "StartOpeningAnimation", easing: Easing.BounceOut, length: 1000U);
-                _emailEntry.IsVisible = true;
+                await ExpandSignupView();
             }
             else
             {
-				Animation fadeOutAnimation = new Animation(d =>
-                {
-                    // set value 50, the movement of the animation set the HeightRequest
-                    _emailEntry.HeightRequest = d * 50;
-					_acceptSwitch.HeightRequest = d * 50;
-					_acceptLabel.HeightRequest = d * 50;
-					_moreInfButton.HeightRequest = d * 50;
-                }, 1, 0);
-                fadeOutAnimation.Commit(this, "Move", easing: Easing.CubicIn, length: 1000U, finished: (d, b) =>
-                {
-					_emailEntry.IsVisible = false;
-					_acceptLabel.IsVisible = false;
-					_acceptSwitch.IsVisible = false;
-					_moreInfButton.IsVisible = false ;
-                });
+                await CollapseSignupView();
             }
         }
-        #endregion
-        /// <summary>
-        /// Changes the scale of the switch, if its triggered.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private async void Toggle(object sender, ToggledEventArgs e)
+
+        private async Task CollapseSignupView()
         {
+            Animation fadeOutAnimation = new Animation(d =>
+            {
+                // set value 50, the movement of the animation set the HeightRequest
+                _emailEntry.HeightRequest = d * 50;
+                _acceptAgbSwitch.HeightRequest = d * 50;
+                _acceptLabel.HeightRequest = d * 50;
+                _agbText.HeightRequest = d * 50;
+            }, 1, 0);
+            fadeOutAnimation.Commit(this, "Move", easing: Easing.CubicIn, length: 250U, finished: (d, b) =>
+            {
+                _emailEntry.IsVisible = false;
+                _acceptLabel.IsVisible = false;
+                _acceptAgbSwitch.IsVisible = false;
+                _agbText.IsVisible = false;
+            });
+            await _signUpSwitch.ScaleTo(0.7, easing: Easing.CubicIn, length: 175U);
+            await _signUpSwitch.ScaleTo(1, easing: Easing.CubicIn, length: 75U);
+        }
+
+        private async Task ExpandSignupView()
+        {
+            _emailEntry.IsVisible = true;
+            _acceptLabel.IsVisible = true;
+            _acceptAgbSwitch.IsVisible = true;
+            _agbText.IsVisible = true;
+            Animation fadeInAnimation = new Animation(d =>
+            {
+                // set value 50, the movement of the animation set the HeightRequest
+                _emailEntry.HeightRequest = d * 50;
+                _acceptAgbSwitch.HeightRequest = d * 50;
+                _acceptLabel.HeightRequest = d * 50;
+                _agbText.HeightRequest = d * 50;
+            }, 0, 1);
+            fadeInAnimation.Commit(this, "StartOpeningAnimation", easing: Easing.BounceOut, length: 1000U);
+            _emailEntry.IsVisible = true; 
             await _signUpSwitch.ScaleTo(1.3, easing: Easing.CubicIn);
             await _signUpSwitch.ScaleTo(1, easing: Easing.CubicIn);
-        }  
+        }
+        #endregion 
 
         public override void Dispose()
-        {
-            _loginButton.ButtonTapped -= Login;
-            _nameEntry.Input.TextChanged -= SetBtnVisible;
-			_passwordEntry.Input.TextChanged -= SetBtnVisible;
+        {   
             base.Dispose();
         } 
     }

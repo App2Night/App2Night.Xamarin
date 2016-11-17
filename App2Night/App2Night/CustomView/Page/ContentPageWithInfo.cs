@@ -14,7 +14,8 @@ namespace App2Night.CustomView.Page
         Label _infoLabel = new Label
         {
             Text = "Your device is not connected to the internet.\n" +
-                   "App2Night will use cached data if available." 
+                   "App2Night will use cached data if available.",
+            TextColor = Color.White
         };
         BoxView _infoBackgroundBoxView = new BoxView
         {

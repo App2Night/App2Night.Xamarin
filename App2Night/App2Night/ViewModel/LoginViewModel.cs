@@ -9,12 +9,18 @@ namespace App2Night.ViewModel
         public MvvmNanoCommand StartLoginCommand => new MvvmNanoCommand(StartLogin);
         public string Password { get; set; }
         public string Username { get; set; }
+        public MvvmNanoCommand ContinueAnonymCommand => new MvvmNanoCommand(ContinueAnonym);
+
+        private void ContinueAnonym()
+        {
+            NavigateTo<DashboardViewModel>();
+        }
 
         private void StartLogin()
         {
             if (Password != null && Username != null)
-            {
-                //TODO remove event when mvvmnano is updated
+            { 
+                //TODO Login
                 NavigateTo<DashboardViewModel>(); 
             }
             else

@@ -221,6 +221,7 @@
     <EmbeddedResource Include="Data\Licenses\MIT.txt" />
     <EmbeddedResource Include="Data\Licenses\XamPlugin.txt" />
     <EmbeddedResource Include="Data\Licenses\JsonNet.txt" />
+    <EmbeddedResource Include="Data\Image\icon.png" />
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>
