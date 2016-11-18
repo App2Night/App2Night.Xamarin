@@ -1,8 +1,10 @@
 ﻿using MvvmNano;
+using App2Night.Model.Model;
+using App2Night.Service.Interface;
 
 namespace App2Night.ViewModel.Subpages
 {
-	public class EditProfileViewModel : MvvmNanoViewModel<User>
+	public class EditProfileViewModel : MvvmNanoViewModel
     {
         public MvvmNanoCommand MoveToCancelCommand => new MvvmNanoCommand(MoveToCanecl);
 
@@ -17,18 +19,25 @@ namespace App2Night.ViewModel.Subpages
             NavigateTo<DashboardViewModel>();
         }
 
-		//private User _User;
+		private Model.Model.User _user;
 
-		//public User User 
-		//{ 
-		//	get { return _User; } 
-		//	set { _User = value; } 
-		//}
+		public Model.Model.User User 
+		{ 
+			get { return _user; }
+			set
+			{
+				_user = value;
+				NotifyPropertyChanged();
+				NotifyPropertyChanged("IsFormValid");
+			}
+		}
 
-		//public override void Initialize(User pUser)
-		//{
-		//	base.Initialize(pUser);
-		//	User = pUser;
-		//}
-    }
+		IDataService _dataService;
+
+		public EditProfileViewModel(IDataService dataService)
+		{
+			_dataService = dataService;
+			_user = _dataService.User;
+		}
+	}
 }
