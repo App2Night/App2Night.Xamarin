@@ -14,6 +14,8 @@ namespace App2Night.Service.Interface
     {
         event EventHandler PartiesUpdated;
 
+		event EventHandler UserUpdated;
+
         /// <summary>
         /// Clears all data from the device storage and current objects, including the logged in user.
         /// </summary>

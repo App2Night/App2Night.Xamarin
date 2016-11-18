@@ -25,8 +25,9 @@ namespace App2Night.Service.Service
         public ObservableCollection<Party> PartyHistory { get; } = new ObservableCollection<Party>();
 
         public event EventHandler PartiesUpdated;
+		public event EventHandler UserUpdated;
 
-        public Task WipeData()
+		public Task WipeData()
         {
             //TODO Wipe all data from storage
             throw new NotImplementedException();
@@ -54,9 +55,17 @@ namespace App2Night.Service.Service
                     }
         };
 
-        public User User => _user; 
+		public User User 
+		{ 
+			get { return _user; } 
+			set 
+			{ 
+				_user = value;
+				UserUpdated?.Invoke(this, EventArgs.Empty);
+			} 
+		}
 
-        public Task<Result<Party>> CreateParty()
+		public Task<Result<Party>> CreateParty()
         {
             throw new NotImplementedException();
         }
