@@ -17,7 +17,7 @@ namespace App2Night.ViewModel
         {
             //Check if user is loged in -> Token is available 
             //If Token is available -> Refresh token
-            //If not -> Open Login! 
+            //If not -> Open SignUp! 
             NavigateTo<LoginViewModel>();
         }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using App2Night.CustomView.Page;
 using App2Night.CustomView.Template;
 using App2Night.CustomView.View;
+using App2Night.Data.Language;
 using App2Night.Helper.ValueConverter;
 using App2Night.Model.Model;
 using App2Night.ViewModel; 
@@ -63,8 +64,8 @@ namespace App2Night.View
                     profilePicture 
                 } 
                 
-            }; 
-            var usernameLabel = new Label() {Text = "Hans Peter XXL"};
+            };
+            var usernameLabel = new Label();
             var joinedAtLabel = new Label() {Text = "Dabei seit: 30.10.2016"};
             var profileDetails = new List<Xamarin.Forms.View>
             {
@@ -172,7 +173,7 @@ namespace App2Night.View
             base.OnSizeAllocated(width, height);
 
             //Handle big screens
-            int columns = (int) Math.Ceiling(Width/300); //Available columns
+            int columns =  (int) Math.Ceiling((Width-200)/300); //Available columns
             if (lastColumns != columns)
             {
                 lastColumns = columns;

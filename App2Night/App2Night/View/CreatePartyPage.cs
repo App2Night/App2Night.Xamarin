@@ -14,17 +14,19 @@ namespace App2Night.View
     /// </summary>
     public class CreatePartyPage : ContentPageWithInfo<CreatePartyViewModel>
     {
-        #region Nodes
+        #region Views
 
         private InputContainer<Entry> _entryName = new InputContainer<Entry>
         {
             Input = {Placeholder = "Name"},
             FontSize = 35,
+			Image = "\uf1ae"
         };
 
         private InputContainer<Entry> _descriptionEntry = new InputContainer<Entry>
         {
             Input = {Placeholder = "Description"},
+			Image = "\uf040",
             HeightRequest = 100,
             FontSize = 35,
         };
@@ -43,7 +45,7 @@ namespace App2Night.View
         private InputContainer<TimePicker> _timePicker = new InputContainer<TimePicker> { Image = "\uf017", FontSize = 35, };
 
         private InputContainer<EnumBindablePicker<MusicGenre>> _musicGenreSwitch =
-            new InputContainer<EnumBindablePicker<MusicGenre>>{ Image = "\uf001", FontSize = 35, Input = { SelectedItem = MusicGenre.All}};
+			new InputContainer<EnumBindablePicker<MusicGenre>>{ Image = "\uf001", FontSize = 35, Input = { SelectedIndex = 0}};
 
         private InputContainer<Entry> _streetEntry = new InputContainer<Entry>
         {
@@ -71,7 +73,7 @@ namespace App2Night.View
 
         private CustomButton _deleteButton = new CustomButton
         {
-            Text = "\uf00d",
+            Text = "\uf1f8",
             ButtonLabel = {FontFamily = "FontAwesome", FontSize = 50},
         };
 
@@ -83,7 +85,7 @@ namespace App2Night.View
 
         private Map _headerMap = new Map()
         {
-            HeightRequest = 200
+            HeightRequest = 500
         };
 
         private Image _image = new Image
@@ -106,12 +108,7 @@ namespace App2Night.View
 
         public CreatePartyPage()
         {
-            _map = new MapWrapper(_headerMap);
-            // add eventHandler to CustomBtn
-            _acceptButton.ButtonTapped += Accept;
-            _deleteButton.ButtonTapped += Delete;
-            //_numberEntry.Input.TextChanged += TextLength;
-            //_zipCodetEntry.Input.TextChanged += TextLength;
+            _map = new MapWrapper(_headerMap); 
             // set tap gesture reconizer
             _tapGesture.Tapped += LoadImage;
             // set title of the page
@@ -161,7 +158,22 @@ namespace App2Night.View
                             {_zipCodetEntry, 1,0}
                         }
 
-                    }}
+                    }},
+					new ViewCell {View = new Grid
+					{
+						ColumnDefinitions =
+						{
+							new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+							new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+						},
+						Children =
+						{
+								{_acceptButton, 0,0},
+								{_deleteButton, 1,0}
+						}
+
+					}},
+					
 
                 }
             };
@@ -169,6 +181,8 @@ namespace App2Night.View
 
             Content = new Grid
             {
+                ColumnSpacing = 0,
+                RowSpacing = 0,
                 ColumnDefinitions =
                 {
                     new ColumnDefinition {Width = new GridLength(0, GridUnitType.Star)},

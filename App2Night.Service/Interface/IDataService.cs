@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using App2Night.Model.HttpModel;
 using App2Night.Model.Model;
 
 namespace App2Night.Service.Interface
@@ -60,13 +61,15 @@ namespace App2Night.Service.Interface
 
         Task<Result>  DeleteAccount();
 
+        Task<Result> CreateUser(SignUp signUpModel);
+
         /// <summary>
         /// Requests a token in name of the user.
         /// </summary>
         /// <param name="username">User Username.</param>
         /// <param name="password">User Password</param>
         /// <returns></returns>
-        Task<Result<Token>> RequestToken(string username, string password);
+        Task<Result> RequestToken(string username, string password);
 
         Task<Result> RequestNewPasswort(string email);
     }

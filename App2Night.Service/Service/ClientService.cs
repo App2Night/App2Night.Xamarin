@@ -9,11 +9,16 @@ using App2Night.Service.Interface;
 using Newtonsoft.Json; 
 
 namespace App2Night.Service.Service
-{ 
+{
+    public enum Endpoint
+    {
+        Api, User
+    }
+
     public class ClientService : IClientService
     { 
 
-        public async Task<Result<TExpectedType>> SendRequest<TExpectedType>(string uri,RestType restType, bool cacheData = false, string query = "", object bodyParameter = null, string token = null)
+        public async Task<Result<TExpectedType>> SendRequest<TExpectedType>(string uri,RestType restType, bool cacheData = false, string query = "", object bodyParameter = null, string token = null, Endpoint endpoint = Endpoint.Api)
         {
             Result<TExpectedType> result = new Result<TExpectedType>();
             
@@ -23,7 +28,7 @@ namespace App2Night.Service.Service
 
             try
             {
-                using (var client = GetClient())
+                using (var client = GetClient(endpoint))
                 {
                     if (!string.IsNullOrEmpty(token))
                     {
@@ -34,7 +39,7 @@ namespace App2Night.Service.Service
                     Stopwatch timer = new Stopwatch();
                     timer.Start();
                     uri = "api/" + uri;
-
+                    uri = uri.ToLower();
                     //Execute the request with the proper request type. 
                     switch (restType)
                     {
@@ -61,7 +66,7 @@ namespace App2Night.Service.Service
                     if (requestResult.IsSuccessStatusCode)
                     {
                         result.Success = true;
-                        if (requestResult.Content != null)
+                        if (requestResult.Content != null && typeof (TExpectedType) != typeof (Type))
                         {
                              string resultAsString = await requestResult.Content.ReadAsStringAsync();
                             //Deserialize the json if one exists. 
@@ -81,9 +86,9 @@ namespace App2Night.Service.Service
         } 
 
         public async Task<Result> SendRequest(string uri, RestType restType, bool cacheData = false, string query = "", object bodyParameter = null,
-            string token = null)
+            string token = null, Endpoint endpoint = Endpoint.Api)
         {
-            return await SendRequest<Type>(uri, restType, cacheData, query, bodyParameter, token);
+            return await SendRequest<Type>(uri, restType, cacheData, query, bodyParameter, token, endpoint);
         }
 
         public async Task<Result<Token>> GetToken(string username, string password)
@@ -91,10 +96,9 @@ namespace App2Night.Service.Service
             Result<Token> result = new Result<Token>();
             try
             {
-                using (var client = GetClient())
+                using (var client = GetClient(Endpoint.User))
                 {
-                    client.BaseAddress = new Uri("http://app2nightuser.azurewebsites.net/");
-                    client.DefaultRequestHeaders.Host = "app2nightuser.azurewebsites.net";
+                    client.BaseAddress = new Uri("http://app2nightuser.azurewebsites.net");
                     client.DefaultRequestHeaders.Accept.Clear(); 
                     var query = "client_id=nativeApp&" +
                                 "client_secret=secret&" +
@@ -123,12 +127,13 @@ namespace App2Night.Service.Service
             return result;
         }
 
-        private HttpClient GetClient()
+        private HttpClient GetClient(Endpoint endpoint)
         {
-            HttpClient client = new HttpClient {BaseAddress = new Uri("https://app2nightapi.azurewebsites.net/")};
+            var domain = endpoint == Endpoint.Api ? "app2nightapi" : "app2nightuser";
+            HttpClient client = new HttpClient {BaseAddress = new Uri($"https://{domain}.azurewebsites.net")};
             client.Timeout = TimeSpan.FromSeconds(5);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Host = "app2nightapi.azurewebsites.net";
+            client.DefaultRequestHeaders.Host = $"{domain}.azurewebsites.net";
             return client;
         }
     }
