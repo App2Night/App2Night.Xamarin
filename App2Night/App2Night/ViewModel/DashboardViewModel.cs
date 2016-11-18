@@ -22,21 +22,41 @@ namespace App2Night.ViewModel
         public ObservableCollection<Party> PartyHistory => MvvmNanoIoC.Resolve<IDataService>().PartyHistory;
         public ObservableCollection<Party> Selectedparties => MvvmNanoIoC.Resolve<IDataService>().SelectedPartys;
 
-        public MvvmNanoCommand MoveToUserEditCommand => new MvvmNanoCommand(() => NavigateTo<EditProfileViewModel>());
+		public MvvmNanoCommand MoveToUserEditCommand => new MvvmNanoCommand(() => NavigateTo<EditProfileViewModel>());
         public MvvmNanoCommand MoveToMyPartiesCommand => new MvvmNanoCommand(() => NavigateTo<MyPartysViewModel>());
         public MvvmNanoCommand MoveToHistoryCommand => new MvvmNanoCommand(() => NavigateTo<HistoryViewModel>());
         public MvvmNanoCommand MoveToPartyPicker => new MvvmNanoCommand(() => NavigateTo<PartyPickerViewModel>());
 
-        public DashboardViewModel()
+		IDataService _service;
+
+
+		public DashboardViewModel(IDataService service)
         {
-            MvvmNanoIoC.Resolve<IDataService>().PartiesUpdated +=  OnPartiesUpdated;
-            SetAvailabilitys();
+            
+			_service = service;
+			_service.PartiesUpdated += OnPartiesUpdated;
+			_User = _service.User;
+
+			SetAvailabilitys();
         } 
 
         private void OnPartiesUpdated(object sender, EventArgs eventArgs)
         {
             SetAvailabilitys();
         }
+
+		private Model.Model.User _User;
+
+		public Model.Model.User User
+		{
+			get { return _User; }
+			set
+			{
+				_User = value;
+				NotifyPropertyChanged();
+				NotifyPropertyChanged("IsFormValid");
+			}
+		}
 
         public override void Initialize()
         {
