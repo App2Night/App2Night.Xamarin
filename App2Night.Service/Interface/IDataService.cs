@@ -69,7 +69,7 @@ namespace App2Night.Service.Interface
         /// <param name="username">User Username.</param>
         /// <param name="password">User Password</param>
         /// <returns></returns>
-        Task<Result<Token>> RequestToken(string username, string password);
+        Task<Result> RequestToken(string username, string password);
 
         Task<Result> RequestNewPasswort(string email);
     }

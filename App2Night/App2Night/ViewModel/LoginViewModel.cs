@@ -121,7 +121,9 @@ namespace App2Night.ViewModel
 
         private async Task FormSubmitted()
         {
-            Result result;
+            Result result = null;
+
+            //Create user
             if (this.SignUp)
             {
                 var signUpData = new SignUp
@@ -131,11 +133,11 @@ namespace App2Night.ViewModel
                     Username = Username
                 };
                 result = await MvvmNanoIoC.Resolve<IDataService>().CreateUser(signUpData); 
-                //TODO add result handling
+                //TODO add result handling 
             }
-            else
-            {
-                 result = await MvvmNanoIoC.Resolve<IClientService>().GetToken(Username, Password);
+            else 
+            { 
+                 result = await MvvmNanoIoC.Resolve<IDataService>().RequestToken(Username, Password);
                 //TODO add result handling 
             }
             if (result.Success)

@@ -83,12 +83,19 @@ namespace App2Night.Service.Service
 
         public async Task<Result> CreateUser(SignUp signUpModels)
         {
-            Result result = await _clientService.SendRequest("user", RestType.Post, bodyParameter: signUpModels, endpoint: Endpoint.User);
+            var creationResult = await _clientService.SendRequest("user", RestType.Post, bodyParameter: signUpModels, endpoint: Endpoint.User);
+            
+            //Login user if creation was successfull
+            if (creationResult.Success)
+            {
+                var loginResult = await RequestToken(signUpModels.Username, signUpModels.Password);
+                //TODO Handle what should happen if login request fails
+            }
 
-            return result;
+            return creationResult;
         }
 
-        public async Task<Result<Token>>  RequestToken(string username, string password)
+        public async Task<Result>  RequestToken(string username, string password)
         {
             var result = await _clientService.GetToken(username, password);
             if (result.Success)
