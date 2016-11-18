@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using App2Night.CustomView.View;
+using App2Night.Data.Language;
 using App2Night.ViewModel;
 using MvvmNano.Forms;
 using Xamarin.Forms;
@@ -13,7 +14,7 @@ namespace App2Night.View
 		private readonly InputContainer<Entry> _usernameEntry = new InputContainer<Entry>
         {
 			Image = "\uf2bd",
-            Input = { Placeholder = "Name"},
+            Input = { Placeholder = AppResources.Username},
             ValidationVisible = true
 
         };
@@ -21,7 +22,7 @@ namespace App2Night.View
         private readonly InputContainer<Entry> _emailEntry = new InputContainer<Entry>
         {
             Image = "\uf003",
-            Input = { Placeholder = "Email Address", Keyboard = Keyboard.Email }, 
+            Input = { Placeholder = AppResources.EmailAdress, Keyboard = Keyboard.Email }, 
             IsVisible = false,
             ValidationVisible = true
         };
@@ -30,7 +31,7 @@ namespace App2Night.View
         {
             Input =
             {
-                Placeholder = "Password",
+                Placeholder = AppResources.Password,
                 IsPassword = true 
             },
 			Image = "\uf023",
@@ -45,7 +46,7 @@ namespace App2Night.View
 
         private readonly Label _registerLabel = new Label
         {
-            Text = "Noch nicht registriert?",
+            Text = AppResources.SignUp,
             HorizontalOptions = LayoutOptions.Start, 
         };
 
@@ -70,19 +71,19 @@ namespace App2Night.View
 
         private readonly Button _submitButton = new Button
         {
-            Text = "Submit"
+            Text = AppResources.Submit
         };
 
         private readonly Button _useAnonymousButton = new Button
         {
-            Text = "Continue anonymous"
+            Text = AppResources.ContinueAnonymous
         };
 
         private readonly CustomButton _agbText = new CustomButton
         {
             HorizontalOptions = LayoutOptions.Start,
 			IsVisible = false,
-			Text = "Mehr Informationen",
+			Text = AppResources.AcceptAgb
         };
         #endregion
 
@@ -90,8 +91,7 @@ namespace App2Night.View
 
         public LoginPage()
         { 
-            _image.SetImage("App2Night.Data.Image.icon.png", SourceOrigin.Resource);
-            Title = "Login";
+            _image.SetImage("App2Night.Data.Image.icon.png", SourceOrigin.Resource); 
 
             //Make sure that the page does not merge in to the status bar on iOS.
             if(Device.OS == TargetPlatform.iOS) 
@@ -116,6 +116,11 @@ namespace App2Night.View
             BindToViewModel(_emailEntry.Input, Entry.TextProperty, vm => vm.Email);
             BindToViewModel(_emailEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidEmail);
              
+            //Switch
+            BindToViewModel(_acceptAgbSwitch, Switch.IsToggledProperty, vm => vm.AgbAccepted);
+            BindToViewModel(_signUpSwitch, Switch.IsToggledProperty, vm => vm.SignUp);
+
+
             //Events
             _signUpSwitch.Toggled += SignUpSwitchToggled; 
             _usernameEntry.Input.Completed += UsernameCompleted;

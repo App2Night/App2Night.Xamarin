@@ -1,4 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
+using App2Night.Model.HttpModel;
+using App2Night.Model.Model;
+using App2Night.Service.Interface;
 using MvvmNano;
 
 namespace App2Night.ViewModel
@@ -11,7 +15,7 @@ namespace App2Night.ViewModel
         private string _email;
         private bool _agbAccepted;
         MvvmNanoCommand MoveToDashboardCommand => new MvvmNanoCommand(() => NavigateTo<DashboardViewModel>());
-        public MvvmNanoCommand StartLoginCommand => new MvvmNanoCommand(StartLogin);
+        public MvvmNanoCommand StartLoginCommand => new MvvmNanoCommand(async () => await FormSubmitted());
 
         public string Password
         {
@@ -87,7 +91,7 @@ namespace App2Night.ViewModel
             }
         }
 
-        public string SubmitFormButtonText => SignUp ? "Sign up" : "Login";
+        public string SubmitFormButtonText => SignUp ? "Sign up" : "SignUp";
 
         public bool ValidUsername => ValidateUsername();
 
@@ -115,9 +119,27 @@ namespace App2Night.ViewModel
             NavigateTo<DashboardViewModel>();
         }
 
-        private void StartLogin()
+        private async Task FormSubmitted()
         {
-            //Start 
+            Result result;
+            if (this.SignUp)
+            {
+                var signUpData = new SignUp
+                {
+                    Email = Email,
+                    Password = Password,
+                    Username = Username
+                };
+                result = await MvvmNanoIoC.Resolve<IDataService>().CreateUser(signUpData); 
+                //TODO add result handling
+            }
+            else
+            {
+                 result = await MvvmNanoIoC.Resolve<IClientService>().GetToken(Username, Password);
+                //TODO add result handling 
+            }
+            if (result.Success)
+                NavigateTo<DashboardViewModel>();
         }
     }
 }

@@ -62,11 +62,65 @@ namespace App2Night.Data.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Das ist ein TestSTring.
+        ///   Looks up a localized string similar to I accept the terms and conditions..
         /// </summary>
-        public static string TestString {
+        public static string AcceptAgb {
             get {
-                return ResourceManager.GetString("TestString", resourceCulture);
+                return ResourceManager.GetString("AcceptAgb", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Continue anonym.
+        /// </summary>
+        public static string ContinueAnonymous {
+            get {
+                return ResourceManager.GetString("ContinueAnonymous", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to E-Mail Adress.
+        /// </summary>
+        public static string EmailAdress {
+            get {
+                return ResourceManager.GetString("EmailAdress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Password.
+        /// </summary>
+        public static string Password {
+            get {
+                return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign up.
+        /// </summary>
+        public static string SignUp {
+            get {
+                return ResourceManager.GetString("SignUp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Submit.
+        /// </summary>
+        public static string Submit {
+            get {
+                return ResourceManager.GetString("Submit", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Username.
+        /// </summary>
+        public static string Username {
+            get {
+                return ResourceManager.GetString("Username", resourceCulture);
             }
         }
     }

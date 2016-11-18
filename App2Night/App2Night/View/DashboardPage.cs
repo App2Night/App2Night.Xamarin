@@ -64,8 +64,8 @@ namespace App2Night.View
                     profilePicture 
                 } 
                 
-            }; 
-            var usernameLabel = new Label() {Text = AppResources.TestString };
+            };
+            var usernameLabel = new Label();
             var joinedAtLabel = new Label() {Text = "Dabei seit: 30.10.2016"};
             var profileDetails = new List<Xamarin.Forms.View>
             {

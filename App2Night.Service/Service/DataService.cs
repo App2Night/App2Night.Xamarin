@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using App2Night.Model.Enum;
+using App2Night.Model.HttpModel;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
 
@@ -78,6 +79,13 @@ namespace App2Night.Service.Service
         public Task<Result> DeleteAccount()
         {
             throw new NotImplementedException();
+        }
+
+        public async Task<Result> CreateUser(SignUp signUpModels)
+        {
+            Result result = await _clientService.SendRequest("user", RestType.Post, bodyParameter: signUpModels, endpoint: Endpoint.User);
+
+            return result;
         }
 
         public async Task<Result<Token>>  RequestToken(string username, string password)
