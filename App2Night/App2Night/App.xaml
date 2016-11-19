@@ -28,8 +28,8 @@
 
           <Style x:Key="LabelBase" TargetType="Label" CanCascade="True">
                 <Setter Property="TextColor" Value="#757575" />
-                <Setter Property="HorizontalTextAlignment" Value="Center" />
-                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="VerticalOptions" Value="Center" />
             </Style>
 
             <Style TargetType="Label" BaseResourceKey="LabelBase" CanCascade="True" />
