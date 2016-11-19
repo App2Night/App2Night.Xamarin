@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.DependencyService;
-using App2Night.Helper;
 using App2Night.Model.Model;
+using App2Night.Service.Helper;
 using App2Night.Service.Interface;
 using App2Night.Service.Service;
 using App2Night.ViewModel;
@@ -56,7 +56,7 @@ namespace App2Night
             {
                 CrossGeolocator.Current.StartListeningAsync(1, 100);
             };
-            Device.BeginInvokeOnMainThread((async () => await StartupSync()));
+            //Task.Run(async () => await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys());
         }
 
         protected override void SetUpPresenter()
@@ -82,35 +82,11 @@ namespace App2Night
                 double distance = userPosition.DistanceTo(party.Coordinates);
                 party.DistanceToParty = distance;
             }
-        } 
-        
-
-        //Replace this with a serious sync 
-        public async Task StartupSync()
-        {
-            if (CrossConnectivity.Current.IsConnected)
-            {
-                //UserDialogs.Instance.ShowLoading("Starting session.");
-                //var tokenResult = await MvvmNanoIoC.Resolve<IDataService>().RequestToken("test", "test");
-                //UserDialogs.Instance.Toast(
-                //    new ToastConfig("Token request finished " + (tokenResult.Success ? "" : "un") + "successfull.")
-                //    {
-                //        BackgroundColor = tokenResult.Success ? System.Drawing.Color.LawnGreen : System.Drawing.Color.LightCoral
-                //    });
-                UserDialogs.Instance.ShowLoading("Loading partys.");
-                var result = await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys();
-                UserDialogs.Instance.HideLoading();
-                UserDialogs.Instance.Toast(
-                    new ToastConfig("Loading parties finished " + (result.Success ? "" : "un") + "successfull.")
-                    {
-                        BackgroundColor = result.Success ? System.Drawing.Color.MediumSeaGreen : System.Drawing.Color.LightCoral
-                    });
-            }
-           
-        }
+        }  
 
         private void RegisterInterfaces()
         {
+            MvvmNanoIoC.Register<IAlertService, AlertService>(); 
             MvvmNanoIoC.Register<IClientService, ClientService>();
             MvvmNanoIoC.RegisterAsSingleton<IDataService, DataService>();
             MvvmNanoIoC.RegisterAsSingleton<IImageFactory, ImageFactory>();

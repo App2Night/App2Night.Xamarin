@@ -1,7 +1,7 @@
 ﻿using System;
 using MvvmNano.Forms;
 
-namespace App2Night.Helper
+namespace App2Night
 {
     public class CustomMasterDetailData : MasterDetailData
     {

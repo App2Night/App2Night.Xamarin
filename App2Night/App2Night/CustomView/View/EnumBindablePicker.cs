@@ -1,7 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 
-namespace App2Night.CustomViews
+namespace App2Night.CustomView.View
 {
     /// <summary>
     /// Adds Enum bindable to items. 

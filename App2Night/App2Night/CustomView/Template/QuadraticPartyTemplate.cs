@@ -1,7 +1,7 @@
 ﻿using System; 
 using App2Night.CustomView.View;
-using App2Night.Helper.ValueConverter;
-using App2Night.Model.Model; 
+using App2Night.Model.Model;
+using App2Night.ValueConverter;
 using Xamarin.Forms;
 
 namespace App2Night.CustomView.Template

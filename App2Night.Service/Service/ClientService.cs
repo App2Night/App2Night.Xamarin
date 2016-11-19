@@ -131,7 +131,7 @@ namespace App2Night.Service.Service
         {
             var domain = endpoint == Endpoint.Api ? "app2nightapi" : "app2nightuser";
             HttpClient client = new HttpClient {BaseAddress = new Uri($"https://{domain}.azurewebsites.net")};
-            client.Timeout = TimeSpan.FromSeconds(5);
+            client.Timeout = TimeSpan.FromSeconds(10);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Host = $"{domain}.azurewebsites.net";
             return client;

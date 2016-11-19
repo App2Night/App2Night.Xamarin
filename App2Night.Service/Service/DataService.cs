@@ -119,7 +119,7 @@ namespace App2Night.Service.Service
             throw new NotImplementedException();
         }
 
-        public async Task<Result>  RefreshPartys()
+        public async Task<Result<IEnumerable<Party>>>  RefreshPartys()
         {
             var syncResult =
                 await _clientService.SendRequest<IEnumerable<Party>>("Party", RestType.Get, token: _token?.AccessToken);

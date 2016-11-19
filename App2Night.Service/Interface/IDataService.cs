@@ -47,7 +47,7 @@ namespace App2Night.Service.Interface
         /// <summary>
         /// Refresh the <see cref="InterestingPartys"/> collection.
         /// </summary> 
-        Task<Result> RefreshPartys();
+        Task<Result<IEnumerable<Party>>> RefreshPartys();
 
         /// <summary>
         /// Creates a new party.

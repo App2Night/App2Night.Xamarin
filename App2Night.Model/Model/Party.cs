@@ -1,8 +1,8 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
-using App2Night.Model.Annotations;
 using App2Night.Model.Enum;
+using App2Night.Model.Properties;
 using Newtonsoft.Json;
 using PropertyChanged;
 

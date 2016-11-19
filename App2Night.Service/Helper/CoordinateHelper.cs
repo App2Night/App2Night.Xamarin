@@ -1,7 +1,7 @@
 ﻿using System;
 using App2Night.Model.Model;
 
-namespace App2Night.Helper
+namespace App2Night.Service.Helper
 {
     public static class CoordinateHelper
     {

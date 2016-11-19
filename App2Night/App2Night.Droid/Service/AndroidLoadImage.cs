@@ -1,11 +1,12 @@
 ﻿using System;
 using Android.App;
 using Android.Content;
-using App2Night.Droid;
+using App2Night.DependencyService;
+using App2Night.Droid.Service;
 using Xamarin.Forms;
 
 [assembly: Xamarin.Forms.Dependency(typeof(AndroidLoadImage))]
-namespace App2Night.Droid
+namespace App2Night.Droid.Service
 {
 	public class AndroidLoadImage : Java.Lang.Object, ILoadImage
 	{

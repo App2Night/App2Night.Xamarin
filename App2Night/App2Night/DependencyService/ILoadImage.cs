@@ -1,7 +1,7 @@
 ﻿using System;
 using Xamarin.Forms;
 
-namespace App2Night
+namespace App2Night.DependencyService
 {
 	public interface ILoadImage
 	{
