@@ -1,6 +1,5 @@
 ﻿using System;
 using App2Night.CustomView.View;
-using App2Night.CustomViews;
 using App2Night.Data.Language;
 using App2Night.Model.Enum;
 using App2Night.Model.Model;

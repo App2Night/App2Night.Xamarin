@@ -147,7 +147,30 @@
 	<data name="Age" xml:space="preserve">
     <value>Age</value>
   </data>
+	<!-- Names of Views-->
 	<data name="EditProfile" xml:space="preserve">
     <value>Edit Profile</value>
+  </data>
+	<!-- Contents of Views-->
+	<data name="User" xml:space="preserve">
+    <value>User</value>
+  </data>
+	<data name="IntParty" xml:space="preserve">
+    <value>Parties near you</value>
+  </data>
+	<data name="ContIntParty" xml:space="preserve">
+    <value>There are no parties that fit your interests. Try to modify your search filters.</value>
+  </data>
+	<data name="MyParty" xml:space="preserve">
+    <value>MyEvents</value>
+  </data>
+	<data name="ContMyParty" xml:space="preserve">
+    <value>You didn't enter a party yet. Tab to start searching.</value>
+  </data>
+	<data name="History" xml:space="preserve">
+    <value>History</value>
+  </data>
+	<data name="ContHistory" xml:space="preserve">
+    <value>You didn't attend to a party yet! Former parties will be visible here.</value>
   </data>
 </root>

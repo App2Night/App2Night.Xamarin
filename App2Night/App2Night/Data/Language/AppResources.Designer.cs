@@ -112,5 +112,47 @@ namespace App2Night.Data.Language {
                 return ResourceManager.GetString("EditProfile", resourceCulture);
             }
         }
+        
+        public static string User {
+            get {
+                return ResourceManager.GetString("User", resourceCulture);
+            }
+        }
+        
+        public static string IntParty {
+            get {
+                return ResourceManager.GetString("IntParty", resourceCulture);
+            }
+        }
+        
+        public static string ContIntParty {
+            get {
+                return ResourceManager.GetString("ContIntParty", resourceCulture);
+            }
+        }
+        
+        public static string MyParty {
+            get {
+                return ResourceManager.GetString("MyParty", resourceCulture);
+            }
+        }
+        
+        public static string ContMyParty {
+            get {
+                return ResourceManager.GetString("ContMyParty", resourceCulture);
+            }
+        }
+        
+        public static string History {
+            get {
+                return ResourceManager.GetString("History", resourceCulture);
+            }
+        }
+        
+        public static string ContHistory {
+            get {
+                return ResourceManager.GetString("ContHistory", resourceCulture);
+            }
+        }
     }
 }

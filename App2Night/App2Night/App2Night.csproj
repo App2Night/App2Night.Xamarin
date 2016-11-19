@@ -71,12 +71,6 @@
     </Compile>
     <Compile Include="DependencyService\IUserLocationService.cs" />
     <Compile Include="DependencyService\IAndroidAppLookupService.cs" />
-    <Compile Include="Helper\ConvertHelper.cs" />
-    <Compile Include="Helper\CoordinateHelper.cs" />
-    <Compile Include="Helper\CustomMasterDetailData.cs" />
-    <Compile Include="Helper\ValueConverter\DateInFutureConverter.cs" />
-    <Compile Include="Helper\ValueConverter\InvertBooleanConverter.cs" />
-    <Compile Include="Helper\ValueConverter\StringNotEmptyConverter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ViewModel\AboutTabbedViewModel.cs" />
     <Compile Include="ViewModel\CreatePartyViewModel.cs" />
@@ -112,6 +106,10 @@
     <Compile Include="DependencyService\ILoadImage.cs" />
     <Compile Include="View\Subpages\ThirdPartyInfoPage.cs" />
     <Compile Include="View\Subpages\ThirdPartyPage.cs" />
+    <Compile Include="ValueConverter\DateInFutureConverter.cs" />
+    <Compile Include="ValueConverter\InvertBooleanConverter.cs" />
+    <Compile Include="ValueConverter\StringNotEmptyConverter.cs" />
+    <Compile Include="CustomMasterDetailData.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
