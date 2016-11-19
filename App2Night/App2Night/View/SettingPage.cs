@@ -1,73 +1,40 @@
-﻿using App2Night.CustomView.Page;
-using App2Night.ViewModel;
-using MvvmNano.Forms;
+﻿using System;
+using System.Globalization;
+using App2Night.CustomView.Page;
+using App2Night.Data.Language;
+using App2Night.ViewModel; 
 using Xamarin.Forms;
 
 namespace App2Night.View
 {
-    public class SettingPage : ContentPageWithInfo<SettingViewModel> { 
-        BoxView _topBoxView = new BoxView
-        {
-            HeightRequest = 1
-        };
-        public Color SeperatorColor
-        {
-            get { return (Color)GetValue(SeperatorColorProperty); }
-            set { SetValue(SeperatorColorProperty, value); }
-        }
-        public static BindableProperty SeperatorColorProperty = BindableProperty.Create(nameof(SeperatorColor),
-            typeof(Color), typeof(SettingPage), Color.Accent,
-            propertyChanged: (bindable, value, newValue) => ColorChanged(bindable, (Color)value, (Color)newValue));
+    public class SettingPage : ContentPageWithInfo<SettingViewModel> {
 
-        private static void ColorChanged(BindableObject bindable, Color oldValue, Color newValue)
-        {
-            SettingPage thisListView = (SettingPage)bindable;
-            thisListView._topBoxView.Color = newValue;
-        }
+        Picker _languagePicker = new Picker();
+
         public SettingPage()
-        {
-            ColorChanged(this, SeperatorColor, SeperatorColor);
-            // TODO Set Settingsoption
+        { 
+            
+            BindToViewModel(_languagePicker, Picker.SelectedIndexProperty, vm => vm.SelectedLanguage);
+
             var stackLayout = new StackLayout
             {
-                Children =
-                {
-                    new Label
-                    {
-                        Text = "Privacy",
-                        FontSize = 20
-                    },
-                    _topBoxView,
-                    new Grid
-                    {
-                        ColumnDefinitions = new ColumnDefinitionCollection
-                        {
-                            new ColumnDefinition {Width = new GridLength(50, GridUnitType.Star)},
-                            new ColumnDefinition {Width = new GridLength(50, GridUnitType.Star)}
-                        },
-                        Children =
-                        {
-                            {
-                                new Label
-                                {
-                                    Text = "Setting",
-                                    HorizontalOptions = LayoutOptions.Start
-                                },
-                                0, 0
-                            },
-                            {new Switch
-                            {
-                                HorizontalOptions = LayoutOptions.End
-                            }, 1, 0}
-                        }
-                    }
-                }
+                 Children =
+                 {
+                     new Label {Text = AppResources.PreferedLanguage},
+                     _languagePicker
+                 }
             };
-            Content = new ContentView
+            Content = stackLayout;
+        }
+
+        public override void OnViewModelSet()
+        {
+            base.OnViewModelSet();
+            foreach (Tuple<string, CultureInfo> culture in ViewModel.Cultures)
             {
-                Content = stackLayout,
-                BackgroundColor = Color.White
-            };
+                _languagePicker.Items.Add(culture.Item1);
+            }
+            _languagePicker.SelectedIndex = 0;
         }
     }
 }

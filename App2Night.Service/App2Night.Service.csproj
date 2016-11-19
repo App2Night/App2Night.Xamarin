@@ -46,6 +46,7 @@
     <Compile Include="Helper\ConvertHelper.cs" />
     <Compile Include="Helper\CoordinateHelper.cs" />
     <Compile Include="Helper\DebugHelper.cs" />
+    <Compile Include="Helper\PlatformCulture.cs" />
     <Compile Include="Interface\IAlertService.cs" />
     <Compile Include="Interface\IDataService.cs" />
     <Compile Include="Interface\IClientService.cs" />

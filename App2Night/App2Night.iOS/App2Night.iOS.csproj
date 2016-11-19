@@ -104,6 +104,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Reachability.cs" />
+    <Compile Include="Service\iOSCultureService.cs" />
     <None Include="app.config" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist">
@@ -223,6 +224,10 @@
     <ProjectReference Include="..\..\App2Night.Model\App2Night.Model.csproj">
       <Project>{2CB6E00C-B477-45A4-A455-8BE9A3B0AD49}</Project>
       <Name>App2Night.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\App2Night.Service\App2Night.Service.csproj">
+      <Project>{CF6B0541-17AF-4FAA-BB46-6D6A715F725F}</Project>
+      <Name>App2Night.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\App2Night\App2Night.csproj">
       <Project>{82039704-FDA9-4BFF-A0ED-0FD841A1AB52}</Project>

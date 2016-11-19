@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
+using App2Night.Data.Language;
 using App2Night.DependencyService;
 using App2Night.Model.Model;
 using App2Night.Service.Helper;
@@ -32,6 +33,13 @@ namespace App2Night
                     Xamarin.Forms.DependencyService.Get<IAndroidAppLookupService>()
                         .DoesAppExist("com.google.android.apps.maps");
             }
+
+            if (Device.OS == TargetPlatform.iOS || Device.OS == TargetPlatform.Android)
+            {
+                var ci = Xamarin.Forms.DependencyService.Get<ICultureService>().GetCurrentCultureInfo();
+                AppResources.Culture = ci; // set the RESX for resource localization
+                Xamarin.Forms.DependencyService.Get<ICultureService>().SetLocale(ci); // set the Thread for locale-aware methods
+            }
         }
 
         protected override void OnStart()
@@ -41,12 +49,12 @@ namespace App2Night
 
             // Set MasterDetailPage
             SetUpMasterDetailPage<NavigationViewModel>();
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (DashboardViewModel), "Dashboard", "\uf015"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (PartyPickerViewModel), "Pick a party", "\uf29b"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (CreatePartyViewModel), "Create", "\uf271"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (HistoryViewModel), "History", "\uf187"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (SettingViewModel), "Setting", "\uf085"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (AboutTabbedViewModel), "About", "\uf05a"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof (DashboardViewModel), AppResources.Dashboard, "\uf015"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof (PartyPickerViewModel), AppResources.PickAParty, "\uf29b"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof (CreatePartyViewModel), AppResources.CreateAParty, "\uf271"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof (HistoryViewModel), AppResources.PartyHistory, "\uf187"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof (SettingViewModel), AppResources.Settings, "\uf085"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof (AboutTabbedViewModel), AppResources.About, "\uf05a"));
 
             //TODO Check if token is available and refresh it to test if it is still valid
             var loggedIn = false;

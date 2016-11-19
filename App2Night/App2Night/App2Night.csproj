@@ -69,6 +69,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AppResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="DependencyService\ICultureService.cs" />
     <Compile Include="DependencyService\IUserLocationService.cs" />
     <Compile Include="DependencyService\IAndroidAppLookupService.cs" />
     <Compile Include="CustomMasterDetailData.cs" />

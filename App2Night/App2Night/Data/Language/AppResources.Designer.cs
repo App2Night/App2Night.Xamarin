@@ -62,6 +62,15 @@ namespace App2Night.Data.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to About.
+        /// </summary>
+        public static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to I accept the terms and conditions..
         /// </summary>
         public static string AcceptAgb {
@@ -80,6 +89,24 @@ namespace App2Night.Data.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Create a party.
+        /// </summary>
+        public static string CreateAParty {
+            get {
+                return ResourceManager.GetString("CreateAParty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Dashboard.
+        /// </summary>
+        public static string Dashboard {
+            get {
+                return ResourceManager.GetString("Dashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to E-Mail Adress.
         /// </summary>
         public static string EmailAdress {
@@ -89,11 +116,47 @@ namespace App2Night.Data.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Recent parties.
+        /// </summary>
+        public static string PartyHistory {
+            get {
+                return ResourceManager.GetString("PartyHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Password.
         /// </summary>
         public static string Password {
             get {
                 return ResourceManager.GetString("Password", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Find a party.
+        /// </summary>
+        public static string PickAParty {
+            get {
+                return ResourceManager.GetString("PickAParty", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Prefered language.
+        /// </summary>
+        public static string PreferedLanguage {
+            get {
+                return ResourceManager.GetString("PreferedLanguage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Settings.
+        /// </summary>
+        public static string Settings {
+            get {
+                return ResourceManager.GetString("Settings", resourceCulture);
             }
         }
         
