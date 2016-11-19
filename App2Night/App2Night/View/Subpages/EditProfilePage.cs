@@ -54,9 +54,9 @@ namespace App2Night.View.Subpages
 			BindToViewModel(_genderPicker, EnumBindablePicker<Gender>.SelectedItemProperty, vm => vm.User.Gender);
 
 			// set event handler
-            _okBtn.ButtonTapped += OnOkBtnTapped;
+			_okBtn.ButtonTapped += OnOkBtnTapped;
             // set Content with two grids. first one contains all information about the user. last one has a cancel and ok btn.
-			StackLayout grid = new StackLayout()
+			StackLayout stackLayout = new StackLayout()
             {
                 Children =
                 {
@@ -66,29 +66,29 @@ namespace App2Night.View.Subpages
 					_ageEntry,
 					_addressEntry,
 					_genderPicker,
-                        new BoxView
+                    new BoxView
+                    {
+                       HeightRequest = 1,
+                       BackgroundColor = Color.Black
+                    },
+                    new Grid
+                    {
+                        ColumnDefinitions = new ColumnDefinitionCollection
                         {
-                            HeightRequest = 1,
-                            BackgroundColor = Color.Black
+                            new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                            new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
                         },
-                        new Grid
+                        Children =
                         {
-                            ColumnDefinitions = new ColumnDefinitionCollection
-                            {
-                                new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
-                                new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
-                            },
-                            Children =
-                            {
-                                {_cancelBtn, 0, 0},
-                                {_okBtn, 1, 0},
-                            }
+                            {_cancelBtn, 0, 0},
+                            {_okBtn, 1, 0},
+                        }
                     }
                 }
             };
 			var mainScroll = new ScrollView
 			{
-				Content = grid,
+				Content = stackLayout,
 				Orientation = ScrollOrientation.Vertical
 			};
 			Content = mainScroll;
@@ -96,8 +96,45 @@ namespace App2Night.View.Subpages
 
         private void OnOkBtnTapped(object sender, EventArgs e)
         {
-            // TODO handle tap
+			if (_okBtn.Command != null)
+			{
+				var animation = new Animation(d =>
+				{
+					_okBtn.Scale = d;
+				}, 1, 1.6);
+				var nextAnimation = new Animation(d =>
+				{
+					_okBtn.Scale = d;
+				}, 1.6, 1);
+				animation.Commit(this, "Scale", finished: delegate
+				{
+					nextAnimation.Commit(this, "Descale");
+				});
+				_okBtn.Command.Execute(null);
+			}
         }
+
+		private void OnCancelBtnTapped(object sender, EventArgs e)
+		{
+			if (_cancelBtn.Command != null)
+			{
+				var animation = new Animation(d =>
+				{
+					_cancelBtn.Scale = d;
+				}, 1, 1.6);
+				var nextAnimation = new Animation(d =>
+				{
+					_cancelBtn.Scale = d;
+				}, 1.6, 1);
+				animation.Commit(this, "Scale", finished: delegate
+				{
+					nextAnimation.Commit(this, "Descale");
+				});
+				_cancelBtn.Command.Execute(null);
+			}
+		}
+
+
 
         public override void Dispose()
         {
