@@ -95,6 +95,36 @@ namespace App2Night.Data.Language {
             }
         }
         
+        public static string Description {
+            get {
+                return ResourceManager.GetString("Description", resourceCulture);
+            }
+        }
+        
+        public static string StrName {
+            get {
+                return ResourceManager.GetString("StrName", resourceCulture);
+            }
+        }
+        
+        public static string HNumber {
+            get {
+                return ResourceManager.GetString("HNumber", resourceCulture);
+            }
+        }
+        
+        public static string Location {
+            get {
+                return ResourceManager.GetString("Location", resourceCulture);
+            }
+        }
+        
+        public static string Zipcode {
+            get {
+                return ResourceManager.GetString("Zipcode", resourceCulture);
+            }
+        }
+        
         public static string Address {
             get {
                 return ResourceManager.GetString("Address", resourceCulture);
@@ -110,6 +140,42 @@ namespace App2Night.Data.Language {
         public static string EditProfile {
             get {
                 return ResourceManager.GetString("EditProfile", resourceCulture);
+            }
+        }
+        
+        public static string CreateParty {
+            get {
+                return ResourceManager.GetString("CreateParty", resourceCulture);
+            }
+        }
+        
+        public static string Dashboard {
+            get {
+                return ResourceManager.GetString("Dashboard", resourceCulture);
+            }
+        }
+        
+        public static string PickParty {
+            get {
+                return ResourceManager.GetString("PickParty", resourceCulture);
+            }
+        }
+        
+        public static string Create {
+            get {
+                return ResourceManager.GetString("Create", resourceCulture);
+            }
+        }
+        
+        public static string Setting {
+            get {
+                return ResourceManager.GetString("Setting", resourceCulture);
+            }
+        }
+        
+        public static string About {
+            get {
+                return ResourceManager.GetString("About", resourceCulture);
             }
         }
         

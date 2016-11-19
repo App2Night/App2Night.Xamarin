@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
+using App2Night.Data.Language;
 using App2Night.DependencyService;
 using App2Night.Model.Model;
 using App2Night.Service.Helper;
@@ -41,12 +42,12 @@ namespace App2Night
 
             // Set MasterDetailPage
             SetUpMasterDetailPage<NavigationViewModel>();
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (DashboardViewModel), "Dashboard", "\uf015"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (PartyPickerViewModel), "Pick a party", "\uf29b"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (CreatePartyViewModel), "Create", "\uf271"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (HistoryViewModel), "History", "\uf187"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (SettingViewModel), "Setting", "\uf085"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (AboutTabbedViewModel), "About", "\uf05a"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof (DashboardViewModel), AppResources.Dashboard, "\uf015"));
+			AddSiteToDetailPages(new CustomMasterDetailData(typeof (PartyPickerViewModel), AppResources.PickParty, "\uf29b"));
+			AddSiteToDetailPages(new CustomMasterDetailData(typeof (CreatePartyViewModel), AppResources.Create, "\uf271"));
+			AddSiteToDetailPages(new CustomMasterDetailData(typeof (HistoryViewModel), AppResources.History, "\uf187"));
+			AddSiteToDetailPages(new CustomMasterDetailData(typeof (SettingViewModel), AppResources.Setting, "\uf085"));
+			AddSiteToDetailPages(new CustomMasterDetailData(typeof (AboutTabbedViewModel), AppResources.About, "\uf05a"));
 
             //TODO Check if token is available and refresh it to test if it is still valid
             var loggedIn = false;
