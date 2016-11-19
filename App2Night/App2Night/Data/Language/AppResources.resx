@@ -138,4 +138,16 @@
   <data name="Username" xml:space="preserve">
     <value>Username</value>
   </data>
+	<data name="Name" xml:space="preserve">
+    <value>Username</value>
+  </data>
+	<data name="Address" xml:space="preserve">
+    <value>Address</value>
+  </data>
+	<data name="Age" xml:space="preserve">
+    <value>Age</value>
+  </data>
+	<data name="EditProfile" xml:space="preserve">
+    <value>Edit Profile</value>
+  </data>
 </root>

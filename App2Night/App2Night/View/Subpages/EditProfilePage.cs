@@ -1,5 +1,7 @@
 ﻿using System;
 using App2Night.CustomView.View;
+using App2Night.CustomViews;
+using App2Night.Data.Language;
 using App2Night.Model.Enum;
 using App2Night.Model.Model;
 using App2Night.ViewModel.Subpages;
@@ -12,13 +14,13 @@ namespace App2Night.View.Subpages
     public class EditProfilePage : MvvmNanoContentPage<EditProfileViewModel>
     {
 		#region Nodes
-		readonly InputContainer<Entry> _nameEntry = new InputContainer<Entry> { Input = { Placeholder = "Name" }, Image ="\uf128", ValidationVisible = true };
+		readonly InputContainer<Entry> _nameEntry = new InputContainer<Entry> { Input = { Placeholder = AppResources.Name }, Image ="\uf128", ValidationVisible = true };
 
-		readonly InputContainer<Entry> _emailEntry = new InputContainer<Entry>{ Input = { Placeholder = "Email Address" }, Image = "\uf003", ValidationVisible = true };
+		readonly InputContainer<Entry> _emailEntry = new InputContainer<Entry>{ Input = { Placeholder = AppResources.EmailAdress}, Image = "\uf003", ValidationVisible = true };
 
-		readonly InputContainer<Entry> _addressEntry = new InputContainer<Entry>{ Input = { Placeholder = "Address" }, Image = "\uf1ae", ValidationVisible = true };
+		readonly InputContainer<Entry> _addressEntry = new InputContainer<Entry>{ Input = { Placeholder = AppResources.Address }, Image = "\uf1ae", ValidationVisible = true };
 
-		readonly InputContainer<Entry> _ageEntry = new InputContainer<Entry> { Input = { Placeholder = "Age", Keyboard = Keyboard.Numeric }, Image = "\uf1ae", ValidationVisible = true };
+		readonly InputContainer<Entry> _ageEntry = new InputContainer<Entry> { Input = { Placeholder = AppResources.Age, Keyboard = Keyboard.Numeric }, Image = "\uf1ae", ValidationVisible = true };
 
 		readonly InputContainer<EnumBindablePicker<Gender>> _genderPicker = new InputContainer<EnumBindablePicker<Gender>>{ Image = "\uf183", ValidationVisible = true };
 
@@ -43,7 +45,7 @@ namespace App2Night.View.Subpages
         public EditProfilePage()
         {
             // set title and add Command for ViewModel
-            Title = "Edit Profile";
+			Title = AppResources.EditProfile;
 			// bind to view model
 			BindToViewModel(_cancelBtn, CustomButton.CommandProperty, vm => vm.MoveToCancelCommand);
             BindToViewModel(_okBtn, CustomButton.CommandProperty, vm => vm.MoveTOkCommand);
