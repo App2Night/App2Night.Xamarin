@@ -11,10 +11,7 @@ using Xamarin.Forms;
 namespace App2Night.Service.Service
 {
     public class AlertService : IAlertService
-    {
-        private System.Drawing.Color SuccessColor
-            => ((Color) Application.Current.Resources["SuccessColor"]).ToSystemDrawingColor();
-
+    {  
         public void UserCreationFinished(Result requestResult, string username)
         {
             if (requestResult.Success)
@@ -23,12 +20,12 @@ namespace App2Night.Service.Service
                 Device.BeginInvokeOnMainThread(async ()=> await UserDialogs.Instance.AlertAsync(new AlertConfig
                 {
                     Title = "User created!",
-                    Message = $"Welcome to App2Night {username}! We send you an e-mail with an confirmation link. You can use all features after confirming your account.",
+                    Message = $"Welcome to App2Night {username}! We send you an e-mail with a confirmation link. You can create parties after confirming your account.",
                     OkText = "I understand."
                 })); 
             }
             else
-                HandleFailure(requestResult, "User creation failed");
+                DefaultFailureHandler(requestResult, "User creation failed");
         }
 
         public void PartyPullFinished(Result<IEnumerable<Party>>  requestResult)
@@ -40,7 +37,7 @@ namespace App2Night.Service.Service
                 using (UserDialogs.Instance.Toast(createToastConfig(message, ToastState.Success))) { }
             }
             else
-                HandleFailure(requestResult, "Searching for parties failed.");
+                DefaultFailureHandler(requestResult, "Searching for parties failed.");
         }
 
         public void LoginFinished(Result requestResult)
@@ -52,12 +49,12 @@ namespace App2Night.Service.Service
                 UserDialogs.Instance.Toast(createToastConfig(message, ToastState.Success));
             }
             else
-                HandleFailure(requestResult, "Login failed");
+                DefaultFailureHandler(requestResult, "Login failed");
         }
 
-        void HandleFailure(Result result, string title)
+        void DefaultFailureHandler(Result result, string title)
         {
-            var message = "The last request got lost in the internet and we can't find it anymore :( " +
+            var message = "The last request got lost and we can't find it anymore :( " +
                           "Dont feel betrayed, we will handle your future requests even more carefull and give him more time! " +
                           "To help us handling your request, please make sure you are actually connected to the internet.";
             Device.BeginInvokeOnMainThread(async () =>
