@@ -18,7 +18,7 @@ namespace App2Night.View.Subpages
 
             var generalViewSize = 150;
             var iconImage = new CachedImage() {Margin = 8};
-            iconImage.SetImage("App2Night.Data.Image.icon.png", SourceOrigin.File);
+            iconImage.SetImage("App2Night.Data.Image.icon.png", SourceOrigin.Resource);
             var generalView = new Grid
             {
                 ColumnDefinitions =

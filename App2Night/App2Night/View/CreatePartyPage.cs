@@ -1,6 +1,7 @@
 ﻿using System;
 using App2Night.CustomView.Page;
 using App2Night.CustomView.View;
+using App2Night.Data.Language;
 using App2Night.Model.Enum;
 using App2Night.ViewModel;
 using Xamarin.Forms;
@@ -17,14 +18,15 @@ namespace App2Night.View
 
         private InputContainer<Entry> _entryName = new InputContainer<Entry>
         {
-            Input = {Placeholder = "Name"},
+			Input = {Placeholder = AppResources.Name},
+			ValidationVisible = true,
             FontSize = 35,
 			Image = "\uf1ae"
         };
 
         private InputContainer<Entry> _descriptionEntry = new InputContainer<Entry>
         {
-            Input = {Placeholder = "Description"},
+			Input = {Placeholder = AppResources.Description},
 			Image = "\uf040",
             HeightRequest = 100,
             FontSize = 35,
@@ -48,25 +50,25 @@ namespace App2Night.View
 
         private InputContainer<Entry> _streetEntry = new InputContainer<Entry>
         {
-            Input = {Placeholder = "Street name"},
+			Input = {Placeholder = AppResources.StrName},
             FontSize = 35,
         };
 
         private InputContainer<Entry> _numberEntry = new InputContainer<Entry>
         {
-            Input = {Keyboard = Keyboard.Numeric, Placeholder = "Number"},
+			Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.HNumber},
             FontSize = 35,
         };
 
         private InputContainer<Entry> _locationEntry = new InputContainer<Entry>
         {
-            Input = {Placeholder = "Loaction"},
+			Input = {Placeholder = AppResources.Location},
             FontSize = 35,
         };
 
         InputContainer<Entry> _zipCodetEntry = new InputContainer<Entry>
         {
-            Input = {Keyboard = Keyboard.Numeric, Placeholder = "Zipcode"},
+			Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.Zipcode},
             FontSize = 35,
         };
 
@@ -111,7 +113,7 @@ namespace App2Night.View
             // set tap gesture reconizer
             _tapGesture.Tapped += LoadImage;
             // set title of the page
-            Title = "Create Party";
+            Title = AppResources.CreateParty;
             _image.IsVisible = false;
             // Change grid columns and rows if the device is windows
             if (Device.OS == TargetPlatform.Windows)
@@ -120,7 +122,7 @@ namespace App2Night.View
             // set Content
             _tableView.Root = new TableRoot
             {
-                new TableSection("Description")
+				new TableSection(AppResources.Description)
                 {
                     new ViewCell {View = _entryName},
                     new ViewCell {View = _descriptionEntry},
@@ -128,7 +130,7 @@ namespace App2Night.View
                     new ViewCell {View = _timePicker},
                     new ViewCell {View = _datePicker},
                 },
-                new TableSection("Orte")
+				new TableSection(AppResources.Location)
                 {
                     new ViewCell {View = _map},
                     new ViewCell {View = new Grid
