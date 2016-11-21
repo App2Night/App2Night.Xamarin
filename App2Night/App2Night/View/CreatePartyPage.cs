@@ -114,7 +114,21 @@ namespace App2Night.View
             _tapGesture.Tapped += LoadImage;
             // set title of the page
             Title = AppResources.CreateParty;
-            _image.IsVisible = false;
+			// bind to view models
+			BindToViewModel(_entryName.Input, Entry.TextProperty, vm => vm.Name);
+			BindToViewModel(_entryName, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidName);
+			BindToViewModel(_descriptionEntry.Input, Entry.TextProperty, vm => vm.Description);
+			BindToViewModel(_descriptionEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidDescription);
+			BindToViewModel(_musicGenreSwitch.Input, EnumBindablePicker<MusicGenre>.SelectedItemProperty, vm => vm.MusicGenre);
+			// date and time
+			BindToViewModel(_datePicker.Input, DatePicker.DateProperty, vm => vm.Date);
+			BindToViewModel(_timePicker.Input, TimePicker.TimeProperty, vm => vm.Time);
+			// address
+			BindToViewModel(_streetEntry.Input, Entry.TextProperty, vm => vm.StreetName);
+			BindToViewModel(_numberEntry, Entry.TextProperty, vm => vm.HouseNumber);
+			BindToViewModel(_locationEntry.Input, Entry.TextProperty, vm => vm.LocationName);
+			BindToViewModel(_zipCodetEntry.Input, Entry.TextProperty, vm => vm.Zipcode);
+			_image.IsVisible = false;
             // Change grid columns and rows if the device is windows
             if (Device.OS == TargetPlatform.Windows)
             {
@@ -133,6 +147,7 @@ namespace App2Night.View
 				new TableSection(AppResources.Location)
                 {
                     new ViewCell {View = _map},
+					// street name and number
                     new ViewCell {View = new Grid
                     {
                         ColumnDefinitions =
@@ -146,6 +161,7 @@ namespace App2Night.View
                             {_numberEntry, 1,0}
                         }
                     }},
+					// location name and zipcode
                     new ViewCell {View = new Grid
                     {
                         ColumnDefinitions =
@@ -160,6 +176,7 @@ namespace App2Night.View
                         }
 
                     }},
+					// accept and remove btn
 					new ViewCell {View = new Grid
 					{
 						ColumnDefinitions =
