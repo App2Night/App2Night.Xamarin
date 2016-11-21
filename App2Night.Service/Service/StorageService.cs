@@ -40,7 +40,7 @@ namespace App2Night.Service.Service
             return encryptedData;
         } 
 
-        public async Task<Storage> ResumeStorage()
+        public async Task<Storage> OpenStorage()
         {
             var folder = await GetFolder();
             var fileExists = await folder.CheckExistsAsync(_fileName);

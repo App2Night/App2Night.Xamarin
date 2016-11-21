@@ -15,6 +15,13 @@ namespace App2Night.Service.Interface
         event EventHandler PartiesUpdated;
 
         event EventHandler UserUpdated;
+        
+        /// <summary>
+        /// Sets the token.
+        /// </summary>
+        /// <param name="token">The new token.</param>
+        /// <returns>Wether or not the token is valid.</returns>
+        Task<bool> SetToken(Token token);
 
         /// <summary>
         /// Clears all data from the device storage and current objects, including the logged in user.

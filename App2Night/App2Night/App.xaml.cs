@@ -1,7 +1,4 @@
-﻿using System;
-using System.Diagnostics;
-using System.Threading.Tasks;
-using Acr.UserDialogs;
+﻿using System.Threading.Tasks;
 using App2Night.Data.Language;
 using App2Night.DependencyService;
 using App2Night.Model.Model;
@@ -10,7 +7,6 @@ using App2Night.Service.Interface;
 using App2Night.Service.Service;
 using App2Night.ViewModel;
 using MvvmNano;
-using MvvmNano.Forms;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using Xamarin.Forms;
@@ -40,12 +36,7 @@ namespace App2Night
                 AppResources.Culture = ci; // set the RESX for resource localization
                 Xamarin.Forms.DependencyService.Get<ICultureService>().SetLocale(ci); // set the Thread for locale-aware methods
             }
-        }
-
-        async Task SyncOnStartup()
-        {
-            
-        }
+        } 
 
         protected override void OnStart()
         {
@@ -61,13 +52,7 @@ namespace App2Night
             AddSiteToDetailPages(new CustomMasterDetailData(typeof (SettingViewModel), AppResources.Settings, "\uf085"));
             AddSiteToDetailPages(new CustomMasterDetailData(typeof (AboutTabbedViewModel), AppResources.About, "\uf05a"));
 
-            //TODO Check if token is available and refresh it to test if it is still valid
-            var loggedIn = false;
-            if (!loggedIn)
-            {
-                //Prompt the login page if the user is not logged in
-                MvvmNanoIoC.Resolve<NavigationViewModel>().OpenLogin();
-            }
+            
             //Sync the parties
             //Task.Run(async () =>
             //{
@@ -85,6 +70,30 @@ namespace App2Night
             CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
             MvvmNanoIoC.Resolve<IDataService>().PartiesUpdated +=
                 (sender, args) => { CrossGeolocator.Current.StartListeningAsync(1, 100); };
+
+            Task.Run(async ()=> await OnStartSync());
+        }
+
+        private async Task OnStartSync()
+        {
+            //Restore stored token 
+            var storage = await MvvmNanoIoC.Resolve<IStorageService>().OpenStorage();
+            bool isLoggedIn = false;
+            if (storage != null)
+            {
+                isLoggedIn = await MvvmNanoIoC.Resolve<IDataService>().SetToken(storage.Token);
+                //TODO Restore optional data, user info for example.
+            }
+            DebugHelper.PrintDebug(DebugType.Info, isLoggedIn ? "Log in from last session." : "User not logged in. No token available.");
+
+            //Make an inital token refresh 
+            Device.BeginInvokeOnMainThread(async ()=> await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys());
+
+            if (!isLoggedIn)
+            {
+                //Prompt the login page if the user is not logged in
+                MvvmNanoIoC.Resolve<NavigationViewModel>().OpenLogin();
+            }
         }
 
         protected override void SetUpPresenter()

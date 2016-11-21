@@ -30,7 +30,16 @@ namespace App2Night.Service.Service
         public event EventHandler PartiesUpdated;
 		public event EventHandler UserUpdated;
 
-		public Task WipeData()
+        public async Task<bool> SetToken(Token token)
+        {
+            _token = token;
+            var tokenValid = await CheckIfTokenIsValid();
+
+            //Assume that the token is valid.
+            return tokenValid;
+        }
+
+        public Task WipeData()
         {
             //TODO Wipe all data from storage
             throw new NotImplementedException();
@@ -125,6 +134,11 @@ namespace App2Night.Service.Service
             {
                 _token = result.Data;
                 _token.LastRefresh = DateTime.Now;
+                //Save the token to the storage
+                await _storageService.SaveStorage(new Storage
+                {
+                    Token = _token
+                });
             }
             return result;
         }
@@ -147,7 +161,7 @@ namespace App2Night.Service.Service
 
                 if (result.Success)
                 {
-                    _token.LastRefresh = DateTime.Now;
+                    _token.LastRefresh = DateTime.Now; 
                 } 
                 return result;
             }
