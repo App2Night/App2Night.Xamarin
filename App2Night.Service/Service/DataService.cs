@@ -7,6 +7,7 @@ using App2Night.Model.Enum;
 using App2Night.Model.HttpModel;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
+using Newtonsoft.Json.Linq;
 
 namespace App2Night.Service.Service
 {
@@ -14,10 +15,12 @@ namespace App2Night.Service.Service
     {
         private Token _token;
         private readonly IClientService _clientService;
+        private readonly IStorageService _storageService;
 
-        public DataService(IClientService clientService)
+        public DataService(IClientService clientService, IStorageService storageService)
         {
             _clientService = clientService;
+            _storageService = storageService;
         }
 
         public ObservableCollection<Party> InterestingPartys { get; } = new ObservableCollection<Party>();
@@ -99,19 +102,59 @@ namespace App2Night.Service.Service
             {
                 var loginResult = await RequestToken(signUpModels.Username, signUpModels.Password);
                 //TODO Handle what should happen if login request fails
-            }
-
+            } 
             return creationResult;
         }
 
         public async Task<Result>  RequestToken(string username, string password)
         {
-            var result = await _clientService.GetToken(username, password);
+            var tokenRequestObject = new JObject();
+            tokenRequestObject.Add("client_id", "nativeApp");
+            tokenRequestObject.Add("client_secret", "secret"); 
+            tokenRequestObject.Add("grant_type","password");
+            tokenRequestObject.Add("username", username);
+            tokenRequestObject.Add("password", password);
+            tokenRequestObject.Add("scope", "App2NightAPI offline_access");
+            tokenRequestObject.Add("offline_access", "true");
+            var result =
+                    await
+                        _clientService.SendRequest<Token>("/connect/token", RestType.Post,
+                            wwwFormData: tokenRequestObject, endpoint:Endpoint.User, enableHttps: false);
+
             if (result.Success)
             {
                 _token = result.Data;
+                _token.LastRefresh = DateTime.Now;
             }
             return result;
+        }
+
+        public async Task<Result> RefreshToken()
+        {
+            if (_token != null)
+            {
+                //Create object
+                var tokenRefreshObject = new JObject();
+                tokenRefreshObject.Add("client_id", "nativeApp");
+                tokenRefreshObject.Add("client_secret", "secret");
+                tokenRefreshObject.Add("token", _token.RefreshToken);
+                tokenRefreshObject.Add("token_type_hint", "refresh_token");
+
+                var result =
+                    await
+                        _clientService.SendRequest<Token>("connect/revocation", RestType.Post,
+                            wwwFormData: tokenRefreshObject, enableHttps: false, endpoint: Endpoint.User, token: _token.AccessToken);
+
+                if (result.Success)
+                {
+                    _token.LastRefresh = DateTime.Now;
+                } 
+                return result;
+            }
+            return new Result
+            {
+                Success = false
+            };
         }
 
         public Task<Result> RequestNewPasswort(string email)
@@ -154,6 +197,15 @@ namespace App2Night.Service.Service
             } 
             PartiesUpdated?.Invoke(this, EventArgs.Empty);
             return syncResult;
+        }
+
+        async Task<bool> CheckIfTokenIsValid()
+        {
+            if (_token == null) return false;
+            if (_token.ExpirationDate > DateTime.Now) return true;
+            //Try to refreh token
+            var result = await RefreshToken();
+            return result.Success;
         }
 
         void PopulateObservableCollection<TObservable>(TObservable collection, IEnumerable<Party> newObjects) where TObservable : ObservableCollection<Party>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -18,13 +19,21 @@ namespace App2Night.Service.Service
     public class ClientService : IClientService
     { 
 
-        public async Task<Result<TExpectedType>> SendRequest<TExpectedType>(string uri,RestType restType, bool cacheData = false, string query = "", object bodyParameter = null, string token = null, Endpoint endpoint = Endpoint.Api)
+        public async Task<Result<TExpectedType>> SendRequest<TExpectedType>(string uri,
+            RestType restType, 
+            bool cacheData = false, 
+            string urlQuery = "", 
+            object bodyParameter = null, 
+            object wwwFormData = null, 
+            string token = null, 
+            Endpoint endpoint = Endpoint.Api,
+            bool httpsEnabled = true)
         {
             Result<TExpectedType> result = new Result<TExpectedType>();
             
-            //Add the query to the uri if one is stated.
-            if (!string.IsNullOrEmpty(query))
-                uri += query;
+            //Add the urlQuery to the uri if one is stated.
+            if (!string.IsNullOrEmpty(urlQuery))
+                uri += urlQuery;
 
             try
             {
@@ -38,21 +47,36 @@ namespace App2Night.Service.Service
 
                     Stopwatch timer = new Stopwatch();
                     timer.Start();
-                    uri = "api/" + uri;
                     uri = uri.ToLower();
+
+                    //Serialize data 
+                    StringContent content = null;
+                    if (restType == RestType.Post || restType == RestType.Put)
+                    {
+                        
+                        if(bodyParameter != null && wwwFormData != null) throw new Exception("Cant send a x-www-form-urlencoed and body parameter at the same time.");
+                        if (bodyParameter != null)
+                        { 
+                            content = new StringContent(
+                                JsonConvert.SerializeObject(bodyParameter), Encoding.UTF8, "application/json");
+                        }
+                        if (wwwFormData != null)
+                        {  
+                            content = new StringContent(ObjectToWwwForm(wwwFormData), Encoding.UTF8, "application/x-www-form-urlencoded"); 
+                        }
+                    }
+
                     //Execute the request with the proper request type. 
                     switch (restType)
                     {
                         case RestType.Post: 
-                            requestResult = await client.PostAsync(uri, new StringContent(
-                                JsonConvert.SerializeObject(bodyParameter), Encoding.UTF8, "application/json"));
+                            requestResult = await client.PostAsync(uri, content);
                             break;
                         case RestType.Get:
                             requestResult = await client.GetAsync(uri);
                             break;
                         case RestType.Put:
-                            requestResult = await client.PutAsync(uri, new StringContent(
-                                JsonConvert.SerializeObject(bodyParameter), Encoding.UTF8, "application/json"));
+                            requestResult = await client.PutAsync(uri, content);
                             break;
                         case RestType.Delete:
                             requestResult = await client.DeleteAsync(uri);
@@ -85,56 +109,45 @@ namespace App2Night.Service.Service
             return result;
         } 
 
-        public async Task<Result> SendRequest(string uri, RestType restType, bool cacheData = false, string query = "", object bodyParameter = null,
-            string token = null, Endpoint endpoint = Endpoint.Api)
+        public async Task<Result> SendRequest(string uri, RestType restType, bool cacheData = false, string urlQuery = "", object bodyParameter = null, object wwwFormData = null,
+            string token = null, Endpoint endpoint = Endpoint.Api, bool httpsEnabled = true)
         {
-            return await SendRequest<Type>(uri, restType, cacheData, query, bodyParameter, token, endpoint);
-        }
-
-        public async Task<Result<Token>> GetToken(string username, string password)
-        {
-            Result<Token> result = new Result<Token>();
-            try
-            {
-                using (var client = GetClient(Endpoint.User))
-                {
-                    client.BaseAddress = new Uri("http://app2nightuser.azurewebsites.net");
-                    client.DefaultRequestHeaders.Accept.Clear(); 
-                    var query = "client_id=nativeApp&" +
-                                "client_secret=secret&" +
-                                "grant_type=password&" +
-                                $"username={username}&" +
-                                $"password={password}&" +
-                                "scope=App2NightAPI offline_access&" +
-                                "offline_access=true";
-                    var content = new StringContent(
-                        query, Encoding.UTF8, "application/x-www-form-urlencoded");
-                    var requestResult = await client.PostAsync("connect/token", content);
-                    result.StatusCode = (int)requestResult.StatusCode;
-                    if (requestResult.IsSuccessStatusCode)
-                    {
-                        result.Success = true;
-                        var response = await requestResult.Content.ReadAsStringAsync(); 
-                        result.Data = JsonConvert.DeserializeObject<Token>(response);
-                    }
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-                result.RequestFailedToException = true;
-            }
-            return result;
-        }
+            return await SendRequest<Type>(uri, restType, cacheData, urlQuery, bodyParameter, wwwFormData, token, endpoint, httpsEnabled);
+        } 
 
         private HttpClient GetClient(Endpoint endpoint)
         {
             var domain = endpoint == Endpoint.Api ? "app2nightapi" : "app2nightuser";
             HttpClient client = new HttpClient {BaseAddress = new Uri($"https://{domain}.azurewebsites.net")};
-            client.Timeout = TimeSpan.FromSeconds(10);
+            client.Timeout = TimeSpan.FromSeconds(30);
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Host = $"{domain}.azurewebsites.net";
             return client;
         }
-    }
+
+        //Helper
+        /// <summary>
+        /// Converts an object to a formatted x-www-urlformencoded string.
+        /// </summary>
+        /// <param name="data">Oobject.</param>
+        /// <returns>Formatted x-www-urlformencoded string.</returns>
+        string ObjectToWwwForm(object data)
+        {
+            var json = JsonConvert.SerializeObject(data);
+            var dic = JsonConvert.DeserializeObject<Dictionary<string, string>>(json);
+
+            StringBuilder sb = new StringBuilder();
+            foreach (KeyValuePair<string, string> valuePair in dic)
+            {
+                if (!string.IsNullOrEmpty(valuePair.Key) && !string.IsNullOrEmpty(valuePair.Value))
+                {
+                    if (sb.Length > 0) sb.Append("&");
+                    sb.Append(valuePair.Key);
+                    sb.Append("=");
+                    sb.Append(valuePair.Value);
+                }
+            }
+            return sb.ToString();
+        }
+    } 
 }

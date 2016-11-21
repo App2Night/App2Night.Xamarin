@@ -42,6 +42,11 @@ namespace App2Night
             }
         }
 
+        async Task SyncOnStartup()
+        {
+            
+        }
+
         protected override void OnStart()
         {
             RegisterInterfaces();
@@ -109,6 +114,7 @@ namespace App2Night
 
         private void RegisterInterfaces()
         {
+            MvvmNanoIoC.Register<IStorageService, StorageService>();
             MvvmNanoIoC.Register<IAlertService, AlertService>();
             MvvmNanoIoC.Register<IClientService, ClientService>();
             MvvmNanoIoC.RegisterAsSingleton<IDataService, DataService>();

@@ -14,7 +14,7 @@ namespace App2Night.Service.Interface
     {
         event EventHandler PartiesUpdated;
 
-		event EventHandler UserUpdated;
+        event EventHandler UserUpdated;
 
         /// <summary>
         /// Clears all data from the device storage and current objects, including the logged in user.
@@ -55,13 +55,13 @@ namespace App2Night.Service.Interface
         /// <returns></returns>
         Task<Result<Party>> CreateParty();
 
-        Task<Result>  DeleteParty();
+        Task<Result> DeleteParty();
 
-        Task<Result>  UpdateParty();
+        Task<Result> UpdateParty();
 
-        Task<Result> UpdateUser(); 
+        Task<Result> UpdateUser();
 
-        Task<Result>  DeleteAccount();
+        Task<Result> DeleteAccount();
 
         Task<Result> CreateUser(SignUp signUpModel);
 
@@ -74,5 +74,7 @@ namespace App2Night.Service.Interface
         Task<Result> RequestToken(string username, string password);
 
         Task<Result> RequestNewPasswort(string email);
+
+        Task<Result> RefreshToken();
     }
 }
