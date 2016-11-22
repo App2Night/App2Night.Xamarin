@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using App2Night.CustomView.Page;
 using App2Night.CustomView.View;
+using App2Night.DependencyService;
 using App2Night.ViewModel.Subpages;
 using MvvmNano;
 using MvvmNano.Forms;
@@ -17,8 +18,11 @@ namespace App2Night.View.Subpages
             SetViewModel(MvvmNanoIoC.Resolve<AboutAppViewModel>());
 
             var generalViewSize = 150;
-            var iconImage = new CachedImage() {Margin = 8};
-            iconImage.SetImage("App2Night.Data.Image.icon.png", SourceOrigin.Resource);
+            var iconImage = new Image
+            {
+                Source = ImageSource.FromResource("App2Night.Data.Image.icon.png"),
+                Margin = new Thickness(8)
+            }; 
             var generalView = new Grid
             {
                 ColumnDefinitions =

@@ -23,14 +23,18 @@ namespace App2Night.ViewModel
 
         private async Task Sync()
         {
-            UserDialogs.Instance.ShowLoading("Sync");
-            var result = await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys();
-            UserDialogs.Instance.HideLoading();
-            UserDialogs.Instance.Toast(
-            new ToastConfig("Sync finished " + (result.Success ? "" : "un") + "successfull.")
+            using (UserDialogs.Instance.Loading("Sync"))
             {
-                BackgroundColor = result.Success ? System.Drawing.Color.LawnGreen : System.Drawing.Color.LightCoral
-            });
+                var result = await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys();
+            
+            }
+        //     UserDialogs.Instance.Toast(
+
+        //new ToastConfig("Sync finished " + (result.Success ? "" : "un") + "successfull.")
+        //    {
+        //        BackgroundColor = result.Success ? System.Drawing.Color.LawnGreen : System.Drawing.Color.LightCoral
+        //    });
+
         } 
     }
 }

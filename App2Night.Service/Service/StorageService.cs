@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Diagnostics;
+using System.Threading.Tasks;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
 using Newtonsoft.Json;
@@ -10,14 +12,21 @@ namespace App2Night.Service.Service
     {
         private string _folderName = "SStorage";
         private string _fileName = "SStore.txt";
+        private Storage _storage;
 
-        public async Task SaveStorage(Storage storage)
+        public Storage Storage
+        {
+            get { return _storage; }
+            set { _storage = value; }
+        }
+
+        public async Task SaveStorage()
         { 
             var folder = await GetFolder();
             var file = await folder.CreateFileAsync(_fileName,
                 CreationCollisionOption.ReplaceExisting);
 
-            string data = JsonConvert.SerializeObject(storage);
+            string data = JsonConvert.SerializeObject(Storage);
             data = EncryptString(data); 
             await file.WriteAllTextAsync(data);
         }
@@ -40,21 +49,32 @@ namespace App2Night.Service.Service
             return encryptedData;
         } 
 
-        public async Task<Storage> OpenStorage()
+        public async Task OpenStorage()
         {
+            var storage = new Storage();
+            var cached = false;
             var folder = await GetFolder();
             var fileExists = await folder.CheckExistsAsync(_fileName);
-            if (fileExists == ExistenceCheckResult.NotFound)
-                //File does not exist, return null
-                return null;
-            else
-            //File exists return data
-            {
-                var file = await folder.GetFileAsync(_fileName);
-                string encryptedString = await file.ReadAllTextAsync();
-                var decryptedString = DecriptString(encryptedString);
-                var storage = JsonConvert.DeserializeObject<Storage>(decryptedString);
-                return storage;
+            if (fileExists == ExistenceCheckResult.FileExists) 
+            //File exists, get data
+            { 
+                try
+                {
+                    var file = await folder.GetFileAsync(_fileName);
+                    string encryptedString = await file.ReadAllTextAsync();
+                    var decryptedString = DecriptString(encryptedString);
+                    storage = JsonConvert.DeserializeObject<Storage>(decryptedString);
+                    cached = true;
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                }
+                finally
+                {
+                    Storage = storage;
+                    if (!cached) await SaveStorage();
+                }
             }
         }
     }

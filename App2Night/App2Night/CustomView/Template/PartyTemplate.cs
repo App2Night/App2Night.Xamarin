@@ -9,10 +9,11 @@ namespace App2Night.CustomView.Template
     /// </summary>
     public class PartyTemplate : ViewCell
     {
-        private CachedImage _pictureImage = new CachedImage
+        private Image _pictureImage = new Image
         {
+            Source = ImageSource.FromResource("App2Night.Data.Image.icon.png"),
             VerticalOptions = LayoutOptions.Center
-        };
+        };  
 
         private Label _nameLabel = new Label
         {
@@ -47,8 +48,7 @@ namespace App2Night.CustomView.Template
         }
 
         public PartyTemplate()
-        {
-            _pictureImage.SetImage("App2Night.Data.Image.default.png", SourceOrigin.Resource);
+        { 
             _nameLabel.SetBinding(Label.TextProperty, nameof(Party.Name));
             _grid= new Grid
             {

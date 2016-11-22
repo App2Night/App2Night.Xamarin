@@ -40,7 +40,6 @@
     </Compile>
     <Compile Include="CustomPresenter.cs" />
     <Compile Include="CustomView\Template\MenuTemplate.cs" />
-    <Compile Include="CustomView\View\CachedImage.cs" />
     <Compile Include="CustomView\View\InputContainer.cs" />
     <Compile Include="CustomView\View\EnumBindablePicker.cs" />
     <Compile Include="CustomView\Page\ContentPageWithInfo.cs" />

@@ -5,7 +5,8 @@ namespace App2Night.Service.Interface
 {
     public interface IStorageService
     {
-        Task SaveStorage(Storage storage);
-        Task<Storage> OpenStorage();
+        Storage Storage { get; set; } 
+        Task SaveStorage();
+        Task OpenStorage();
     }
 }

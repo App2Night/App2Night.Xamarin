@@ -21,11 +21,12 @@ namespace App2Night.View
             HeightRequest = 200
         };
 
-        CachedImage profilePicture = new CachedImage()
+        Image profilePicture = new Image 
         {
             HeightRequest = 100,
             WidthRequest = 100,
-            Margin = new Thickness(10) 
+            Margin = new Thickness(10),
+            Source = ImageSource.FromResource("App2Night.Data.Image.icon.png")
         }; 
 
         private HorizontalGallerieView historyGallerieView = new HorizontalGallerieView
@@ -48,9 +49,7 @@ namespace App2Night.View
         }; 
 
         public DashboardPage()
-        { 
-            profilePicture.SetImage("App2Night.Data.Image.default.png", SourceOrigin.Resource);
-
+        {   
             //User info view
             var userInfoView = new Grid
             {

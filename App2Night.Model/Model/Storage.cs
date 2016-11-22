@@ -4,5 +4,9 @@
     {
         public Token Token { get; set; }
 
+        public int FilterRadius { get; set; } = 20;
+
+        public bool UseGps { get; set; } = true;
+
     }
 }

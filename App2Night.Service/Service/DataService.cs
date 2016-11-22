@@ -8,12 +8,18 @@ using App2Night.Model.HttpModel;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
 using Newtonsoft.Json.Linq;
+using Plugin.Connectivity;
 
 namespace App2Night.Service.Service
 {
     public class DataService : IDataService 
     {
-        private Token _token;
+        private Token Token
+        {
+            get { return _storageService.Storage.Token; }
+            set { _storageService.Storage.Token = value; }
+        }
+
         private readonly IClientService _clientService;
         private readonly IStorageService _storageService;
 
@@ -32,7 +38,11 @@ namespace App2Night.Service.Service
 
         public async Task<bool> SetToken(Token token)
         {
-            _token = token;
+            Token = token;
+            //Cant check if the token is valid if user is offline, assume that the token is valid.
+            //User will get logged out if the next request getsends
+            //TODO add automatic token check when user gets online
+            if (!CrossConnectivity.Current.IsConnected) return true;
             var tokenValid = await CheckIfTokenIsValid();
 
             //Assume that the token is valid.
@@ -132,36 +142,34 @@ namespace App2Night.Service.Service
 
             if (result.Success)
             {
-                _token = result.Data;
-                _token.LastRefresh = DateTime.Now;
+                Token = result.Data;
+                Token.LastRefresh = DateTime.Now;
                 //Save the token to the storage
-                await _storageService.SaveStorage(new Storage
-                {
-                    Token = _token
-                });
+                await _storageService.SaveStorage();
             }
             return result;
         }
 
         public async Task<Result> RefreshToken()
         {
-            if (_token != null)
+            if (Token != null)
             {
                 //Create object
                 var tokenRefreshObject = new JObject();
                 tokenRefreshObject.Add("client_id", "nativeApp");
                 tokenRefreshObject.Add("client_secret", "secret");
-                tokenRefreshObject.Add("token", _token.RefreshToken);
+                tokenRefreshObject.Add("token", Token.RefreshToken);
                 tokenRefreshObject.Add("token_type_hint", "refresh_token");
 
                 var result =
                     await
                         _clientService.SendRequest<Token>("connect/revocation", RestType.Post,
-                            wwwFormData: tokenRefreshObject, enableHttps: false, endpoint: Endpoint.User, token: _token.AccessToken);
+                            wwwFormData: tokenRefreshObject, enableHttps: false, endpoint: Endpoint.User, token: Token.AccessToken);
 
                 if (result.Success)
                 {
-                    _token.LastRefresh = DateTime.Now; 
+                    Token.LastRefresh = DateTime.Now;
+                    await _storageService.SaveStorage();
                 } 
                 return result;
             }
@@ -177,9 +185,9 @@ namespace App2Night.Service.Service
         }
 
         public async Task<Result<IEnumerable<Party>>>  RefreshPartys()
-        {
+        { 
             var syncResult =
-                await _clientService.SendRequest<IEnumerable<Party>>("Party", RestType.Get, token: _token?.AccessToken);
+                await _clientService.SendRequest<IEnumerable<Party>>("Party", RestType.Get, token: Token?.AccessToken);
             //Check if the request was a success
             if (syncResult.Success)
             {
@@ -215,8 +223,8 @@ namespace App2Night.Service.Service
 
         async Task<bool> CheckIfTokenIsValid()
         {
-            if (_token == null) return false;
-            if (_token.ExpirationDate > DateTime.Now) return true;
+            if (Token == null) return false;
+            if (Token.ExpirationDate > DateTime.Now) return true;
             //Try to refreh token
             var result = await RefreshToken();
             return result.Success;

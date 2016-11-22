@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Acr.UserDialogs;
+﻿using System.Threading.Tasks; 
 using App2Night.Data.Language;
 using App2Night.DependencyService;
 using App2Night.Model.Model;
@@ -8,6 +7,7 @@ using App2Night.Service.Interface;
 using App2Night.Service.Service;
 using App2Night.ViewModel;
 using MvvmNano;
+using Plugin.Connectivity;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using Xamarin.Forms;
@@ -16,7 +16,7 @@ namespace App2Night
 {
     public partial class App
     {
-        public static bool MapAvailable { get; private set; }
+        public static bool MapAvailable { get; private set; } 
 
         public App()
         {
@@ -78,13 +78,14 @@ namespace App2Night
         private async Task OnStartSync()
         {
             //Restore stored token 
-            var storage = await MvvmNanoIoC.Resolve<IStorageService>().OpenStorage();
+            await MvvmNanoIoC.Resolve<IStorageService>().OpenStorage();
             bool isLoggedIn = false;
-            if (storage != null)
-            {
-                isLoggedIn = await MvvmNanoIoC.Resolve<IDataService>().SetToken(storage.Token);
-                //TODO Restore optional data, user info for example.
-            }
+            var storage = MvvmNanoIoC.Resolve<IStorageService>().Storage;
+            if (storage.Token != null)
+            { 
+                //Set token from last session and update user information.
+                isLoggedIn = await MvvmNanoIoC.Resolve<IDataService>().SetToken(storage.Token); 
+            }  
             DebugHelper.PrintDebug(DebugType.Info, isLoggedIn ? "Log in from last session." : "User not logged in. No token available.");
 
             //Make an inital token refresh 
@@ -124,7 +125,7 @@ namespace App2Night
 
         private void RegisterInterfaces()
         {
-            MvvmNanoIoC.Register<IStorageService, StorageService>();
+            MvvmNanoIoC.RegisterAsSingleton<IStorageService, StorageService>();
             MvvmNanoIoC.Register<IAlertService, AlertService>();
             MvvmNanoIoC.Register<IClientService, ClientService>();
             MvvmNanoIoC.RegisterAsSingleton<IDataService, DataService>();

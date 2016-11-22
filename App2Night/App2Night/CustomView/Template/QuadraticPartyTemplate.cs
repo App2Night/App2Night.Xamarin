@@ -16,19 +16,20 @@ namespace App2Night.CustomView.Template
         //};
         Label _distanceLabel;
 
-        CachedImage image = new CachedImage()
+        Image image = new Image 
         {
-            InputTransparent = true,
-            Aspect = Aspect.AspectFill
-        };
+            Aspect = Aspect.AspectFill,
+            InputTransparent = true,   
+                Source = ImageSource.FromResource("App2Night.Data.Image.icon.png"),
+                IsOpaque = false
+            };
+ 
 
         public QuadraticPartyTemplate()
         {
             BackgroundColor = Color.White;
             Padding = 8;
-            HasShadow = true;
-
-            image.SetImage("App2Night.Data.Image.default.png", SourceOrigin.Resource);
+            HasShadow = true; 
 
             var titleLabel = new Label()
             {
@@ -77,8 +78,8 @@ namespace App2Night.CustomView.Template
                 },
                 Children =
                 {
-                    image,
-                    new BoxView { Color = Color.Black.MultiplyAlpha(0.2), InputTransparent = true},
+                    //image,
+                    new BoxView { Color = Color.Green.MultiplyAlpha(0.9), InputTransparent = true},
                     _distanceLabel,
                     likeButton,
                     {titleLabel, 0, 1},
