@@ -9,6 +9,7 @@ using App2Night.Model.Model;
 using App2Night.Service.Interface;
 using Newtonsoft.Json.Linq;
 using Plugin.Connectivity;
+using Plugin.Geolocator;
 
 namespace App2Night.Service.Service
 {
@@ -185,9 +186,14 @@ namespace App2Night.Service.Service
         }
 
         public async Task<Result<IEnumerable<Party>>>  RefreshPartys()
-        { 
+        {
+            var location = await CrossGeolocator.Current.GetPositionAsync(500);
+            var radius = _storageService.Storage.FilterRadius;
+
+            string uri = $"?lat={location.Latitude}&lon={location.Latitude}&radius={radius}";
+
             var syncResult =
-                await _clientService.SendRequest<IEnumerable<Party>>("Party", RestType.Get, token: Token?.AccessToken);
+                await _clientService.SendRequest<IEnumerable<Party>>("api/party", RestType.Get, urlQuery: uri, token: Token?.AccessToken);
             //Check if the request was a success
             if (syncResult.Success)
             {
