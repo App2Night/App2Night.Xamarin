@@ -141,8 +141,8 @@
   <data name="PickAParty" xml:space="preserve">
     <value>Find a party</value>
   </data>
-  <data name="PreferedLanguage" xml:space="preserve">
-    <value>Prefered language</value>
+  <data name="GpsSettingHeader" xml:space="preserve">
+    <value>GPS settings</value>
   </data>
   <data name="Settings" xml:space="preserve">
     <value>Settings</value>
@@ -218,5 +218,11 @@
   </data>
   <data name="Dashboard" xml:space="preserve">
     <value>Dashboard</value>
+  </data>
+  <data name="EnableGps" xml:space="preserve">
+    <value>Enable GPS</value>
+  </data>
+  <data name="GpsUsage" xml:space="preserve">
+    <value>We need your position to locate parties near you. You can always disable GPS for this App and set a position manualy.</value>
   </data>
 </root>

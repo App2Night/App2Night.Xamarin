@@ -2,39 +2,45 @@
 using System.Globalization;
 using App2Night.CustomView.Page;
 using App2Night.Data.Language;
-using App2Night.ViewModel; 
+using App2Night.ViewModel;
 using Xamarin.Forms;
 
 namespace App2Night.View
 {
-    public class SettingPage : ContentPageWithInfo<SettingViewModel> {
-
-        Picker _languagePicker = new Picker();
-
+    public class SettingPage : ContentPageWithInfo<SettingViewModel>
+    {
         public SettingPage()
-        { 
-            
-            BindToViewModel(_languagePicker, Picker.SelectedIndexProperty, vm => vm.SelectedLanguage);
+        {
+            //GPS
+            //Slider
+            var gpsRangeSlider = new Slider(5, 200, 1);
+            BindToViewModel(gpsRangeSlider, Slider.ValueProperty, vm => vm.SelectedRange);
+
+            var gpsEnabledSwitch = new Switch
+            {
+                HorizontalOptions = LayoutOptions.End
+            };
+            BindToViewModel(gpsEnabledSwitch, Switch.IsToggledProperty, vm => vm.GpsEnabled);
 
             var stackLayout = new StackLayout
             {
-                 Children =
-                 {
-                     new Label {Text = AppResources.PreferedLanguage},
-                     _languagePicker
-                 }
+                Padding = new Thickness(5),
+                Children =
+                {
+                    new Label {Text = AppResources.GpsSettingHeader},
+                    gpsRangeSlider,
+                    new Grid
+                    {
+                        Children =
+                        {
+                            gpsEnabledSwitch,
+                            new Label {Text = AppResources.EnableGps, HorizontalOptions = LayoutOptions.Start}
+                        }
+                    },
+                    new Label {Text = AppResources.GpsUsage}
+                }
             };
             Content = stackLayout;
-        }
-
-        public override void OnViewModelSet()
-        {
-            base.OnViewModelSet();
-            foreach (Tuple<string, CultureInfo> culture in ViewModel.Cultures)
-            {
-                _languagePicker.Items.Add(culture.Item1);
-            }
-            _languagePicker.SelectedIndex = 0;
         }
     }
 }

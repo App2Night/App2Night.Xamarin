@@ -197,6 +197,33 @@ namespace App2Night.Data.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable GPS.
+        /// </summary>
+        public static string EnableGps {
+            get {
+                return ResourceManager.GetString("EnableGps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to GPS settings.
+        /// </summary>
+        public static string GpsSettingHeader {
+            get {
+                return ResourceManager.GetString("GpsSettingHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to We need your position to locate parties near you. You can always disable GPS for this App and set a position manualy..
+        /// </summary>
+        public static string GpsUsage {
+            get {
+                return ResourceManager.GetString("GpsUsage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to History.
         /// </summary>
         public static string History {
@@ -283,15 +310,6 @@ namespace App2Night.Data.Language {
         public static string PickParty {
             get {
                 return ResourceManager.GetString("PickParty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Prefered language.
-        /// </summary>
-        public static string PreferedLanguage {
-            get {
-                return ResourceManager.GetString("PreferedLanguage", resourceCulture);
             }
         }
         

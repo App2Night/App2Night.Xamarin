@@ -5,55 +5,40 @@ using System.Globalization;
 using System.Linq;
 using App2Night.Data.Language;
 using App2Night.DependencyService;
+using App2Night.Service.Interface;
 using MvvmNano;
 
 namespace App2Night.ViewModel
 {
     public class SettingViewModel : MvvmNanoViewModel
     {
-        private int _selectedLanguage;
+        private readonly IStorageService _storageService;
+        private int _selectedRange;
 
-        public IList<Tuple<string, CultureInfo>> Cultures = new List<Tuple<string, CultureInfo>>
-        {
-            new Tuple<string, CultureInfo>("Deutsch", new CultureInfo("de")),
-            new Tuple<string, CultureInfo>("English", new CultureInfo("en")) 
-        };  
 
-        public SettingViewModel()
+        public SettingViewModel(IStorageService storageService)
         {
-            try
-            {
-                var culture = Cultures.FirstOrDefault(o => o.Item2.Name == AppResources.Culture.Name);
-                if(culture != null)
-                    SelectedLanguage = Cultures.IndexOf(culture);
-            }
-            catch (Exception e)
-            {
-                Debug.WriteLine(e);
-            }
+            _storageService = storageService; 
         }
 
-        public int SelectedLanguage
+        public int SelectedRange
         {
-            get { return _selectedLanguage; }
+            get { return _storageService.Storage.FilterRadius; }
             set
             {
-                if (_selectedLanguage != value && value >= 0)
-                {
-                    _selectedLanguage = value;
-                    SetCulture(Cultures[_selectedLanguage].Item2);
-                }
+                _storageService.Storage.FilterRadius = value;
+                //TODO save range after x amount of time.
             }
         }
 
-        private void SetCulture(CultureInfo culture)
-        { 
-            if (culture != null)
+        public bool GpsEnabled
+        {
+            get { return _storageService.Storage.UseGps; }
+            set
             {
-                var oldCulture = AppResources.Culture;
-                Debug.WriteLine("Old culture: " + oldCulture.Name + " new culture " + culture.Name);
-                AppResources.Culture = culture; 
-                Xamarin.Forms.DependencyService.Get<ICultureService>().SetLocale(culture); 
+                _storageService.Storage.UseGps = value;
+                _storageService.SaveStorage();
+                //TODO show a manuel position entry view if usegps = false 
             }
         }
     }
