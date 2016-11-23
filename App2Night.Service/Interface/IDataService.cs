@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using App2Night.Model.Enum;
 using App2Night.Model.HttpModel;
 using App2Night.Model.Model;
 
@@ -22,6 +23,8 @@ namespace App2Night.Service.Interface
         /// <param name="token">The new token.</param>
         /// <returns>Wether or not the token is valid.</returns>
         Task<bool> SetToken(Token token);
+
+        Task<Result<Location>> ValidateLocation(Location location);
 
         /// <summary>
         /// Clears all data from the device storage and current objects, including the logged in user.
@@ -56,11 +59,13 @@ namespace App2Night.Service.Interface
         /// </summary> 
         Task<Result<IEnumerable<Party>>> RefreshPartys();
 
+        Task<Result<Party>> GetParty(Guid id);
+
         /// <summary>
         /// Creates a new party.
         /// </summary>
         /// <returns></returns>
-        Task<Result<Party>> CreateParty();
+        Task<Result<Party>> CreateParty(string name, DateTime date, MusicGenre genre, string country, string cityName, string street, string houseNr, string zipcode, PartyType type, string description);
 
         Task<Result> DeleteParty();
 

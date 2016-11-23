@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
 using App2Night.Model.Enum;
@@ -53,6 +54,23 @@ namespace App2Night.Service.Service
             return tokenValid;
         }
 
+        public async Task<Result<Location>> ValidateLocation(Location location)
+        {
+            var tokenValid = await CheckIfTokenIsValid();
+            if (tokenValid)
+            {
+               return await _clientService.SendRequest<Location>("/api/Party/validate", RestType.Post,
+                    bodyParameter: location, token: _storageService.Storage.Token.AccessToken);
+            }
+            else
+            {
+                return new Result<Location>
+                {
+                    Message = "Token not valid."
+                };
+            }
+        }
+
         public Task WipeData()
         {
             //TODO Wipe all data from storage
@@ -91,10 +109,45 @@ namespace App2Night.Service.Service
 			} 
 		}
 
-		public Task<Result<Party>> CreateParty()
-        {
-            throw new NotImplementedException();
-        }
+		public async Task<Result<Party>> CreateParty(string name, DateTime date, MusicGenre genre, string country, string cityName, string street, string houseNr, string zipcode, PartyType type, string description)
+		{
+		    dynamic partyCreationObject = new ExpandoObject(); 
+		    partyCreationObject.partyName = name;
+
+		    partyCreationObject.partyDate = date;
+
+                 partyCreationObject.musicGenre=(int) genre;
+
+                 partyCreationObject.countryName= country;
+
+            partyCreationObject.cityName=cityName;
+
+            partyCreationObject.streetName= street;
+
+            partyCreationObject.houseNumber= houseNr;
+
+            partyCreationObject.zipcode= zipcode;
+
+            partyCreationObject.partyType=(int) type;
+
+            partyCreationObject.description= description;
+       
+		    var result =
+		        await
+		            _clientService.SendRequest<Guid>("api/party", RestType.Post, bodyParameter: partyCreationObject,
+		                token: Token.AccessToken);
+
+		    if (!result.Success) return new Result<Party>
+		    {
+		        RequestFailedToException = result.RequestFailedToException,
+                StatusCode =result.StatusCode
+		    };
+
+		    var party = await GetParty(result.Data);
+
+		    return party;
+
+		}
 
         public Task<Result> DeleteParty()
         {
@@ -118,7 +171,7 @@ namespace App2Night.Service.Service
 
         public async Task<Result> CreateUser(SignUp signUpModels)
         {
-            var creationResult = await _clientService.SendRequest("user", RestType.Post, bodyParameter: signUpModels, endpoint: Endpoint.User);
+            var creationResult = await _clientService.SendRequest("api/user", RestType.Post, bodyParameter: signUpModels, endpoint: Endpoint.User);
             
             //Login user if creation was successfull
             if (creationResult.Success)
@@ -163,7 +216,7 @@ namespace App2Night.Service.Service
                 tokenRefreshObject.Add("client_id", "nativeApp");
                 tokenRefreshObject.Add("client_secret", "secret");
                 tokenRefreshObject.Add("token", Token.RefreshToken);
-                tokenRefreshObject.Add("token_type_hint", "refresh_token");
+                tokenRefreshObject.Add("token_type_hint", "access_token");
 
                 var result =
                     await
@@ -244,6 +297,15 @@ namespace App2Night.Service.Service
             } 
             PartiesUpdated?.Invoke(this, EventArgs.Empty);
             return requestResult;
+        }
+
+        public async Task<Result<Party>> GetParty(Guid id)
+        {
+            var result =
+                await
+                    _clientService.SendRequest<Party>("api/party", RestType.Get, urlQuery: "?id=" + id,
+                        token: Token.AccessToken);
+            return result;
         }
 
         async Task<bool> CheckIfTokenIsValid()

@@ -77,5 +77,11 @@ namespace App2Night.Service.Service
                 }
             }
         }
+
+        public async Task ForceLogout()
+        {
+            Storage = new Storage();
+            await SaveStorage();
+        }
     }
 }

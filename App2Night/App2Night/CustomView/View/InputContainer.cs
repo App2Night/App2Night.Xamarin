@@ -19,7 +19,7 @@ namespace App2Night.CustomView.View
             {
                 _validationVisible = value;
                 _validationIconLabel.IsVisible = value;
-                ColumnDefinitions[2].Width = new GridLength(value ? 1 : 0, GridUnitType.Star);
+                //ColumnDefinitions[2].Width = new GridLength(value ? 25 : 0, GridUnitType.Absolute);
             }
         }
 
@@ -30,12 +30,15 @@ namespace App2Night.CustomView.View
                 _validationIconLabel.Text = "\uf00c";
                 _validationIconLabel.TextColor = Color.LawnGreen.ToXamarinColor();
                 _validationIconLabel.FontSize = 25;
+                InvalidateLayout();
             }
             else
             {
                 _validationIconLabel.Text = "\uf111";
                 _validationIconLabel.TextColor = Color.DarkOrange.ToXamarinColor();
-                _validationIconLabel.FontSize = 10; 
+                _validationIconLabel.FontSize = 10;
+                InvalidateLayout();
+
             }
         }
 
@@ -56,9 +59,9 @@ namespace App2Night.CustomView.View
 
         private Label _validationIconLabel = new Label
         {
-            FontFamily = "FontAwesome",
-            FontSize = 25,
-            Opacity = 0.7
+            FontFamily = "FontAwesome", 
+            Opacity = 0.7,
+            Margin = new Thickness(3)
         };
 
         public double FontSize { get { return _imageLabel.FontSize; } set { _imageLabel.FontSize = value; } }
@@ -66,24 +69,26 @@ namespace App2Night.CustomView.View
         Label _imageLabel = new Label
         {
             FontFamily = "FontAwesome",
-            FontSize = 25
+            FontSize = 25,
+            Margin = new Thickness(3)
         };
 
 
         public InputContainer()
         {
+            ColumnSpacing = 0;
             ColumnDefinitions = new ColumnDefinitionCollection()
             {
                 new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
                 new ColumnDefinition {Width = new GridLength(10, GridUnitType.Star)},
-                new ColumnDefinition {Width = new GridLength(15, GridUnitType.Absolute)},
+                new ColumnDefinition {Width = new GridLength(50, GridUnitType.Absolute)},
 
             };
             Children.Add(_imageLabel, 0, 0);
             Children.Add(Input, 1, 0);
             Children.Add(_validationIconLabel, 2, 0);
 
-            _validationIconLabel.IsVisible = ValidationVisible;
+            ValidationVisible = _validationVisible; 
         }
 
         public static explicit operator InputContainer<T>(Type v)

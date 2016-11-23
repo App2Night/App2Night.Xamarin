@@ -141,7 +141,7 @@ namespace App2Night.View
             BindToViewModel(_cityNameEntry.Input, Entry.TextProperty, vm => vm.CityName);
             BindToViewModel(_cityNameEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidCityname);
 
-            BindToViewModel(_numberEntry, Entry.TextProperty, vm => vm.HouseNumber);
+            BindToViewModel(_numberEntry.Input, Entry.TextProperty, vm => vm.HouseNumber);
             BindToViewModel(_numberEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidHousenumber);
 
             BindToViewModel(_locationEntry.Input, Entry.TextProperty, vm => vm.LocationName);
@@ -149,6 +149,9 @@ namespace App2Night.View
 
             BindToViewModel(_zipCodetEntry.Input, Entry.TextProperty, vm => vm.Zipcode);
             BindToViewModel(_zipCodetEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidZipcode);
+
+            //Buttons
+            BindToViewModel(_acceptButton, CustomButton.CommandProperty, vm => vm.CreatePartyCommand);
 
             _image.IsVisible = false;
             // Change grid columns and rows if the device is windows

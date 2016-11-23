@@ -8,5 +8,6 @@ namespace App2Night.Service.Interface
         Storage Storage { get; set; } 
         Task SaveStorage();
         Task OpenStorage();
+        Task ForceLogout();
     }
 }

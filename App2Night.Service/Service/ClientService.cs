@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using App2Night.Model.Model;
+using App2Night.Service.Helper;
 using App2Night.Service.Interface;
+using MvvmNano;
 using Newtonsoft.Json; 
 
 namespace App2Night.Service.Service
@@ -41,7 +44,7 @@ namespace App2Night.Service.Service
                 {
                     if (!string.IsNullOrEmpty(token))
                     {
-                        client.DefaultRequestHeaders.Add("Authorization", "Baerer " + token);
+                        client.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
                     }
                     HttpResponseMessage requestResult;
 
@@ -56,9 +59,10 @@ namespace App2Night.Service.Service
                         
                         if(bodyParameter != null && wwwFormData != null) throw new Exception("Cant send a x-www-form-urlencoed and body parameter at the same time.");
                         if (bodyParameter != null)
-                        { 
-                            content = new StringContent(
-                                JsonConvert.SerializeObject(bodyParameter), Encoding.UTF8, "application/json");
+                        {
+                            var json = JsonConvert.SerializeObject(bodyParameter);
+                            content = new StringContent(json
+                                , Encoding.UTF8, "application/json");
                         }
                         if (wwwFormData != null)
                         {  
@@ -84,22 +88,37 @@ namespace App2Night.Service.Service
                         default:
                             throw new Exception("Unexpected RestType " + restType);
                     }
-                    result.StatusCode = (int)requestResult.StatusCode;
-                    Debug.WriteLine("Request excequted in: " + timer.Elapsed.ToString("c"));
+                    result.StatusCode = (int)requestResult.StatusCode; 
+                    
+                    //The token is not valid anymore!
+                    await CheckIfTokenIsValid(requestResult.StatusCode, token);
+
+                    
                     //Check wheter or not the request was successfull.
                     if (requestResult.IsSuccessStatusCode)
                     {
                         result.Success = true;
                         if (requestResult.Content != null && typeof (TExpectedType) != typeof (Type))
                         {
-                             string resultAsString = await requestResult.Content.ReadAsStringAsync();
+                            string resultAsString = await requestResult.Content.ReadAsStringAsync();
                             //Deserialize the json if one exists. 
                             if (!string.IsNullOrEmpty(resultAsString))
                             {
                                 result.Data = JsonConvert.DeserializeObject<TExpectedType>(resultAsString);
-                            } 
+                            }
                         }
-                    } 
+                        timer.PrintTime($"Request to {uri} succeeded");
+                    }
+                    else
+                    {
+                        string errorMessage = string.Empty;
+                        if (requestResult.Content != null)
+                        {
+                            errorMessage = await requestResult.Content.ReadAsStringAsync();
+                        }
+                        timer.PrintTime(
+                            $"Request to {uri} failed {(string.IsNullOrEmpty(errorMessage) ? "" : $"to:\n{errorMessage}")}");
+                    }
                 }
             }
             catch(Exception e)
@@ -107,7 +126,17 @@ namespace App2Night.Service.Service
                 result.RequestFailedToException = true;
             } 
             return result;
-        } 
+        }
+
+        /// <summary>
+        /// Handles what should happen if a used token is not valid.
+        /// </summary>
+        private async Task CheckIfTokenIsValid(HttpStatusCode responseCode, string token)
+        {
+            if (responseCode == HttpStatusCode.Unauthorized && !string.IsNullOrEmpty(token))
+                //Do a user logout.
+                await MvvmNanoIoC.Resolve<IStorageService>().ForceLogout();
+        }
 
         public async Task<Result> SendRequest(string uri, RestType restType, bool cacheData = false, string urlQuery = "", object bodyParameter = null, object wwwFormData = null,
             string token = null, Endpoint endpoint = Endpoint.Api, bool httpsEnabled = true)
@@ -120,7 +149,7 @@ namespace App2Night.Service.Service
             var domain = endpoint == Endpoint.Api ? "app2nightapi" : "app2nightuser";
             HttpClient client = new HttpClient {BaseAddress = new Uri($"https://{domain}.azurewebsites.net")};
             client.Timeout = TimeSpan.FromSeconds(30);
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             client.DefaultRequestHeaders.Host = $"{domain}.azurewebsites.net";
             return client;
         }
