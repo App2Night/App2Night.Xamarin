@@ -101,7 +101,7 @@ namespace App2Night.CustomView.Template
                     {
                         //This is the default falue, distance not measured.
                         _distanceLabel.Text =
-                            $"{party.Location.CityName}\n{party.Location.StreetName} {party.Location.HouseNumber}{party.Location.HouseNumberAdditional}";
+                            $"{party.Location.CityName}\n{party.Location.StreetName} {party.Location.HouseNumber}";
                     }
                     else
                     {

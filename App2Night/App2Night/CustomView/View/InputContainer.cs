@@ -10,7 +10,7 @@ namespace App2Night.CustomView.View
 
         public static BindableProperty InputValidateProperty = BindableProperty.Create(nameof(InputValidate), typeof(object), typeof(InputContainer<T>), propertyChanged: delegate(BindableObject bindable, object value, object newValue) { ((InputContainer<T>)bindable).ChangeValidationItem((bool)newValue); });
 
-        private bool _validationVisible;
+        private bool _validationVisible = true;
 
         public bool ValidationVisible
         {

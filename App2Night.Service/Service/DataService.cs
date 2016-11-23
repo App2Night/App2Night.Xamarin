@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using App2Night.Model.Enum;
 using App2Night.Model.HttpModel;
 using App2Night.Model.Model;
+using App2Night.Service.Helper;
 using App2Night.Service.Interface;
 using Newtonsoft.Json.Linq;
 using Plugin.Connectivity;
@@ -187,15 +190,31 @@ namespace App2Night.Service.Service
 
         public async Task<Result<IEnumerable<Party>>>  RefreshPartys()
         {
-            var location = await CrossGeolocator.Current.GetPositionAsync(500);
-            var radius = _storageService.Storage.FilterRadius;
+            Result<IEnumerable<Party>> requestResult = new Result<IEnumerable<Party>>();
 
-            string uri = $"?lat={location.Latitude}&lon={location.Latitude}&radius={radius}";
+            try
+            {
+                var location = await CrossGeolocator.Current.GetPositionAsync(3000);
+                var radius = _storageService.Storage.FilterRadius;
+                var uri = $"?lat={location.Latitude}&lon={location.Latitude}&radius={radius}";
+                requestResult =
+                    await
+                        _clientService.SendRequest<IEnumerable<Party>>("api/party", RestType.Get, urlQuery: uri,
+                            token: Token?.AccessToken);
+            }
+            catch (TaskCanceledException e)
+            {
+                DebugHelper.PrintDebug(DebugType.Error, "Getting location in time failed.\n" + e); 
+                requestResult.RequestFailedToException = true;
+            }
+            catch (Exception e)
+            {
+                DebugHelper.PrintDebug(DebugType.Error, "Fetching parties failed.\n" + e);
+                requestResult.RequestFailedToException = true; 
+            }
 
-            var syncResult =
-                await _clientService.SendRequest<IEnumerable<Party>>("api/party", RestType.Get, urlQuery: uri, token: Token?.AccessToken);
             //Check if the request was a success
-            if (syncResult.Success)
+            if (requestResult.Success)
             {
                 //TODO cache data 
             }
@@ -213,18 +232,18 @@ namespace App2Night.Service.Service
                 //TODO Replace with real caching
                 if (cachedData.Count > 0)
                 {
-                    syncResult.Data = cachedData; 
-                    syncResult.IsCached = true; 
+                    requestResult.Data = cachedData;
+                    requestResult.IsCached = true; 
                 }
             }
-            if (syncResult.Data != null)
+            if (requestResult.Data != null)
             { 
-                PopulateObservableCollection(InterestingPartys, syncResult.Data.OrderBy(o => o.Date).Take(5).Where(o => o.Date >= DateTime.Today));
-                PopulateObservableCollection(SelectedPartys, syncResult.Data.OrderBy(o => o.Date).Take(5).Where(o => o.Date >= DateTime.Today)); 
-                PopulateObservableCollection(PartyHistory, syncResult.Data.OrderBy(o => o.Date).Take(5).Where(o => o.Date < DateTime.Today));
+                PopulateObservableCollection(InterestingPartys, requestResult.Data.OrderBy(o => o.Date).Take(5).Where(o => o.Date >= DateTime.Today));
+                PopulateObservableCollection(SelectedPartys, requestResult.Data.OrderBy(o => o.Date).Take(5).Where(o => o.Date >= DateTime.Today)); 
+                PopulateObservableCollection(PartyHistory, requestResult.Data.OrderBy(o => o.Date).Take(5).Where(o => o.Date < DateTime.Today));
             } 
             PartiesUpdated?.Invoke(this, EventArgs.Empty);
-            return syncResult;
+            return requestResult;
         }
 
         async Task<bool> CheckIfTokenIsValid()

@@ -98,6 +98,15 @@ namespace App2Night.Data.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to City.
+        /// </summary>
+        public static string Cityname {
+            get {
+                return ResourceManager.GetString("Cityname", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You didn&apos;t attend to a party yet! Former parties will be visible here..
         /// </summary>
         public static string ContHistory {

@@ -225,4 +225,7 @@
   <data name="GpsUsage" xml:space="preserve">
     <value>We need your position to locate parties near you. You can always disable GPS for this App and set a position manualy.</value>
   </data>
+  <data name="Cityname" xml:space="preserve">
+    <value>City</value>
+  </data>
 </root>
