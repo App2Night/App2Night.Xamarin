@@ -19,7 +19,7 @@ namespace App2Night.ViewModel
 		string _name;
 		string _description;
 		MusicGenre _musicGenre;
-		DateTime _time;
+		TimeSpan _time;
 		DateTime _date;
 		Location _location;
 		string _streetName;
@@ -58,7 +58,7 @@ namespace App2Night.ViewModel
 			} 
 		}
 
-		public DateTime Time 
+		public TimeSpan Time 
 		{ 
 			get { return _time; } 
 			set { _time = value; }
@@ -164,7 +164,7 @@ namespace App2Night.ViewModel
 
         private async Task CreateParty()
         {
-            var dateTime = new DateTime(Date.Year, Date.Month, Date.Day, Time.Hour, Time.Minute, Time.Second);
+            var dateTime = new DateTime(Date.Year, Date.Month, Date.Day, Time.Hours, Time.Minutes, 0);
             var result = await
                     MvvmNanoIoC.Resolve<IDataService>()
                         .CreateParty(Name, dateTime, MusicGenre, "Germany", CityName, StreetName, HouseNumber, Zipcode,
