@@ -15,7 +15,7 @@ namespace App2Night.DependencyService
 		event EventHandler<ImageSourceEventArgs> ImageSelected;
 	}
 	/// <summary>
-	/// Image source event arguments.
+	/// IconCode source event arguments.
 	/// </summary>
 	public class ImageSourceEventArgs : EventArgs
 	{

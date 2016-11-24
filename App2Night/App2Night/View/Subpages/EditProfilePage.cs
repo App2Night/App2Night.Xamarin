@@ -13,17 +13,17 @@ namespace App2Night.View.Subpages
     public class EditProfilePage : MvvmNanoContentPage<EditProfileViewModel>
     {
 		#region Nodes
-		readonly InputContainer<Entry> _nameEntry = new InputContainer<Entry> { Input = { Placeholder = AppResources.Name }, Image ="\uf128", ValidationVisible = true };
+		readonly InputContainer<Entry> _nameEntry = new InputContainer<Entry> { Input = { Placeholder = AppResources.Username }, IconCode ="\uf128", ValidationVisible = true };
 
-		readonly InputContainer<Entry> _emailEntry = new InputContainer<Entry>{ Input = { Placeholder = AppResources.EmailAdress}, Image = "\uf003", ValidationVisible = true };
+		readonly InputContainer<Entry> _emailEntry = new InputContainer<Entry>{ Input = { Placeholder = AppResources.EmailAdress}, IconCode = "\uf003", ValidationVisible = true };
 
-		readonly InputContainer<Entry> _addressEntry = new InputContainer<Entry>{ Input = { Placeholder = AppResources.Address }, Image = "\uf1ae", ValidationVisible = true };
+		readonly InputContainer<Entry> _addressEntry = new InputContainer<Entry>{ Input = { Placeholder = AppResources.Address }, IconCode = "\uf1ae", ValidationVisible = true };
 
-		readonly InputContainer<Entry> _ageEntry = new InputContainer<Entry> { Input = { Placeholder = AppResources.Age, Keyboard = Keyboard.Numeric }, Image = "\uf1ae", ValidationVisible = true };
+		readonly InputContainer<Entry> _ageEntry = new InputContainer<Entry> { Input = { Placeholder = AppResources.Age, Keyboard = Keyboard.Numeric }, IconCode = "\uf1ae", ValidationVisible = true };
 
-		readonly InputContainer<EnumBindablePicker<Gender>> _genderPicker = new InputContainer<EnumBindablePicker<Gender>>{ Image = "\uf183", ValidationVisible = true };
+		readonly InputContainer<EnumBindablePicker<Gender>> _genderPicker = new InputContainer<EnumBindablePicker<Gender>>{ IconCode = "\uf183", ValidationVisible = true };
 
-		// TODO handle Image
+		// TODO handle IconCode
 		Image _image = new Image { BackgroundColor = Color.Gray, HeightRequest = 300};
 
 		private readonly CustomButton _cancelBtn = new CustomButton

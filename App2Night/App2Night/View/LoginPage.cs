@@ -13,7 +13,7 @@ namespace App2Night.View
         #region Views  
 		private readonly InputContainer<Entry> _usernameEntry = new InputContainer<Entry>
         {
-			Image = "\uf2bd",
+			IconCode = "\uf2bd",
             Input = { Placeholder = AppResources.Username},
             ValidationVisible = true
 
@@ -21,7 +21,7 @@ namespace App2Night.View
 
         private readonly InputContainer<Entry> _emailEntry = new InputContainer<Entry>
         {
-            Image = "\uf003",
+            IconCode = "\uf003",
             Input = { Placeholder = AppResources.EmailAdress, Keyboard = Keyboard.Email }, 
             IsVisible = false,
             ValidationVisible = true
@@ -34,7 +34,7 @@ namespace App2Night.View
                 Placeholder = AppResources.Password,
                 IsPassword = true 
             },
-			Image = "\uf023",
+			IconCode = "\uf023",
             ValidationVisible = true
         };
 
@@ -60,7 +60,7 @@ namespace App2Night.View
         private readonly Image _image = new Image 
         {  
             Aspect = Aspect.AspectFit,
-            Source = ImageSource.FromResource("App2Night.Data.Image.icon.png")
+            Source = ImageSource.FromResource("App2Night.Data.IconCode.icon.png")
         };
 
         private readonly Switch _acceptAgbSwitch = new Switch
@@ -136,7 +136,7 @@ namespace App2Night.View
                 {
                     new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
 
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)}, //Image
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)}, //IconCode
 
                     new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
 

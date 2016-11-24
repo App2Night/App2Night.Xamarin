@@ -11,7 +11,7 @@ namespace App2Night.CustomView.Template
     {
         private Image _pictureImage = new Image
         {
-            Source = ImageSource.FromResource("App2Night.Data.Image.icon.png"),
+            Source = ImageSource.FromResource("App2Night.Data.IconCode.icon.png"),
             VerticalOptions = LayoutOptions.Center
         };  
 
