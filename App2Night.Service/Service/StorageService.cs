@@ -16,8 +16,19 @@ namespace App2Night.Service.Service
 
         public Storage Storage
         {
-            get { return _storage; }
-            set { _storage = value; }
+            get
+            {
+                if (_storage == null)
+                {
+                    _storage = new Storage();
+                    Task.Run(SaveStorage);
+                }
+                return _storage;
+            }
+            set
+            {
+                _storage = value;
+            }
         }
 
         public async Task SaveStorage()
