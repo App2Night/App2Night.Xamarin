@@ -2,9 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
+using Acr.UserDialogs;
 using App2Night.CustomView.Template;
 using App2Night.Model.Model;
+using App2Night.Service.Helper;
 using MvvmNano;
 
 namespace App2Night.ViewModel.Subpages
@@ -75,24 +79,30 @@ namespace App2Night.ViewModel.Subpages
         }
 
         public ThirdPartyViewModel()
-        {
-            foreach (License license in LicensesList)
+        { 
+            using (UserDialogs.Instance.Loading())
             {
-                try
+                var ioWatch = new Stopwatch();
+                ioWatch.Start();
+                var tasks = LicensesList.Select(license => Task.Run(() =>
                 {
-                    var assembly = typeof(QuadraticPartyTemplate).GetTypeInfo().Assembly;
-                    Stream stream =
-                        assembly.GetManifestResourceStream("App2Night.Data.Licenses." + license.LicenseFileName + ".txt");
-                    using (var reader = new StreamReader(stream))
+                    try
                     {
-                        license.LicenseText = reader.ReadToEnd();
+                        var assembly = typeof (QuadraticPartyTemplate).GetTypeInfo().Assembly;
+                        Stream stream = assembly.GetManifestResourceStream("App2Night.Data.Licenses." + license.LicenseFileName + ".txt");
+                        using (var reader = new StreamReader(stream))
+                        {
+                            license.LicenseText = reader.ReadToEnd();
+                        }
                     }
-                }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e);
-                }
-            }
+                    catch (Exception e)
+                    {
+                        Debug.WriteLine(e);
+                    }
+                })).ToList();
+                Task.WaitAll(tasks.ToArray());
+                ioWatch.PrintTime("Reading license files");
+            } 
         } 
     }
 }

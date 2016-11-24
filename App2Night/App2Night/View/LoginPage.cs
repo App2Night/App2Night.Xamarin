@@ -57,9 +57,10 @@ namespace App2Night.View
             IsVisible = false
         };
 
-        private readonly CachedImage _image = new CachedImage()
+        private readonly Image _image = new Image 
         {  
-            Aspect = Aspect.AspectFit
+            Aspect = Aspect.AspectFit,
+            Source = ImageSource.FromResource("App2Night.Data.Image.icon.png")
         };
 
         private readonly Switch _acceptAgbSwitch = new Switch
@@ -91,7 +92,7 @@ namespace App2Night.View
 
         public LoginPage()
         { 
-            _image.SetImage("App2Night.Data.Image.icon.png", SourceOrigin.Resource); 
+            
 
             //Make sure that the page does not merge in to the status bar on iOS.
             if(Device.OS == TargetPlatform.iOS) 

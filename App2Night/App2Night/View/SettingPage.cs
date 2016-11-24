@@ -1,73 +1,46 @@
-﻿using App2Night.CustomView.Page;
+﻿using System;
+using System.Globalization;
+using App2Night.CustomView.Page;
+using App2Night.Data.Language;
 using App2Night.ViewModel;
-using MvvmNano.Forms;
 using Xamarin.Forms;
 
 namespace App2Night.View
 {
-    public class SettingPage : ContentPageWithInfo<SettingViewModel> { 
-        BoxView _topBoxView = new BoxView
-        {
-            HeightRequest = 1
-        };
-        public Color SeperatorColor
-        {
-            get { return (Color)GetValue(SeperatorColorProperty); }
-            set { SetValue(SeperatorColorProperty, value); }
-        }
-        public static BindableProperty SeperatorColorProperty = BindableProperty.Create(nameof(SeperatorColor),
-            typeof(Color), typeof(SettingPage), Color.Accent,
-            propertyChanged: (bindable, value, newValue) => ColorChanged(bindable, (Color)value, (Color)newValue));
-
-        private static void ColorChanged(BindableObject bindable, Color oldValue, Color newValue)
-        {
-            SettingPage thisListView = (SettingPage)bindable;
-            thisListView._topBoxView.Color = newValue;
-        }
+    public class SettingPage : ContentPageWithInfo<SettingViewModel>
+    {
         public SettingPage()
         {
-            ColorChanged(this, SeperatorColor, SeperatorColor);
-            // TODO Set Settingsoption
+            //GPS
+            //Slider
+            var gpsRangeSlider = new Slider(5, 200, 1);
+            BindToViewModel(gpsRangeSlider, Slider.ValueProperty, vm => vm.SelectedRange);
+
+            var gpsEnabledSwitch = new Switch
+            {
+                HorizontalOptions = LayoutOptions.End
+            };
+            BindToViewModel(gpsEnabledSwitch, Switch.IsToggledProperty, vm => vm.GpsEnabled);
+
             var stackLayout = new StackLayout
             {
+                Padding = new Thickness(5),
                 Children =
                 {
-                    new Label
-                    {
-                        Text = "Privacy",
-                        FontSize = 20
-                    },
-                    _topBoxView,
+                    new Label {Text = AppResources.GpsSettingHeader},
+                    gpsRangeSlider,
                     new Grid
                     {
-                        ColumnDefinitions = new ColumnDefinitionCollection
-                        {
-                            new ColumnDefinition {Width = new GridLength(50, GridUnitType.Star)},
-                            new ColumnDefinition {Width = new GridLength(50, GridUnitType.Star)}
-                        },
                         Children =
                         {
-                            {
-                                new Label
-                                {
-                                    Text = "Setting",
-                                    HorizontalOptions = LayoutOptions.Start
-                                },
-                                0, 0
-                            },
-                            {new Switch
-                            {
-                                HorizontalOptions = LayoutOptions.End
-                            }, 1, 0}
+                            gpsEnabledSwitch,
+                            new Label {Text = AppResources.EnableGps, HorizontalOptions = LayoutOptions.Start}
                         }
-                    }
+                    },
+                    new Label {Text = AppResources.GpsUsage}
                 }
             };
-            Content = new ContentView
-            {
-                Content = stackLayout,
-                BackgroundColor = Color.White
-            };
+            Content = stackLayout;
         }
     }
 }

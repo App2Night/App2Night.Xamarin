@@ -4,8 +4,8 @@ using App2Night.CustomView.Page;
 using App2Night.CustomView.Template;
 using App2Night.CustomView.View;
 using App2Night.Data.Language;
-using App2Night.Helper.ValueConverter;
 using App2Night.Model.Model;
+using App2Night.ValueConverter;
 using App2Night.ViewModel; 
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
@@ -21,11 +21,12 @@ namespace App2Night.View
             HeightRequest = 200
         };
 
-        CachedImage profilePicture = new CachedImage()
+        Image profilePicture = new Image 
         {
             HeightRequest = 100,
             WidthRequest = 100,
-            Margin = new Thickness(10) 
+            Margin = new Thickness(10),
+            Source = ImageSource.FromResource("App2Night.Data.Image.icon.png")
         }; 
 
         private HorizontalGallerieView historyGallerieView = new HorizontalGallerieView
@@ -48,9 +49,7 @@ namespace App2Night.View
         }; 
 
         public DashboardPage()
-        { 
-            profilePicture.SetImage("App2Night.Data.Image.default.png", SourceOrigin.Resource);
-
+        {   
             //User info view
             var userInfoView = new Grid
             {
@@ -84,7 +83,7 @@ namespace App2Night.View
 
             EnhancedContainer userInfoContainer = new EnhancedContainer
             {
-                Name = "User",
+				Name = AppResources.User,
                 ButtonText = "\uf0ad",
                 Content = userInfoView,
                 NoContentWarningVisible = false,
@@ -95,10 +94,9 @@ namespace App2Night.View
             //Interesting partie view
             var interestingPartieContainer = new EnhancedContainer
             {
-                Name = "Parties near you", 
+				Name = AppResources.IntParty, 
                 Content = interestingPartieGallerie,
-                ContentMissingText = "There are no parties that fit your interests.\n" +
-                                     "Try to modify your search filters."
+				ContentMissingText = AppResources.ContIntParty
             };
             interestingPartieGallerie.ElementTapped += PartieSelected;
             BindToViewModel(interestingPartieGallerie, GallerieView.ItemSourceProperty, vm => vm.InterestingPartiesForUser);
@@ -108,10 +106,9 @@ namespace App2Night.View
             //Users parties view
             var myPartiesContainer = new EnhancedContainer
             {
-                Name = "MyEvents",
+				Name = AppResources.MyParty,
                 Content = myPartieGallerie,
-                ContentMissingText = "You didn't enter a party yet.\n" +
-                                     "Tab to start searching."
+				ContentMissingText = AppResources.ContMyParty
             };
             myPartieGallerie.ElementTapped +=PartieSelected;
             BindToViewModel(myPartiesContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToMyPartiesCommand);
@@ -121,10 +118,9 @@ namespace App2Night.View
             //Partie history
             var historyContainer = new EnhancedContainer
             {
-                Name = "History", 
+				Name = AppResources.History, 
                 Content = historyGallerieView,
-                ContentMissingText = "You didn't attend to a party yet!\n" +
-                                     "Former parties will be visible here."
+				ContentMissingText = AppResources.ContHistory
             };
             BindToViewModel(historyContainer, EnhancedContainer.CommandProperty, vm => vm.MoveToHistoryCommand);
             historyGallerieView.ElementTapped += PartieSelected;

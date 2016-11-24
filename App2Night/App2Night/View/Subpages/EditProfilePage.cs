@@ -1,6 +1,6 @@
 ﻿using System;
 using App2Night.CustomView.View;
-using App2Night.CustomViews;
+using App2Night.Data.Language;
 using App2Night.Model.Enum;
 using App2Night.Model.Model;
 using App2Night.ViewModel.Subpages;
@@ -13,47 +13,20 @@ namespace App2Night.View.Subpages
     public class EditProfilePage : MvvmNanoContentPage<EditProfileViewModel>
     {
 		#region Nodes
-        public User User
-        {
-			get
-			{
-				return new User
-				{
-					Name = _nameEntry.Input.Text,
-					Gender = _genderPicker.Input.SelectedItem,
-					Email = _emailEntry.Input.Text,
-				};  
-			}
-            set 
-			{
-				_nameEntry.Input.Text = value.Name;
-				_emailEntry.Input.Text = value.Email;
-				// set gender 
-				if (value.Gender == Gender.Men) 
-				{ 
-					_genderPicker.Input.SelectedIndex = 0; 
-				} else if (value.Gender == Gender.Woman) 
-				{ 
-					_genderPicker.Input.SelectedIndex = 1; 
-				} else 
-				{
-					_genderPicker.Input.SelectedIndex = 2;
-				}
+		readonly InputContainer<Entry> _nameEntry = new InputContainer<Entry> { Input = { Placeholder = AppResources.Name }, Image ="\uf128", ValidationVisible = true };
 
-			}
-        }
+		readonly InputContainer<Entry> _emailEntry = new InputContainer<Entry>{ Input = { Placeholder = AppResources.EmailAdress}, Image = "\uf003", ValidationVisible = true };
 
-		readonly InputContainer<Entry> _nameEntry = new InputContainer<Entry> { Input = { Placeholder = "Name" }, Image ="\uf128" };
+		readonly InputContainer<Entry> _addressEntry = new InputContainer<Entry>{ Input = { Placeholder = AppResources.Address }, Image = "\uf1ae", ValidationVisible = true };
 
-        readonly InputContainer<Entry> _emailEntry = new InputContainer<Entry>{ Input = { Placeholder = "Email Address" }, Image = "\uf003" };
+		readonly InputContainer<Entry> _ageEntry = new InputContainer<Entry> { Input = { Placeholder = AppResources.Age, Keyboard = Keyboard.Numeric }, Image = "\uf1ae", ValidationVisible = true };
 
-        readonly InputContainer<Entry> _addressEntry = new InputContainer<Entry>{ Input = { Placeholder = "Address" }, Image = "\uf1ae" };
+		readonly InputContainer<EnumBindablePicker<Gender>> _genderPicker = new InputContainer<EnumBindablePicker<Gender>>{ Image = "\uf183", ValidationVisible = true };
 
-		readonly InputContainer<Entry> _ageEntry = new InputContainer<Entry> { Input = { Placeholder = "Age", Keyboard = Keyboard.Numeric }, Image = "\uf1ae" };
+		// TODO handle Image
+		Image _image = new Image { BackgroundColor = Color.Gray, HeightRequest = 300};
 
-		readonly InputContainer<EnumBindablePicker<Gender>> _genderPicker = new InputContainer<EnumBindablePicker<Gender>>{ Image = "\uf183" };
-
-        private readonly CustomButton _cancelBtn = new CustomButton
+		private readonly CustomButton _cancelBtn = new CustomButton
         {
             Text = "\uf00d",
             ButtonLabel = { FontFamily = "FontAwesome", FontSize = 50 },
@@ -71,74 +44,51 @@ namespace App2Night.View.Subpages
         public EditProfilePage()
         {
             // set title and add Command for ViewModel
-            Title = "Edit Profile";
+			Title = AppResources.EditProfile;
 			// bind to view model
 			BindToViewModel(_cancelBtn, CustomButton.CommandProperty, vm => vm.MoveToCancelCommand);
             BindToViewModel(_okBtn, CustomButton.CommandProperty, vm => vm.MoveTOkCommand);
-			// set event handler
-            _okBtn.ButtonTapped += OnOkBtnTapped;
-            // set Content with two grids. first one contains all information about the user. last one has a cancel and ok btn.
+			BindToViewModel(_nameEntry.Input, Entry.TextProperty, vm => vm.User.Name);
+			BindToViewModel(_emailEntry.Input, Entry.TextProperty, vm => vm.User.Email);
+			BindToViewModel(_ageEntry.Input, Entry.TextProperty, vm => vm.User.Age);
+			BindToViewModel(_genderPicker, EnumBindablePicker<Gender>.SelectedItemProperty, vm => vm.User.Gender);
 
-            Grid grid = new Grid()
+			// set event handler
+			_okBtn.ButtonTapped += OnOkBtnTapped;
+            // set Content with two grids. first one contains all information about the user. last one has a cancel and ok btn.
+			StackLayout stackLayout = new StackLayout()
             {
-                RowDefinitions = new RowDefinitionCollection
-                {
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
-                },
                 Children =
                 {
+					_image,
+					_nameEntry,
+					_emailEntry,
+					_ageEntry,
+					_addressEntry,
+					_genderPicker,
+                    new BoxView
                     {
-                        new Grid
-                        {
-                            Padding = new Thickness(10),
-                            RowDefinitions = new RowDefinitionCollection
-                            {
-                                new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
-                                new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
-                                new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
-                                new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
-                            },
-                            Children =
-                            {
-                                {_nameEntry, 0, 0},
-                                {_emailEntry, 0, 1},
-                                {_addressEntry, 0, 2},
-                                {_genderPicker, 0, 3}
-                            }
-                        },
-                        0, 0
+                       HeightRequest = 1,
+                       BackgroundColor = Color.Black
                     },
+                    new Grid
                     {
-                        new BoxView
+                        ColumnDefinitions = new ColumnDefinitionCollection
                         {
-                            HeightRequest = 1,
-                            BackgroundColor = Color.Black
+                            new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                            new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
                         },
-                        0, 1
-                    },
-                    {
-                        new Grid
+                        Children =
                         {
-                            ColumnDefinitions = new ColumnDefinitionCollection
-                            {
-                                new ColumnDefinition {Width = new GridLength(50, GridUnitType.Star)},
-                                new ColumnDefinition {Width = new GridLength(50, GridUnitType.Star)}
-                            },
-                            Children =
-                            {
-                                {_cancelBtn, 0, 0},
-                                {_okBtn, 1, 0},
-                            }
-                        },
-                        0, 2
+                            {_cancelBtn, 0, 0},
+                            {_okBtn, 1, 0},
+                        }
                     }
                 }
             };
 			var mainScroll = new ScrollView
 			{
-				Content = grid,
+				Content = stackLayout,
 				Orientation = ScrollOrientation.Vertical
 			};
 			Content = mainScroll;
@@ -146,8 +96,45 @@ namespace App2Night.View.Subpages
 
         private void OnOkBtnTapped(object sender, EventArgs e)
         {
-            // TODO handle tap
+			if (_okBtn.Command != null)
+			{
+				var animation = new Animation(d =>
+				{
+					_okBtn.Scale = d;
+				}, 1, 1.6);
+				var nextAnimation = new Animation(d =>
+				{
+					_okBtn.Scale = d;
+				}, 1.6, 1);
+				animation.Commit(this, "Scale", finished: delegate
+				{
+					nextAnimation.Commit(this, "Descale");
+				});
+				_okBtn.Command.Execute(null);
+			}
         }
+
+		private void OnCancelBtnTapped(object sender, EventArgs e)
+		{
+			if (_cancelBtn.Command != null)
+			{
+				var animation = new Animation(d =>
+				{
+					_cancelBtn.Scale = d;
+				}, 1, 1.6);
+				var nextAnimation = new Animation(d =>
+				{
+					_cancelBtn.Scale = d;
+				}, 1.6, 1);
+				animation.Commit(this, "Scale", finished: delegate
+				{
+					nextAnimation.Commit(this, "Descale");
+				});
+				_cancelBtn.Command.Execute(null);
+			}
+		}
+
+
 
         public override void Dispose()
         {

@@ -1,13 +1,12 @@
-﻿using System.Threading.Tasks;
-using Acr.UserDialogs;
+﻿using System.Threading.Tasks; 
+using App2Night.Data.Language;
 using App2Night.DependencyService;
-using App2Night.Helper;
 using App2Night.Model.Model;
+using App2Night.Service.Helper;
 using App2Night.Service.Interface;
 using App2Night.Service.Service;
 using App2Night.ViewModel;
 using MvvmNano;
-using MvvmNano.Forms;
 using Plugin.Connectivity;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
@@ -15,13 +14,13 @@ using Xamarin.Forms;
 
 namespace App2Night
 {
-    public partial class App : MvvmNanoApplication
+    public partial class App
     {
-        public static bool MapAvailable { get; private set; }
- 
+        public static bool MapAvailable { get; private set; } 
+
         public App()
         {
-			InitializeComponent();
+            InitializeComponent();
             MainPage = new ContentPage();
             //It is possible (even if it is unlikely) that Google Maps is not installed on the device.
             //Check if it is installed on start.
@@ -30,40 +29,80 @@ namespace App2Night
                 MapAvailable =
                     Xamarin.Forms.DependencyService.Get<IAndroidAppLookupService>()
                         .DoesAppExist("com.google.android.apps.maps");
-            } 
-        }
+            }
+
+            if (Device.OS == TargetPlatform.iOS || Device.OS == TargetPlatform.Android)
+            {
+                var ci = Xamarin.Forms.DependencyService.Get<ICultureService>().GetCurrentCultureInfo();
+                AppResources.Culture = ci; // set the RESX for resource localization
+                Xamarin.Forms.DependencyService.Get<ICultureService>().SetLocale(ci); // set the Thread for locale-aware methods
+            }
+        } 
 
         protected override void OnStart()
         {
-            RegisterInterfaces(); 
+            RegisterInterfaces();
             base.OnStart();
-            
+
             // Set MasterDetailPage
             SetUpMasterDetailPage<NavigationViewModel>();
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof(DashboardViewModel), "Dashboard", "\uf015"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof(PartyPickerViewModel), "Pick a party", "\uf29b"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof(CreatePartyViewModel), "Create", "\uf271"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof(HistoryViewModel), "History", "\uf187"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof(SettingViewModel), "Setting", "\uf085"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof(AboutTabbedViewModel), "About", "\uf05a"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof (DashboardViewModel), AppResources.Dashboard, "\uf015"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof (PartyPickerViewModel), AppResources.PickAParty, "\uf29b"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof (CreatePartyViewModel), AppResources.CreateAParty, "\uf271"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof (HistoryViewModel), AppResources.PartyHistory, "\uf187"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof (SettingViewModel), AppResources.Settings, "\uf085"));
+            AddSiteToDetailPages(new CustomMasterDetailData(typeof (AboutTabbedViewModel), AppResources.About, "\uf05a"));
 
-            //TODO Check if user is already loged in
-            MvvmNanoIoC.Resolve<NavigationViewModel>().OpenLogin();
+            
+            //Sync the parties
+            //Task.Run(async () =>
+            //{
+            //    try
+            //    {
+            //        await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys();
+            //    }
+            //    catch (Exception e)
+            //    {
+            //        Debug.WriteLine(e);
+            //    }
+            //});
 
             //TODO Extract this part
             CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
-            MvvmNanoIoC.Resolve<IDataService>().PartiesUpdated += (sender, args) =>
+            MvvmNanoIoC.Resolve<IDataService>().PartiesUpdated +=
+                (sender, args) => { CrossGeolocator.Current.StartListeningAsync(1, 100); };
+
+            Task.Run(async ()=> await OnStartSync());
+        }
+
+        private async Task OnStartSync()
+        {
+            //Restore stored token 
+            await MvvmNanoIoC.Resolve<IStorageService>().OpenStorage();
+            bool isLoggedIn = false;
+            var storage = MvvmNanoIoC.Resolve<IStorageService>().Storage;
+            if (storage.Token != null)
+            { 
+                //Set token from last session and update user information.
+                isLoggedIn = await MvvmNanoIoC.Resolve<IDataService>().SetToken(storage.Token); 
+            }  
+            DebugHelper.PrintDebug(DebugType.Info, isLoggedIn ? "Log in from last session." : "User not logged in. No token available.");
+
+            //Make an inital token refresh 
+            Device.BeginInvokeOnMainThread(async ()=> await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys());
+
+            if (!isLoggedIn)
             {
-                CrossGeolocator.Current.StartListeningAsync(1, 100);
-            };
-            Device.BeginInvokeOnMainThread((async () => await StartupSync()));
+                //Prompt the login page if the user is not logged in
+                MvvmNanoIoC.Resolve<NavigationViewModel>().OpenLogin();
+            }
         }
 
         protected override void SetUpPresenter()
         {
             MvvmNanoIoC.RegisterAsSingleton<IPresenter>(
                 new CustomPresenter(this)
-            );
+                );
         }
 
         private void CurrentOnPositionChanged(object sender, PositionEventArgs positionEventArgs)
@@ -82,35 +121,12 @@ namespace App2Night
                 double distance = userPosition.DistanceTo(party.Coordinates);
                 party.DistanceToParty = distance;
             }
-        } 
-        
-
-        //Replace this with a serious sync 
-        public async Task StartupSync()
-        {
-            if (CrossConnectivity.Current.IsConnected)
-            {
-                //UserDialogs.Instance.ShowLoading("Starting session.");
-                //var tokenResult = await MvvmNanoIoC.Resolve<IDataService>().RequestToken("test", "test");
-                //UserDialogs.Instance.Toast(
-                //    new ToastConfig("Token request finished " + (tokenResult.Success ? "" : "un") + "successfull.")
-                //    {
-                //        BackgroundColor = tokenResult.Success ? System.Drawing.Color.LawnGreen : System.Drawing.Color.LightCoral
-                //    });
-                UserDialogs.Instance.ShowLoading("Loading partys.");
-                var result = await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys();
-                UserDialogs.Instance.HideLoading();
-                UserDialogs.Instance.Toast(
-                    new ToastConfig("Loading parties finished " + (result.Success ? "" : "un") + "successfull.")
-                    {
-                        BackgroundColor = result.Success ? System.Drawing.Color.MediumSeaGreen : System.Drawing.Color.LightCoral
-                    });
-            }
-           
         }
 
         private void RegisterInterfaces()
         {
+            MvvmNanoIoC.RegisterAsSingleton<IStorageService, StorageService>();
+            MvvmNanoIoC.Register<IAlertService, AlertService>();
             MvvmNanoIoC.Register<IClientService, ClientService>();
             MvvmNanoIoC.RegisterAsSingleton<IDataService, DataService>();
             MvvmNanoIoC.RegisterAsSingleton<IImageFactory, ImageFactory>();

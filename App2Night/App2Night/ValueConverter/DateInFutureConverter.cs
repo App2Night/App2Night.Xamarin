@@ -1,16 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using Xamarin.Forms;
 
-namespace App2Night.Helper.ValueConverter
+namespace App2Night.ValueConverter
 {
-    public class InvertBooleanConverter : IValueConverter
+    public class DateInFutureConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return !(bool)value;
+            var date = (DateTime) value;
+            return date.Date >= DateTime.Today;
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)

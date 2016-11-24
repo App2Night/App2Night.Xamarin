@@ -1,7 +1,7 @@
 ﻿using System;
 using App2Night.CustomView.Page;
 using App2Night.CustomView.View;
-using App2Night.CustomViews;
+using App2Night.Data.Language;
 using App2Night.Model.Enum;
 using App2Night.ViewModel;
 using Xamarin.Forms;
@@ -18,14 +18,15 @@ namespace App2Night.View
 
         private InputContainer<Entry> _entryName = new InputContainer<Entry>
         {
-            Input = {Placeholder = "Name"},
+			Input = {Placeholder = AppResources.Name},
+			ValidationVisible = true,
             FontSize = 35,
 			Image = "\uf1ae"
         };
 
         private InputContainer<Entry> _descriptionEntry = new InputContainer<Entry>
         {
-            Input = {Placeholder = "Description"},
+			Input = {Placeholder = AppResources.Description},
 			Image = "\uf040",
             HeightRequest = 100,
             FontSize = 35,
@@ -47,27 +48,36 @@ namespace App2Night.View
         private InputContainer<EnumBindablePicker<MusicGenre>> _musicGenreSwitch =
 			new InputContainer<EnumBindablePicker<MusicGenre>>{ Image = "\uf001", FontSize = 35, Input = { SelectedIndex = 0}};
 
+        private InputContainer<Entry> _cityNameEntry = new InputContainer<Entry>
+        {
+            Input = { Placeholder = AppResources.Cityname },
+            FontSize = 35,
+            Image = "\uf279"
+        };
+
         private InputContainer<Entry> _streetEntry = new InputContainer<Entry>
         {
-            Input = {Placeholder = "Street name"},
+			Input = {Placeholder = AppResources.StrName},
             FontSize = 35,
+            Image = "\uf0f3"
         };
 
         private InputContainer<Entry> _numberEntry = new InputContainer<Entry>
         {
-            Input = {Keyboard = Keyboard.Numeric, Placeholder = "Number"},
+			Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.HNumber},
             FontSize = 35,
         };
 
         private InputContainer<Entry> _locationEntry = new InputContainer<Entry>
         {
-            Input = {Placeholder = "Loaction"},
+			Input = {Placeholder = AppResources.Location},
             FontSize = 35,
+            Image = "\uf015"
         };
 
         InputContainer<Entry> _zipCodetEntry = new InputContainer<Entry>
         {
-            Input = {Keyboard = Keyboard.Numeric, Placeholder = "Zipcode"},
+			Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.Zipcode},
             FontSize = 35,
         };
 
@@ -84,8 +94,7 @@ namespace App2Night.View
         };
 
         private Map _headerMap = new Map()
-        {
-            HeightRequest = 500
+        { 
         };
 
         private Image _image = new Image
@@ -100,6 +109,7 @@ namespace App2Night.View
         {
             HorizontalOptions = LayoutOptions.Center,
             RowHeight = 75,
+            HasUnevenRows = true
         };
 
         private TapGestureRecognizer _tapGesture = new TapGestureRecognizer();
@@ -107,12 +117,42 @@ namespace App2Night.View
         #endregion
 
         public CreatePartyPage()
-        {
+        { 
             _map = new MapWrapper(_headerMap); 
             // set tap gesture reconizer
             _tapGesture.Tapped += LoadImage;
             // set title of the page
-            Title = "Create Party";
+            Title = AppResources.CreateParty;
+			// bind to view models
+			BindToViewModel(_entryName.Input, Entry.TextProperty, vm => vm.Name);
+			BindToViewModel(_entryName, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidName);
+			BindToViewModel(_descriptionEntry.Input, Entry.TextProperty, vm => vm.Description);
+			BindToViewModel(_descriptionEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidDescription);
+			BindToViewModel(_musicGenreSwitch.Input, EnumBindablePicker<MusicGenre>.SelectedItemProperty, vm => vm.MusicGenre);
+			// date and time
+			BindToViewModel(_datePicker.Input, DatePicker.DateProperty, vm => vm.Date);
+            BindToViewModel(_datePicker, InputContainer<DatePicker>.InputValidateProperty, vm => vm.ValidDate);
+
+            BindToViewModel(_timePicker.Input, TimePicker.TimeProperty, vm => vm.Time);  
+            // address
+            BindToViewModel(_streetEntry.Input, Entry.TextProperty, vm => vm.StreetName);
+			BindToViewModel(_streetEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidStreetname);
+
+            BindToViewModel(_cityNameEntry.Input, Entry.TextProperty, vm => vm.CityName);
+            BindToViewModel(_cityNameEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidCityname);
+
+            BindToViewModel(_numberEntry.Input, Entry.TextProperty, vm => vm.HouseNumber);
+            BindToViewModel(_numberEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidHousenumber);
+
+            BindToViewModel(_locationEntry.Input, Entry.TextProperty, vm => vm.LocationName);
+            BindToViewModel(_locationEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidLocationname);
+
+            BindToViewModel(_zipCodetEntry.Input, Entry.TextProperty, vm => vm.Zipcode);
+            BindToViewModel(_zipCodetEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidZipcode);
+
+            //Buttons
+            BindToViewModel(_acceptButton, CustomButton.CommandProperty, vm => vm.CreatePartyCommand);
+
             _image.IsVisible = false;
             // Change grid columns and rows if the device is windows
             if (Device.OS == TargetPlatform.Windows)
@@ -121,7 +161,11 @@ namespace App2Night.View
             // set Content
             _tableView.Root = new TableRoot
             {
-                new TableSection("Description")
+                new TableSection()
+                {
+                    new ViewCell {View = _map }
+                },
+                new TableSection(AppResources.Description)
                 {
                     new ViewCell {View = _entryName},
                     new ViewCell {View = _descriptionEntry},
@@ -129,9 +173,11 @@ namespace App2Night.View
                     new ViewCell {View = _timePicker},
                     new ViewCell {View = _datePicker},
                 },
-                new TableSection("Orte")
+				new TableSection(AppResources.Location)
                 {
                     new ViewCell {View = _map},
+                    new ViewCell { View = _locationEntry },
+					// street name and number
                     new ViewCell {View = new Grid
                     {
                         ColumnDefinitions =
@@ -145,6 +191,7 @@ namespace App2Night.View
                             {_numberEntry, 1,0}
                         }
                     }},
+					// location name and zipcode
                     new ViewCell {View = new Grid
                     {
                         ColumnDefinitions =
@@ -154,11 +201,11 @@ namespace App2Night.View
                         },
                         Children =
                         {
-                            {_locationEntry, 0,0},
+                            {_cityNameEntry, 0,0},
                             {_zipCodetEntry, 1,0}
-                        }
-
+                        } 
                     }},
+					// accept and remove btn
 					new ViewCell {View = new Grid
 					{
 						ColumnDefinitions =
@@ -170,37 +217,19 @@ namespace App2Night.View
 						{
 								{_acceptButton, 0,0},
 								{_deleteButton, 1,0}
-						}
-
-					}},
-					
-
+						} 
+					}}, 
                 }
             };
 
 
-            Content = new Grid
-            {
-                ColumnSpacing = 0,
-                RowSpacing = 0,
-                ColumnDefinitions =
-                {
-                    new ColumnDefinition {Width = new GridLength(0, GridUnitType.Star)},
-                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
-                    new ColumnDefinition {Width = new GridLength(0, GridUnitType.Star)},
-                },
-                RowDefinitions =
-                {
-                    new RowDefinition {Height = new GridLength(0, GridUnitType.Star)},
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Star)}, //Image 
-                    new RowDefinition {Height = new GridLength(4, GridUnitType.Star)}, //TableView
-                },
-                Children =
-                {
-                    {_image, 1, 1},
-                    {_tableView, 1, 2}
-                }
-            };
+            Content = _tableView;
+        }
+
+        protected override void OnSizeAllocated(double width, double height)
+        {
+            base.OnSizeAllocated(width, height);
+            _headerMap.HeightRequest = Width;
         }
 
         private void TextLength(object sender, TextChangedEventArgs e)

@@ -104,6 +104,7 @@
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Reachability.cs" />
+    <Compile Include="Service\iOSCultureService.cs" />
     <None Include="app.config" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist">
@@ -166,6 +167,14 @@
       <HintPath>..\..\packages\Portable.Ninject.3.3.1\lib\Xamarin.iOS\Ninject.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PCLStorage, Version=1.0.2.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\PCLStorage.1.0.2\lib\portable-Xamarin.iOS+Xamarin.Mac\PCLStorage.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PCLStorage.Abstractions, Version=1.0.2.0, Culture=neutral, PublicKeyToken=286fe515a2c35b64, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\PCLStorage.1.0.2\lib\portable-Xamarin.iOS+Xamarin.Mac\PCLStorage.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Plugin.Connectivity, Version=2.2.12.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Xam.Plugin.Connectivity.2.2.12\lib\Xamarin.iOS10\Plugin.Connectivity.dll</HintPath>
       <Private>True</Private>
@@ -223,6 +232,10 @@
     <ProjectReference Include="..\..\App2Night.Model\App2Night.Model.csproj">
       <Project>{2CB6E00C-B477-45A4-A455-8BE9A3B0AD49}</Project>
       <Name>App2Night.Model</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\App2Night.Service\App2Night.Service.csproj">
+      <Project>{CF6B0541-17AF-4FAA-BB46-6D6A715F725F}</Project>
+      <Name>App2Night.Service</Name>
     </ProjectReference>
     <ProjectReference Include="..\App2Night\App2Night.csproj">
       <Project>{82039704-FDA9-4BFF-A0ED-0FD841A1AB52}</Project>

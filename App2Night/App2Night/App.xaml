@@ -14,10 +14,22 @@
             <Color x:Key="SecondaryTextColor">#757575</Color>
             <Color x:Key="DividerColor">#BDBDBD</Color>
 
-            <Style x:Key="LabelBase" TargetType="Label" CanCascade="True">
+            <!-- Toast colors -->
+           <Color x:Key="SuccessColor">#3A9435</Color>
+           <Color x:Key="SuccessTextColor">Black</Color>
+
+          <Color x:Key="FailureColor">#D65466</Color>
+          <Color x:Key="FailureTextColor">Black</Color>
+
+          <Color x:Key="NeutralColor">#AC795E</Color>
+          <Color x:Key="NeutralTextColor">Black</Color>
+
+
+
+          <Style x:Key="LabelBase" TargetType="Label" CanCascade="True">
                 <Setter Property="TextColor" Value="#757575" />
-                <Setter Property="HorizontalTextAlignment" Value="Center" />
-                <Setter Property="VerticalTextAlignment" Value="Center" />
+                <Setter Property="HorizontalOptions" Value="Center" />
+                <Setter Property="VerticalOptions" Value="Center" />
             </Style>
 
             <Style TargetType="Label" BaseResourceKey="LabelBase" CanCascade="True" />

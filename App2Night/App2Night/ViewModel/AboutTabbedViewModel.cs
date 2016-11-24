@@ -1,4 +1,6 @@
-﻿using MvvmNano;
+﻿using System;
+using MvvmNano;
+using Xamarin.Forms;
 
 namespace App2Night.ViewModel
 {

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using App2Night.Model.HttpModel;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
@@ -9,6 +10,7 @@ namespace App2Night.ViewModel
 {
     public class LoginViewModel : MvvmNanoViewModel
     {
+        private readonly IAlertService _alertService;
         private string _password;
         private string _username;
         private bool _signUp;
@@ -16,6 +18,11 @@ namespace App2Night.ViewModel
         private bool _agbAccepted;
         MvvmNanoCommand MoveToDashboardCommand => new MvvmNanoCommand(() => NavigateTo<DashboardViewModel>());
         public MvvmNanoCommand StartLoginCommand => new MvvmNanoCommand(async () => await FormSubmitted());
+
+        public LoginViewModel(IAlertService alertService)
+        {
+            _alertService = alertService;
+        }
 
         public string Password
         {
@@ -122,25 +129,28 @@ namespace App2Night.ViewModel
         private async Task FormSubmitted()
         {
             Result result = null;
-
-            //Create user
-            if (this.SignUp)
-            {
-                var signUpData = new SignUp
-                {
-                    Email = Email,
-                    Password = Password,
-                    Username = Username
-                };
-                result = await MvvmNanoIoC.Resolve<IDataService>().CreateUser(signUpData); 
-                //TODO add result handling 
-            }
-            else 
+            using (var loading = UserDialogs.Instance.Loading(""))
             { 
-                 result = await MvvmNanoIoC.Resolve<IDataService>().RequestToken(Username, Password);
-                //TODO add result handling 
+                //Create user
+                if (this.SignUp)
+                {
+                    loading.Title = "Creating user";
+                    var signUpData = new SignUp
+                    {
+                        Email = Email,
+                        Password = Password,
+                        Username = Username
+                    };
+                    result = await MvvmNanoIoC.Resolve<IDataService>().CreateUser(signUpData); 
+                    _alertService.UserCreationFinished(result, Username);
+                }
+                else { 
+                    loading.Title = "Login";
+                     result = await MvvmNanoIoC.Resolve<IDataService>().RequestToken(Username, Password);
+                    _alertService.LoginFinished(result);
+                }
             }
-            if (result.Success)
+            if (result != null && result.Success)
                 NavigateTo<DashboardViewModel>();
         }
     }
