@@ -49,7 +49,7 @@ namespace App2Night.View.Subpages
             BindToViewModel(_nameLabel, Label.TextProperty, vm => vm.Party.Name);
             BindToViewModel(_descriptionLabel, Label.TextProperty, vm => vm.Party.Description);
             BindToViewModel(_dateLabel, Label.TextProperty, vm => vm.Party.Date);
-            BindToViewModel();
+            //BindToViewModel();
             Content = new StackLayout
             {
                 Children =
