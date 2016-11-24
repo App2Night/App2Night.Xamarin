@@ -189,7 +189,7 @@ namespace App2Night.Service.Service
 
         public async Task<Result> CreateUser(SignUp signUpModels)
         {
-            //Send the create user request
+            //SendKEY the create user request
             var creationResult = await _clientService.SendRequest(new Uri("api/user"), RestType.Post, bodyParameter: signUpModels, endpoint: Endpoint.User);
             
             //Login user after a successfull creation
