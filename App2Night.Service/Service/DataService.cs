@@ -246,8 +246,8 @@ namespace App2Night.Service.Service
             Result<IEnumerable<Party>> requestResult = new Result<IEnumerable<Party>>();
 
             try
-            {
-                var location = await CrossGeolocator.Current.GetPositionAsync(3000);
+            { 
+                var location = await CrossGeolocator.Current.GetPositionAsync(3000); 
                 var radius = _storageService.Storage.FilterRadius;
                 var uri = $"?lat={location.Latitude}&lon={location.Latitude}&radius={radius}";
                 requestResult =
