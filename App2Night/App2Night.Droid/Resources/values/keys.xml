@@ -5,5 +5,5 @@ Drop a file named keys.xml in this folder and put in your secrets.
 <resources>
   <string
       name="maps_key"
-        >AbCdEfGhIjKlMnOpQrStUvWValueGoesHere</string>
+        >KEY_HERE</string>
 </resources> 
