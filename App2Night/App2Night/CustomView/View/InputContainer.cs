@@ -6,7 +6,8 @@ using Color = System.Drawing.Color;
 namespace App2Night.CustomView.View
 {
     public class InputContainer<T> :Grid where T : Xamarin.Forms.View, new()
-    { 
+    {
+
         public static BindableProperty InputValidateProperty = BindableProperty.Create(nameof(InputValidate), typeof(object), typeof(InputContainer<T>), propertyChanged: delegate(BindableObject bindable, object value, object newValue) { ((InputContainer<T>)bindable).ChangeValidationItem((bool)newValue); });
 
         private bool _validationVisible = true;
@@ -37,6 +38,7 @@ namespace App2Night.CustomView.View
                 _validationIconLabel.TextColor = Color.DarkOrange.ToXamarinColor();
                 _validationIconLabel.FontSize = 10;
                 InvalidateLayout();
+
             }
         }
 
@@ -49,17 +51,10 @@ namespace App2Night.CustomView.View
 
 
         public T Input{ get; } = new T { HorizontalOptions = LayoutOptions.FillAndExpand, VerticalOptions = LayoutOptions.End};
-
-
-        public string IconCode
+        public string Image
         {
             get { return _imageLabel.Text; }
-            set
-            {
-                _imageLabel.Text = value; 
-                if(!string.IsNullOrEmpty(value))
-                    ColumnDefinitions[0].Width = new GridLength(30, GridUnitType.Absolute);
-            }
+            set { _imageLabel.Text = value; }
         }
 
         private Label _validationIconLabel = new Label
@@ -67,7 +62,9 @@ namespace App2Night.CustomView.View
             FontFamily = "FontAwesome", 
             Opacity = 0.7,
             Margin = new Thickness(3)
-        }; 
+        };
+
+        public double FontSize { get { return _imageLabel.FontSize; } set { _imageLabel.FontSize = value; } }
 
         Label _imageLabel = new Label
         {
@@ -82,7 +79,7 @@ namespace App2Night.CustomView.View
             ColumnSpacing = 0;
             ColumnDefinitions = new ColumnDefinitionCollection()
             {
-                new ColumnDefinition {Width = new GridLength(0, GridUnitType.Absolute)},
+                new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
                 new ColumnDefinition {Width = new GridLength(10, GridUnitType.Star)},
                 new ColumnDefinition {Width = new GridLength(50, GridUnitType.Absolute)},
 
