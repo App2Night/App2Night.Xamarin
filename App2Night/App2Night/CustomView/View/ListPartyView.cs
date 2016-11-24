@@ -43,7 +43,7 @@ namespace App2Night.CustomView.View
                     {
                         new Label
                         {
-                            Text = "Image"
+                            Text = "IconCode"
                         },
                         0, 0
                     },
