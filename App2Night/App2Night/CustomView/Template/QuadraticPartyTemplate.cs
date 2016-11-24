@@ -8,7 +8,7 @@ namespace App2Night.CustomView.Template
 {
     public class QuadraticPartyTemplate : Frame
     {
-        //MaskedImage image = new MaskedImage("App2Night.Data.Image.default.png")
+        //MaskedImage image = new MaskedImage("App2Night.Data.IconCode.default.png")
         //{
         //    Edge = false,
         //    InputTransparent = true,
@@ -20,7 +20,7 @@ namespace App2Night.CustomView.Template
         {
             Aspect = Aspect.AspectFill,
             InputTransparent = true,   
-                Source = ImageSource.FromResource("App2Night.Data.Image.icon.png"),
+                Source = ImageSource.FromResource("App2Night.Data.IconCode.icon.png"),
                 IsOpaque = false
             };
  

@@ -9,7 +9,9 @@ using Android.OS;
 using Android.Views;
 using HockeyApp.Android;
 using HockeyApp.Android.Metrics;
+using Xamarin;
 using Xamarin.Forms.Platform.Android;
+using Plugin.Permissions;
 
 namespace App2Night.Droid
 {
@@ -32,7 +34,8 @@ namespace App2Night.Droid
 			CrashManager.Register(this, "3aca0e171a5443c090b3e064f2e5ce4b");
 			UpdateManager.Register(this, "3aca0e171a5443c090b3e064f2e5ce4b");
 			MetricsManager.Register(Application, "3aca0e171a5443c090b3e064f2e5ce4b");
-			UserDialogs.Init(this); 
+			UserDialogs.Init(this);  
+            
 			Xamarin.FormsMaps.Init(this, bundle);
 			LoadApplication(new App());
 		}
@@ -52,6 +55,6 @@ namespace App2Night.Droid
 
 			base.OnPause();
 		}
-	}
+    }
 }
 

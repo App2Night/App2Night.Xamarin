@@ -246,10 +246,14 @@ namespace App2Night.Service.Service
             Result<IEnumerable<Party>> requestResult = new Result<IEnumerable<Party>>();
 
             try
-            {
+            { 
                 var location = await CrossGeolocator.Current.GetPositionAsync(3000);
+                string lat = location.Latitude.ToString();
+                lat = lat.Replace(",", ".");
+                string lon = location.Longitude.ToString();
+                lon = lon.Replace(",", ".");
                 var radius = _storageService.Storage.FilterRadius;
-                var uri = $"?lat={location.Latitude}&lon={location.Latitude}&radius={radius}";
+                var uri = $"?lat={lat}&lon={lon}&radius={radius.ToString()}";
                 requestResult =
                     await
                         _clientService.SendRequest<IEnumerable<Party>>("api/party", RestType.Get, urlQuery: uri,

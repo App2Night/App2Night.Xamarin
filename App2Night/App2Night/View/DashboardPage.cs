@@ -16,6 +16,7 @@ namespace App2Night.View
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public class DashboardPage : ContentPageWithPreview<DashboardViewModel>
     {
+        #region Views
         Map _headerMap = new Map()
         {
             HeightRequest = 200
@@ -26,7 +27,7 @@ namespace App2Night.View
             HeightRequest = 100,
             WidthRequest = 100,
             Margin = new Thickness(10),
-            Source = ImageSource.FromResource("App2Night.Data.Image.icon.png")
+            Source = ImageSource.FromResource("App2Night.Data.IconCode.icon.png")
         }; 
 
         private HorizontalGallerieView historyGallerieView = new HorizontalGallerieView
@@ -46,8 +47,8 @@ namespace App2Night.View
         {
             Columns = 1,
             Template = typeof(QuadraticPartyTemplate)
-        }; 
-
+        };
+        #endregion
         public DashboardPage()
         {   
             //User info view

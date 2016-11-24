@@ -20,7 +20,7 @@ namespace App2Night.View.Subpages
             var generalViewSize = 150;
             var iconImage = new Image
             {
-                Source = ImageSource.FromResource("App2Night.Data.Image.icon.png"),
+                Source = ImageSource.FromResource("App2Night.Data.IconCode.icon.png"),
                 Margin = new Thickness(8)
             }; 
             var generalView = new Grid

@@ -156,8 +156,8 @@
   <data name="Username" xml:space="preserve">
     <value>Username</value>
   </data>
-  <data name="Name" xml:space="preserve">
-    <value>Username</value>
+  <data name="PartyName" xml:space="preserve">
+    <value>Party name</value>
   </data>
   <data name="Description" xml:space="preserve">
     <value>Description</value>

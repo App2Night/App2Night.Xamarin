@@ -4,6 +4,7 @@ using App2Night.CustomView.View;
 using App2Night.Data.Language;
 using App2Night.Model.Enum;
 using App2Night.ViewModel;
+using Plugin.Media;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -14,22 +15,25 @@ namespace App2Night.View
     /// </summary>
     public class CreatePartyPage : ContentPageWithInfo<CreatePartyViewModel>
     {
+        //Default thicknes
+        private static Thickness _defaultMargin = new Thickness(5, 0);
+
         #region Views
 
-        private InputContainer<Entry> _entryName = new InputContainer<Entry>
+        private InputContainer<Entry> _nameEntry = new InputContainer<Entry>
         {
-			Input = {Placeholder = AppResources.Name},
-			ValidationVisible = true,
-            FontSize = 35,
-			Image = "\uf1ae"
+			Input = {Placeholder = AppResources.PartyName},
+			ValidationVisible = true, 
+			IconCode = "\uf0fc",
+            Margin = _defaultMargin
         };
 
         private InputContainer<Entry> _descriptionEntry = new InputContainer<Entry>
         {
 			Input = {Placeholder = AppResources.Description},
-			Image = "\uf040",
+			IconCode = "\uf040",
             HeightRequest = 100,
-            FontSize = 35,
+            Margin = _defaultMargin
         };
 
         private readonly InputContainer<DatePicker> _datePicker = new InputContainer<DatePicker>
@@ -39,46 +43,44 @@ namespace App2Night.View
                 MinimumDate = DateTime.Now,
                 MaximumDate = DateTime.Now.AddMonths(12)
             },
-            Image = "\uf073",
-            FontSize = 35,
+            IconCode = "\uf073",
+            Margin = _defaultMargin
         };
 
-        private InputContainer<TimePicker> _timePicker = new InputContainer<TimePicker> { Image = "\uf017", FontSize = 35, };
+        private InputContainer<TimePicker> _timePicker = new InputContainer<TimePicker> { IconCode = "\uf017" };
 
         private InputContainer<EnumBindablePicker<MusicGenre>> _musicGenreSwitch =
-			new InputContainer<EnumBindablePicker<MusicGenre>>{ Image = "\uf001", FontSize = 35, Input = { SelectedIndex = 0}};
+			new InputContainer<EnumBindablePicker<MusicGenre>>{ IconCode = "\uf001",   Input = { SelectedIndex = 0},
+                Margin = _defaultMargin
+            };
 
         private InputContainer<Entry> _cityNameEntry = new InputContainer<Entry>
         {
-            Input = { Placeholder = AppResources.Cityname },
-            FontSize = 35,
-            Image = "\uf279"
+            Input = { Placeholder = AppResources.Cityname }, 
+            IconCode = "\uf279" 
         };
 
         private InputContainer<Entry> _streetEntry = new InputContainer<Entry>
         {
-			Input = {Placeholder = AppResources.StrName},
-            FontSize = 35,
-            Image = "\uf0f3"
+			Input = {Placeholder = AppResources.StrName}, 
+            IconCode = "\uf0f3" 
         };
 
         private InputContainer<Entry> _numberEntry = new InputContainer<Entry>
         {
-			Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.HNumber},
-            FontSize = 35,
+			Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.HNumber}, 
         };
 
         private InputContainer<Entry> _locationEntry = new InputContainer<Entry>
         {
-			Input = {Placeholder = AppResources.Location},
-            FontSize = 35,
-            Image = "\uf015"
+			Input = {Placeholder = AppResources.Location}, 
+            IconCode = "\uf015",
+            Margin = _defaultMargin
         };
 
         InputContainer<Entry> _zipCodetEntry = new InputContainer<Entry>
         {
-			Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.Zipcode},
-            FontSize = 35,
+			Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.Zipcode}, 
         };
 
         private CustomButton _deleteButton = new CustomButton
@@ -93,9 +95,7 @@ namespace App2Night.View
             ButtonLabel = {FontFamily = "FontAwesome", FontSize = 50},
         };
 
-        private Map _headerMap = new Map()
-        { 
-        };
+        private Map _headerMap = new Map();
 
         private Image _image = new Image
         {
@@ -105,27 +105,31 @@ namespace App2Night.View
 
         private MapWrapper _map;
 
-        TableView _tableView = new TableView
+        readonly TableView _tableView = new TableView
         {
             HorizontalOptions = LayoutOptions.Center,
             RowHeight = 75,
             HasUnevenRows = true
         };
 
-        private TapGestureRecognizer _tapGesture = new TapGestureRecognizer();
+        private readonly TapGestureRecognizer _tapGesture = new TapGestureRecognizer();
 
         #endregion
 
         public CreatePartyPage()
-        { 
-            _map = new MapWrapper(_headerMap); 
+        {
+            
+
+            _map = new MapWrapper(_headerMap);
             // set tap gesture reconizer
-            _tapGesture.Tapped += LoadImage;
+            BindToViewModel(_tapGesture, TapGestureRecognizer.CommandProperty, vm => vm.LoadImageCommand);
+            BindToViewModel(_image, Image.SourceProperty, vm => vm.Image);
+            _image.GestureRecognizers.Add(_tapGesture);
             // set title of the page
             Title = AppResources.CreateParty;
 			// bind to view models
-			BindToViewModel(_entryName.Input, Entry.TextProperty, vm => vm.Name);
-			BindToViewModel(_entryName, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidName);
+			BindToViewModel(_nameEntry.Input, Entry.TextProperty, vm => vm.Name);
+			BindToViewModel(_nameEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidName);
 			BindToViewModel(_descriptionEntry.Input, Entry.TextProperty, vm => vm.Description);
 			BindToViewModel(_descriptionEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidDescription);
 			BindToViewModel(_musicGenreSwitch.Input, EnumBindablePicker<MusicGenre>.SelectedItemProperty, vm => vm.MusicGenre);
@@ -158,27 +162,20 @@ namespace App2Night.View
             if (Device.OS == TargetPlatform.Windows)
             {
             }
-            // set Content
-            _tableView.Root = new TableRoot
+
+            var layout = new StackLayout
             {
-                new TableSection()
-                {
-                    new ViewCell {View = _map }
-                },
-                new TableSection(AppResources.Description)
-                {
-                    new ViewCell {View = _entryName},
-                    new ViewCell {View = _descriptionEntry},
-                    new ViewCell {View = _musicGenreSwitch},
-                    new ViewCell {View = _timePicker},
-                    new ViewCell {View = _datePicker},
-                },
-				new TableSection(AppResources.Location)
-                {
-                    new ViewCell {View = _map},
-                    new ViewCell { View = _locationEntry },
-					// street name and number
-                    new ViewCell {View = new Grid
+                Spacing = 5,
+                Children =
+                { 
+                    _nameEntry,
+                    _descriptionEntry,
+                    _musicGenreSwitch,
+                    _datePicker,
+                    _timePicker,
+                    _map,
+                    _locationEntry,
+                    new Grid
                     {
                         ColumnDefinitions =
                         {
@@ -189,10 +186,10 @@ namespace App2Night.View
                         {
                             {_streetEntry, 0,0},
                             {_numberEntry, 1,0}
-                        }
-                    }},
-					// location name and zipcode
-                    new ViewCell {View = new Grid
+                        },
+            Margin = _defaultMargin
+                    },
+                    new Grid
                     {
                         ColumnDefinitions =
                         {
@@ -203,33 +200,36 @@ namespace App2Night.View
                         {
                             {_cityNameEntry, 0,0},
                             {_zipCodetEntry, 1,0}
-                        } 
-                    }},
-					// accept and remove btn
-					new ViewCell {View = new Grid
-					{
-						ColumnDefinitions =
-						{
-							new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
-							new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
-						},
-						Children =
-						{
-								{_acceptButton, 0,0},
-								{_deleteButton, 1,0}
-						} 
-					}}, 
+                        },
+            Margin = _defaultMargin
+                    }
                 }
             };
 
-
-            Content = _tableView;
+            Content = new Grid
+            {
+                RowDefinitions =
+                {
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)}
+                },
+                Children =
+                {
+                    new ScrollView
+                    {
+                        Content = layout
+                    },
+                    { new BoxView { Color = Color.Accent }, 0, 1  },
+                     
+                }
+            }; 
         }
 
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
-            _headerMap.HeightRequest = Width;
+            _headerMap.HeightRequest = width;
         }
 
         private void TextLength(object sender, TextChangedEventArgs e)
@@ -245,30 +245,32 @@ namespace App2Night.View
         }
 
         #region Events
-
-        /// <summary>
-        /// Loads the image. If image is null, _contentLabel is visible.
-        /// </summary>
-        /// <param name="o">O.</param>
-        /// <param name="e">E.</param>
-        void LoadImage(Object o, EventArgs e)
+        private async void MediaPicker(Object o, EventArgs e)
         {
-            /*ILoadImage galleryService = Xamarin.Forms.DependencyService.Get<ILoadImage>();
-            galleryService.ImageSelected +=
-                (i, imageSourceEventArgs) => _image.Source = imageSourceEventArgs.ImageSource;
-            galleryService.LoadImage();
-            if (_image.Source != null)
-            {
-                _ContentLabel.IsVisible = false;
-                _image.IsVisible = true;
-            }
-            else
-            {
-                _ContentLabel.IsVisible = true;
-                _image.IsVisible = false;
-            }*/
-        }
+            await CrossMedia.Current.Initialize();
 
+            if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+            {
+                await DisplayAlert("No Camera", ":( No camera available.", "OK");
+            }
+
+            var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+            {
+                Directory = "Sample",
+                Name = "test.jpg"
+            });
+
+            if (file == null)
+
+            await DisplayAlert("File Location", file.Path, "OK");
+
+            _image.Source = ImageSource.FromStream(() =>
+            {
+                var stream = file.GetStream();
+                file.Dispose();
+                return stream;
+            });
+        }
         /// <summary>
         /// Creates new party with the specific values of <see cref="T:App2Night.View.CreatePartyPage"/>.
         /// </summary>
@@ -287,7 +289,7 @@ namespace App2Night.View
         void Delete(Object o, EventArgs e)
         {
             TappedAnimation(_deleteButton);
-            _entryName.Input.Text = "";
+            _nameEntry.Input.Text = "";
             _descriptionEntry.Input.Text = "";
             _datePicker.Input.Date = DateTime.Now;
         }
