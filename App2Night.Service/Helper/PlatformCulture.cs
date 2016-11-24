@@ -2,6 +2,10 @@
 
 namespace App2Night.Service.Helper
 {
+    /// <summary>
+    /// Helper class to identify the culture on different platforms.
+    /// Taken from: https://developer.xamarin.com/guides/xamarin-forms/advanced/localization/
+    /// </summary>
     public class PlatformCulture
     {
         public PlatformCulture(string platformCultureString)

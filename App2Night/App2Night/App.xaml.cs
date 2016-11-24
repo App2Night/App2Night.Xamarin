@@ -59,7 +59,7 @@ namespace App2Night
             //{
             //    try
             //    {
-            //        await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys();
+            //        await MvvmNanoIoC.Resolve<IDataService>().RequestPartyWithFilter();
             //    }
             //    catch (Exception e)
             //    {
@@ -89,7 +89,7 @@ namespace App2Night
             DebugHelper.PrintDebug(DebugType.Info, isLoggedIn ? "Log in from last session." : "User not logged in. No token available.");
 
             //Make an inital token refresh 
-            Device.BeginInvokeOnMainThread(async ()=> await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys());
+            Device.BeginInvokeOnMainThread(async ()=> await MvvmNanoIoC.Resolve<IDataService>().RequestPartyWithFilter());
 
             if (!isLoggedIn)
             {
@@ -128,8 +128,7 @@ namespace App2Night
             MvvmNanoIoC.RegisterAsSingleton<IStorageService, StorageService>();
             MvvmNanoIoC.Register<IAlertService, AlertService>();
             MvvmNanoIoC.Register<IClientService, ClientService>();
-            MvvmNanoIoC.RegisterAsSingleton<IDataService, DataService>();
-            MvvmNanoIoC.RegisterAsSingleton<IImageFactory, ImageFactory>();
+            MvvmNanoIoC.RegisterAsSingleton<IDataService, DataService>(); 
         }
     }
 }

@@ -30,7 +30,7 @@ namespace App2Night.ViewModel
         {
             using (UserDialogs.Instance.Loading("Sync"))
             {
-                var result = await MvvmNanoIoC.Resolve<IDataService>().RefreshPartys();
+                var result = await MvvmNanoIoC.Resolve<IDataService>().RequestPartyWithFilter();
             
             }
         //     UserDialogs.Instance.Toast(
