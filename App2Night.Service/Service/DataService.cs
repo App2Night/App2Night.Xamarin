@@ -278,13 +278,20 @@ namespace App2Night.Service.Service
             else
             {
                 var cachedData = new List<Party>();
-                for (int i = 0; i < 10; i++)
-                {
-                    cachedData.Add(new Party
+                string buf = "";
+                    for (int j = 0; j < 31; j++)
                     {
-                        Name = "Cached dummy Party bla bla bla bla bla bla party party party" + (i + 1),
-                        Date = DateTime.Today.AddDays(i).AddMonths(i)
-                    });
+                        buf += "A";
+                    }
+                for (int i = 0; i < 5; i++)
+                {
+                    
+                        cachedData.Add(new Party
+                        {
+                            Name = buf + (i + 1),
+                            Date = DateTime.Today.AddDays(i).AddMonths(i)
+                        }); 
+                    
                 }
                 //TODO Replace with real caching
                 if (cachedData.Count > 0)
