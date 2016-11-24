@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using App2Night.DependencyService;
 using App2Night.Model.Model;
+using App2Night.ViewModel;
+using MvvmNano;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -92,6 +94,12 @@ namespace App2Night.CustomView.View
             Content = new ScrollView { Content = layoutGrid };
         }
 
+        public override void More()
+        {
+            base.More();
+            MvvmNanoIoC.Resolve<NavigationViewModel>().OpenMore(Party);
+        }
+
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
@@ -105,7 +113,7 @@ namespace App2Night.CustomView.View
 
         private void OpenNavigationToParty(object sender, EventArgs eventArgs)
         {
-
+            
         }
     }
 }

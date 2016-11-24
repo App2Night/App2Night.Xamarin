@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using App2Night.Model.Enum;
 using App2Night.Model.Model;
 using App2Night.Service;
 using App2Night.Service.Helper;
 using App2Night.Service.Interface;
 using MvvmNano;
+using Plugin.Media;
 using PropertyChanged;
+using Xamarin.Forms;
 
 namespace App2Night.ViewModel
 {
@@ -273,6 +276,45 @@ namespace App2Night.ViewModel
         string NormalizeString(string s)
         {
             return s.ToLower().Replace(" ", "");
+        }
+        public MvvmNanoCommand LoadImageCommand => new MvvmNanoCommand(async () => await MediaPicker());
+
+        Image _image = new Image();
+
+        public Image Image
+        {
+            get { return _image; }
+            set
+            {
+                _image = value;
+                NotifyPropertyChanged(nameof(MediaPicker));
+            }
+        }
+
+        private async Task MediaPicker()
+        {
+            await CrossMedia.Current.Initialize();
+
+            if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+            {
+                UserDialogs.Instance.Alert("No Camera", "OK");
+            }
+
+            var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+            {
+                Directory = "Sample",
+                Name = "test.jpg"
+            });
+
+            if (file == null)
+                UserDialogs.Instance.Alert("File Location", file.Path, "OK");
+
+            Image.Source = ImageSource.FromStream(() =>
+            {
+                var stream = file.GetStream();
+                file.Dispose();
+                return stream;
+            });
         }
     }
 }

@@ -4,6 +4,7 @@ using App2Night.CustomView.View;
 using App2Night.Data.Language;
 using App2Night.Model.Enum;
 using App2Night.ViewModel;
+using Plugin.Media;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -93,9 +94,7 @@ namespace App2Night.View
             ButtonLabel = {FontFamily = "FontAwesome", FontSize = 50},
         };
 
-        private Map _headerMap = new Map()
-        { 
-        };
+        private Map _headerMap = new Map();
 
         private Image _image = new Image
         {
@@ -105,22 +104,24 @@ namespace App2Night.View
 
         private MapWrapper _map;
 
-        TableView _tableView = new TableView
+        readonly TableView _tableView = new TableView
         {
             HorizontalOptions = LayoutOptions.Center,
             RowHeight = 75,
             HasUnevenRows = true
         };
 
-        private TapGestureRecognizer _tapGesture = new TapGestureRecognizer();
+        private readonly TapGestureRecognizer _tapGesture = new TapGestureRecognizer();
 
         #endregion
 
         public CreatePartyPage()
         { 
-            _map = new MapWrapper(_headerMap); 
+            _map = new MapWrapper(_headerMap);
             // set tap gesture reconizer
-            _tapGesture.Tapped += LoadImage;
+            BindToViewModel(_tapGesture, TapGestureRecognizer.CommandProperty, vm => vm.LoadImageCommand);
+            BindToViewModel(_image, Image.SourceProperty, vm => vm.Image);
+            _image.GestureRecognizers.Add(_tapGesture);
             // set title of the page
             Title = AppResources.CreateParty;
 			// bind to view models
@@ -245,30 +246,32 @@ namespace App2Night.View
         }
 
         #region Events
-
-        /// <summary>
-        /// Loads the image. If image is null, _contentLabel is visible.
-        /// </summary>
-        /// <param name="o">O.</param>
-        /// <param name="e">E.</param>
-        void LoadImage(Object o, EventArgs e)
+        private async void MediaPicker(Object o, EventArgs e)
         {
-            /*ILoadImage galleryService = Xamarin.Forms.DependencyService.Get<ILoadImage>();
-            galleryService.ImageSelected +=
-                (i, imageSourceEventArgs) => _image.Source = imageSourceEventArgs.ImageSource;
-            galleryService.LoadImage();
-            if (_image.Source != null)
-            {
-                _ContentLabel.IsVisible = false;
-                _image.IsVisible = true;
-            }
-            else
-            {
-                _ContentLabel.IsVisible = true;
-                _image.IsVisible = false;
-            }*/
-        }
+            await CrossMedia.Current.Initialize();
 
+            if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
+            {
+                await DisplayAlert("No Camera", ":( No camera available.", "OK");
+            }
+
+            var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
+            {
+                Directory = "Sample",
+                Name = "test.jpg"
+            });
+
+            if (file == null)
+
+            await DisplayAlert("File Location", file.Path, "OK");
+
+            _image.Source = ImageSource.FromStream(() =>
+            {
+                var stream = file.GetStream();
+                file.Dispose();
+                return stream;
+            });
+        }
         /// <summary>
         /// Creates new party with the specific values of <see cref="T:App2Night.View.CreatePartyPage"/>.
         /// </summary>
