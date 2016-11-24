@@ -13,8 +13,23 @@ namespace App2Night.CustomView.View
     public class PartyPreviewView : PreviewView
     {
         private Party Party => (Party) Item;
-        private MapWrapper map;
-
+        private MapWrapper _map;
+        Button _routeBtn = new Button
+        {
+            Text = "Route",
+            HorizontalOptions = LayoutOptions.Center
+        };
+        Style _infoLabelStyle = new Style(typeof(Label))
+        {
+            Setters =
+                {
+                    new Setter
+                    {
+                        Property = Label.FontSizeProperty,
+                        Value = 20
+                    }
+                }
+        };
         private readonly IUserLocationService _userLocationService =
             Xamarin.Forms.DependencyService.Get<IUserLocationService>();
 
@@ -24,39 +39,21 @@ namespace App2Night.CustomView.View
         { 
             BackgroundColor = Color.White;
             // set button to calculate route
-            var routeBtn = new Button
-            {
-                Text = "Route",
-                HorizontalOptions = LayoutOptions.Center
-            };
-            // TODO Handle BtnClicked
-            routeBtn.Clicked += OpenNavigationToParty;
+            _routeBtn.Clicked += OpenNavigationToParty;
             Coordinates userCoordinates = _userLocationService.GetUserCoordinates(); 
-            map = new MapWrapper(new Map(MapSpan.FromCenterAndRadius(
+            _map = new MapWrapper(new Map(MapSpan.FromCenterAndRadius(
                 new Position(userCoordinates.Latitude, userCoordinates.Longitude),
                 Distance.FromMiles(0.3)))
             {
                 IsShowingUser = true 
             });
-            Grid.SetColumnSpan(map, 2);
+            Grid.SetColumnSpan(_map, 2);
 
-            Style infoLabelStyle = new Style(typeof(Label))
-            {
-                Setters =
-                {
-                    new Setter
-                    {
-                        Property = Label.FontSizeProperty,
-                        Value = 20
-                    }
-                }
-            };
-
-            var dateLabel = new Label{Style = infoLabelStyle};
+            var dateLabel = new Label{Style = _infoLabelStyle};
             dateLabel.SetBinding(Label.TextProperty, "Date");
-            var startTimeLabel = new Label { Style = infoLabelStyle };
+            var startTimeLabel = new Label { Style = _infoLabelStyle };
             startTimeLabel.SetBinding(Label.TextProperty, "Date");
-            var genreLabel = new Label { Style = infoLabelStyle };
+            var genreLabel = new Label { Style = _infoLabelStyle };
             genreLabel.SetBinding(Label.TextProperty, "Genre");
 
             var views = new ResourceDictionary()
@@ -79,14 +76,14 @@ namespace App2Night.CustomView.View
                 },
                 Children =
                 {
-                    map
+                    _map
                 }
             };
             int rowCounter = 1;
             foreach (KeyValuePair<string, object> valuePair in views)
             {
                 layoutGrid.RowDefinitions.Add(new RowDefinition {Height = new GridLength(1, GridUnitType.Star)});
-                layoutGrid.Children.Add(new Label {Text = valuePair.Key, Style = infoLabelStyle, HorizontalOptions = LayoutOptions.Start}, 0, rowCounter);
+                layoutGrid.Children.Add(new Label {Text = valuePair.Key, Style = _infoLabelStyle, HorizontalOptions = LayoutOptions.Start}, 0, rowCounter);
                 layoutGrid.Children.Add((Xamarin.Forms.View) valuePair.Value, 1, rowCounter); 
                 rowCounter++;
             }

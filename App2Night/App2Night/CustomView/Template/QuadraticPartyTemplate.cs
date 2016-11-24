@@ -1,4 +1,4 @@
-﻿using System; 
+﻿using System;
 using App2Night.CustomView.View;
 using App2Night.Model.Model;
 using App2Night.ValueConverter;
@@ -8,69 +8,66 @@ namespace App2Night.CustomView.Template
 {
     public class QuadraticPartyTemplate : Frame
     {
-        //MaskedImage image = new MaskedImage("App2Night.Data.IconCode.default.png")
-        //{
-        //    Edge = false,
-        //    InputTransparent = true,
-        //    DrawGradient = true
-        //};
-        Label _distanceLabel;
+        #region Views
 
-        Image image = new Image 
+        Label _distanceLabel = new Label
+        {
+            TextColor = Color.White
+        };
+
+        Label _titleLabel = new Label()
+        {
+            FontSize = 20,
+            HorizontalTextAlignment = TextAlignment.Start
+        };
+
+        CustomButton _likeButton = new CustomButton
+        {
+            Text = "\uf004",
+            FontFamily = "FontAwesome",
+            HorizontalOptions = LayoutOptions.End,
+            VerticalOptions = LayoutOptions.Start,
+            Margin = 10,
+            FontSize = 50,
+            ButtonLabel = {TextColor = Color.White}
+        };
+
+        CustomButton _shareIconLabel = new CustomButton
+        {
+            FontFamily = "FontAwesome",
+            Text = "\uf1e0",
+            HorizontalOptions = LayoutOptions.Center,
+            Margin = new Thickness(8, 0),
+            ButtonLabel = { FontSize = 35}
+        };
+
+        Image _image = new Image
         {
             Aspect = Aspect.AspectFill,
-            InputTransparent = true,   
-                Source = ImageSource.FromResource("App2Night.Data.IconCode.icon.png"),
-                IsOpaque = false
-            };
- 
+            InputTransparent = true,
+            Source = ImageSource.FromResource("App2Night.Data.IconCode.icon.png"),
+            IsOpaque = false
+        };
 
+        #endregion
+        TapGestureRecognizer _tapGestureRecognizer = new TapGestureRecognizer();
+        private CommitmentState _state = CommitmentState.Rejected;
         public QuadraticPartyTemplate()
         {
             BackgroundColor = Color.White;
             Padding = 8;
-            HasShadow = true; 
+            HasShadow = true;
 
-            var titleLabel = new Label()
+            _titleLabel.SetBinding(Label.TextProperty, "Name");
+            _distanceLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
+            _shareIconLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
+            _likeButton.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
+
+            _tapGestureRecognizer.Tapped += TappedLikeBtn;
+            _likeButton.GestureRecognizers.Add(_tapGestureRecognizer);
+
+            Content = new Grid
             {
-                FontSize = 20,
-                HorizontalTextAlignment = TextAlignment.Start
-            };
-            titleLabel.SetBinding(Label.TextProperty, "Name");
-
-            _distanceLabel = new Label
-            { 
-                TextColor = Color.White
-            };
-            _distanceLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter()); 
-
-
-            var shareIconLabel = new CustomButton
-            {
-                FontFamily = "FontAwesome",
-                Text = "\uf1e0",
-                HorizontalOptions = LayoutOptions.End,
-                Margin = new Thickness(8, 0)
-            };
-            shareIconLabel.ButtonLabel.FontSize = 30;
-            shareIconLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
-
-            var likeButton = new CustomButton
-            {
-                Text = "\uf004",
-                FontFamily = "FontAwesome",
-                HorizontalOptions = LayoutOptions.End,
-                VerticalOptions = LayoutOptions.Start,
-                Margin = 10,
-                FontSize = 50
-            };
-            likeButton.ButtonLabel.TextColor = Color.White;
-            likeButton.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
-
-
-            var mainLayoutGrid = new Grid
-            {
-
                 RowDefinitions = new RowDefinitionCollection
                 {
                     new RowDefinition {Height = new GridLength(5, GridUnitType.Star)},
@@ -78,16 +75,46 @@ namespace App2Night.CustomView.Template
                 },
                 Children =
                 {
-                    //image,
-                    new BoxView { Color = Color.Green.MultiplyAlpha(0.9), InputTransparent = true},
+                    //_image,
+                    new BoxView {Color = Color.Green.MultiplyAlpha(0.9), InputTransparent = true},
                     _distanceLabel,
-                    likeButton,
-                    {titleLabel, 0, 1},
-                    {shareIconLabel, 0, 1}
+                    _likeButton,
+                    {new Grid
+                    {
+                        ColumnDefinitions = new ColumnDefinitionCollection
+                        {
+                           new ColumnDefinition { Width = new GridLength(5, GridUnitType.Star)},
+                           new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star)},
+                        },
+                        Children =
+                        {
+                            {_titleLabel,0,0},
+                            {_shareIconLabel,1,0}
+                        }
+                    },0,1}
                 }
             };
-            Content = mainLayoutGrid;
-        } 
+        }
+        
+        private void TappedLikeBtn(object sender, EventArgs e)
+        {
+            if (_state == CommitmentState.Rejected)
+            {
+                _likeButton.ButtonLabel.TextColor = Color.Red;
+                _state = CommitmentState.Accepted;
+            } else if (_state == CommitmentState.Accepted)
+            {
+                _likeButton.ButtonLabel.TextColor = Color.White;
+                _state = CommitmentState.Rejected;
+            }
+        }
+
+        public enum CommitmentState
+        {
+            Accepted,
+            Noted,
+            Rejected
+        }
 
         protected override void OnPropertyChanged(string propertyName = null)
         {
@@ -123,7 +150,6 @@ namespace App2Night.CustomView.Template
                             $"{distance} {unit}";
                     }
                 };
-                
             }
         }
     }
