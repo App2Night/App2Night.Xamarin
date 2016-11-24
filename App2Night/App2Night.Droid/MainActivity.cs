@@ -11,6 +11,7 @@ using HockeyApp.Android;
 using HockeyApp.Android.Metrics;
 using Xamarin;
 using Xamarin.Forms.Platform.Android;
+using Plugin.Permissions;
 
 namespace App2Night.Droid
 {
@@ -54,6 +55,6 @@ namespace App2Night.Droid
 
 			base.OnPause();
 		}
-	}
+    }
 }
 

@@ -134,7 +134,7 @@ namespace App2Night.CustomView.View
 
         public event EventHandler<object> MoreEvent;
 
-        public void More()
+        public virtual void More()
         {
             if (MoreEvent != null)
                 MoreEvent(this, EventArgs.Empty);

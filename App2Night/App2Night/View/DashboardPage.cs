@@ -16,6 +16,7 @@ namespace App2Night.View
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public class DashboardPage : ContentPageWithPreview<DashboardViewModel>
     {
+        #region Views
         Map _headerMap = new Map()
         {
             HeightRequest = 200
@@ -46,8 +47,8 @@ namespace App2Night.View
         {
             Columns = 1,
             Template = typeof(QuadraticPartyTemplate)
-        }; 
-
+        };
+        #endregion
         public DashboardPage()
         {   
             //User info view

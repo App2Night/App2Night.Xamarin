@@ -1,16 +1,21 @@
 ﻿using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.DependencyService;
+using App2Night.Model.Model;
 using App2Night.Service.Interface;
 using App2Night.View;
+using App2Night.ViewModel.Subpages;
 using MvvmNano;
 
 namespace App2Night.ViewModel
 {
     public class NavigationViewModel : MvvmNanoViewModel
     {
-        
 
+        public void OpenMore(Party party)
+        {
+            NavigateTo<PartyDetailViewModel, Party>(party);
+        }
         public MvvmNanoCommand SyncCommand => new MvvmNanoCommand(async ()=> await Sync());
 
         public void OpenLogin()
