@@ -10,35 +10,29 @@ namespace App2Night.View.Subpages
     {
         #region Views
         InputContainer<Label> _nameLabel = new InputContainer<Label>
-        {
-            FontSize = 35,
-            Image = "\uf1ae"
+        { 
+            IconCode = "\uf1ae"
         };
         InputContainer<Label> _descriptionLabel = new InputContainer<Label>
         {
-            Image = "\uf040",
-            HeightRequest = 100,
-            FontSize = 35,
+            IconCode = "\uf040",
+            HeightRequest = 100 
         };
         InputContainer<Label> _dateLabel = new InputContainer<Label>
         {
-            Image = "\uf073",
-            FontSize = 35,
+            IconCode = "\uf073" 
         };
         InputContainer<Label> _creationDateLabel = new InputContainer<Label>
         {
-            Image = "\uf017",
-            FontSize = 35,
+            IconCode = "\uf017" 
         };
         InputContainer<Label> _MusicGenreLabel = new InputContainer<Label>
         {
-            Image = "\uf001",
-            FontSize = 35,
+            IconCode = "\uf001" 
         };
         InputContainer<Label> _partyTypeLabel = new InputContainer<Label>
         {
-            Image = "\uf0fc",
-            FontSize = 35,
+            IconCode = "\uf0fc" 
         };
         MapWrapper _partyLocation = new MapWrapper(new Map());
         #endregion

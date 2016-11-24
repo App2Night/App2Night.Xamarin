@@ -27,7 +27,7 @@ namespace App2Night.View
             HeightRequest = 100,
             WidthRequest = 100,
             Margin = new Thickness(10),
-            Source = ImageSource.FromResource("App2Night.Data.Image.icon.png")
+            Source = ImageSource.FromResource("App2Night.Data.IconCode.icon.png")
         }; 
 
         private HorizontalGallerieView historyGallerieView = new HorizontalGallerieView

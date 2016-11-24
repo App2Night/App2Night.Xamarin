@@ -278,20 +278,20 @@ namespace App2Night.Data.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Username.
-        /// </summary>
-        public static string Name {
-            get {
-                return ResourceManager.GetString("Name", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Recent parties.
         /// </summary>
         public static string PartyHistory {
             get {
                 return ResourceManager.GetString("PartyHistory", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Party name.
+        /// </summary>
+        public static string PartyName {
+            get {
+                return ResourceManager.GetString("PartyName", resourceCulture);
             }
         }
         
