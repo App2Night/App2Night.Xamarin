@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Linq;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
 using App2Night.ViewModel.Subpages;
-using MvvmNano; 
+using MvvmNano;
 
 namespace App2Night.ViewModel
-{ 
+{
     public class DashboardViewModel : MvvmNanoViewModel
     {
         public bool InterestingPartieAvailable { get; set; }
@@ -27,7 +24,7 @@ namespace App2Night.ViewModel
         public MvvmNanoCommand MoveToHistoryCommand => new MvvmNanoCommand(() => NavigateTo<HistoryViewModel>());
         public MvvmNanoCommand MoveToPartyPicker => new MvvmNanoCommand(() => NavigateTo<PartyPickerViewModel>());
 
-		IDataService _service;
+        readonly IDataService _service;
 
 
 		public DashboardViewModel(IDataService service)
@@ -35,7 +32,7 @@ namespace App2Night.ViewModel
             
 			_service = service;
 			_service.PartiesUpdated += OnPartiesUpdated;
-			_User = _service.User;
+			_user = _service.User;
 
 			SetAvailabilitys();
         } 
@@ -45,14 +42,14 @@ namespace App2Night.ViewModel
             SetAvailabilitys();
         }
 
-		private Model.Model.User _User;
+		private Model.Model.User _user;
 
 		public Model.Model.User User
 		{
-			get { return _User; }
+			get { return _user; }
 			set
 			{
-				_User = value;
+				_user = value;
 				NotifyPropertyChanged();
 				NotifyPropertyChanged("IsFormValid");
 			}

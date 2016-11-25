@@ -5,6 +5,7 @@ namespace App2Night.CustomView.View
 {
     public class PreviewView : ContentView
     {
+        #region views  
         static Style _labelStyle = new Style(typeof(Label))
         {
             BaseResourceKey = "AccentLabel",
@@ -16,7 +17,7 @@ namespace App2Night.CustomView.View
                     Value = 23
                 }
             }
-        }; 
+        };
 
         protected readonly object Item;
 
@@ -25,14 +26,17 @@ namespace App2Night.CustomView.View
             HorizontalOptions = LayoutOptions.Start,
             WidthRequest = 50,
             Text = "\uf078",
-            VerticalOptions = LayoutOptions.Center 
+            VerticalOptions = LayoutOptions.Center,
+            ButtonLabel = { FontFamily = "FontAwesome" }
         };
+
         CustomButton _moreButton = new CustomButton()
         {
             HorizontalOptions = LayoutOptions.End,
             WidthRequest = 50,
             Text = "\uf061",
-            VerticalOptions = LayoutOptions.Center
+            VerticalOptions = LayoutOptions.Center,
+            ButtonLabel = { FontFamily = "FontAwesome" }
         };
 
         Label _titleLabel = new Label
@@ -40,83 +44,102 @@ namespace App2Night.CustomView.View
             Style = _labelStyle
         };
 
+        private BoxView _middleBoxView = new BoxView
+        {
+            Color = Color.Accent
+        };
+
+        private BoxView _topBoxView = new BoxView
+        {
+            Color = (Color) Application.Current.Resources["PrimaryTextColor"]
+        };
+
         public new Xamarin.Forms.View Content
         {
             get { return _content.Content; }
-            set
-            {
-                _content.Content = value;
-            }
+            set { _content.Content = value; }
         }
 
         readonly ContentView _content = new ContentView();
-
-        public void StartOpeningAnimation(uint length = 500U)
-        {
-            _titleLabel.SetBinding(Label.TextProperty, "Name");
-             
-
-            _closeButton.ButtonLabel.Rotation = 180;
-            Animation openingAnimation = new Animation(d =>
-            {
-                _closeButton.ButtonLabel.Rotation = 180*d;
-            },1,0);
-            openingAnimation.Commit(this, "StartOpeningAnimation", length: length);
-        }
-
-        public void StartClosingAnimataion(uint length = 500U)
-        {
-            _closeButton.ButtonLabel.Rotation = 0;
-            Animation openingAnimation = new Animation(d =>
-            {
-                _closeButton.ButtonLabel.Rotation = 180 * d;
-            }, 0, 1);
-            openingAnimation.Commit(this, "StartOpeningAnimation", length: length);
-        }
+        #endregion  
 
         public PreviewView(string title, object item)
         {
             BindingContext = item;
-            _moreButton.ButtonLabel.FontFamily = "FontAwesome";
-            _closeButton.ButtonLabel.FontFamily = "FontAwesome";
+            Item = item;
+            _titleLabel.Text = title;
             _moreButton.ButtonLabel.Style = _labelStyle;
             _closeButton.ButtonLabel.Style = _labelStyle;
-
-            Item = item;
+            // add events
             _closeButton.ButtonTapped += CloseButtonOnButtonTapped;
             _moreButton.ButtonTapped += MoreButtonOnTapped;
-            _titleLabel.Text = title;
             var mainGrid = new Grid
             {
                 RowSpacing = 0,
                 RowDefinitions =
                 {
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)}, 
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
                     new RowDefinition {Height = new GridLength(50, GridUnitType.Absolute)},
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)}, 
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
                     new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
+                },
+                ColumnDefinitions =
+                {
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                    new ColumnDefinition {Width = new GridLength(4, GridUnitType.Star)},
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
                 },
                 Children =
                 {
-                    new BoxView { Color = (Color) Application.Current.Resources["DarkPrimaryColor"]},
-                    {new BoxView {  Color = (Color) Application.Current.Resources["PrimaryTextColor"]},0,1 },
-                    {_closeButton,0,1 },
-                    { _titleLabel,0,1 },
-                    {_moreButton,0,1 },
-                    { new BoxView { Color = Color.Accent}, 0,2},
-                    {_content, 0, 3 }
+                    new BoxView {Color = (Color) Application.Current.Resources["DarkPrimaryColor"]},
+                    {_topBoxView, 0, 1},
+                    {_closeButton, 0, 1},
+                    {_titleLabel, 1, 1},
+                    {_moreButton, 2, 1},
+                    {_middleBoxView, 0, 2},
+                    {_content, 0, 3}
                 }
             };
+            Grid.SetColumnSpan(_content, 2);
+            Grid.SetColumnSpan(_middleBoxView, 2);
+            Grid.SetColumnSpan(_topBoxView, 2);
             base.Content = mainGrid;
         }
 
+        #region Events
+        /// <summary>
+        /// Starts animation that rotate the <code>_closeButton</code>.
+        /// </summary>
+        /// <param name="length"></param>
+        public void StartOpeningAnimation(uint length = 500U)
+        {
+            _titleLabel.SetBinding(Label.TextProperty, "Name");
+
+            _closeButton.ButtonLabel.Rotation = 180;
+            Animation openingAnimation = new Animation(d => { _closeButton.ButtonLabel.Rotation = 180*d; }, 1, 0);
+            openingAnimation.Commit(this, "StartOpeningAnimation", length: length);
+        }
+
+        /// <summary>
+        /// Starts animation that rotate the <code>_closeButton</code>.
+        /// </summary>
+        /// <param name="length"><see cref="uint"/>of the length of the animation.</param>
+        public void StartClosingAnimataion(uint length = 500U)
+        {
+            _closeButton.ButtonLabel.Rotation = 0;
+            Animation openingAnimation = new Animation(d => { _closeButton.ButtonLabel.Rotation = 180*d; }, 0, 1);
+            openingAnimation.Commit(this, "StartOpeningAnimation", length: length);
+        }
+
+        /// <summary>
+        /// Handles <see cref="_moreButton"/> tapped event. Animation fired and <see cref="VisualElement.TranslationX"/> changes.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void MoreButtonOnTapped(object sender, EventArgs e)
         {
-            Animation moveAnimation = new Animation(d =>
-            {
-                _moreButton.TranslationX = d*100;
-            },0,1);
-            moveAnimation.Commit(this,"MoveMoreButton", length:1000U, finished: (d, b) =>_moreButton.TranslationX = 0);
+            Animation moveAnimation = new Animation(d => { _moreButton.TranslationX = d*100; }, 0, 1);
+            moveAnimation.Commit(this, "MoveMoreButton", length: 1000U, finished: (d, b) => _moreButton.TranslationX = 0);
         }
 
         private void CloseButtonOnButtonTapped(object sender, EventArgs eventArgs)
@@ -128,7 +151,7 @@ namespace App2Night.CustomView.View
 
         public void CloseView()
         {
-            if(CloseViewEvent!=null)
+            if (CloseViewEvent != null)
                 CloseViewEvent(this, EventArgs.Empty);
         }
 
@@ -139,10 +162,16 @@ namespace App2Night.CustomView.View
             if (MoreEvent != null)
                 MoreEvent(this, EventArgs.Empty);
         }
+
+        #endregion
     }
 
+    /// <summary>
+    /// Enum to compare state of animation.
+    /// </summary>
     public enum AnimationType
     {
-        Opening, Closing
+        Opening,
+        Closing
     }
 }
