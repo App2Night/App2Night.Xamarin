@@ -6,6 +6,7 @@ namespace App2Night.CustomView.View
     public class PreviewView : ContentView
     {
         #region views  
+
         static Style _labelStyle = new Style(typeof(Label))
         {
             BaseResourceKey = "AccentLabel",
@@ -27,7 +28,7 @@ namespace App2Night.CustomView.View
             WidthRequest = 50,
             Text = "\uf078",
             VerticalOptions = LayoutOptions.Center,
-            ButtonLabel = { FontFamily = "FontAwesome" }
+            ButtonLabel = {FontFamily = "FontAwesome"}
         };
 
         CustomButton _moreButton = new CustomButton()
@@ -36,12 +37,13 @@ namespace App2Night.CustomView.View
             WidthRequest = 50,
             Text = "\uf061",
             VerticalOptions = LayoutOptions.Center,
-            ButtonLabel = { FontFamily = "FontAwesome" }
+            ButtonLabel = {FontFamily = "FontAwesome"}
         };
 
         Label _titleLabel = new Label
         {
-            Style = _labelStyle
+            Style = _labelStyle,
+            HorizontalOptions = LayoutOptions.Center
         };
 
         private BoxView _middleBoxView = new BoxView
@@ -61,7 +63,8 @@ namespace App2Night.CustomView.View
         }
 
         readonly ContentView _content = new ContentView();
-        #endregion  
+
+        #endregion
 
         public PreviewView(string title, object item)
         {
@@ -78,35 +81,44 @@ namespace App2Night.CustomView.View
                 RowSpacing = 0,
                 RowDefinitions =
                 {
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
-                    new RowDefinition {Height = new GridLength(50, GridUnitType.Absolute)},
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)}, // header information
+                    new RowDefinition {Height = new GridLength(50, GridUnitType.Absolute)}, // content
                     new RowDefinition {Height = new GridLength(1, GridUnitType.Absolute)},
                     new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
-                },
-                ColumnDefinitions =
-                {
-                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
-                    new ColumnDefinition {Width = new GridLength(4, GridUnitType.Star)},
-                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
                 },
                 Children =
                 {
                     new BoxView {Color = (Color) Application.Current.Resources["DarkPrimaryColor"]},
                     {_topBoxView, 0, 1},
-                    {_closeButton, 0, 1},
-                    {_titleLabel, 1, 1},
-                    {_moreButton, 2, 1},
+                    // add grid to handle length of party name
+                    {
+                        new Grid
+                        {
+                            ColumnSpacing = 0,
+                            ColumnDefinitions =
+                            {
+                                new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                                new ColumnDefinition {Width = new GridLength(4, GridUnitType.Star)},
+                                new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                            },
+                            Children =
+                            {
+                                {_closeButton, 0, 0},
+                                {_titleLabel, 1, 0},
+                                {_moreButton, 2, 0}
+                            }
+                        },
+                        0, 1
+                    },
                     {_middleBoxView, 0, 2},
                     {_content, 0, 3}
                 }
             };
-            Grid.SetColumnSpan(_content, 2);
-            Grid.SetColumnSpan(_middleBoxView, 2);
-            Grid.SetColumnSpan(_topBoxView, 2);
             base.Content = mainGrid;
         }
 
         #region Events
+
         /// <summary>
         /// Starts animation that rotate the <code>_closeButton</code>.
         /// </summary>
