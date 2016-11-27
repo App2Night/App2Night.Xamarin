@@ -14,7 +14,7 @@ using Xamarin.Forms.Xaml;
 namespace App2Night.View
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public class DashboardPage : ContentPageWithPreview<DashboardViewModel>
+    public class DashboardPage : CustomContentPage<DashboardViewModel>
     {
         #region Views
 

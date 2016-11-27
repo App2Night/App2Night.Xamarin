@@ -12,7 +12,7 @@ namespace App2Night.View
     /// <summary>
     /// Create party page.
     /// </summary>
-    public class CreatePartyPage : ContentPageWithInfo<CreatePartyViewModel>
+    public class CreatePartyPage : CustomContentPage<CreatePartyViewModel>
     {
         //Default thicknes
         private static Thickness _defaultMargin = new Thickness(5, 0);

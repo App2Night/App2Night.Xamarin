@@ -249,11 +249,7 @@ namespace App2Night.Service.Service
         }
 
         public async Task<Result> RefreshToken()
-        {
-
-            if (!await CheckIfTokenIsValid())
-                return new Result(); //Resault.success = false
-
+        { 
             Dictionary<string, string> tokenRefreshObject = CreateRefreshDictionary();
 
             //Request token refresh 

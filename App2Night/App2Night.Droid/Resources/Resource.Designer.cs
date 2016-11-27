@@ -182,7 +182,7 @@ namespace App2Night.Droid
 			global::HockeyApp.Resource.String.library_name = global::App2Night.Droid.Resource.String.library_name;
 			global::HockeyApp.Resource.Style.HockeyApp_ButtonStyle = global::App2Night.Droid.Resource.Style.HockeyApp_ButtonStyle;
 			global::HockeyApp.Resource.Style.HockeyApp_EditTextStyle = global::App2Night.Droid.Resource.Style.HockeyApp_EditTextStyle;
-			global::HockeyApp.Resource.Style.HockeyApp_SingleLineInputStyle = global::App2Night.Droid.Resource.Style.HockeyApp_SingleLineInputStyle;
+			global::HockeyApp.Resource.Style.HockeyApp_SingleLineInputStyle = global::App2Night.Droid.Resource.Style.HockeyApp_SingleLineInputStyle; 
 			global::Splat.Resource.String.library_name = global::App2Night.Droid.Resource.String.library_name;
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::App2Night.Droid.Resource.Attribute.actionBarSize;
 		}

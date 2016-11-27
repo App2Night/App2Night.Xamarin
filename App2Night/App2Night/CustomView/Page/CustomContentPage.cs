@@ -2,13 +2,19 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using App2Night.CustomView.View;
+using App2Night.Service.Helper;
 using MvvmNano;
+using MvvmNano.Forms;
+using Plugin.Connectivity;
+using Plugin.Connectivity.Abstractions;
 using Xamarin.Forms;
 
 namespace App2Night.CustomView.Page
 {
-    public class ContentPageWithPreview<TViewModel> : ContentPageWithInfo<TViewModel> where TViewModel : MvvmNanoViewModel
+    public class CustomContentPage<TViewModel> : MvvmNanoContentPage<TViewModel> where TViewModel : MvvmNanoViewModel
     {
+        private static readonly double _size = 50;
+
         private ContentView _previewContainer1 = new ContentView
         {
             IsVisible = false
@@ -23,8 +29,6 @@ namespace App2Night.CustomView.Page
         public uint ClosingAnimationLength { get; set; } = 500;
         public uint SwitchingAnimationLength { get; set; } = 500;
 
-        
-
         /// <summary>
         /// Animations for the preview view gets handled here.
         /// </summary> 
@@ -32,46 +36,120 @@ namespace App2Night.CustomView.Page
         private int _selectedPreviewContainer;
         private PreviewView _preview;
 
-        private ContentView _content = new ContentView() ;
-
-        public new Xamarin.Forms.View  Content
+        Label _infoLabel = new Label
         {
-            get { return _content.Content; }
-            set { _content.Content = value; }
-        }
+            Text = "Your device is not connected to the internet.\n" +
+                   "App2Night will use cached data if available.",
+            TextColor = Color.White
+        };
+        BoxView _infoBackgroundBoxView = new BoxView
+        {
+            Color = System.Drawing.Color.DarkOrange.ToXamarinColor()
+        }; 
 
-        public ContentPageWithPreview()
-        { 
-            base.Content = new Grid
+        private Grid _contentGrid;
+        private Grid _previewGrid;
+
+        public CustomContentPage()
+        {
+            _contentGrid = new Grid
             {
                 RowSpacing = 0,
                 RowDefinitions =
                 {
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}
+                    new RowDefinition { Height = new GridLength(CrossConnectivity.Current.IsConnected ? 0 : _size, GridUnitType.Absolute)},
+                    new RowDefinition { Height = new GridLength(1, GridUnitType.Star)}
                 },
                 Children =
                 {
-                    _content,
-                    {_previewContainer1, 0,1 },
-                    {_previewContainer2, 0,1 } 
+                    
+                     _infoBackgroundBoxView,
+                     _infoLabel 
                 }
             };
-            Grid.SetRowSpan(_content, 2);
+
+            _previewGrid = new Grid
+            {
+                Children =
+                {
+                    _contentGrid,
+                   _previewContainer1,
+                   _previewContainer2
+                }
+            }; 
+
+            base.Content = _previewGrid;
+
+            //Set start connectivity value.
+            _oldValue = CrossConnectivity.Current.IsConnected;
+            CrossConnectivity.Current.ConnectivityChanged += ConnectionChanged; 
+        }
+
+        private bool _oldValue;
+
+        private void ConnectionChanged(object sender, ConnectivityChangedEventArgs connectivityChangedEventArgs)
+        {
+            var connected = connectivityChangedEventArgs.IsConnected;
+            Device.BeginInvokeOnMainThread(() =>
+            { 
+                if (_oldValue && !connected)
+                {
+                    //Device lost connection, slide in info
+                    var animation = new Animation(d => 
+                    {
+                        _infoLabel.TranslationY = -_size + _size * d;
+                        _contentGrid.RowDefinitions[0].Height = new GridLength(d * _size, GridUnitType.Absolute);
+                    });
+                    animation.Commit(this, "SlideInInfo", easing: Easing.CubicInOut, length: 500U);
+                }
+                else if (!_oldValue && connected)
+                {
+                    //Device got connected, slide out info 
+                    var animation = new Animation(d =>
+                    {
+                        _infoLabel.TranslationY = -_size * d;
+                        _contentGrid.RowDefinitions[0].Height = new GridLength((1 - d) * _size, GridUnitType.Absolute);
+                    }, 0, 1);
+                    animation.Commit(this, "SlideInInfo", easing: Easing.CubicInOut, length: 500U);
+                }
+                _oldValue = connected;
+            });
         }
 
 
+        public override void Dispose()
+        {
+            //Clean up that handler.
+            CrossConnectivity.Current.ConnectivityChanged -= ConnectionChanged;
+            base.Dispose();
+        }
+
+        /// <summary>
+        /// Set the page Content.
+        /// </summary>
+        public new Xamarin.Forms.View Content
+        {
+            get { return _contentGrid.Children.Count>2?  _contentGrid.Children[1] : null; }
+            set
+            {
+                if (_contentGrid.Children.Count > 2)
+                {
+                    _contentGrid.Children.RemoveAt(2);
+                }
+                _contentGrid.Children.Add(value, 0, 1); 
+            }
+        }
 
         /// <summary>
         /// Gets fired if a partie item gets tapped on.
         /// Will display the party info view.
         /// </summary> 
-        public async void PreviewItemSelected<TItemType, TPreviewType>(TItemType sender, object [] parameter) where TPreviewType : PreviewView
+        public async void PreviewItemSelected<TItemType, TPreviewType>(TItemType sender, object[] parameter) where TPreviewType : PreviewView
         {
-            var p = new List<object> {sender};
+            var p = new List<object> { sender };
             p.AddRange(parameter);
-           
-            _preview = (TPreviewType) Activator.CreateInstance(typeof(TPreviewType),p.ToArray());
+
+            _preview = (TPreviewType)Activator.CreateInstance(typeof(TPreviewType), p.ToArray());
             _preview.CloseViewEvent += ClosePreviewEvent;
             await ShowPreview(_preview);
         }
@@ -116,7 +194,7 @@ namespace App2Night.CustomView.Page
             //Move container to bottom
             _previewContainer1.TranslationY = newView.HeightRequest;
             //Make container visible
-            _previewContainer1.IsVisible = true; 
+            _previewContainer1.IsVisible = true;
             //Start animations in view
             newView.StartOpeningAnimation(OpeningAnimationLength);
             //Move container up
@@ -140,7 +218,7 @@ namespace App2Night.CustomView.Page
                 nextContainerRef.TranslationX = -Width * (1 - d);
                 currentContainerRef.TranslationX = Width * d;
             });
-            rotateAnimation.Commit(this, "RotateAnimation", length:SwitchingAnimationLength, easing: Easing.CubicInOut, finished: (d, b) =>
+            rotateAnimation.Commit(this, "RotateAnimation", length: SwitchingAnimationLength, easing: Easing.CubicInOut, finished: (d, b) =>
             {
                 currentContainerRef.Content = null;
                 currentContainerRef.IsVisible = false;
@@ -149,5 +227,5 @@ namespace App2Night.CustomView.Page
                 _preview = newView;
             });
         }
-    }  
+    }
 }
