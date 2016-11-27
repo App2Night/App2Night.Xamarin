@@ -3,7 +3,7 @@ using FreshMvvm;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
-namespace App2Night.Page
+namespace App2Night.Page.SubPages
 {
     public class PartyDetailPage : FreshBaseContentPage
     {
@@ -45,11 +45,11 @@ namespace App2Night.Page
 
         public PartyDetailPage()
         {
-            BindToViewModel(_nameLabel, Label.TextProperty, vm => vm.Party.Name);
-            BindToViewModel(_descriptionLabel, Label.TextProperty, vm => vm.Party.Description);
-            BindToViewModel(_dateLabel, Label.TextProperty, vm => vm.Party.Date);
-            BindToViewModel(_partyTypeLabel, Label.TextProperty, vm => vm.Party.PartyType);
-            BindToViewModel(_creationDateLabel, Label.TextProperty, vm => vm.Party.CreationDateTime);
+            _nameLabel.SetBinding(Label.TextProperty, "Party.Name");
+            _descriptionLabel.SetBinding( Label.TextProperty, "Party.Description");
+            _dateLabel.SetBinding( Label.TextProperty, "Party.Date");
+            _partyTypeLabel.SetBinding( Label.TextProperty, "Party.PartyType");
+            _creationDateLabel.SetBinding( Label.TextProperty, "Party.CreationDateTime");
             // TODO Bind coodinates to Map
             //BindToViewModel(_partyLocation.Map, Map.NavigationProperty, vm => vm.Party.Coordinates);
             Content = new StackLayout

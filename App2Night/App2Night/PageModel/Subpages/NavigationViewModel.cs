@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.Model.Model;
-using App2Night.PageModel.Subpages;
 using App2Night.Service.Interface;
 using FreshMvvm;
 using Xamarin.Forms;
 
-namespace App2Night.PageModel
+namespace App2Night.PageModel.SubPages
 {
     public class NavigationViewModel : FreshBasePageModel
     {

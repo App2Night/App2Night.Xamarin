@@ -4,7 +4,7 @@ using FreshMvvm;
 using PropertyChanged;
 using Xamarin.Forms;
 
-namespace App2Night.PageModel.Subpages
+namespace App2Night.PageModel.SubPages
 {
     [ImplementPropertyChanged]
 	public class EditProfileViewModel : FreshBasePageModel

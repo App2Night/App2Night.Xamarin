@@ -74,17 +74,12 @@ namespace App2Night
             {
                 //Set token from last session and update user information.
                 isLoggedIn = await FreshIOC.Container.Resolve<IDataService>().SetToken(storage.Token);
-            } 
-            DebugHelper.PrintDebug(DebugType.Info, isLoggedIn ? "Log in from last session." : "User not logged in. No token available.");
+            }
+            DebugHelper.PrintDebug(DebugType.Info,
+                isLoggedIn ? "Log in from last session." : "User not logged in. No token available.");
 
             //Make an inital token refresh 
-            Device.BeginInvokeOnMainThread(async ()=> await FreshIOC.Container.Resolve<IDataService>().RequestPartyWithFilter());
-
-            if (!isLoggedIn)
-            {
-                //Prompt the login page if the user is not logged in
-                Device.BeginInvokeOnMainThread(async ()=> await FreshIOC.Container.Resolve<DashboardPageModel>().OpenLogin());
-            }
+            await FreshIOC.Container.Resolve<IDataService>().RequestPartyWithFilter();
         } 
         private void CurrentOnPositionChanged(object sender, PositionEventArgs positionEventArgs)
         {

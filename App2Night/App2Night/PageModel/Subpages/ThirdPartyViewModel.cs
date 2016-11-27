@@ -12,7 +12,7 @@ using App2Night.Service.Helper;
 using FreshMvvm;
 using Xamarin.Forms;
 
-namespace App2Night.PageModel.Subpages
+namespace App2Night.PageModel.SubPages
 {
     public class ThirdPartyViewModel : FreshBasePageModel
     {

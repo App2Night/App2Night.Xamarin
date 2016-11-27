@@ -4,6 +4,7 @@ using System.Globalization;
 using App2Night.DependencyService;
 using App2Night.Model.Model;
 using App2Night.PageModel;
+using App2Night.PageModel.SubPages;
 using FreshMvvm; 
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;

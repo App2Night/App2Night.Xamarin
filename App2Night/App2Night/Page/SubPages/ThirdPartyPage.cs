@@ -1,14 +1,12 @@
 ﻿using FreshMvvm;
 using Xamarin.Forms;
 
-namespace App2Night.Page
+namespace App2Night.Page.SubPages
 {
     public class ThirdPartyPage : FreshBaseContentPage
     {
         public ThirdPartyPage()
-        { 
-          
-
+        {  
             Title = "Third party librarys"; 
 
             var template = new DataTemplate(() =>

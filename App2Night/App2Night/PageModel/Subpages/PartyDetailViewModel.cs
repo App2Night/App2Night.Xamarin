@@ -1,7 +1,7 @@
 ﻿using App2Night.Model.Model;
 using FreshMvvm;
 
-namespace App2Night.PageModel.Subpages
+namespace App2Night.PageModel.SubPages
 {
     public class PartyDetailViewModel : FreshBasePageModel 
     {

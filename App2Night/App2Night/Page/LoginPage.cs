@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace App2Night.Page
 {
-    public class LoginPage : ContentPage
+    public class LoginPage : FreshBaseContentPage
     {
         #region Views  
 		private readonly InputContainer<Entry> _usernameEntry = new InputContainer<Entry>

@@ -3,7 +3,7 @@ using App2Night.CustomView.View;
 using FreshMvvm;
 using Xamarin.Forms;
 
-namespace App2Night.Page
+namespace App2Night.Page.SubPages
 {
     public class AboutAppPage : FreshBaseContentPage
     {
