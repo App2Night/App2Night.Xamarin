@@ -10,28 +10,34 @@ namespace App2Night.Page
         #region Views
         InputContainer<Label> _nameLabel = new InputContainer<Label>
         { 
-            IconCode = "\uf1ae"
+            IconCode = "\uf1ae",
+            HorizontalOptions = LayoutOptions.Start
         };
         InputContainer<Label> _descriptionLabel = new InputContainer<Label>
         {
             IconCode = "\uf040",
-            HeightRequest = 100 
+            HeightRequest = 100,
+            HorizontalOptions = LayoutOptions.Start
         };
         InputContainer<Label> _dateLabel = new InputContainer<Label>
         {
-            IconCode = "\uf073" 
+            IconCode = "\uf073",
+            HorizontalOptions = LayoutOptions.Start
         };
         InputContainer<Label> _creationDateLabel = new InputContainer<Label>
         {
-            IconCode = "\uf017" 
+            IconCode = "\uf017",
+            HorizontalOptions = LayoutOptions.Start
         };
         InputContainer<Label> _MusicGenreLabel = new InputContainer<Label>
         {
-            IconCode = "\uf001" 
+            IconCode = "\uf001",
+            HorizontalOptions = LayoutOptions.Start
         };
         InputContainer<Label> _partyTypeLabel = new InputContainer<Label>
         {
-            IconCode = "\uf0fc" 
+            IconCode = "\uf0fc",
+            HorizontalOptions = LayoutOptions.Start
         };
         MapWrapper _partyLocation = new MapWrapper(new Map());
         #endregion
@@ -39,10 +45,13 @@ namespace App2Night.Page
 
         public PartyDetailPage()
         {
-            _nameLabel.SetBinding(Label.TextProperty, "Party.Name");
-            _descriptionLabel.SetBinding(Label.TextProperty, "Party.Description");
-           _dateLabel.SetBinding(Label.TextProperty, "Party.Date");
-            //.SetBinding();
+            BindToViewModel(_nameLabel, Label.TextProperty, vm => vm.Party.Name);
+            BindToViewModel(_descriptionLabel, Label.TextProperty, vm => vm.Party.Description);
+            BindToViewModel(_dateLabel, Label.TextProperty, vm => vm.Party.Date);
+            BindToViewModel(_partyTypeLabel, Label.TextProperty, vm => vm.Party.PartyType);
+            BindToViewModel(_creationDateLabel, Label.TextProperty, vm => vm.Party.CreationDateTime);
+            // TODO Bind coodinates to Map
+            //BindToViewModel(_partyLocation.Map, Map.NavigationProperty, vm => vm.Party.Coordinates);
             Content = new StackLayout
             {
                 Children =
