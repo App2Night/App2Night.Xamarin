@@ -25,7 +25,7 @@ namespace App2Night.Droid.CustomRenderer
         }
 
         protected void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
-        { 
+        {
             if (ChildCount > 0)
             {
                 GetChildAt(0).HorizontalScrollBarEnabled = false;

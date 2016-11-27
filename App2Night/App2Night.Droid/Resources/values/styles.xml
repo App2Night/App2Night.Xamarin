@@ -3,12 +3,11 @@
   <style name="MyTheme" parent="MyTheme.Base">
   </style>
   <style name="MyTheme.Base" parent="Theme.AppCompat.Light.NoActionBar">
-    <item name="android:colorPrimary">@color/primary</item>
+    <item name="colorPrimary">@color/primary</item>
     <item name="colorPrimaryDark">@color/primaryDark</item>
-    <item name="colorAccent">@color/accent</item> 
+    <item name="colorAccent">@color/accent</item>
+    <item name="android:windowBackground">@color/window_background</item>
     <item name="windowActionModeOverlay">false</item>
-    <item name="android:windowBackground">@color/primary</item>
-    <item name="android:statusBarColor">@color/primary</item>
   </style>
 
   <style name="MyTheme.Splash" parent ="Theme.AppCompat.Light.NoActionBar">

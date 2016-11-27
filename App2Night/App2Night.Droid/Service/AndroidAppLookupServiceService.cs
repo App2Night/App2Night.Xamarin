@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Android.App;
+﻿using Android.App;
 using Android.Content.PM;
 using App2Night.DependencyService;
 using App2Night.Droid.Service;
@@ -18,7 +17,7 @@ namespace App2Night.Droid.Service
                 pm.GetPackageInfo(packageName, PackageInfoFlags.Activities);
                 installed = true;
             }
-            catch (PackageManager.NameNotFoundException)
+            catch (PackageManager.NameNotFoundException e)
             {
                 installed = false;
             }
