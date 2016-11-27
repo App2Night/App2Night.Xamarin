@@ -19,21 +19,19 @@ namespace App2Night.View
         private static Thickness _defaultMargin = new Thickness(5, 0);
 
         #region Views
-
         private InputContainer<Entry> _nameEntry = new InputContainer<Entry>
         {
-			Input = {Placeholder = AppResources.PartyName},
-			ValidationVisible = true, 
-			IconCode = "\uf0fc",
+            Input = {Placeholder = AppResources.PartyName},
+            ValidationVisible = true,
+            IconCode = "\uf0fc",
             Margin = _defaultMargin
         };
 
-        private InputContainer<Entry> _descriptionEntry = new InputContainer<Entry>
+        private InputContainer<Editor> _descriptionEntry = new InputContainer<Editor>
         {
-			Input = {Placeholder = AppResources.Description},
-			IconCode = "\uf040",
+            IconCode = "\uf040",
             HeightRequest = 100,
-            Margin = _defaultMargin
+            Margin = _defaultMargin,
         };
 
         private readonly InputContainer<DatePicker> _datePicker = new InputContainer<DatePicker>
@@ -47,40 +45,47 @@ namespace App2Night.View
             Margin = _defaultMargin
         };
 
-        private InputContainer<TimePicker> _timePicker = new InputContainer<TimePicker> { IconCode = "\uf017" };
+        private InputContainer<TimePicker> _timePicker = new InputContainer<TimePicker>
+        {
+            IconCode = "\uf017",
+            Padding = new Thickness(5, 0, 0, 0)
+        };
 
         private InputContainer<EnumBindablePicker<MusicGenre>> _musicGenreSwitch =
-			new InputContainer<EnumBindablePicker<MusicGenre>>{ IconCode = "\uf001",   Input = { SelectedIndex = 0},
+            new InputContainer<EnumBindablePicker<MusicGenre>>
+            {
+                IconCode = "\uf001",
+                Input = {SelectedIndex = 0},
                 Margin = _defaultMargin
             };
 
         private InputContainer<Entry> _cityNameEntry = new InputContainer<Entry>
         {
-            Input = { Placeholder = AppResources.Cityname }, 
-            IconCode = "\uf279" 
+            Input = {Placeholder = AppResources.Cityname},
+            IconCode = "\uf279"
         };
 
         private InputContainer<Entry> _streetEntry = new InputContainer<Entry>
         {
-			Input = {Placeholder = AppResources.StrName}, 
-            IconCode = "\uf0f3" 
+            Input = {Placeholder = AppResources.StrName},
+            IconCode = "\uf0f3"
         };
 
         private InputContainer<Entry> _numberEntry = new InputContainer<Entry>
         {
-			Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.HNumber}, 
+            Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.HNumber},
         };
 
         private InputContainer<Entry> _locationEntry = new InputContainer<Entry>
         {
-			Input = {Placeholder = AppResources.Location}, 
+            Input = {Placeholder = AppResources.Location},
             IconCode = "\uf015",
             Margin = _defaultMargin
         };
 
         InputContainer<Entry> _zipCodetEntry = new InputContainer<Entry>
         {
-			Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.Zipcode}, 
+            Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.Zipcode},
         };
 
         private CustomButton _deleteButton = new CustomButton
@@ -118,8 +123,6 @@ namespace App2Night.View
 
         public CreatePartyPage()
         {
-            
-
             _map = new MapWrapper(_headerMap);
             // set tap gesture reconizer
             BindToViewModel(_tapGesture, TapGestureRecognizer.CommandProperty, vm => vm.LoadImageCommand);
@@ -127,20 +130,21 @@ namespace App2Night.View
             _image.GestureRecognizers.Add(_tapGesture);
             // set title of the page
             Title = AppResources.CreateParty;
-			// bind to view models
-			BindToViewModel(_nameEntry.Input, Entry.TextProperty, vm => vm.Name);
-			BindToViewModel(_nameEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidName);
-			BindToViewModel(_descriptionEntry.Input, Entry.TextProperty, vm => vm.Description);
-			BindToViewModel(_descriptionEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidDescription);
-			BindToViewModel(_musicGenreSwitch.Input, EnumBindablePicker<MusicGenre>.SelectedItemProperty, vm => vm.MusicGenre);
-			// date and time
-			BindToViewModel(_datePicker.Input, DatePicker.DateProperty, vm => vm.Date);
+            // bind to view models
+            BindToViewModel(_nameEntry.Input, Entry.TextProperty, vm => vm.Name);
+            BindToViewModel(_nameEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidName);
+            BindToViewModel(_descriptionEntry.Input, Entry.TextProperty, vm => vm.Description);
+            BindToViewModel(_descriptionEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidDescription);
+            BindToViewModel(_musicGenreSwitch.Input, EnumBindablePicker<MusicGenre>.SelectedItemProperty,
+                vm => vm.MusicGenre);
+            // date and time
+            BindToViewModel(_datePicker.Input, DatePicker.DateProperty, vm => vm.Date);
             BindToViewModel(_datePicker, InputContainer<DatePicker>.InputValidateProperty, vm => vm.ValidDate);
 
-            BindToViewModel(_timePicker.Input, TimePicker.TimeProperty, vm => vm.Time);  
+            BindToViewModel(_timePicker.Input, TimePicker.TimeProperty, vm => vm.Time);
             // address
             BindToViewModel(_streetEntry.Input, Entry.TextProperty, vm => vm.StreetName);
-			BindToViewModel(_streetEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidStreetname);
+            BindToViewModel(_streetEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidStreetname);
 
             BindToViewModel(_cityNameEntry.Input, Entry.TextProperty, vm => vm.CityName);
             BindToViewModel(_cityNameEntry, InputContainer<Entry>.InputValidateProperty, vm => vm.ValidCityname);
@@ -167,7 +171,7 @@ namespace App2Night.View
             {
                 Spacing = 5,
                 Children =
-                { 
+                {
                     _nameEntry,
                     _descriptionEntry,
                     _musicGenreSwitch,
@@ -184,10 +188,10 @@ namespace App2Night.View
                         },
                         Children =
                         {
-                            {_streetEntry, 0,0},
-                            {_numberEntry, 1,0}
+                            {_streetEntry, 0, 0},
+                            {_numberEntry, 1, 0}
                         },
-            Margin = _defaultMargin
+                        Margin = _defaultMargin
                     },
                     new Grid
                     {
@@ -198,10 +202,10 @@ namespace App2Night.View
                         },
                         Children =
                         {
-                            {_cityNameEntry, 0,0},
-                            {_zipCodetEntry, 1,0}
+                            {_cityNameEntry, 0, 0},
+                            {_zipCodetEntry, 1, 0}
                         },
-            Margin = _defaultMargin
+                        Margin = _defaultMargin
                     }
                 }
             };
@@ -220,10 +224,9 @@ namespace App2Night.View
                     {
                         Content = layout
                     },
-                    { new BoxView { Color = Color.Accent }, 0, 1  },
-                     
+                    {new BoxView {Color = Color.Accent}, 0, 1},
                 }
-            }; 
+            };
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -245,6 +248,7 @@ namespace App2Night.View
         }
 
         #region Events
+
         private async void MediaPicker(Object o, EventArgs e)
         {
             await CrossMedia.Current.Initialize();
@@ -262,7 +266,7 @@ namespace App2Night.View
 
             if (file == null)
 
-            await DisplayAlert("File Location", file.Path, "OK");
+                await DisplayAlert("File Location", file.Path, "OK");
 
             _image.Source = ImageSource.FromStream(() =>
             {
@@ -271,6 +275,7 @@ namespace App2Night.View
                 return stream;
             });
         }
+
         /// <summary>
         /// Creates new party with the specific values of <see cref="T:App2Night.View.CreatePartyPage"/>.
         /// </summary>
