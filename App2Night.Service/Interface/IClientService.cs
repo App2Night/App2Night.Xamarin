@@ -25,7 +25,7 @@ namespace App2Night.Service.Interface
         /// <param name="endpoint">The endpoint of the request, API or User Server.</param>
         /// <param name="enableHttps">Should HTTPS be enabled.</param>
         /// <returns></returns>
-        Task<Result<TExpectedType>> SendRequest<TExpectedType>(Uri uri, RestType restType, bool cacheData = false,
+        Task<Result<TExpectedType>> SendRequest<TExpectedType>(string uri, RestType restType, bool cacheData = false,
             string urlQuery = "", object bodyParameter = null, Dictionary<string, string> wwwFormData = null, string token = null,
             Endpoint endpoint = Endpoint.Api, bool enableHttps = true);
 
@@ -42,7 +42,7 @@ namespace App2Night.Service.Interface
         /// <param name="endpoint">The endpoint of the request, API or User Server.</param>
         /// <param name="enableHttps">Should HTTPS be enabled.</param>
         /// <returns></returns>
-        Task<Result> SendRequest(Uri uri, RestType restType, bool cacheData = false, string urlQuery = "",
+        Task<Result> SendRequest(string uri, RestType restType, bool cacheData = false, string urlQuery = "",
             object bodyParameter = null, Dictionary<string, string> wwwFormData = null, string token = null,
             Endpoint endpoint = Endpoint.Api, bool enableHttps = true);
     }
