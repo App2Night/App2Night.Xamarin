@@ -2,11 +2,11 @@
 using App2Night.Data.Language;
 using App2Night.DependencyService;
 using App2Night.Model.Model;
+using App2Night.PageModel;
 using App2Night.Service.Helper;
 using App2Night.Service.Interface;
 using App2Night.Service.Service;
-using App2Night.ViewModel;
-using MvvmNano;
+using FreshMvvm;
 using Plugin.Connectivity;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
@@ -21,7 +21,7 @@ namespace App2Night
         public App()
         {
             InitializeComponent();
-            MainPage = new ContentPage();
+
             //It is possible (even if it is unlikely) that Google Maps is not installed on the device.
             //Check if it is installed on start.
             if (Device.OS == TargetPlatform.Android)
@@ -30,6 +30,19 @@ namespace App2Night
                     Xamarin.Forms.DependencyService.Get<IAndroidAppLookupService>()
                         .DoesAppExist("com.google.android.apps.maps");
             }
+
+            RegisterInterfaces();
+
+            var masterDetailNav = new FreshMasterDetailNavigationContainer();
+            masterDetailNav.Init("Menu");
+            masterDetailNav.AddPage<DashboardPageModel>(AppResources.Dashboard, null);
+            masterDetailNav.AddPage<PartyPickerViewModel>(AppResources.PickAParty, null);
+            masterDetailNav.AddPage<CreatePartyViewModel>(AppResources.CreateAParty);
+            masterDetailNav.AddPage<HistoryViewModel>(AppResources.History);
+            masterDetailNav.AddPage<SettingViewModel>(AppResources.Settings);
+            masterDetailNav.AddPage<AboutTabbedViewModel>(AppResources.About);
+
+            MainPage = masterDetailNav; 
 
             if (Device.OS == TargetPlatform.iOS || Device.OS == TargetPlatform.Android)
             {
@@ -41,35 +54,11 @@ namespace App2Night
 
         protected override void OnStart()
         {
-            RegisterInterfaces();
-            base.OnStart();
-
-            // Set MasterDetailPage
-            SetUpMasterDetailPage<NavigationViewModel>();
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (DashboardViewModel), AppResources.Dashboard, "\uf015"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (PartyPickerViewModel), AppResources.PickAParty, "\uf29b"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (CreatePartyViewModel), AppResources.CreateAParty, "\uf271"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (HistoryViewModel), AppResources.PartyHistory, "\uf187"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (SettingViewModel), AppResources.Settings, "\uf085"));
-            AddSiteToDetailPages(new CustomMasterDetailData(typeof (AboutTabbedViewModel), AppResources.About, "\uf05a"));
-
             
-            //Sync the parties
-            //Task.Run(async () =>
-            //{
-            //    try
-            //    {
-            //        await MvvmNanoIoC.Resolve<IDataService>().RequestPartyWithFilter();
-            //    }
-            //    catch (Exception e)
-            //    {
-            //        Debug.WriteLine(e);
-            //    }
-            //});
-
-            //TODO Extract this part
+            base.OnStart();   
+           
             CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
-            MvvmNanoIoC.Resolve<IDataService>().PartiesUpdated +=
+            FreshIOC.Container.Resolve<IDataService>().PartiesUpdated +=
                 (sender, args) => { CrossGeolocator.Current.StartListeningAsync(1, 100); };
 
             Task.Run(async ()=> await OnStartSync());
@@ -78,36 +67,28 @@ namespace App2Night
         private async Task OnStartSync()
         {
             //Restore stored token 
-            await MvvmNanoIoC.Resolve<IStorageService>().OpenStorage();
+            await FreshIOC.Container.Resolve<IStorageService>().OpenStorage();
             bool isLoggedIn = false;
-            var storage = MvvmNanoIoC.Resolve<IStorageService>().Storage;
+            var storage = FreshIOC.Container.Resolve<IStorageService>().Storage;
             if (storage.Token != null)
             {
                 //Set token from last session and update user information.
-                isLoggedIn = await MvvmNanoIoC.Resolve<IDataService>().SetToken(storage.Token);
+                isLoggedIn = await FreshIOC.Container.Resolve<IDataService>().SetToken(storage.Token);
             } 
             DebugHelper.PrintDebug(DebugType.Info, isLoggedIn ? "Log in from last session." : "User not logged in. No token available.");
 
             //Make an inital token refresh 
-            Device.BeginInvokeOnMainThread(async ()=> await MvvmNanoIoC.Resolve<IDataService>().RequestPartyWithFilter());
+            Device.BeginInvokeOnMainThread(async ()=> await FreshIOC.Container.Resolve<IDataService>().RequestPartyWithFilter());
 
             if (!isLoggedIn)
             {
                 //Prompt the login page if the user is not logged in
-                Device.BeginInvokeOnMainThread(()=> MvvmNanoIoC.Resolve<NavigationViewModel>().OpenLogin());
+                Device.BeginInvokeOnMainThread(async ()=> await FreshIOC.Container.Resolve<DashboardPageModel>().OpenLogin());
             }
-        }
-
-        protected override void SetUpPresenter()
-        {
-            MvvmNanoIoC.RegisterAsSingleton<IPresenter>(
-                new CustomPresenter(this)
-                );
-        }
-
+        } 
         private void CurrentOnPositionChanged(object sender, PositionEventArgs positionEventArgs)
         {
-            var dataService = MvvmNanoIoC.Resolve<IDataService>();
+            var dataService = FreshIOC.Container.Resolve<IDataService>();
             var position = positionEventArgs.Position;
             Coordinates userPosition = new Coordinates((float) position.Longitude, (float) position.Latitude);
             //Update distance to all partys
@@ -125,10 +106,10 @@ namespace App2Night
 
         private void RegisterInterfaces()
         {
-            MvvmNanoIoC.RegisterAsSingleton<IStorageService, StorageService>();
-            MvvmNanoIoC.Register<IAlertService, AlertService>();
-            MvvmNanoIoC.Register<IClientService, ClientService>();
-            MvvmNanoIoC.RegisterAsSingleton<IDataService, DataService>(); 
+            FreshIOC.Container.Register<IStorageService, StorageService>().AsSingleton();
+            FreshIOC.Container.Register<IAlertService, AlertService>();
+            FreshIOC.Container.Register<IClientService, ClientService>();
+            FreshIOC.Container.Register<IDataService, DataService>().AsSingleton();
         }
     }
 }

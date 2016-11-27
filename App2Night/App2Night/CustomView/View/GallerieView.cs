@@ -4,8 +4,7 @@ using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
-using MvvmNano;
+using System.Threading.Tasks; 
 using Xamarin.Forms;
 
 namespace App2Night.CustomView.View
@@ -26,10 +25,10 @@ namespace App2Night.CustomView.View
             }
         }
 
-        public static BindableProperty ElementTappedCommandProperty = BindableProperty.Create(nameof(ElementTappedCommand), typeof(MvvmNanoCommand), typeof(HorizontalGallerieView));
-        public MvvmNanoCommand ElementTappedCommand
+        public static BindableProperty ElementTappedCommandProperty = BindableProperty.Create(nameof(ElementTappedCommand), typeof(Command), typeof(HorizontalGallerieView));
+        public Command ElementTappedCommand
         {
-            get { return (MvvmNanoCommand)GetValue(ElementTappedCommandProperty); }
+            get { return (Command)GetValue(ElementTappedCommandProperty); }
             set { SetValue(ElementTappedCommandProperty, value); }
         }
 
@@ -161,12 +160,12 @@ namespace App2Night.CustomView.View
         private int lastResizeWidth = 0;
         private double tmpResizeWidth = 0;
         private bool newAllocation = false;
-        protected async override void OnSizeAllocated(double width, double height)
+        protected override void OnSizeAllocated(double width, double height)
         {
-            base.OnSizeAllocated(width, height);
-            tmpResizeWidth = width;
-            await Task.Delay(50); 
-            if(tmpResizeWidth!=width) return;
+            //base.OnSizeAllocated(width, height);
+            //tmpResizeWidth = width;
+            //await Task.Delay(50); 
+            //if(tmpResizeWidth!=width) return;
             if (Math.Abs(lastResizeWidth - (int)width) > 3)
             {
                 lastResizeWidth = (int)width;

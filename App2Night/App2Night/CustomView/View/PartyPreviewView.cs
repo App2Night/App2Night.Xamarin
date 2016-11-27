@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using App2Night.DependencyService;
 using App2Night.Model.Model;
-using App2Night.ViewModel;
-using MvvmNano;
+using App2Night.PageModel;
+using FreshMvvm; 
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -110,7 +110,7 @@ namespace App2Night.CustomView.View
         public override void More()
         {
             base.More();
-            MvvmNanoIoC.Resolve<NavigationViewModel>().OpenMore(Party);
+            FreshIOC.Container.Resolve<NavigationViewModel>().OpenMore(Party);
         }
 
         protected override void OnBindingContextChanged()

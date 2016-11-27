@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using App2Night.Model.Model;
 using App2Night.Service.Helper;
 using App2Night.Service.Interface;
+using FreshMvvm;
 using MvvmNano;
 using Newtonsoft.Json; 
 
@@ -216,7 +217,7 @@ namespace App2Night.Service.Service
         {
             if (responseCode == HttpStatusCode.Unauthorized && !string.IsNullOrEmpty(token))
                 //Do a user logout.
-                await MvvmNanoIoC.Resolve<IStorageService>().DeleteStorage();
+                await FreshIOC.Container.Resolve<IStorageService>().DeleteStorage();
         } 
 
         private HttpClient GetClient(Endpoint endpoint)

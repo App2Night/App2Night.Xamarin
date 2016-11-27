@@ -1,5 +1,4 @@
-﻿using System;
-using MvvmNano;
+﻿using System; 
 using Xamarin.Forms;
 
 namespace App2Night.CustomView.View
@@ -8,12 +7,12 @@ namespace App2Night.CustomView.View
     {
         public event EventHandler ButtonTapped;
 
-        public static BindableProperty CommandProperty = BindableProperty.Create(nameof(CommandProperty), typeof(MvvmNanoCommand), typeof(EnhancedContainer));
+        public static BindableProperty CommandProperty = BindableProperty.Create(nameof(CommandProperty), typeof(Command), typeof(EnhancedContainer));
           
        
-        public MvvmNanoCommand Command
+        public Command Command
         {
-            get { return (MvvmNanoCommand)GetValue(CommandProperty); }
+            get { return (Command)GetValue(CommandProperty); }
             set { SetValue(CommandProperty, value); }
         } 
 

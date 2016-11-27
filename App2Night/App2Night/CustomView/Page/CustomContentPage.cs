@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using App2Night.CustomView.View;
 using App2Night.Service.Helper;
-using MvvmNano;
-using MvvmNano.Forms;
+using FreshMvvm;
 using Plugin.Connectivity;
 using Plugin.Connectivity.Abstractions;
 using Xamarin.Forms;
 
 namespace App2Night.CustomView.Page
 {
-    public class CustomContentPage<TViewModel> : MvvmNanoContentPage<TViewModel> where TViewModel : MvvmNanoViewModel
+    public class  stomContentPage : FreshBaseContentPage
     {
         private static readonly double _size = 50;
 
@@ -50,7 +49,7 @@ namespace App2Night.CustomView.Page
         private Grid _contentGrid;
         private Grid _previewGrid;
 
-        public CustomContentPage()
+        public  stomContentPage()
         {
             _contentGrid = new Grid
             {
@@ -116,13 +115,12 @@ namespace App2Night.CustomView.Page
             });
         }
 
-
-        public override void Dispose()
+        protected override void OnDisappearing()
         {
-            //Clean up that handler.
             CrossConnectivity.Current.ConnectivityChanged -= ConnectionChanged;
-            base.Dispose();
-        }
+
+            base.OnDisappearing();
+        } 
 
         /// <summary>
         /// Set the page Content.

@@ -1,7 +1,6 @@
-﻿<forms:MvvmNanoApplication
+﻿<Application
     xmlns="http://xamarin.com/schemas/2014/forms"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:forms="clr-namespace:MvvmNano.Forms;assembly=MvvmNano.Forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
     x:Class="App2Night.App">
     <Application.Resources>
         <ResourceDictionary>
@@ -40,4 +39,4 @@
 
         </ResourceDictionary>
     </Application.Resources>
-</forms:MvvmNanoApplication>
+</Application>

@@ -38,7 +38,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="CustomPresenter.cs" />
     <Compile Include="CustomView\Template\MenuTemplate.cs" />
     <Compile Include="CustomView\View\InputContainer.cs" />
     <Compile Include="CustomView\View\EnumBindablePicker.cs" />
@@ -70,46 +69,45 @@
     <Compile Include="DependencyService\IUserLocationService.cs" />
     <Compile Include="DependencyService\IAndroidAppLookupService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel\AboutTabbedViewModel.cs" />
-    <Compile Include="ViewModel\CreatePartyViewModel.cs" />
-    <Compile Include="ViewModel\DashboardViewModel.cs" />
-    <Compile Include="ViewModel\PartyViewModel.cs" />
-    <Compile Include="ViewModel\HistoryViewModel.cs" />
-    <Compile Include="ViewModel\LoginViewModel.cs" />
-    <Compile Include="ViewModel\NavigationViewModel.cs" />
-    <Compile Include="ViewModel\SettingViewModel.cs" />
-    <Compile Include="ViewModel\Subpages\AboutAppViewModel.cs" />
-    <Compile Include="ViewModel\Subpages\EditPartyViewModel.cs" />
-    <Compile Include="ViewModel\Subpages\EditProfileViewModel.cs" />
-    <Compile Include="ViewModel\Subpages\MyPartysViewModel.cs" />
-    <Compile Include="ViewModel\Subpages\ParticipantViewModel.cs" />
-    <Compile Include="ViewModel\Subpages\PartyDetailViewModel.cs" />
-    <Compile Include="ViewModel\Subpages\ThirdPartyInfoViewModel.cs" />
-    <Compile Include="ViewModel\Subpages\ThirdPartyViewModel.cs" />
-    <Compile Include="ViewModel\TestViewModel.cs" />
-    <Compile Include="ViewModel\PartyPickerViewModel.cs" />
-    <Compile Include="View\AboutTabbedPage.cs" />
-    <Compile Include="View\CreatePartyPage.cs" />
-    <Compile Include="View\DashboardPage.cs" />
-    <Compile Include="View\PartyPage.cs" />
-    <Compile Include="View\PartyPickerPage.cs" />
-    <Compile Include="View\HistoryPage.cs" />
-    <Compile Include="View\LoginPage.cs" />
-    <Compile Include="View\NavigationPage.cs" />
-    <Compile Include="View\SettingPage.cs" />
-    <Compile Include="View\Subpages\AboutAppPage.cs" />
-    <Compile Include="View\Subpages\EditPartyPage.cs" />
-    <Compile Include="View\Subpages\EditProfilePage.cs" />
-    <Compile Include="View\Subpages\MyPartysPage.cs" />
-    <Compile Include="View\Subpages\ParticipantPage.cs" />
+    <Compile Include="PageModel\AboutTabbedViewModel.cs" />
+    <Compile Include="PageModel\CreatePartyViewModel.cs" />
+    <Compile Include="PageModel\DashboardPageModel.cs" />
+    <Compile Include="PageModel\PartyViewModel.cs" />
+    <Compile Include="PageModel\HistoryViewModel.cs" />
+    <Compile Include="PageModel\LoginViewModel.cs" />
+    <Compile Include="PageModel\Subpages\NavigationViewModel.cs" />
+    <Compile Include="PageModel\SettingViewModel.cs" />
+    <Compile Include="PageModel\Subpages\AboutAppViewModel.cs" />
+    <Compile Include="PageModel\Subpages\EditPartyViewModel.cs" />
+    <Compile Include="PageModel\Subpages\EditProfileViewModel.cs" />
+    <Compile Include="PageModel\Subpages\MyPartysViewModel.cs" />
+    <Compile Include="PageModel\Subpages\ParticipantViewModel.cs" />
+    <Compile Include="PageModel\Subpages\PartyDetailViewModel.cs" />
+    <Compile Include="PageModel\Subpages\ThirdPartyInfoViewModel.cs" />
+    <Compile Include="PageModel\Subpages\ThirdPartyViewModel.cs" />
+    <Compile Include="PageModel\TestViewModel.cs" />
+    <Compile Include="PageModel\PartyPickerViewModel.cs" />
+    <Compile Include="Page\AboutTabbedPage.cs" />
+    <Compile Include="Page\CreatePartyPage.cs" />
+    <Compile Include="Page\DashboardPage.cs" />
+    <Compile Include="Page\PartyPage.cs" />
+    <Compile Include="Page\PartyPickerPage.cs" />
+    <Compile Include="Page\HistoryPage.cs" />
+    <Compile Include="Page\LoginPage.cs" />
+    <Compile Include="Page\NavigationPage.cs" />
+    <Compile Include="Page\SettingPage.cs" />
+    <Compile Include="Page\AboutAppPage.cs" />
+    <Compile Include="Page\EditPartyPage.cs" />
+    <Compile Include="Page\EditProfilePage.cs" />
+    <Compile Include="Page\MyPartysPage.cs" />
+    <Compile Include="Page\ParticipantPage.cs" />
     <Compile Include="DependencyService\ILoadImage.cs" />
-    <Compile Include="View\Subpages\PartyDetailPage.cs" />
-    <Compile Include="View\Subpages\ThirdPartyInfoPage.cs" />
-    <Compile Include="View\Subpages\ThirdPartyPage.cs" />
+    <Compile Include="Page\PartyDetailPage.cs" />
+    <Compile Include="Page\ThirdPartyInfoPage.cs" />
+    <Compile Include="Page\ThirdPartyPage.cs" />
     <Compile Include="ValueConverter\DateInFutureConverter.cs" />
     <Compile Include="ValueConverter\InvertBooleanConverter.cs" />
     <Compile Include="ValueConverter\StringNotEmptyConverter.cs" />
-    <Compile Include="CustomMasterDetailData.cs" />
     <Compile Include="DependencyService\ICultureService.cs" />
   </ItemGroup>
   <ItemGroup />
@@ -132,22 +130,20 @@
       <HintPath>..\..\packages\Acr.UserDialogs.6.3.1\lib\portable-win+net45+wp8+win8+wpa81\Acr.UserDialogs.Interface.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="FreshIOC, Version=1.0.6071.17008, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FreshMvvm.2.2.0\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\FreshIOC.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FreshMvvm, Version=1.0.6071.17008, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FreshMvvm.2.2.0\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\FreshMvvm.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="HockeySDK, Version=1.0.6103.22141, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\HockeySDK.Xamarin.4.1.0\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\HockeySDK.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MvvmNano.Core">
-      <HintPath>..\..\Libs\MvvmNano.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmNano.Forms">
-      <HintPath>..\..\Libs\MvvmNano.Forms.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Portable.Ninject.3.3.1\lib\portable-net4+sl5+wp8+win8+wpa81+monotouch+monoandroid+Xamarin.iOS\Ninject.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Plugin.Connectivity, Version=2.2.12.0, Culture=neutral, processorArchitecture=MSIL">
