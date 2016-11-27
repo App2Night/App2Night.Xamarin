@@ -42,7 +42,7 @@ namespace App2Night
             masterDetailNav.AddPage<SettingViewModel>(AppResources.Settings);
             masterDetailNav.AddPage<AboutTabbedViewModel>(AppResources.About);
 
-            MainPage = masterDetailNav; 
+            MainPage = masterDetailNav;
 
             if (Device.OS == TargetPlatform.iOS || Device.OS == TargetPlatform.Android)
             {
