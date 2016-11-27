@@ -1,6 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <!--
-Drop a file named keys.xml in this folder and put in your secrets.
+  Execute 
+  git update-index assume-unchanged .\App2Night\App2Night.Droid\Resources\values\keys.xml 
+  and replace $(mapKey).
 -->
 <resources>
   <string
