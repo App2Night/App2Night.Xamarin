@@ -25,7 +25,7 @@ namespace App2Night.Service.Service
     public class ClientService : IClientService
     { 
 
-        public async Task<Result<TExpectedType>> SendRequest<TExpectedType>(Uri uri, RestType restType, bool cacheData = false, string urlQuery = "", object bodyParameter = null, Dictionary<string, string> wwwFormData = null, string token = null, Endpoint endpoint = Endpoint.Api, bool httpsEnabled = true)
+        public async Task<Result<TExpectedType>> SendRequest<TExpectedType>(string uri, RestType restType, bool cacheData = false, string urlQuery = "", object bodyParameter = null, Dictionary<string, string> wwwFormData = null, string token = null, Endpoint endpoint = Endpoint.Api, bool httpsEnabled = true)
         {
             //Object that will contain the resul
             Result<TExpectedType> result = new Result<TExpectedType>();
@@ -71,7 +71,7 @@ namespace App2Night.Service.Service
         /// <summary>
         /// Handles a failed request. Prints the given error message from the request result if one is available.
         /// </summary> 
-        private static async Task HandleFailure(Uri uri, Stopwatch timer, HttpResponseMessage requestResult)
+        private static async Task HandleFailure(string uri, Stopwatch timer, HttpResponseMessage requestResult)
         {
             string errorMessage = string.Empty;
             if (requestResult.Content != null)
@@ -85,7 +85,7 @@ namespace App2Night.Service.Service
         /// <summary>
         /// Handles a successfull request.
         /// </summary> 
-        private async Task HandleSuccess<TExpectedType>(Uri uri, Result<TExpectedType> result, Stopwatch timer, HttpResponseMessage requestResult)
+        private async Task HandleSuccess<TExpectedType>(string uri, Result<TExpectedType> result, Stopwatch timer, HttpResponseMessage requestResult)
         {
             result.Success = true;
             result.Data = (TExpectedType)await DeserilizeContent<TExpectedType>(requestResult);
@@ -121,7 +121,7 @@ namespace App2Night.Service.Service
         /// <param name="client"><see cref="HttpClient"/> that should execute the request.</param>
         /// <param name="content">Content of the request.</param>
         /// <returns></returns>
-        private static async Task<HttpResponseMessage> MakeRequest(Uri uri, RestType restType, HttpClient client, StringContent content)
+        private static async Task<HttpResponseMessage> MakeRequest(string uri, RestType restType, HttpClient client, StringContent content)
         {
             switch (restType)
             {
@@ -173,7 +173,7 @@ namespace App2Night.Service.Service
             return content;
         }
 
-        public async Task<Result> SendRequest(Uri uri, RestType restType, bool cacheData = false, string urlQuery = "", object bodyParameter = null, Dictionary<string, string> wwwFormData = null, string token = null, Endpoint endpoint = Endpoint.Api, bool httpsEnabled = true)
+        public async Task<Result> SendRequest(string uri, RestType restType, bool cacheData = false, string urlQuery = "", object bodyParameter = null, Dictionary<string, string> wwwFormData = null, string token = null, Endpoint endpoint = Endpoint.Api, bool httpsEnabled = true)
         {
             /*
              * Calls SendRequest<> with Type as expected deserialized data.
@@ -202,10 +202,10 @@ namespace App2Night.Service.Service
         /// <param name="uri">Endpoint</param>
         /// <param name="urlQuery">Query</param>
         /// <returns>A combined uri of the original uri and query.</returns>
-        private Uri AddQuery(Uri uri, string urlQuery)
+        private string AddQuery(string uri, string urlQuery)
         {
             if (!string.IsNullOrEmpty(urlQuery))
-                uri = new Uri(uri, urlQuery);
+                uri = uri + urlQuery;
             return uri;
         }
 

@@ -7,7 +7,7 @@ namespace App2Night.CustomView.View
 {
     public class InputContainer<T> :Grid where T : Xamarin.Forms.View, new()
     { 
-        public static BindableProperty InputValidateProperty = BindableProperty.Create(nameof(InputValidate), typeof(object), typeof(InputContainer<T>), propertyChanged: delegate(BindableObject bindable, object value, object newValue) { ((InputContainer<T>)bindable).ChangeValidationItem((bool)newValue); });
+        public static BindableProperty InputValidateProperty = BindableProperty.Create(nameof(InputValidate), typeof(object), typeof(InputContainer<T>), propertyChanged: delegate(BindableObject bindable, object value, object newValue) { ((InputContainer<T>)bindable).ChangeValidationItem(newValue as bool?); });
 
         private bool _validationVisible = true;
 
@@ -22,9 +22,11 @@ namespace App2Night.CustomView.View
             }
         }
 
-        private void ChangeValidationItem(bool newValue)
+        private void ChangeValidationItem(bool? newValue)
         {
-            if (newValue)
+            if(!newValue.HasValue) return;
+
+            if (newValue.Value)
             {
                 _validationIconLabel.Text = "\uf00c";
                 _validationIconLabel.TextColor = Color.LawnGreen.ToXamarinColor();

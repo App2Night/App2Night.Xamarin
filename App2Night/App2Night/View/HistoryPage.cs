@@ -12,7 +12,7 @@ using Xamarin.Forms;
 
 namespace App2Night.View
 {
-    public class HistoryPage : ContentPageWithPreview<HistoryViewModel>
+    public class HistoryPage : CustomContentPage<HistoryViewModel>
     {
         /// <summary>
         /// Lists the Parties in a ListView. 

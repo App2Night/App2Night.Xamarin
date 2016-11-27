@@ -9,7 +9,7 @@ using Xamarin.Forms;
 
 namespace App2Night.View
 {
-    public class PartyPickerPage : ContentPageWithPreview<PartyPickerViewModel>
+    public class PartyPickerPage : CustomContentPage<PartyPickerViewModel>
     {
         public PartyPickerPage()
         {  

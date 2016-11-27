@@ -18,8 +18,5 @@ namespace App2Night.Model.Model
 
         [JsonIgnore]
         public DateTime ExpirationDate => LastRefresh.AddSeconds(ExpirationLength);
-
-        [JsonIgnore]
-        public TimeSpan ExpiresIn => ExpirationDate - DateTime.Now;
     }
 }

@@ -68,7 +68,7 @@ namespace App2Night.Service.Service
             if (tokenValid)
             {
                 //Validate the given location an return the location suggested by the server.
-               return await _clientService.SendRequest<Location>(new Uri("/api/Party/validate"), RestType.Post,
+               return await _clientService.SendRequest<Location>("/api/Party/validate", RestType.Post,
                     bodyParameter: location, token: _storageService.Storage.Token.AccessToken);
             }
             //Signal that the used token is not valid.
@@ -126,7 +126,7 @@ namespace App2Night.Service.Service
             //Send the create party request
             var result =
                 await
-                    _clientService.SendRequest<Guid>(new Uri("api/party"), RestType.Post, bodyParameter: partyCreationObject,
+                    _clientService.SendRequest<Guid>("api/party", RestType.Post, bodyParameter: partyCreationObject,
                         token: Token.AccessToken);
 
 		    if (!result.Success) return result; 
@@ -189,16 +189,24 @@ namespace App2Night.Service.Service
 
         public async Task<Result> CreateUser(SignUp signUpModels)
         {
-            //SendKEY the create user request
-            var creationResult = await _clientService.SendRequest(new Uri("api/user"), RestType.Post, bodyParameter: signUpModels, endpoint: Endpoint.User);
-            
-            //Login user after a successfull creation
-            if (creationResult.Success)
+            try
             {
-                var loginResult = await RequestToken(signUpModels.Username, signUpModels.Password);
-                //TODO Handle what should happen if login request fails
-            } 
-            return creationResult;
+//SendKEY the create user request
+                var creationResult = await _clientService.SendRequest("api/user", RestType.Post, bodyParameter: signUpModels, endpoint: Endpoint.User);
+            
+                //Login user after a successfull creation
+                if (creationResult.Success)
+                {
+                    var loginResult = await RequestToken(signUpModels.Username, signUpModels.Password);
+                    //TODO Handle what should happen if login request fails
+                } 
+                return creationResult;
+            }
+            catch (Exception e)
+            {
+                DebugHelper.PrintDebug(DebugType.Error, e.ToString());
+            }
+            return new Result();
         }
 
         public async Task<Result>  RequestToken(string username, string password)
@@ -208,7 +216,7 @@ namespace App2Night.Service.Service
             //Request the user login
             var result =
                     await
-                        _clientService.SendRequest<Token>(new Uri("/connect/token"), RestType.Post,
+                        _clientService.SendRequest<Token>("/connect/token", RestType.Post,
                             wwwFormData: tokenRequestValues, endpoint: Endpoint.User, enableHttps: false);
 
             //Save the new token to the storage
@@ -241,17 +249,13 @@ namespace App2Night.Service.Service
         }
 
         public async Task<Result> RefreshToken()
-        {
-
-            if (!await CheckIfTokenIsValid())
-                return new Result(); //Resault.success = false
-
+        { 
             Dictionary<string, string> tokenRefreshObject = CreateRefreshDictionary();
 
             //Request token refresh 
             var result =
                 await
-                    _clientService.SendRequest<Token>(new Uri("connect/revocation"), RestType.Post,
+                    _clientService.SendRequest<Token>("connect/revocation", RestType.Post,
                         wwwFormData: tokenRefreshObject, token: Token.AccessToken, endpoint: Endpoint.User, enableHttps: false);
 
             if (result.Success)
@@ -298,7 +302,7 @@ namespace App2Night.Service.Service
                 var uri = $"?lat={lat}&lon={lon}&radius={radius.ToString()}";
                 requestResult =
                     await
-                        _clientService.SendRequest<IEnumerable<Party>>(new Uri("api/party"), RestType.Get, urlQuery: uri,
+                        _clientService.SendRequest<IEnumerable<Party>>("api/party", RestType.Get, urlQuery: uri,
                             token: Token?.AccessToken);
             }
             catch (TaskCanceledException e)
@@ -357,7 +361,7 @@ namespace App2Night.Service.Service
             //Request the party with the given id
             var result =
                 await
-                    _clientService.SendRequest<Party>(new Uri("api/party"), RestType.Get, urlQuery: "id=" + id.ToString("D"),
+                    _clientService.SendRequest<Party>("api/party", RestType.Get, urlQuery: "id=" + id.ToString("D"),
                         token: Token.AccessToken);
             return result;
         }

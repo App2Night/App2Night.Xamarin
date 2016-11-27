@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace App2Night.View
 {
-    public class SettingPage : ContentPageWithInfo<SettingViewModel>
+    public class SettingPage : CustomContentPage<SettingViewModel>
     {
         public SettingPage()
         {
