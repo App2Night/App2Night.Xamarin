@@ -14,41 +14,21 @@ namespace App2Night.PageModel
     [ImplementPropertyChanged]
     public class CreatePartyViewModel : FreshBasePageModel
     {
-		string _name;
-        MusicGenre _musicGenre;
-		TimeSpan _time;
         Location _location;
 		string _streetName;
         string _zipcode;
 		string _houseNumber;
-        private string _cityName; 
+        private string _cityName;
 
-        public string Name 
-		{ 
-			get { return _name;} 
-			set 
-			{
-				_name = value; 
-			} 
-		} 
-        
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled),nameof(DeleteButtonEnabled))] 
+        public string Name { get; set; }
+
         [AlsoNotifyFor(nameof(ValidDescription))]
         public string Description { get; set; }
 
-        public MusicGenre MusicGenre 
-		{ 
-			get { return _musicGenre; } 
-			set
-			{ 
-				_musicGenre = value; 
-			} 
-		}
+        public MusicGenre MusicGenre { get; set; }
 
-		public TimeSpan Time 
-		{ 
-			get { return _time; } 
-			set { _time = value; }
-		}
+        public TimeSpan Time { get; set; }
 
         [AlsoNotifyFor(nameof(ValidDate))]
         public DateTime Date { get; set; }
@@ -86,6 +66,7 @@ namespace App2Night.PageModel
             }
 		}
 
+
 		public string HouseNumber
 		{
 			get { return _houseNumber; }
@@ -96,27 +77,77 @@ namespace App2Night.PageModel
             }
 		}
 
-        public bool ValidStreetname { get; private set; } 
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))] 
+        public bool ValidStreetname { get; private set; }
 
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
         public bool ValidCityname { get; private set; }
 
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
         public bool ValidHousenumber { get; private set; }
 
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))] 
         public bool ValidZipcode { get; private set; }
 
-        public bool ValidLocationname => ValidateLocationname(); 
+        public bool AcceptButtonEnabled
+        {
+            get
+            {
+                return ValidCityname
+                       && ValidDate
+                       && ValidDescription
+                       && ValidHousenumber
+                       && ValidLocationname
+                       && ValidName
+                       && ValidZipcode
+                       && ValidStreetname;
+            }
+        }
 
-        public bool ValidDate => ValidateDate(); 
+        public bool DeleteButtonEnabled
+        {
+            get
+            {
+                return !(string.IsNullOrEmpty(CityName)
+                         && string.IsNullOrEmpty(Name)
+                         && string.IsNullOrEmpty(Description)
+                         && string.IsNullOrEmpty(Zipcode)
+                         && string.IsNullOrEmpty(StreetName)
+                         && string.IsNullOrEmpty(HouseNumber)
+                         && string.IsNullOrEmpty(LocationName));
+            }
+        }
 
-        public bool ValidName => ValidateName(); 
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
+        public bool ValidLocationname => ValidateLocationname();
 
-		public bool ValidDescription => ValidateDescription();
-        public Command CreatePartyCommand => new Command(async ()=> await CreateParty()); 
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
+        public bool ValidDate => ValidateDate();
 
-        private bool ValidateDate()
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
+        public bool ValidName => ValidateName();
+
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
+        public bool ValidDescription => ValidateDescription();
+
+        public Command CreatePartyCommand => new Command(async () => await CreateParty());
+        public Command ClearFormCommand => new Command(ClearForm);
+
+        private void ClearForm()
+        {
+            Zipcode = string.Empty;
+            CityName = string.Empty;
+            StreetName = string.Empty;
+            HouseNumber = string.Empty;
+            LocationName = string.Empty;
+            Name = string.Empty;
+            Description = string.Empty;
+        }
+
+        public bool ValidateDate()
         {
             return Date >= DateTime.Today && Date <= DateTime.Today.AddMonths(12);
-        }
+        } 
 
         private bool ValidateLocationname()
         {
