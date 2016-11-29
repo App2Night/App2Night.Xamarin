@@ -18,16 +18,18 @@ namespace App2Night
     public partial class App
     {
         public static bool MapAvailable { get; private set; }
-         
+
+        CustomMasterDetailContainer _masterDetailNav; 
+
         public App()
         {
             InitializeComponent();
             CheckIfMapsIsAvailable();
 
             RegisterInterfaces();
-            CustomMasterDetailContainer masterDetailNav = CreateMasterDetailContainerInstance();
+            _masterDetailNav = CreateMasterDetailContainerInstance();
 
-            MainPage = masterDetailNav;
+            MainPage = _masterDetailNav;
 
             if (Device.OS == TargetPlatform.iOS || Device.OS == TargetPlatform.Android)
             {
