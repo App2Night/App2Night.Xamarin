@@ -200,5 +200,15 @@ namespace App2Night.Page
             _profilePicture.HeightRequest = Width/2 - 20;
             _profilePicture.WidthRequest = Width/2 - 20;
         }
+        /// <summary>
+        /// Removes <see cref="EventHandler"/> of <see cref="GallerieView"/>'s
+        /// </summary>
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _interestingPartieGallerie.ElementTapped -= PartieSelected;
+            _myPartieGallerie.ElementTapped -= PartieSelected;
+            _historyGallerieView.ElementTapped -= PartieSelected;
+        }
     }
 }
