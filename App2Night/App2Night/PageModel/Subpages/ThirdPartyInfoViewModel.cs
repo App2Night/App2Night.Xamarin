@@ -17,11 +17,10 @@ namespace App2Night.PageModel.SubPages
             Device.BeginInvokeOnMainThread(()=> Device.OpenUri(License.ProjectUri)); 
         }
 
-
-        public ThirdPartyInfoViewModel(License parameter)
+        public override void Init(object initData)
         {
-            License = parameter;
-
+            base.Init(initData);
+            License = (License) initData;
         } 
     }
 }

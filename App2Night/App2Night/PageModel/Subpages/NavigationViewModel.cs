@@ -23,6 +23,8 @@ namespace App2Night.PageModel.SubPages
             //If not -> Open SignUp! 
             //
         }
+        public Command<License> OpenLicenseCommand => new Command<License>(async (license) => await CoreMethods.PushPageModel<EditProfileViewModel>(license));
+
 
         private async Task Sync()
         {

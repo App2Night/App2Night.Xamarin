@@ -91,7 +91,7 @@ namespace App2Night.Page
 
         public LoginPage()
         { 
-            
+            BackgroundColor = Color.Red;
 
             //Make sure that the page does not merge in to the status bar on iOS.
             if(Device.OS == TargetPlatform.iOS) 
