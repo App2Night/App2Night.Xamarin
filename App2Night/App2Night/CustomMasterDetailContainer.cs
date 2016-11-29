@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -41,6 +42,7 @@ namespace App2Night
         public void AddPage<T>(string title, object data = null) where T : FreshBasePageModel
         {
             var page = FreshPageModelResolver.ResolvePageModel<T>(data);
+            page.Title = title;
             page.GetModel().CurrentNavigationServiceName = NavigationServiceName;
             _pagesInner.Add(page);
             var navigationContainer = CreateContainerPage(page);
@@ -62,12 +64,13 @@ namespace App2Night
         {
             return new NavigationPage(page);
         }
+        ListView listView;
 
         private void CreateMenuPage(string menuPageTitle, string menuIcon = null)
         {
             _menuPage = new ContentPage();
             _menuPage.Title = menuPageTitle;
-            var listView = new ListView();
+            listView = new ListView();
 
             listView.ItemsSource = _pageNames;
 
@@ -94,8 +97,14 @@ namespace App2Night
         {
             if (modal)
                 return Detail.Navigation.PushModalAsync(page);
-            return (Detail as NavigationPage).PushAsync(page, animate); //TODO: make this better
-        }
+
+            KeyValuePair<string, Xamarin.Forms.Page>  innerPage = _pages.FirstOrDefault(p => ((NavigationPage)p.Value).CurrentPage.GetType() == page.GetType());
+            if (innerPage.Key != null)
+            {
+                return Task.FromResult(listView.SelectedItem = innerPage.Key);
+            }  
+            return (Detail as NavigationPage).PushAsync(page, animate);    
+         }
 
         public Task PopPage(bool modal = false, bool animate = true)
         {
