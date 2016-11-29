@@ -68,7 +68,10 @@ namespace App2Night.CustomView.View
         {
             FontFamily = "FontAwesome", 
             Opacity = 0.7,
-            Margin = new Thickness(3)
+            Margin = new Thickness(3),
+            Text = "\uf00c",
+            FontSize = 25,
+            TextColor = Color.Gray.ToXamarinColor()
         }; 
 
         Label _imageLabel = new Label
@@ -86,7 +89,7 @@ namespace App2Night.CustomView.View
             {
                 new ColumnDefinition {Width = new GridLength(0, GridUnitType.Absolute)},
                 new ColumnDefinition {Width = new GridLength(10, GridUnitType.Star)},
-                new ColumnDefinition {Width = new GridLength(50, GridUnitType.Absolute)},
+                new ColumnDefinition {Width = new GridLength(40, GridUnitType.Absolute)},
 
             };
             Children.Add(_imageLabel, 0, 0);
