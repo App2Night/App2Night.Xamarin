@@ -23,7 +23,7 @@ namespace App2Night.CustomView.Template
 
         CustomButton _likeButton = new CustomButton
         {
-            Text = "\uf004",
+            Text = "\uf006",
             FontFamily = "FontAwesome",
             HorizontalOptions = LayoutOptions.End,
             VerticalOptions = LayoutOptions.Start,
@@ -50,7 +50,8 @@ namespace App2Night.CustomView.Template
         };
 
         #endregion
-        TapGestureRecognizer _tapGestureRecognizer = new TapGestureRecognizer();
+
+        readonly TapGestureRecognizer _tapGestureRecognizer = new TapGestureRecognizer();
         private CommitmentState _state = CommitmentState.Rejected;
         public QuadraticPartyTemplate()
         {
@@ -95,20 +96,36 @@ namespace App2Night.CustomView.Template
                 }
             };
         }
-        
+        /// <summary>
+        /// Sets <see cref="_likeButton"/> to CommimentState. 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void TappedLikeBtn(object sender, EventArgs e)
         {
             if (_state == CommitmentState.Rejected)
             {
-                _likeButton.ButtonLabel.TextColor = Color.Red;
-                _state = CommitmentState.Accepted;
+                // sets btn to star, change color to 
+                _likeButton.Text = "\uf004";
+                _likeButton.ButtonLabel.TextColor = Color.Yellow;
+                _state = CommitmentState.Noted;
             } else if (_state == CommitmentState.Accepted)
             {
+                // sets btn back to star with a white color
+                _likeButton.Text = "\uf006";
                 _likeButton.ButtonLabel.TextColor = Color.White;
                 _state = CommitmentState.Rejected;
+            } else if (_state == CommitmentState.Noted)
+            {
+                // sets btn to heart with a red color
+                _likeButton.Text = "\uf004";
+                _likeButton.ButtonLabel.TextColor = Color.Red;
+                _state = CommitmentState.Noted;
             }
         }
-
+        /// <summary>
+        /// CommitmentState of the User for a Party.
+        /// </summary>
         public enum CommitmentState
         {
             Accepted,
