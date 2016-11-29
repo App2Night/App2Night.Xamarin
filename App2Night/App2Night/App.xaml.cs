@@ -18,73 +18,111 @@ namespace App2Night
     public partial class App
     {
         public static bool MapAvailable { get; private set; }
-
-        CustomMasterDetailContainer _masterDetailNav = new CustomMasterDetailContainer();
+         
         public App()
         {
             InitializeComponent();
+            CheckIfMapsIsAvailable();
 
-            //It is possible (even if it is unlikely) that Google Maps is not installed on the device.
-            //Check if it is installed on start.
-            if (Device.OS == TargetPlatform.Android)
-            {
-                MapAvailable =
-                    Xamarin.Forms.DependencyService.Get<IAndroidAppLookupService>()
-                        .DoesAppExist("com.google.android.apps.maps");
-            }
+            RegisterInterfaces();
+            CustomMasterDetailContainer masterDetailNav = CreateMasterDetailContainerInstance();
 
-            RegisterInterfaces(); 
-            _masterDetailNav.Init("Menu");
-            _masterDetailNav.AddPage<DashboardPageModel>(AppResources.Dashboard, null);
-            _masterDetailNav.AddPage<PartyPickerViewModel>(AppResources.PickAParty, null);
-            _masterDetailNav.AddPage<CreatePartyViewModel>(AppResources.CreateAParty);
-            _masterDetailNav.AddPage<HistoryViewModel>(AppResources.History);
-            _masterDetailNav.AddPage<SettingViewModel>(AppResources.Settings);
-            _masterDetailNav.AddPage<AboutTabbedViewModel>(AppResources.About);
-
-            MainPage = _masterDetailNav;
+            MainPage = masterDetailNav;
 
             if (Device.OS == TargetPlatform.iOS || Device.OS == TargetPlatform.Android)
             {
                 var ci = Xamarin.Forms.DependencyService.Get<ICultureService>().GetCurrentCultureInfo();
                 AppResources.Culture = ci; // set the RESX for resource localization
                 Xamarin.Forms.DependencyService.Get<ICultureService>().SetLocale(ci); // set the Thread for locale-aware methods
-            } 
+            }
 
-            Device.BeginInvokeOnMainThread(async ()=>await Setup());
+            Device.BeginInvokeOnMainThread(async () => await GenerelSetup());
         }
 
-        async Task Setup()
+        /// <summary>
+        /// Creates an instance of the <see cref="CustomMasterDetailContainer"/> containing all pages for this session.
+        /// </summary>
+        /// <returns></returns>
+        private CustomMasterDetailContainer CreateMasterDetailContainerInstance()
+        {
+            var masterDetailNav = new CustomMasterDetailContainer();
+            masterDetailNav.Init("App2Night");
+            masterDetailNav.AddPage<DashboardPageModel>(AppResources.Dashboard, null);
+            masterDetailNav.AddPage<PartyPickerViewModel>(AppResources.PickAParty, null);
+            masterDetailNav.AddPage<CreatePartyViewModel>(AppResources.CreateAParty);
+            masterDetailNav.AddPage<HistoryViewModel>(AppResources.History);
+            masterDetailNav.AddPage<SettingViewModel>(AppResources.Settings);
+            masterDetailNav.AddPage<AboutTabbedViewModel>(AppResources.About);
+            return masterDetailNav;
+        }
+
+        /// <summary>
+        /// Validates if Google Maps is installed if the app is executed on an android device.
+        /// </summary>
+        private static void CheckIfMapsIsAvailable()
+        { 
+            if (Device.OS == TargetPlatform.Android)
+            {
+                MapAvailable =
+                    Xamarin.Forms.DependencyService.Get<IAndroidAppLookupService>()
+                        .DoesAppExist("com.google.android.apps.maps");
+            }
+        }
+
+        /// <summary>
+        /// Resumes the last session, makes an initial sync and opens the login page if needed.
+        /// </summary>
+        /// <returns></returns>
+        private async Task GenerelSetup()
         {
             using (UserDialogs.Instance.Loading())
             {
-                CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
-                FreshIOC.Container.Resolve<IDataService>().PartiesUpdated +=
-                    (sender, args) => { CrossGeolocator.Current.StartListeningAsync(1, 100); };
+                SetupGeolocator();
 
                 await FreshIOC.Container.Resolve<IStorageService>().OpenStorage();
-                bool isLoggedIn = false;
-                var storage = FreshIOC.Container.Resolve<IStorageService>().Storage;
-                if (storage.Token != null)
-                {
-                    //Set token from last session and update user information.
-                    isLoggedIn = await FreshIOC.Container.Resolve<IDataService>().SetToken(storage.Token);
-                }
-                DebugHelper.PrintDebug(DebugType.Info,
-                    isLoggedIn ? "Log in from last session." : "User not logged in. No token available.");
+                bool isLoggedIn = await ResumeLastSession();
 
                 //Make an inital token refresh 
                 await FreshIOC.Container.Resolve<IDataService>().RequestPartyWithFilter();
 
                 if (!isLoggedIn)
                 {
-                    var page = FreshPageModelResolver.ResolvePageModel<LoginViewModel>();
-                    await _masterDetailNav.PushPage(page, null, true);
-                     
+                    await ShowLoginModal();
                 }
             }
-        }  
+        }
 
+        private async Task ShowLoginModal()
+        {
+            var page = FreshPageModelResolver.ResolvePageModel<LoginViewModel>();
+            await _masterDetailNav.PushPage(page, null, true);
+        }
+
+        private async Task<bool> ResumeLastSession()
+        {
+            bool isLoggedIn = false;
+            var storage = FreshIOC.Container.Resolve<IStorageService>().Storage;
+            if (storage.Token != null)
+            {
+                //Set token from last session and update user information.
+                isLoggedIn = await FreshIOC.Container.Resolve<IDataService>().SetToken(storage.Token);
+            }
+            DebugHelper.PrintDebug(DebugType.Info,
+                isLoggedIn ? "Log in from last session." : "User not logged in. No token available.");
+            return isLoggedIn;
+        }
+
+        private void SetupGeolocator()
+        {
+            CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
+            FreshIOC.Container.Resolve<IDataService>().PartiesUpdated +=
+                (sender, args) => { CrossGeolocator.Current.StartListeningAsync(1, 100); };
+        }
+
+        /// <summary>
+        /// Handles position changes.
+        /// Calculates distance to all nearby parties.
+        /// </summary> 
         private void CurrentOnPositionChanged(object sender, PositionEventArgs positionEventArgs)
         {
             var dataService = FreshIOC.Container.Resolve<IDataService>();
@@ -103,6 +141,9 @@ namespace App2Night
             }
         }
 
+        /// <summary>
+        /// Registers all interfaces.
+        /// </summary>
         private void RegisterInterfaces()
         {
             FreshIOC.Container.Register<IStorageService, StorageService>().AsSingleton();
