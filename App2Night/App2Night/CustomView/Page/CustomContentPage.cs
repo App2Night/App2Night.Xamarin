@@ -7,12 +7,22 @@ using FreshMvvm;
 using Plugin.Connectivity;
 using Plugin.Connectivity.Abstractions;
 using Xamarin.Forms;
+using static System.Drawing.Color;
 
 namespace App2Night.CustomView.Page
 {
-    public class  stomContentPage : FreshBaseContentPage
+    public class  CustomContentPage : FreshBaseContentPage
     {
         private static readonly double _size = 50;
+        private static Color _infoBackgroundColor = Khaki.ToXamarinColor();
+        private static Color _infoTextColor = DimGray.ToXamarinColor();
+
+        public string OfflineMessage
+        {
+            get { return _infoLabel.Text; }
+            set { _infoLabel.Text = value; }
+        }
+
 
         private ContentView _previewContainer1 = new ContentView
         {
@@ -39,19 +49,18 @@ namespace App2Night.CustomView.Page
         {
             Text = "Your device is not connected to the internet.\n" +
                    "App2Night will use cached data if available.",
-            TextColor = Color.White
+            TextColor = _infoTextColor
         };
         BoxView _infoBackgroundBoxView = new BoxView
         {
-            Color = System.Drawing.Color.DarkOrange.ToXamarinColor()
+            Color = _infoBackgroundColor
         }; 
+         
+        private Grid _infoContainer;
 
-        private Grid _contentGrid;
-        private Grid _previewGrid;
-
-        public  stomContentPage()
+        public  CustomContentPage()
         {
-            _contentGrid = new Grid
+            _infoContainer = new Grid
             {
                 RowSpacing = 0,
                 RowDefinitions =
@@ -67,17 +76,17 @@ namespace App2Night.CustomView.Page
                 }
             };
 
-            _previewGrid = new Grid
+            var previewGrid = new Grid
             {
                 Children =
                 {
-                    _contentGrid,
-                   _previewContainer1,
-                   _previewContainer2
+                    _infoContainer,
+                    _previewContainer1,
+                    _previewContainer2
                 }
             }; 
 
-            base.Content = _previewGrid;
+            base.Content = previewGrid;
 
             //Set start connectivity value.
             _oldValue = CrossConnectivity.Current.IsConnected;
@@ -92,33 +101,38 @@ namespace App2Night.CustomView.Page
             Device.BeginInvokeOnMainThread(() =>
             { 
                 if (_oldValue && !connected)
-                {
                     //Device lost connection, slide in info
-                    var animation = new Animation(d => 
-                    {
-                        _infoLabel.TranslationY = -_size + _size * d;
-                        _contentGrid.RowDefinitions[0].Height = new GridLength(d * _size, GridUnitType.Absolute);
-                    });
-                    animation.Commit(this, "SlideInInfo", easing: Easing.CubicInOut, length: 500U);
-                }
-                else if (!_oldValue && connected)
-                {
+                    ShowInformationAnimation();
+                else if (!_oldValue && connected) 
                     //Device got connected, slide out info 
-                    var animation = new Animation(d =>
-                    {
-                        _infoLabel.TranslationY = -_size * d;
-                        _contentGrid.RowDefinitions[0].Height = new GridLength((1 - d) * _size, GridUnitType.Absolute);
-                    }, 0, 1);
-                    animation.Commit(this, "SlideInInfo", easing: Easing.CubicInOut, length: 500U);
-                }
+                    HideInformationAnimation(); 
                 _oldValue = connected;
             });
         }
 
+        private void HideInformationAnimation()
+        {
+            var animation = new Animation(d =>
+            {
+                _infoLabel.TranslationY = -_size * d;
+                _infoContainer.RowDefinitions[0].Height = new GridLength((1 - d) * _size, GridUnitType.Absolute);
+            }, 0, 1);
+            animation.Commit(this, "SlideInInfo", easing: Easing.CubicInOut, length: 500U);
+        }
+
+        private void ShowInformationAnimation()
+        {
+            var animation = new Animation(d =>
+            {
+                _infoLabel.TranslationY = -_size + _size * d;
+                _infoContainer.RowDefinitions[0].Height = new GridLength(d * _size, GridUnitType.Absolute);
+            });
+            animation.Commit(this, "SlideInInfo", easing: Easing.CubicInOut, length: 500U);
+        }
+
         protected override void OnDisappearing()
         {
-            CrossConnectivity.Current.ConnectivityChanged -= ConnectionChanged;
-
+            CrossConnectivity.Current.ConnectivityChanged -= ConnectionChanged; 
             base.OnDisappearing();
         } 
 
@@ -127,26 +141,29 @@ namespace App2Night.CustomView.Page
         /// </summary>
         public new Xamarin.Forms.View Content
         {
-            get { return _contentGrid.Children.Count>2?  _contentGrid.Children[1] : null; }
+            get { return _infoContainer.Children.Count>2?  _infoContainer.Children[1] : null; }
             set
             {
-                if (_contentGrid.Children.Count > 2)
+                if (_infoContainer.Children.Count > 2)
                 {
-                    _contentGrid.Children.RemoveAt(2);
+                    _infoContainer.Children.RemoveAt(2);
                 }
-                _contentGrid.Children.Add(value, 0, 1); 
+                _infoContainer.Children.Add(value, 0, 1); 
             }
         }
 
         /// <summary>
-        /// Gets fired if a partie item gets tapped on.
-        /// Will display the party info view.
+        /// Opens a preview for the object.
         /// </summary> 
+        /// <typeparam name="TPreviewType">A derivation <see cref="PreviewView"/> that will show the object.</typeparam>
+        /// <param name="sender">Object that will be shown in the preview.</param>
+        /// <param name="parameter">Parameter for the <see cref="TPreviewType"/>.</param>
         public async void PreviewItemSelected<TItemType, TPreviewType>(TItemType sender, object[] parameter) where TPreviewType : PreviewView
         {
             var p = new List<object> { sender };
             p.AddRange(parameter);
 
+            //Create an instance of the PreviewView
             _preview = (TPreviewType)Activator.CreateInstance(typeof(TPreviewType), p.ToArray());
             _preview.CloseViewEvent += ClosePreviewEvent;
             await ShowPreview(_preview);

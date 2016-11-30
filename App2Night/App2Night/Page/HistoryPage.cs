@@ -7,7 +7,7 @@ using Xamarin.Forms;
 
 namespace App2Night.Page
 {
-    public class HistoryPage : FreshBaseContentPage 
+    public class HistoryPage : CustomContentPage 
     {
         /// <summary>
         /// Lists the Parties in a ListView. 
