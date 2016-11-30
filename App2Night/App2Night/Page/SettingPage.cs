@@ -5,7 +5,7 @@ using Xamarin.Forms;
 
 namespace App2Night.Page
 {
-    public class SettingPage : FreshBaseContentPage 
+    public class SettingPage : CustomContentPage 
     {
         public SettingPage()
         {
