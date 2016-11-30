@@ -4,11 +4,11 @@ using Xamarin.Forms;
 
 namespace App2Night.Page.SubPages
 {
-    public class NavigationPage : FreshBaseContentPage
+    public class NavigationPage : ContentPage
     {
         Grid _layoutGrid;
 
-        public NavigationPage()
+        public NavigationPage(ListView menuListView)
         {
             if(Device.OS == TargetPlatform.iOS) Padding = new Thickness(0, 20, 0, 0);
             Title = "Menü";
@@ -30,13 +30,13 @@ namespace App2Night.Page.SubPages
                     new RowDefinition { Height = new GridLength(2, GridUnitType.Star)} 
                 },
                 Children =
-                { 
-                    //DetailListView,
+                {
+                    menuListView,
                     { syncButton, 0, 1}
                 }
             };
 
-            //MasterContent = _layoutGrid;
+            Content = _layoutGrid;
         }
 
         protected override void OnSizeAllocated(double width, double height)
