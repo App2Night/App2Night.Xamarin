@@ -200,18 +200,9 @@ namespace App2Night.CustomView.View
                 FontSize = 100,
                 FontAttributes = FontAttributes.Bold
             });
-            _noContentView.Children.Add(_noContentText);
-            SetNoContentViewVisiblity(ContentWarningVisible); 
             _moreBtn.ButtonTapped += MoreBtnOnButtonTapped;
+            SetNoContentViewVisiblity(ContentWarningVisible);
             _moreBtn.ButtonLabel.FontSize = 25; 
-            TapGestureRecognizer noContentViewGesture = new TapGestureRecognizer
-            {
-                Command = new Command(() =>
-                {
-                    MoreBtnOnButtonTapped(null, EventArgs.Empty);
-                })
-            };
-            noContentViewContainer.GestureRecognizers.Add(noContentViewGesture);
 
             if (string.IsNullOrEmpty(ButtonText))
                 ButtonText = "\uf061";
@@ -239,29 +230,13 @@ namespace App2Night.CustomView.View
 
         private void MoreBtnOnButtonTapped(object sender, EventArgs eventArgs)
         {
-            if (Command != null)
-            {
-                var animation = new Animation(d =>
-                {
-                    _moreBtn.Scale = d;
-                },1, 1.6);
-                var nextAnimation = new Animation(d =>
-                {
-                    _moreBtn.Scale = d;
-                },1.6, 1);
-                animation.Commit(this, "Scale", finished: delegate
-                {
-                    nextAnimation.Commit(this, "Descale");
-                });
-                Command.Execute(null);
-            }
+            Command?.Execute(null);
         }
 
         protected override void OnRemoved(Xamarin.Forms.View view)
         {
             base.OnRemoved(view);
             _moreBtn.ButtonTapped -= MoreBtnOnButtonTapped;
-
-        } 
+        }
     }
 }

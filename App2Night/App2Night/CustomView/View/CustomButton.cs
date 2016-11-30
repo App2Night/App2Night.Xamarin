@@ -88,9 +88,11 @@ namespace App2Night.CustomView.View
         {
             var gestureRecognizer = new TapGestureRecognizer
             {
-                Command = new Command(() =>
+                Command = new Command(async () =>
                 {
-                    Tapped();
+                    await Animation();
+                    Command?.Execute(null);
+                    await OnButtonTapped();
                 })
             };
             GestureRecognizers.Add(gestureRecognizer);
@@ -98,17 +100,6 @@ namespace App2Night.CustomView.View
 
             _defaultOpacity = ButtonLabel.Opacity;
         }
-
-        private async Task Tapped()
-        {
-            if ( Command != null)
-            {
-                await Animation();
-                Command.Execute(null);
-            }
-            await OnButtonTapped();
-        }
-
         private async Task Animation()
         {
             var animation = new Animation(d => { ButtonLabel.Scale = d; }, 1, ScaleAnimation);
