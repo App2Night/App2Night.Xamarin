@@ -1,4 +1,5 @@
 ﻿using System;
+using App2Night.CustomView.Page;
 using App2Night.CustomView.View;
 using App2Night.Data.Language;
 using App2Night.Model.Enum;
@@ -12,7 +13,7 @@ namespace App2Night.Page
     /// <summary>
     /// Create party page.
     /// </summary>
-    public class CreatePartyPage : FreshBaseContentPage
+    public class CreatePartyPage : CustomContentPage
     {
         //Default thicknes
         private static Thickness _defaultMargin = new Thickness(5, 0);

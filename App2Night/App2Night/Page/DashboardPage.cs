@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using App2Night.CustomView.Page;
 using App2Night.CustomView.Template;
 using App2Night.CustomView.View;
 using App2Night.Data.Language;
@@ -10,7 +11,7 @@ using Xamarin.Forms.Maps;
 
 namespace App2Night.Page
 { 
-    public class DashboardPage : ContentPage 
+    public class DashboardPage : CustomContentPage 
     {
         #region Views
 

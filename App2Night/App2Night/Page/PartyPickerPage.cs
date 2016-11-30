@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace App2Night.Page
 {
-    public class PartyPickerPage : FreshBaseContentPage 
+    public class PartyPickerPage : CustomContentPage 
     {
         public PartyPickerPage()
         {  
