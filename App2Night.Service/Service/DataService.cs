@@ -119,23 +119,24 @@ namespace App2Night.Service.Service
 		}
 
 		public async Task<Result<Party>> CreateParty(string name, DateTime date, MusicGenre genre, string country, string cityName, string street, string houseNr, string zipcode, PartyType type, string description)
-        {
+        { 
             //Create an object from the given parameters for the party creation
             dynamic partyCreationObject = CreatePartyCreateObject(name, date, genre, country, cityName, street, houseNr, zipcode, type, description);
 
             //Send the create party request
             var result =
                 await
-                    _clientService.SendRequest<Party>("api/party", RestType.Post, bodyParameter: partyCreationObject,
+                    _clientService.SendRequest<Guid>("api/party", RestType.Post, bodyParameter: partyCreationObject,
                         token: Token.AccessToken);
+            DebugHelper.PrintDebug(DebugType.Info, $"Guid of the created party is {result.Data}");
 
 		    if (!result.Success) return result; 
 
             //Get the created party if the creation was successfull. 
-            //var party = await GetParty(result.Data);
+            var party = await GetParty(result.Data);
 
             //Return the created party
-            return result;
+            return party;
 
         }
 
@@ -356,12 +357,12 @@ namespace App2Night.Service.Service
 
         public async Task<Result<Party>> GetParty(Guid id)
         {
-            if(await CheckIfTokenIsValid()) return new Result<Party>(); //Empty result with success = false
+            if(!await CheckIfTokenIsValid()) return new Result<Party>(); //Empty result with success = false
             
             //Request the party with the given id
             var result =
                 await
-                    _clientService.SendRequest<Party>("api/party", RestType.Get, urlQuery: "id=" + id.ToString("D"),
+                    _clientService.SendRequest<Party>("api/party", RestType.Get, urlQuery: "/id=" + id.ToString("D"),
                         token: Token.AccessToken);
             return result;
         }

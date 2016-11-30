@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using App2Night.Model.Enum;
 using App2Night.Model.Model;
 using App2Night.Service.Helper;
@@ -169,11 +170,23 @@ namespace App2Night.PageModel
 
         private async Task CreateParty()
         {
-            var dateTime = new DateTime(Date.Year, Date.Month, Date.Day, Time.Hours, Time.Minutes, 0);
-            var result = await
-                    FreshIOC.Container.Resolve<IDataService>()
-                        .CreateParty(Name, dateTime, MusicGenre, "Germany", CityName, StreetName, HouseNumber, Zipcode,
-                            PartyType.Bar, Description);
+            using (UserDialogs.Instance.Loading("Creating Party")) //RESOURCE 
+            {
+                var dateTime = new DateTime(Date.Year, Date.Month, Date.Day, Time.Hours, Time.Minutes, 0);
+                var result = await
+                        FreshIOC.Container.Resolve<IDataService>()
+                            .CreateParty(Name, dateTime, MusicGenre, "Germany", CityName, StreetName, HouseNumber, Zipcode,
+                                PartyType.Bar, Description);
+
+                if (result.Success)
+                {
+                    //The user should come to the dashboard after popping the party detail page.
+                    await CoreMethods.SwitchSelectedMaster<DashboardPageModel>();
+
+                    await CoreMethods.PushPageModel<PartyViewModel>(result.Data, true);
+                } 
+                //TODO Handle create party failure
+            }   
         }
 
         DateTime _lastLocationChange = new DateTime();
