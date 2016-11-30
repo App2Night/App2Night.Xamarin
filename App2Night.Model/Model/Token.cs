@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace App2Night.Model.Model
 {
@@ -8,5 +9,14 @@ namespace App2Night.Model.Model
         public string AccessToken { get; set; }
         [JsonProperty(PropertyName = "refresh_token")]
         public string RefreshToken { get; set; } 
+
+        [JsonProperty(PropertyName = "expires_in")]
+        public int ExpirationLength { get; set; }
+
+        [JsonIgnore]
+        public DateTime LastRefresh { get; set; }
+
+        [JsonIgnore]
+        public DateTime ExpirationDate => LastRefresh.AddSeconds(ExpirationLength);
     }
 }

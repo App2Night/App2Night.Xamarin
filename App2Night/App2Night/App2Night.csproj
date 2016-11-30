@@ -35,14 +35,18 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="App.cs" />
-    <Compile Include="CustomPage\ContentPageWithInfo.cs" />
-    <Compile Include="CustomPage\ContentPageWithPreview.cs" />
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="CustomMasterDetailContainer.cs" />
+    <Compile Include="CustomView\Template\MenuTemplate.cs" />
+    <Compile Include="CustomView\View\InputContainer.cs" />
+    <Compile Include="CustomView\View\EnumBindablePicker.cs" />
+    <Compile Include="CustomView\Page\CustomContentPage.cs" />
     <Compile Include="CustomView\Template\HistoryTemplate.cs" />
     <Compile Include="CustomView\Template\QuadraticPartyTemplate.cs" />
     <Compile Include="CustomView\View\GallerieView.cs" />
     <Compile Include="CustomView\View\CustomButton.cs" />
-    <Compile Include="CustomView\View\ImageFromPortable.cs" />
     <Compile Include="CustomView\View\MapWrapper.cs" />
     <Compile Include="CustomView\View\CustomScrollView.cs" />
     <Compile Include="CustomView\View\HorizontalGallerieView.cs" />
@@ -50,47 +54,64 @@
     <Compile Include="CustomView\View\PartyPreviewView.cs" />
     <Compile Include="CustomView\Template\PartyTemplate.cs" />
     <Compile Include="CustomView\View\PreviewView.cs" />
-    <Compile Include="CustomView\View\RoundImage.cs" />
     <Compile Include="CustomView\View\SwipeView.cs" />
     <Compile Include="CustomView\View\EnhancedContainer.cs" />
     <Compile Include="CustomView\View\VerticalGallerieView.cs" />
+    <Compile Include="Data\Language\AppResources.de.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.de.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Data\Language\AppResources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>AppResources.resx</DependentUpon>
+    </Compile>
     <Compile Include="DependencyService\IUserLocationService.cs" />
     <Compile Include="DependencyService\IAndroidAppLookupService.cs" />
-    <Compile Include="Helper\ConvertHelper.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="ViewModel\AboutViewModel.cs" />
-    <Compile Include="ViewModel\CreatePartyViewModel.cs" />
-    <Compile Include="ViewModel\DashboardViewModel.cs" />
-    <Compile Include="ViewModel\PartyViewModel.cs" />
-    <Compile Include="ViewModel\HistoryViewModel.cs" />
-    <Compile Include="ViewModel\LoginViewModel.cs" />
-    <Compile Include="ViewModel\NavigationViewModel.cs" />
-    <Compile Include="ViewModel\SettingViewModel.cs" />
-    <Compile Include="ViewModel\Subpages\EditPartyViewModel.cs" />
-    <Compile Include="ViewModel\Subpages\EditProfileViewModel.cs" />
-    <Compile Include="ViewModel\Subpages\MyPartysViewModel.cs" />
-    <Compile Include="ViewModel\Subpages\ParticipantViewModel.cs" />
-    <Compile Include="ViewModel\TestViewModel.cs" />
-    <Compile Include="ViewModel\PartyPickerViewModel.cs" />
-    <Compile Include="View\AboutPage.cs" />
-    <Compile Include="View\CreatePartyPage.cs" />
-    <Compile Include="View\DashboardPage.cs" />
-    <Compile Include="View\PartyPage.cs" />
-    <Compile Include="View\PartyPickerPage.cs" />
-    <Compile Include="View\HistoryPage.cs" />
-    <Compile Include="View\LoginPage.cs" />
-    <Compile Include="View\NavigationPage.cs" />
-    <Compile Include="View\SettingPage.cs" />
-    <Compile Include="View\Subpages\EditPartyPage.cs" />
-    <Compile Include="View\Subpages\EditProfilePage.cs" />
-    <Compile Include="View\Subpages\MyPartysPage.cs" />
-    <Compile Include="View\Subpages\ParticipantPage.cs" />
+    <Compile Include="PageModel\AboutTabbedViewModel.cs" />
+    <Compile Include="PageModel\CreatePartyViewModel.cs" />
+    <Compile Include="PageModel\DashboardPageModel.cs" />
+    <Compile Include="PageModel\PartyViewModel.cs" />
+    <Compile Include="PageModel\HistoryViewModel.cs" />
+    <Compile Include="PageModel\LoginViewModel.cs" />
+    <Compile Include="PageModel\SubPages\NavigationViewModel.cs" />
+    <Compile Include="PageModel\SettingViewModel.cs" />
+    <Compile Include="PageModel\SubPages\AboutAppViewModel.cs" />
+    <Compile Include="PageModel\SubPages\EditPartyViewModel.cs" />
+    <Compile Include="PageModel\SubPages\EditProfileViewModel.cs" />
+    <Compile Include="PageModel\SubPages\MyPartysViewModel.cs" />
+    <Compile Include="PageModel\SubPages\ParticipantViewModel.cs" />
+    <Compile Include="PageModel\SubPages\PartyDetailViewModel.cs" />
+    <Compile Include="PageModel\SubPages\ThirdPartyInfoViewModel.cs" />
+    <Compile Include="PageModel\SubPages\ThirdPartyViewModel.cs" />
+    <Compile Include="PageModel\TestViewModel.cs" />
+    <Compile Include="PageModel\PartyPickerViewModel.cs" />
+    <Compile Include="Page\AboutTabbedPage.cs" />
+    <Compile Include="Page\CreatePartyPage.cs" />
+    <Compile Include="Page\DashboardPage.cs" />
+    <Compile Include="Page\PartyPage.cs" />
+    <Compile Include="Page\PartyPickerPage.cs" />
+    <Compile Include="Page\HistoryPage.cs" />
+    <Compile Include="Page\LoginPage.cs" />
+    <Compile Include="Page\SubPages\NavigationPage.cs" />
+    <Compile Include="Page\SettingPage.cs" />
+    <Compile Include="Page\SubPages\AboutAppPage.cs" />
+    <Compile Include="Page\SubPages\EditPartyPage.cs" />
+    <Compile Include="Page\SubPages\EditProfilePage.cs" />
+    <Compile Include="Page\SubPages\MyPartysPage.cs" />
+    <Compile Include="Page\ParticipantPage.cs" />
+    <Compile Include="DependencyService\ILoadImage.cs" />
+    <Compile Include="Page\SubPages\PartyDetailPage.cs" />
+    <Compile Include="Page\SubPages\ThirdPartyInfoPage.cs" />
+    <Compile Include="Page\SubPages\ThirdPartyPage.cs" />
+    <Compile Include="ValueConverter\DateInFutureConverter.cs" />
+    <Compile Include="ValueConverter\InvertBooleanConverter.cs" />
+    <Compile Include="ValueConverter\StringNotEmptyConverter.cs" />
+    <Compile Include="DependencyService\ICultureService.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="CustomView\Page\" />
-    <Folder Include="Model\" />
-    <Folder Include="Resource\" />
-  </ItemGroup>
+  <ItemGroup />
   <ItemGroup>
     <ProjectReference Include="..\..\App2Night.Model\App2Night.Model.csproj">
       <Project>{2CB6E00C-B477-45A4-A455-8BE9A3B0AD49}</Project>
@@ -103,29 +124,27 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Acr.UserDialogs, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Acr.UserDialogs.6.3.0\lib\portable-win+net45+wp8+win8+wpa81\Acr.UserDialogs.dll</HintPath>
+      <HintPath>..\..\packages\Acr.UserDialogs.6.3.1\lib\portable-win+net45+wp8+win8+wpa81\Acr.UserDialogs.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Acr.UserDialogs.Interface, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Acr.UserDialogs.6.3.0\lib\portable-win+net45+wp8+win8+wpa81\Acr.UserDialogs.Interface.dll</HintPath>
+      <HintPath>..\..\packages\Acr.UserDialogs.6.3.1\lib\portable-win+net45+wp8+win8+wpa81\Acr.UserDialogs.Interface.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FreshIOC, Version=1.0.6071.17008, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FreshMvvm.2.2.0\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\FreshIOC.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="FreshMvvm, Version=1.0.6071.17008, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\FreshMvvm.2.2.0\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\FreshMvvm.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="HockeySDK, Version=1.0.6103.22141, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\HockeySDK.Xamarin.4.1.0\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10\HockeySDK.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="MvvmNano.Core">
-      <HintPath>..\..\Libs\MvvmNano.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="MvvmNano.Forms">
-      <HintPath>..\..\Libs\MvvmNano.Forms.dll</HintPath>
-    </Reference>
     <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="Ninject, Version=3.0.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Portable.Ninject.3.3\lib\portable-net4+sl5+wp8+win8+wpa81+monotouch+monoandroid\Ninject.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Plugin.Connectivity, Version=2.2.12.0, Culture=neutral, processorArchitecture=MSIL">
@@ -136,42 +155,61 @@
       <HintPath>..\..\packages\Xam.Plugin.Connectivity.2.2.12\lib\portable-net45+wp80+wp81+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+Xamarin.Mac20+UAP10\Plugin.Connectivity.Abstractions.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SkiaSharp, Version=1.54.0.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SkiaSharp.1.54.1\lib\portable-net45+win8+wpa81+wp8\SkiaSharp.dll</HintPath>
+    <Reference Include="Plugin.Geolocator, Version=3.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.Geolocator.3.0.4\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10\Plugin.Geolocator.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="SkiaSharp.Views.Forms, Version=1.54.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\SkiaSharp.Views.Forms.1.54.1-beta1\lib\portable-net45+win8+wpa81+wp8\SkiaSharp.Views.Forms.dll</HintPath>
+    <Reference Include="Plugin.Geolocator.Abstractions, Version=3.0.4.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Xam.Plugin.Geolocator.3.0.4\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10\Plugin.Geolocator.Abstractions.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="Plugin.Permissions, Version=1.1.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Plugin.Permissions.1.1.7\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10\Plugin.Permissions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Plugin.Permissions.Abstractions, Version=1.1.6.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Plugin.Permissions.1.1.7\lib\portable-net45+wp8+wpa81+win8+MonoAndroid10+MonoTouch10+Xamarin.iOS10+UAP10\Plugin.Permissions.Abstractions.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="PropertyChanged">
+      <HintPath>..\..\packages\PropertyChanged.Fody.1.52.1\lib\portable-net4+sl4+wp8+win8+wpa81+MonoAndroid16+MonoTouch40\PropertyChanged.dll</HintPath>
     </Reference>
     <Reference Include="Splat, Version=1.6.2.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Splat.1.6.2\lib\Portable-net45+win+wpa81+wp80\Splat.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xamarin.Forms.CarouselView, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.CarouselView.2.3.0-pre2\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.CarouselView.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="Newtonsoft.Json">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.2-beta1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="Ninject">
+      <HintPath>..\..\packages\Portable.Ninject.3.3.1\lib\portable-net4+sl5+wp8+win8+wpa81+monotouch+monoandroid+Xamarin.iOS\Ninject.dll</HintPath>
+    </Reference>
+    <Reference Include="Acr.UserDialogs">
+      <HintPath>..\..\packages\Acr.UserDialogs.6.3.1\lib\portable-win+net45+wp8+win8+wpa81\Acr.UserDialogs.dll</HintPath>
+    </Reference>
+    <Reference Include="Acr.UserDialogs.Interface">
+      <HintPath>..\..\packages\Acr.UserDialogs.6.3.1\lib\portable-win+net45+wp8+win8+wpa81\Acr.UserDialogs.Interface.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Connectivity.Abstractions">
+      <HintPath>..\..\packages\Xam.Plugin.Connectivity.2.3.0.37-beta\lib\portable-net45+wp80+win8+wpa81\Plugin.Connectivity.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Plugin.Connectivity">
+      <HintPath>..\..\packages\Xam.Plugin.Connectivity.2.3.0.37-beta\lib\portable-net45+wp80+win8+wpa81\Plugin.Connectivity.dll</HintPath>
     </Reference>
     <Reference Include="Xamarin.Forms.Core, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.2.3.2.127\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Core.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.2.3.0.107\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Forms.Maps, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.Maps.2.3.2.127\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Maps.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.Maps.2.3.0.107\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Maps.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="Xamarin.Forms.Platform, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.2.3.2.127\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Platform.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.2.3.0.107\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Platform.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="Xamarin.Forms.Platform.Android">
-      <HintPath>..\..\packages\Xamarin.Forms.2.3.3.163-pre3\lib\MonoAndroid10\Xamarin.Forms.Platform.Android.dll</HintPath>
-    </Reference>
-    <Reference Include="Xamarin.Forms.Platform.iOS">
-      <HintPath>..\..\packages\Xamarin.Forms.2.3.3.163-pre3\lib\Xamarin.iOS10\Xamarin.Forms.Platform.iOS.dll</HintPath>
-    </Reference>
     <Reference Include="Xamarin.Forms.Xaml, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Xamarin.Forms.2.3.2.127\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
+      <HintPath>..\..\packages\Xamarin.Forms.2.3.0.107\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.Xaml.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>
@@ -184,28 +222,45 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\Image\icon.svg" />
-    <EmbeddedResource Include="Data\Image\icon_monocolor.svg" />
+    <EmbeddedResource Include="Data\Image\icon_monocolor.svg">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Data\Image\icon_monocolor_white.svg" />
     <EmbeddedResource Include="Data\Image\icon_name_transparent.svg" />
   </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Data\Language\AppResources.de.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.de.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Language\AppResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Licenses\MvvmNano.txt" />
+    <EmbeddedResource Include="Data\Licenses\UserDialogs.txt" />
+    <EmbeddedResource Include="Data\Licenses\MIT.txt" />
+    <EmbeddedResource Include="Data\Licenses\XamPlugin.txt" />
+    <EmbeddedResource Include="Data\Licenses\JsonNet.txt" />
+    <EmbeddedResource Include="Data\Image\icon.png" />
+    <Content Include="FodyWeavers.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="App.xaml">
+      <Generator>MSBuild:UpdateDesignTimeXaml</Generator>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
-  <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" />
-  <Target Name="EnsureBclBuildImported" BeforeTargets="BeforeBuild" Condition="'$(BclBuildImported)' == ''">
-    <Error Condition="!Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="This project references NuGet package(s) that are missing on this computer. Enable NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=317567." HelpKeyword="BCLBUILD2001" />
-    <Error Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.14\tools\Microsoft.Bcl.Build.targets')" Text="The build restored NuGet packages. Build the project again to include these packages in the build. For more information, see http://go.microsoft.com/fwlink/?LinkID=317568." HelpKeyword="BCLBUILD2002" />
-  </Target>
-  <Import Project="..\..\packages\Xamarin.Forms.2.3.2.127\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.2.127\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
       <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('..\..\packages\Xamarin.Forms.2.3.2.127\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.2.3.2.127\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Xamarin.Forms.2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Xamarin.Forms.2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets'))" />
   </Target>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
+  <Import Project="..\..\packages\Fody.1.30.0-beta01\build\portable-net+sl+win+wpa+wp\Fody.targets" Condition="Exists('..\..\packages\Fody.1.30.0-beta01\build\portable-net+sl+win+wpa+wp\Fody.targets')" />
+  <Import Project="..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets" Condition="Exists('..\..\packages\Microsoft.Bcl.Build.1.0.21\build\Microsoft.Bcl.Build.targets')" />
+  <Import Project="..\..\packages\Fody.1.29.4\build\portable-net+sl+win+wpa+wp\Fody.targets" Condition="Exists('..\..\packages\Fody.1.29.4\build\portable-net+sl+win+wpa+wp\Fody.targets')" />
+  <Import Project="..\..\packages\Xamarin.Forms.2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets" Condition="Exists('..\..\packages\Xamarin.Forms.2.3.0.107\build\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Xamarin.Forms.targets')" />
 </Project>

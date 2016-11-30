@@ -1,8 +1,10 @@
-﻿using System.ComponentModel;
+﻿ 
+using System;
+using System.ComponentModel;
 using App2Night.Droid.CustomRenderer;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
-using ScrollView = Xamarin.Forms.ScrollView;
+using Exception = Java.Lang.Exception;
 
 [assembly: ExportRenderer(typeof(ScrollView), typeof(CustomScrollViewRenderer))]
 
@@ -26,11 +28,14 @@ namespace App2Night.Droid.CustomRenderer
 
         protected void OnElementPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (ChildCount > 0)
-            {
-                GetChildAt(0).HorizontalScrollBarEnabled = false;
-                GetChildAt(0).VerticalScrollBarEnabled = false;
-            }
+             
+                if (Element != null && ChildCount > 0)
+                {
+                    GetChildAt(0).HorizontalScrollBarEnabled = false;
+                    GetChildAt(0).VerticalScrollBarEnabled = false;
+                }
+       
+            
         }
     }
 }

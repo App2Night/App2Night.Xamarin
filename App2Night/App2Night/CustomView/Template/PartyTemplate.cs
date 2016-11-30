@@ -1,5 +1,5 @@
 ﻿using App2Night.CustomView.View;
-using PartyUp.Model.Model;
+using App2Night.Model.Model;
 using Xamarin.Forms;
 
 namespace App2Night.CustomView.Template
@@ -9,10 +9,11 @@ namespace App2Night.CustomView.Template
     /// </summary>
     public class PartyTemplate : ViewCell
     {
-        private RoundImage _pictureImage = new RoundImage("App2Night.Data.Image.default.png")
+        private Image _pictureImage = new Image
         {
+            Source = ImageSource.FromResource("App2Night.Data.IconCode.icon.png"),
             VerticalOptions = LayoutOptions.Center
-        };
+        };  
 
         private Label _nameLabel = new Label
         {
@@ -47,7 +48,7 @@ namespace App2Night.CustomView.Template
         }
 
         public PartyTemplate()
-        {
+        { 
             _nameLabel.SetBinding(Label.TextProperty, nameof(Party.Name));
             _grid= new Grid
             {

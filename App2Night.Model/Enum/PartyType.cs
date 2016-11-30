@@ -1,4 +1,4 @@
-﻿namespace App2Night.Model.Model
+﻿namespace App2Night.Model.Enum
 {
     public enum PartyType
     {

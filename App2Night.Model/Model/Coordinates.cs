@@ -1,8 +1,16 @@
-﻿namespace PartyUp.Model.Enum
+﻿namespace App2Night.Model.Model
 {
     public class Coordinates
     {
-        public float Longitude { get; set; }
-        public float Latitude { get; set; }
+        public double Longitude { get; set; }
+        public double Latitude { get; set; }
+
+        public Coordinates() { }
+
+        public Coordinates(float longitude, float latitude)
+        {
+            Longitude = longitude;
+            Latitude = latitude;
+        }
     }
 }

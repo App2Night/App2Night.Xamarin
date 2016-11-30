@@ -1,5 +1,5 @@
 ﻿using System;
-using PartyUp.Model.Enum;
+using App2Night.Model.Model;
 
 namespace App2Night.DependencyService
 {

@@ -3,6 +3,9 @@ using Xamarin.Forms.Maps;
 
 namespace App2Night.CustomView.View
 {
+    /// <summary>
+    /// Warps Map in a <see cref="ContentView"/>.
+    /// </summary>
     public class MapWrapper : ContentView
     {
         private readonly Map _map;
@@ -11,6 +14,7 @@ namespace App2Night.CustomView.View
         {
             _map = map;
             HeightRequest = map.HeightRequest;
+            // check if maps is avaible on device
             if (Device.OS == TargetPlatform.Android && !App.MapAvailable)
             {
                 BackgroundColor = Color.Gray.MultiplyAlpha(0.6);

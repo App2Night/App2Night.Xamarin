@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using Xamarin.Forms;
 
@@ -40,8 +41,8 @@ namespace App2Night.CustomView.View
             int tmpColumnCounter = 0;
             foreach (Xamarin.Forms.View view in ContentGrid.Children)
             {
-                view.HeightRequest = elementSize;
-                view.WidthRequest = elementSize;
+                //view.HeightRequest = elementSize;
+                //view.WidthRequest = elementSize;
                 if (tmpColumnCounter == elementsPerRow)
                 {
                     tmpRowCounter++;
@@ -51,6 +52,7 @@ namespace App2Night.CustomView.View
                 Grid.SetRow(view, tmpRowCounter);
                 tmpColumnCounter++;
             } 
+            Debug.WriteLine("VIEW UPDATE: Gallerie View updated its view.");
         }
 
         public HorizontalGallerieView()

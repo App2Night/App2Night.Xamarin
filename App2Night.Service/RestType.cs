@@ -1,4 +1,4 @@
-namespace PartyUp.Service.Service
+namespace App2Night.Service
 {
     public enum RestType
     {
