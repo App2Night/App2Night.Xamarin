@@ -14,6 +14,7 @@ namespace App2Night.PageModel
 {
     public class DashboardPageModel : FreshBasePageModel
     {
+        private readonly IDataService _dataService;
         public bool InterestingPartieAvailable { get; set; }
         public bool PartyHistoryAvailable { get; set; }
         public bool SelectedpartiesAvailable { get; set; } 
@@ -26,12 +27,13 @@ namespace App2Night.PageModel
 		public Command MoveToUserEditCommand => new Command(async () => await CoreMethods.PushPageModel<EditProfileViewModel>());
         public Command MoveToMyPartiesCommand => new Command(async () => await CoreMethods.PushPageModel<MyPartysViewModel>());
         public Command MoveToHistoryCommand => new Command(async () => await CoreMethods.PushPageModel<HistoryViewModel>());
-        public Command MoveToPartyPicker => new Command(async () => await CoreMethods.PushPageModel<PartyPickerViewModel>()); 
-		public DashboardPageModel( ) : base()
-		{
+        public Command MoveToPartyPicker => new Command(async () => await CoreMethods.PushPageModel<PartyPickerViewModel>());
 
-		  
-        } 
+        public DashboardPageModel(IDataService dataService) : base()
+        {
+            _dataService = dataService;
+            _dataService.PartiesUpdated += OnPartiesUpdated;
+        }
 
         private void OnPartiesUpdated(object sender, EventArgs eventArgs)
         {
