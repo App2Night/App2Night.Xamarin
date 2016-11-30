@@ -25,13 +25,14 @@ namespace App2Night.PageModel.SubPages
          
 		public Model.Model.User User { get; set; }
 
-        IDataService _dataService;
+        readonly IDataService _dataService;
+        readonly IClientService _clientService;
 
-		public EditProfileViewModel(IDataService dataService)
+        public EditProfileViewModel(IDataService dataService, IClientService clientService)
 		{
 			_dataService = dataService;
-			User = _dataService.User;
+            _clientService = clientService;
+            User = _dataService.User;
 		}
-        
     }
 }
