@@ -200,7 +200,7 @@ namespace App2Night.CustomView.View
                 FontSize = 100,
                 FontAttributes = FontAttributes.Bold
             });
-            _moreBtn.ButtonTapped += (sender, args) => Command?.Execute(null);
+            _moreBtn.ButtonTapped += MoreBtnOnButtonTapped;
             SetNoContentViewVisiblity(ContentWarningVisible);
             _moreBtn.ButtonLabel.FontSize = 25; 
 
@@ -226,6 +226,17 @@ namespace App2Night.CustomView.View
             Children.Add(_bottomBoxView, 0, 4);
 
             SpacerSize = _spacerSize; 
+        }
+
+        private void MoreBtnOnButtonTapped(object sender, EventArgs eventArgs)
+        {
+            Command?.Execute(null);
+        }
+
+        protected override void OnRemoved(Xamarin.Forms.View view)
+        {
+            base.OnRemoved(view);
+            _moreBtn.ButtonTapped -= MoreBtnOnButtonTapped;
         }
     }
 }
