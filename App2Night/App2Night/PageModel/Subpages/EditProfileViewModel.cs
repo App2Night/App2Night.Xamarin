@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using App2Night.CustomView.View;
 using App2Night.Service.Interface;
 using FreshMvvm;
 using PropertyChanged;
@@ -31,5 +32,6 @@ namespace App2Night.PageModel.SubPages
 			_dataService = dataService;
 			User = _dataService.User;
 		}
-	}
+        
+    }
 }

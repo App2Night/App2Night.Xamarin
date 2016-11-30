@@ -2,6 +2,7 @@
 using App2Night.CustomView.View;
 using App2Night.Data.Language;
 using App2Night.Model.Enum;
+using App2Night.PageModel.SubPages;
 using FreshMvvm;
 using Xamarin.Forms;
 
@@ -10,7 +11,6 @@ namespace App2Night.Page.SubPages
     public class EditProfilePage : FreshBaseContentPage
     {
         #region Nodes
-
         readonly InputContainer<Entry> _nameEntry = new InputContainer<Entry>
         {
             Input = {Placeholder = AppResources.Username},
@@ -106,21 +106,42 @@ namespace App2Night.Page.SubPages
             // set title and add Command for ViewModel
             Title = AppResources.EditProfile;
             // bind to view model
-            _cancelBtn.SetBinding(CustomButton.CommandProperty, "MoveToCancelCommand");
-            _okBtn.SetBinding(CustomButton.CommandProperty, "MoveTOkCommand");
-
-            _nameEntry.Input.SetBinding(Entry.TextProperty, "User.Name");
-
-            _emailEntry.Input.SetBinding(Entry.TextProperty, "User.Email");
-
-            _ageEntry.Input.SetBinding(Entry.TextProperty, "User.Age");
-
-            _genderPicker.Input.SetBinding(EnumBindablePicker<Gender>.SelectedItemProperty, "User.Gender");
-
+            SetBindings();
             // set event handler
             _okBtn.ButtonTapped += OnOkBtnTapped;
+            TapGestureRecognizer tap = new TapGestureRecognizer
+            {
+                Command = new Command(() =>
+                {
+                    MoreBtnOnButtonTapped(null, EventArgs.Empty);
+                })
+            };
+            
+            _okBtn.GestureRecognizers.Add(tap);
             // set Content with two grids. first one contains all information about the user. last one has a cancel and ok btn.
-            StackLayout stackLayout = new StackLayout()
+            StackLayout stackLayout = CreateInputColumns();
+            var mainScroll = new ScrollView
+            {
+                Content = stackLayout,
+                Orientation = ScrollOrientation.Horizontal
+            };
+            Content = stackLayout;
+
+            TapGestureRecognizer noContentViewGesture = new TapGestureRecognizer
+            {
+                Command = new Command(() =>
+                {
+                    OnOkBtnTapped(null, EventArgs.Empty);
+                })
+            };
+            _okBtn.GestureRecognizers.Add(noContentViewGesture);
+        }
+
+        
+
+        private StackLayout CreateInputColumns()
+        {
+            return new StackLayout()
             {
                 Children =
                 {
@@ -128,10 +149,32 @@ namespace App2Night.Page.SubPages
                     _emailEntry,
                     _ageEntry,
                     _genderPicker,
-                    _streetEntry,
-                    _numberEntry,
-                    _cityNameEntry,
-                    _zipCodetEntry,
+                    new Grid
+                    {
+                        ColumnDefinitions = new ColumnDefinitionCollection
+                        {
+                            new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
+                            new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
+                        },
+                        Children =
+                        {
+                            {_streetEntry, 0, 0},
+                            {_numberEntry, 1, 0},
+                        }
+                    },
+                    new Grid
+                    {
+                        ColumnDefinitions = new ColumnDefinitionCollection
+                        {
+                            new ColumnDefinition {Width = new GridLength(2, GridUnitType.Star)},
+                            new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
+                        },
+                        Children =
+                        {
+                            {_addressEntry, 0, 0},
+                            {_zipCodetEntry, 1, 0},
+                        }
+                    },
                     new BoxView
                     {
                         HeightRequest = 1,
@@ -152,30 +195,21 @@ namespace App2Night.Page.SubPages
                     }
                 }
             };
-            var mainScroll = new ScrollView
-            {
-                Content = stackLayout,
-                Orientation = ScrollOrientation.Horizontal
-                //{
+        }
 
-                //    new Grid
-                //    {
-                //        RowDefinitions = new RowDefinitionCollection
-                //        {
-                //            new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
-                //            new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
-                //        },
-                //        Children =
-                //        {
-                //            {_image, 0, 0},
-                //            {stackLayout, 1, 0}
-                //        }
-                //    }
+        private void SetBindings()
+        {
+            //_cancelBtn.SetBinding(CustomButton.CommandProperty, "MoveToCancelCommand");
 
-                //},
-                
-            };
-            Content = stackLayout;
+            _okBtn.SetBinding(CustomButton.CommandProperty, "MoveTOkCommand");
+
+            _nameEntry.Input.SetBinding(Entry.TextProperty, "User.Name");
+
+            _emailEntry.Input.SetBinding(Entry.TextProperty, "User.Email");
+
+            _ageEntry.Input.SetBinding(Entry.TextProperty, "User.Age");
+
+            _genderPicker.Input.SetBinding(Picker.SelectedIndexProperty, "User.Gender");
         }
 
         private void OnOkBtnTapped(object sender, EventArgs e)
@@ -204,6 +238,24 @@ namespace App2Night.Page.SubPages
         {
             base.OnDisappearing();
             _okBtn.ButtonTapped -= OnOkBtnTapped;
+        }
+        private void MoreBtnOnButtonTapped(object sender, EventArgs eventArgs)
+        {
+            //if (((CustomButton) sender).Command != null)
+            //{
+            //    var animation = new Animation(d =>
+            //    {
+            //        ((CustomButton) sender).Scale = d;
+            //    }, 1, 1.6);
+            //    var nextAnimation = new Animation(d =>
+            //    {
+            //        ((CustomButton) sender).Scale = d;
+            //    }, 1.6, 1);
+            //    animation.Commit(this, "Scale", finished: delegate
+            //    {
+            //        nextAnimation.Commit(this, "Descale");
+            //    });
+            //}
         }
     }
 }
