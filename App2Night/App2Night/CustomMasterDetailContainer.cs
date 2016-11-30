@@ -135,8 +135,8 @@ namespace App2Night
         {
             var tabIndex = _pagesInner.FindIndex(o => o.GetModel().GetType().FullName == typeof(T).FullName);
 
-            Detail = _pages.Values.ElementAt(tabIndex); ;
-
+            //Detail = _pages.Values.ElementAt(tabIndex); ;
+            listView.SelectedItem = _pageNames[tabIndex];
             return Task.FromResult((Detail as NavigationPage).CurrentPage.GetModel());
         }
     }
