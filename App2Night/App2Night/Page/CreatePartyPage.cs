@@ -97,12 +97,14 @@ namespace App2Night.Page
         {
             Text = "\uf1f8",
             ButtonLabel = {FontFamily = "FontAwesome", FontSize = 50},
+            IsEnabled = false
         };
 
         private CustomButton _acceptButton = new CustomButton
         {
             Text = "\uf00c",
             ButtonLabel = {FontFamily = "FontAwesome", FontSize = 50},
+            IsEnabled =  false
         };
 
         private Map _headerMap = new Map();
@@ -146,8 +148,9 @@ namespace App2Night.Page
 
             var gradientLayer = new BoxView
             {
-                Color = Color.Gray.MultiplyAlpha(0.2)
-            }; 
+                Color = Color.White.MultiplyAlpha(0.3)
+            };
+            
 
             Content = new Grid
             {
@@ -165,7 +168,7 @@ namespace App2Night.Page
                 Children =
                 {
                     inputRows,
-                    //{gradientLayer, 0, 1},
+                    {gradientLayer, 0, 1},
                     {_clearButton, 0, 1 },
                     {_acceptButton, 1,1 }
                 }
@@ -173,6 +176,7 @@ namespace App2Night.Page
             };
 
             Grid.SetColumnSpan(gradientLayer, 2);
+
         }
 
         private ScrollView CreateInputRows()
@@ -232,8 +236,8 @@ namespace App2Night.Page
         private void SetBindings()
         {
             //Buttons
-            _acceptButton.SetBinding(IsEnabledProperty, nameof(CreatePartyViewModel.AcceptButtonEnabled));
-            _clearButton.SetBinding(IsEnabledProperty, nameof(CreatePartyViewModel.DeleteButtonEnabled));
+             _acceptButton.SetBinding(CustomButton.IsEnabledProperty, nameof(CreatePartyViewModel.AcceptButtonEnabled));
+            _clearButton.SetBinding(CustomButton.IsEnabledProperty, nameof(CreatePartyViewModel.ClearButtonEnabled));
 
             _acceptButton.SetBinding(CustomButton.CommandProperty, "CreatePartyCommand");
             _clearButton.SetBinding(CustomButton.CommandProperty, nameof(CreatePartyViewModel.ClearFormCommand));

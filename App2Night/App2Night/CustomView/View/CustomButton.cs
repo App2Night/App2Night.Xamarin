@@ -1,50 +1,58 @@
-﻿using System; 
+﻿using System;
+using System.Diagnostics;
 using Xamarin.Forms;
 
 namespace App2Night.CustomView.View
 {
     public class CustomButton : ContentView
     {
+        public Label ButtonLabel { get; } = new Label();
+
         public event EventHandler ButtonTapped;
 
         public static BindableProperty CommandProperty = BindableProperty.Create(nameof(CommandProperty), typeof(Command), typeof(EnhancedContainer));
-         
 
-        protected override void OnPropertyChanged(string propertyName = null)
+
+        public new static BindableProperty IsEnabledProperty = BindableProperty.Create(nameof(IsEnabled),
+            typeof(bool), 
+            typeof(CustomButton),
+            true,
+            propertyChanged: (bindable, value, newValue)=>
+            {
+                ((CustomButton)bindable).IsEnabledChanged();
+            });
+
+        public new bool IsEnabled
         {
-            base.OnPropertyChanged(propertyName);
-            if (propertyName == "IsEnabled")
-                IsEnabledChanged();
-              
+            get { return (bool)GetValue(IsEnabledProperty); }
+            set { SetValue(IsEnabledProperty, value); }
         }
 
-
-
-
-        private double _defaultOpacity;
-        private bool _wasDisabled;
+#region IsEnabled handling
+        private double _defaultOpacity; 
 
         void IsEnabledChanged()
         {
-            if (IsEnabled)
-            {
-                Enabled();
-            }
-            else
-            {
-                ButtonLabel.Opacity = 0.6;
-                _wasDisabled = true;
-            }
+            if (IsEnabled) 
+                Enabled(); 
+            else 
+                Disabled(); 
+        }
+
+        private void Disabled()
+        {
+            //Add the disabled opacity
+            ButtonLabel.IsEnabled = false;
+            ButtonLabel.Opacity = 0.6; 
         }
 
         private void Enabled()
         {
-            if (_wasDisabled)
-                ButtonLabel.Opacity = _defaultOpacity;
-            else
-                _defaultOpacity = ButtonLabel.Opacity;
-            _wasDisabled = false;
+            //Restore the original opacity
+            ButtonLabel.Opacity = _defaultOpacity;
+            ButtonLabel.IsEnabled = true;
         }
+#endregion
 
         public Command Command
         {
@@ -52,7 +60,7 @@ namespace App2Night.CustomView.View
             set { SetValue(CommandProperty, value); }
         } 
 
-        public Label ButtonLabel { get; } = new Label();
+        
 
         public string Text
         {
@@ -76,9 +84,10 @@ namespace App2Night.CustomView.View
             set { ButtonLabel.FontFamily = value; }
         }
 
+        TapGestureRecognizer gestureRecognizer = new TapGestureRecognizer();
         public CustomButton()
         {
-            TapGestureRecognizer gestureRecognizer = new TapGestureRecognizer();
+            
             gestureRecognizer.Command = new Command(Tapped);
             GestureRecognizers.Add(gestureRecognizer);
             Content = ButtonLabel;

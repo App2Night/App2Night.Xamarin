@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Threading;
 using System.Threading.Tasks;
 using App2Night.Model.Enum;
@@ -20,7 +21,7 @@ namespace App2Night.PageModel
 		string _houseNumber;
         private string _cityName;
 
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled),nameof(DeleteButtonEnabled))] 
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled),nameof(ClearButtonEnabled))] 
         public string Name { get; set; }
 
         [AlsoNotifyFor(nameof(ValidDescription))]
@@ -77,23 +78,23 @@ namespace App2Night.PageModel
             }
 		}
 
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))] 
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(ClearButtonEnabled))] 
         public bool ValidStreetname { get; private set; }
 
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(ClearButtonEnabled))]
         public bool ValidCityname { get; private set; }
 
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(ClearButtonEnabled))]
         public bool ValidHousenumber { get; private set; }
 
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))] 
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(ClearButtonEnabled))] 
         public bool ValidZipcode { get; private set; }
-
+         
         public bool AcceptButtonEnabled
         {
             get
             {
-                return ValidCityname
+                var enabled = ValidCityname
                        && ValidDate
                        && ValidDescription
                        && ValidHousenumber
@@ -101,37 +102,39 @@ namespace App2Night.PageModel
                        && ValidName
                        && ValidZipcode
                        && ValidStreetname;
+                return enabled;
             }
         }
 
-        public bool DeleteButtonEnabled
+        public bool ClearButtonEnabled
         {
             get
             {
-                return !(string.IsNullOrEmpty(CityName)
-                         && string.IsNullOrEmpty(Name)
-                         && string.IsNullOrEmpty(Description)
-                         && string.IsNullOrEmpty(Zipcode)
-                         && string.IsNullOrEmpty(StreetName)
-                         && string.IsNullOrEmpty(HouseNumber)
-                         && string.IsNullOrEmpty(LocationName));
+                var enabled = !(string.IsNullOrEmpty(CityName)
+                                && string.IsNullOrEmpty(Name)
+                                && string.IsNullOrEmpty(Description)
+                                && string.IsNullOrEmpty(Zipcode)
+                                && string.IsNullOrEmpty(StreetName)
+                                && string.IsNullOrEmpty(HouseNumber)
+                                && string.IsNullOrEmpty(LocationName));
+                return enabled;
             }
         }
 
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(ClearButtonEnabled))]
         public bool ValidLocationname => ValidateLocationname();
 
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(ClearButtonEnabled))]
         public bool ValidDate => ValidateDate();
 
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(ClearButtonEnabled))]
         public bool ValidName => ValidateName();
 
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(ClearButtonEnabled))]
         public bool ValidDescription => ValidateDescription();
 
         public Command CreatePartyCommand => new Command(async () => await CreateParty());
-        public Command ClearFormCommand => new Command(ClearForm);
+        public Command ClearFormCommand => new Command(ClearForm); 
 
         private void ClearForm()
         {

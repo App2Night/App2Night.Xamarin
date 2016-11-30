@@ -126,16 +126,16 @@ namespace App2Night.Service.Service
             //Send the create party request
             var result =
                 await
-                    _clientService.SendRequest<Guid>("api/party", RestType.Post, bodyParameter: partyCreationObject,
+                    _clientService.SendRequest<Party>("api/party", RestType.Post, bodyParameter: partyCreationObject,
                         token: Token.AccessToken);
 
 		    if (!result.Success) return result; 
 
             //Get the created party if the creation was successfull. 
-            var party = await GetParty(result.Data);
+            //var party = await GetParty(result.Data);
 
             //Return the created party
-            return party;
+            return result;
 
         }
 
