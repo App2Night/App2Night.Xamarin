@@ -82,7 +82,7 @@ namespace App2Night.PageModel
 
         private async Task ContinueAnonym()
         {
-            await CoreMethods.PushPageModel<DashboardPageModel>();
+            await ClosePage();
         }
 
         private async Task FormSubmitted()
@@ -110,7 +110,12 @@ namespace App2Night.PageModel
                 }
             }
             if (result != null && result.Success)
-                await CoreMethods.PopPageModel(true);
+                await ClosePage();
+        }
+
+        private async Task ClosePage()
+        {
+            await CoreMethods.PopPageModel(true);
         }
     }
 }
