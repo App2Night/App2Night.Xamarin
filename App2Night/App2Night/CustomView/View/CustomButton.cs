@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace App2Night.CustomView.View
@@ -56,18 +56,17 @@ namespace App2Night.CustomView.View
 
         public Command Command
         {
-            get { return (Command)GetValue(CommandProperty); }
+            get { return (Command) GetValue(CommandProperty); }
             set { SetValue(CommandProperty, value); }
-        } 
+        }
 
         
 
+        public double ScaleAnimation { get; set; } = 1.4;
+
         public string Text
         {
-            get
-            {
-                return ButtonLabel.Text;
-            }
+            get { return ButtonLabel.Text; }
 
             set { ButtonLabel.Text = value; }
         }
@@ -87,24 +86,37 @@ namespace App2Night.CustomView.View
         TapGestureRecognizer gestureRecognizer = new TapGestureRecognizer();
         public CustomButton()
         {
-            
-            gestureRecognizer.Command = new Command(Tapped);
+            var gestureRecognizer = new TapGestureRecognizer
+            {
+                Command = new Command(() =>
+                {
+                    Tapped();
+                })
+            };
             GestureRecognizers.Add(gestureRecognizer);
             Content = ButtonLabel;
 
             _defaultOpacity = ButtonLabel.Opacity;
         }
 
-        private void Tapped()
+        private async Task Tapped()
         {
-            OnButtonTapped();
-            if (Command != null)
-            { 
+            if ( Command != null)
+            {
+                await Animation();
                 Command.Execute(null);
             }
+            await OnButtonTapped();
         }
 
-        protected void OnButtonTapped()
+        private async Task Animation()
+        {
+            var animation = new Animation(d => { ButtonLabel.Scale = d; }, 1, ScaleAnimation);
+            var nextAnimation = new Animation(d => { ButtonLabel.Scale = d; }, ScaleAnimation, 1);
+            animation.Commit(this, "Scale", length: 100U , finished: delegate { nextAnimation.Commit(this, "Descale"); });
+        }
+
+        protected async Task OnButtonTapped()
         {
             ButtonTapped?.Invoke(this, EventArgs.Empty);
         }
