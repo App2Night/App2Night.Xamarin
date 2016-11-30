@@ -2,15 +2,14 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net;
-using System.Net.Http; 
 using System.Text;
 using System.Threading.Tasks;
 using App2Night.Model.Model;
 using App2Night.Service.Helper;
 using App2Night.Service.Interface;
 using FreshMvvm;
-using MvvmNano;
-using Newtonsoft.Json; 
+using Newtonsoft.Json;
+using System.Net.Http;
 
 namespace App2Night.Service.Service
 {
