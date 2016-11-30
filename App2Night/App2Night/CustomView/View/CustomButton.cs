@@ -1,4 +1,5 @@
-﻿using System; 
+﻿using System;
+using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace App2Night.CustomView.View
@@ -7,19 +8,16 @@ namespace App2Night.CustomView.View
     {
         public event EventHandler ButtonTapped;
 
-        public static BindableProperty CommandProperty = BindableProperty.Create(nameof(CommandProperty), typeof(Command), typeof(EnhancedContainer));
-         
+        public static BindableProperty CommandProperty = BindableProperty.Create(nameof(CommandProperty),
+            typeof(Command), typeof(EnhancedContainer));
+
 
         protected override void OnPropertyChanged(string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
             if (propertyName == "IsEnabled")
                 IsEnabledChanged();
-              
         }
-
-
-
 
         private double _defaultOpacity;
         private bool _wasDisabled;
@@ -48,18 +46,15 @@ namespace App2Night.CustomView.View
 
         public Command Command
         {
-            get { return (Command)GetValue(CommandProperty); }
+            get { return (Command) GetValue(CommandProperty); }
             set { SetValue(CommandProperty, value); }
-        } 
+        }
 
         public Label ButtonLabel { get; } = new Label();
 
         public string Text
         {
-            get
-            {
-                return ButtonLabel.Text;
-            }
+            get { return ButtonLabel.Text; }
 
             set { ButtonLabel.Text = value; }
         }
@@ -76,23 +71,37 @@ namespace App2Night.CustomView.View
             set { ButtonLabel.FontFamily = value; }
         }
 
+        private TapGestureRecognizer gestureRecognizer;
         public CustomButton()
         {
-            TapGestureRecognizer gestureRecognizer = new TapGestureRecognizer();
-            gestureRecognizer.Command = new Command(Tapped);
+            gestureRecognizer = new TapGestureRecognizer
+            {
+                Command = new Command(() =>
+                {
+                    Tapped();
+                })
+            };
             GestureRecognizers.Add(gestureRecognizer);
             Content = ButtonLabel;
 
             _defaultOpacity = ButtonLabel.Opacity;
         }
 
-        private void Tapped()
+        private async Task Tapped()
         {
-            OnButtonTapped();
-            if (Command != null)
-            { 
+            if ( Command != null)
+            {
+                await Animation();
                 Command.Execute(null);
             }
+            OnButtonTapped();
+        }
+
+        private async Task Animation()
+        {
+            var animation = new Animation(d => { ButtonLabel.Scale = d; }, 1, 1.4);
+            var nextAnimation = new Animation(d => { ButtonLabel.Scale = d; }, 1.4, 1);
+            animation.Commit(this, "Scale", length: 100U , finished: delegate { nextAnimation.Commit(this, "Descale"); });
         }
 
         protected void OnButtonTapped()
