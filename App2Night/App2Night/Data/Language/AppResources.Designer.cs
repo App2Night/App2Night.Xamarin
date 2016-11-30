@@ -242,7 +242,7 @@ namespace App2Night.Data.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Number.
+        ///   Looks up a localized string similar to Nr..
         /// </summary>
         public static string HNumber {
             get {
@@ -386,7 +386,7 @@ namespace App2Night.Data.Language {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Zipcode.
+        ///   Looks up a localized string similar to ZIP.
         /// </summary>
         public static string Zipcode {
             get {

@@ -22,9 +22,7 @@ namespace App2Night.Service.Service
                 //Create a new storage if non is set yet.
                 if (_storage == null)
                 {
-                    _storage = new Storage();
-                    //Save the new storage async
-                    Task.Run(SaveStorage);
+                    _storage = new Storage(); 
                 }
                 return _storage;
             }

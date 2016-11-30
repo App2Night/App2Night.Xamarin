@@ -13,12 +13,14 @@ namespace App2Night.PageModel
     public class LoginViewModel : FreshBasePageModel
     {
         private readonly IAlertService _alertService;
-        Command MoveToDashboardCommand => new Command(async () => await CoreMethods.PushPageModel<DashboardPageModel>());
+        private readonly IDataService _dataService;
+        public Command MoveToDashboardCommand => new Command(async () => await CoreMethods.PushPageModel<DashboardPageModel>());
         public Command StartLoginCommand => new Command(async () => await FormSubmitted());
 
-        public LoginViewModel(IAlertService alertService)
+        public LoginViewModel(IAlertService alertService, IDataService dataService)
         {
             _alertService = alertService;
+            _dataService = dataService;
         }
 
         [AlsoNotifyFor(nameof(ValidPassword), nameof(CanSubmitForm))] 
@@ -98,17 +100,17 @@ namespace App2Night.PageModel
                         Password = Password,
                         Username = Username
                     };
-                    result = await FreshIOC.Container.Resolve<IDataService>().CreateUser(signUpData); 
+                    result = await _dataService.CreateUser(signUpData); 
                     _alertService.UserCreationFinished(result, Username);
                 }
                 else { 
                     loading.Title = "Login";
-                     result = await FreshIOC.Container.Resolve<IDataService>().RequestToken(Username, Password);
+                     result = await _dataService.RequestToken(Username, Password);
                     _alertService.LoginFinished(result);
                 }
             }
             if (result != null && result.Success)
-                await CoreMethods.PushPageModel<DashboardPageModel>();
+                await CoreMethods.PopPageModel(true);
         }
     }
 }

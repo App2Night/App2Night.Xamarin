@@ -63,23 +63,19 @@ namespace App2Night.PageModel.SubPages
             }
         };
 
-        
         public License SelectedLicense
         {
             get { return _selectedLicense; }
             set
             {
-                if (value != null) 
+                if (value != null)
                 {
-                    Device.BeginInvokeOnMainThread(async () =>
-                    {
-                        _selectedLicense = value;
-                        await CoreMethods.PushPageModel<ThirdPartyInfoViewModel>(_selectedLicense);
-                        SelectedLicense = null;
-                    }); 
+                    var license = value;  
+                    FreshIOC.Container.Resolve<NavigationViewModel>().OpenLicenseCommand.Execute(license);
                 }
             }
         }
+
 
         public ThirdPartyViewModel()
         { 

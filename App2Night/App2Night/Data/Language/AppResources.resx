@@ -166,13 +166,13 @@
     <value>Street Name</value>
   </data>
   <data name="HNumber" xml:space="preserve">
-    <value>Number</value>
+    <value>Nr.</value>
   </data>
   <data name="Location" xml:space="preserve">
     <value>Location</value>
   </data>
   <data name="Zipcode" xml:space="preserve">
-    <value>Zipcode</value>
+    <value>ZIP</value>
   </data>
   <data name="Address" xml:space="preserve">
     <value>Address</value>
