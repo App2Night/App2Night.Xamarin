@@ -11,7 +11,6 @@ namespace App2Night.CustomView.View
         public static BindableProperty CommandProperty = BindableProperty.Create(nameof(CommandProperty),
             typeof(Command), typeof(EnhancedContainer));
 
-
         protected override void OnPropertyChanged(string propertyName = null)
         {
             base.OnPropertyChanged(propertyName);
@@ -52,6 +51,8 @@ namespace App2Night.CustomView.View
 
         public Label ButtonLabel { get; } = new Label();
 
+        public double ScaleAnimation { get; set; } = 1.4;
+
         public string Text
         {
             get { return ButtonLabel.Text; }
@@ -71,10 +72,9 @@ namespace App2Night.CustomView.View
             set { ButtonLabel.FontFamily = value; }
         }
 
-        private TapGestureRecognizer gestureRecognizer;
         public CustomButton()
         {
-            gestureRecognizer = new TapGestureRecognizer
+            var gestureRecognizer = new TapGestureRecognizer
             {
                 Command = new Command(() =>
                 {
@@ -94,17 +94,17 @@ namespace App2Night.CustomView.View
                 await Animation();
                 Command.Execute(null);
             }
-            OnButtonTapped();
+            await OnButtonTapped();
         }
 
         private async Task Animation()
         {
-            var animation = new Animation(d => { ButtonLabel.Scale = d; }, 1, 1.4);
-            var nextAnimation = new Animation(d => { ButtonLabel.Scale = d; }, 1.4, 1);
+            var animation = new Animation(d => { ButtonLabel.Scale = d; }, 1, ScaleAnimation);
+            var nextAnimation = new Animation(d => { ButtonLabel.Scale = d; }, ScaleAnimation, 1);
             animation.Commit(this, "Scale", length: 100U , finished: delegate { nextAnimation.Commit(this, "Descale"); });
         }
 
-        protected void OnButtonTapped()
+        protected async Task OnButtonTapped()
         {
             ButtonTapped?.Invoke(this, EventArgs.Empty);
         }
