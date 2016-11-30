@@ -28,11 +28,13 @@ namespace App2Night.Page
             Margin = _defaultMargin
         };
 
-        private InputContainer<Entry> _descriptionEntry = new InputContainer<Entry>
-        {
-            Input = {Placeholder = AppResources.Description},
-            IconCode = "\uf040",
-            HeightRequest = 100,
+        private InputContainer<Editor> _descriptionEntry = new InputContainer<Editor>
+        {  
+            Input =
+            {
+                HeightRequest = 100
+            },
+            IconCode = "\uf040", 
             Margin = _defaultMargin
         };
 
@@ -244,9 +246,9 @@ namespace App2Night.Page
 
             _nameEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, "ValidName");
 
-            _descriptionEntry.Input.SetBinding(Entry.TextProperty, "Description");
+            _descriptionEntry.Input.SetBinding(Editor.TextProperty, "Description");
 
-            _descriptionEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, "ValidDescription");
+            _descriptionEntry.SetBinding(InputContainer<Editor>.InputValidateProperty, "ValidDescription");
 
             _musicGenreSwitch.Input.SetBinding(EnumBindablePicker<MusicGenre>.SelectedItemProperty, "MusicGenre");
             // date and time
