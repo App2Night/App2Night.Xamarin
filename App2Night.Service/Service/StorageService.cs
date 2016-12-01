@@ -15,6 +15,10 @@ namespace App2Night.Service.Service
         private string _fileName = "SStore.txt";
         private Storage _storage;
 
+        public event EventHandler<bool> IsLoginChanged;
+
+        public bool IsLogIn { get; set; }
+
         public Storage Storage
         {
             get
@@ -125,6 +129,21 @@ namespace App2Night.Service.Service
         {
             Storage = new Storage();
             await SaveStorage();
+            LogInChanged(false);
+        }
+
+        public async Task SetToken(Token token)
+        {
+            Storage.Token = token;
+            await SaveStorage();
+            LogInChanged(true);
+           
+        }
+
+        private void LogInChanged(bool isLogIn)
+        {
+            IsLogIn = isLogIn;
+            IsLoginChanged?.Invoke(null, isLogIn);
         }
     }
 }

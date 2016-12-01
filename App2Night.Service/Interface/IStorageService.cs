@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using App2Night.Model.Model;
 
 namespace App2Night.Service.Interface
@@ -8,6 +9,8 @@ namespace App2Night.Service.Interface
     /// </summary>
     public interface IStorageService
     {
+        event EventHandler<bool> IsLoginChanged;
+        bool IsLogIn { get; }
         /// <summary>
         /// Returns the <see cref="Storage"/> object that contains all settings, user data and the last token.
         /// </summary>
@@ -31,6 +34,12 @@ namespace App2Night.Service.Interface
         /// <returns></returns>
         Task DeleteStorage();
 
+        /// <summary>
+        /// Sets Token to current Storage and invoke EventHandler
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        Task SetToken(Token token);
         //TODO Add party caching
     }
 }
