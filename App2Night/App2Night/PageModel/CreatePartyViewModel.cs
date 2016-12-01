@@ -245,6 +245,12 @@ namespace App2Night.PageModel
             {
                 var resLocation = result.Data;
 
+                if (IsEqualOrContains(resLocation.CityName, CityName))
+                    CityName = resLocation.CityName;
+
+                if (IsEqualOrContains(resLocation.StreetName, StreetName))
+                    StreetName = resLocation.StreetName;
+
                 ValidCityname = IsNameEqual(resLocation.CityName, CityName);
                 ValidZipcode = IsNameEqual(resLocation.Zipcode, Zipcode);
                 ValidStreetname = IsNameEqual(resLocation.StreetName, StreetName);

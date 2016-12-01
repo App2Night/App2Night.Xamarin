@@ -348,7 +348,12 @@ namespace App2Night.Service.Service
                     cachedData.Add(new Party
                     {
                         Name = buf + (i + 1),
-                        Date = DateTime.Today.AddDays(i).AddMonths(i)
+                        Date = DateTime.Today.AddDays(i).AddMonths(i),
+                        Location = new Location
+                        {
+                             Latitude= 48.444120,
+                            Longitude = 8.679107
+                        }
                     });
                 }
                 //TODO Replace with real caching

@@ -1,6 +1,7 @@
 ﻿using System;
 using App2Night.CustomView.View;
 using App2Night.Model.Model;
+using App2Night.Service.Helper;
 using App2Night.ValueConverter;
 using Xamarin.Forms;
 
@@ -70,7 +71,7 @@ namespace App2Night.CustomView.Template
                 },
                 Children =
                 {
-                    new BoxView {Color = Color.Green.MultiplyAlpha(0.9), InputTransparent = true},
+                    new BoxView {Color = System.Drawing.Color.Goldenrod.ToXamarinColor(), InputTransparent = true},
                     _distanceLabel,
                     _likeButton,
                     {new Grid
