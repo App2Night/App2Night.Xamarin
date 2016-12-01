@@ -49,12 +49,12 @@ namespace App2Night
         {
             var masterDetailNav = new CustomMasterDetailContainer();
             masterDetailNav.Init("App2Night");
-            masterDetailNav.AddPage<DashboardPageModel>(AppResources.Dashboard, null);
-            masterDetailNav.AddPage<PartyPickerViewModel>(AppResources.PickAParty, null);
-            masterDetailNav.AddPage<CreatePartyViewModel>(AppResources.CreateAParty);
-            masterDetailNav.AddPage<HistoryViewModel>(AppResources.History);
-            masterDetailNav.AddPage<SettingViewModel>(AppResources.Settings);
-            masterDetailNav.AddPage<AboutTabbedViewModel>(AppResources.About);
+            masterDetailNav.AddPage<DashboardPageModel>(AppResources.Dashboard, "\uf015");
+            masterDetailNav.AddPage<PartyPickerViewModel>(AppResources.PickAParty, "\uf29b");
+            masterDetailNav.AddPage<CreatePartyViewModel>(AppResources.CreateAParty, "\uf271");
+            masterDetailNav.AddPage<HistoryViewModel>(AppResources.History, "\uf187");
+            masterDetailNav.AddPage<SettingViewModel>(AppResources.Settings, "\uf085");
+            masterDetailNav.AddPage<AboutTabbedViewModel>(AppResources.About, "\uf05a");
             return masterDetailNav;
         }
 
