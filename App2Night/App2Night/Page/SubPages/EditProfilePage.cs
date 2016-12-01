@@ -25,23 +25,6 @@ namespace App2Night.Page.SubPages
             ValidationVisible = true
         };
 
-        readonly InputContainer<Entry> _addressEntry = new InputContainer<Entry>
-        {
-            Input = {Placeholder = AppResources.Address},
-            IconCode = "\uf1ae",
-            ValidationVisible = true
-        };
-
-        readonly InputContainer<Entry> _ageEntry = new InputContainer<Entry>
-        {
-            Input = {Placeholder = AppResources.Age, Keyboard = Keyboard.Numeric},
-            IconCode = "\uf1ae",
-            ValidationVisible = true
-        };
-
-        readonly InputContainer<EnumBindablePicker<Gender>> _genderPicker =
-            new InputContainer<EnumBindablePicker<Gender>> {IconCode = "\uf183", ValidationVisible = true};
-
         private readonly CustomButton _cancelBtn = new CustomButton
         {
             Text = "\uf00d",
@@ -107,25 +90,23 @@ namespace App2Night.Page.SubPages
                 {
                     _nameEntry,
                     _emailEntry,
-                    _ageEntry,
-                    _genderPicker,
                 }
             };
         }
 
         private void SetBindings()
         {
+            // set command
             _cancelBtn.SetBinding(CustomButton.CommandProperty, "MoveToCancelCommand");
-
             _okBtn.SetBinding(CustomButton.CommandProperty, "MoveTOkCommand");
 
-            _nameEntry.Input.SetBinding(Entry.TextProperty, "User.Name");
+            // Set binding to text property
+            _nameEntry.Input.SetBinding(Entry.TextProperty, "Name");
+            _emailEntry.Input.SetBinding(Entry.TextProperty, "Email");
 
-            _emailEntry.Input.SetBinding(Entry.TextProperty, "User.Email");
-
-            _ageEntry.Input.SetBinding(Entry.TextProperty, "User.Age");
-
-            _genderPicker.Input.SetBinding(Picker.SelectedIndexProperty, "User.Gender");
+            // Set Bindings to InputValidateProperty
+            _nameEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, "ValidName");
+            _emailEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, "ValidEmail");
         }
     }
 }
