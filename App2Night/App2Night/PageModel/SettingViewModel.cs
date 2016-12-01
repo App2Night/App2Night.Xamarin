@@ -1,5 +1,6 @@
 ﻿using App2Night.Service.Interface;
 using FreshMvvm;
+using Xamarin.Forms;
 
 namespace App2Night.PageModel
 {
@@ -34,5 +35,7 @@ namespace App2Night.PageModel
                 //TODO show a manuel position entry view if usegps = false 
             }
         }
+
+        public Command ClearCacheCommand => new Command(async () => await _storageService.ClearCache());
     }
 }
