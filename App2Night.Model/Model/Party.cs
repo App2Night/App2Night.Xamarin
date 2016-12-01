@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using App2Night.Model.Enum;
@@ -21,7 +22,15 @@ namespace App2Night.Model.Model
         public Location Location { get; set; }
         public PartyType PartyType { get; set; }
         public string Description { get; set; }
+        public int Price { get; set; } 
+        public Host Host { get; set; }
+        public bool HostedByUser { get; set; }
 
+        [JsonProperty("CommittedUser")]
+        public List<Participant> Participants { get; set; }
+
+        [JsonProperty("UserCommitmentState")]
+        public PartyCommitmentState CommitmentState { get; set; }
         [JsonIgnore]
         public double DistanceToParty { get; set; } = -1;
 

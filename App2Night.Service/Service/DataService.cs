@@ -307,7 +307,7 @@ namespace App2Night.Service.Service
 
             try
             {
-                var location = await CrossGeolocator.Current.GetPositionAsync(3000);
+                var location = await CrossGeolocator.Current.GetPositionAsync(10000);
                 string lat = location.Latitude.ToString();
                 lat = lat.Replace(",", ".");
                 string lon = location.Longitude.ToString();

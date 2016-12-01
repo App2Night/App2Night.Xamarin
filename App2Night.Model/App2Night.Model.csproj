@@ -37,10 +37,12 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Credentials.cs" />
+    <Compile Include="Enum\Participant.cs" />
     <Compile Include="HttpModel\SignUp.cs" />
     <Compile Include="Model\Coordinates.cs" />
     <Compile Include="Enum\PartyCommitmentState.cs" />
     <Compile Include="Enum\MusicGenre.cs" />
+    <Compile Include="Model\Host.cs" />
     <Compile Include="Model\License.cs" />
     <Compile Include="Model\Party.cs" />
     <Compile Include="Model\Location.cs" />
