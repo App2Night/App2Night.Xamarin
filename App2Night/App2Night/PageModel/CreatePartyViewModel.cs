@@ -150,7 +150,7 @@ namespace App2Night.PageModel
 
         public bool ValidateDate()
         {
-            return Date >= DateTime.Today && Date <= DateTime.Today.AddMonths(12);
+            return Date > DateTime.Today && Date <= DateTime.Today.AddMonths(12);
         } 
 
         private bool ValidateLocationname()
@@ -160,12 +160,12 @@ namespace App2Night.PageModel
 
         bool ValidateName()
         {
-            return !string.IsNullOrEmpty(Name) && Name.Length > 3;
+            return !string.IsNullOrEmpty(Name) && Name.Length <= 32;
         }
 
         bool ValidateDescription()
 		{
-			return !string.IsNullOrEmpty(Description);
+			return !string.IsNullOrEmpty(Description) && Description.Length <= 256;
 		}
 
         private async Task CreateParty()
