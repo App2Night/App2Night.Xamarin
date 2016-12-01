@@ -28,16 +28,13 @@ namespace App2Night.PageModel
         public DashboardPageModel(IDataService dataService) : base()
         {
             _dataService = dataService;
-            _dataService.PartiesUpdated += OnPartiesUpdated;
-            User = _dataService.User;
+            _dataService.NearPartiesUpdated += OnNearPartiesUpdated;
         }
 
         private void OnNearPartiesUpdated(object sender, EventArgs eventArgs)
         {
             SetAvailabilitys();
         }
-
-        public Model.Model.User User { get; set; }
 
         void SetAvailabilitys()
         {
