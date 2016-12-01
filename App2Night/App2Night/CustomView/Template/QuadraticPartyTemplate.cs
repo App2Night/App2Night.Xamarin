@@ -45,6 +45,17 @@ namespace App2Night.CustomView.Template
         };
         #endregion
 
+        public PartyCommitmentState CommitmentState
+        {
+            get { return (PartyCommitmentState) GetValue(CommitmentStateProperty); }
+            set { SetValue(CommitmentStateProperty, value);}
+        }
+
+        public static BindableProperty CommitmentStateProperty = BindableProperty.Create(nameof(CommitmentState), typeof(PartyCommitmentState), typeof(QuadraticPartyTemplate), PartyCommitmentState.Rejected, propertyChanged:
+            (bindable, value, newValue) =>
+            {
+                ((QuadraticPartyTemplate) bindable).CommitmentStateChanged((PartyCommitmentState) newValue);
+            });
         readonly TapGestureRecognizer _tapGestureRecognizer = new TapGestureRecognizer();
         private PartyCommitmentState _commitmentState = PartyCommitmentState.Rejected;
         public QuadraticPartyTemplate()
@@ -98,6 +109,22 @@ namespace App2Night.CustomView.Template
             };
         }
 
+        private void CommitmentStateChanged(PartyCommitmentState partyCommitmentState)
+        {
+            if (partyCommitmentState == PartyCommitmentState.Rejected)
+            {
+                RejectParty();
+            }
+            else if (partyCommitmentState == PartyCommitmentState.Accepted)
+            {
+                AcceptParty();
+            }
+            else if (partyCommitmentState == PartyCommitmentState.Noted)
+            {
+                NoteParty();
+            }
+        }
+
         /// <summary>
         /// Sets <see cref="_likeButton"/> to CommimentState. 
         /// </summary>
@@ -105,19 +132,7 @@ namespace App2Night.CustomView.Template
         /// <param name="e"></param>
         private void TappedLikeBtn(object sender, EventArgs e)
         {
-            if (_commitmentState == PartyCommitmentState.Rejected)
-            {
-                NoteParty();
-            }
-            else if (_commitmentState == PartyCommitmentState.Accepted)
-            {
-                RejectParty();
-            }
-            else if (_commitmentState == PartyCommitmentState.Noted)
-            {
-                AcceptParty();
-            }
-
+            
             var commitmentParameter = new PartyCommitmentParameter
             {
                 Party = (Party) BindingContext,

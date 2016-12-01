@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using App2Night.CustomView.Template;
 using App2Night.Model.Enum;
 using App2Night.Model.Model;
@@ -33,11 +34,11 @@ namespace App2Night.PageModel
         public Command MoveToMyPartiesCommand => new Command(async () => await CoreMethods.PushPageModel<MyPartysViewModel>());
         public Command MoveToHistoryCommand => new Command(async () => await CoreMethods.PushPageModel<HistoryViewModel>());
         public Command MoveToPartyPicker => new Command(async () => await CoreMethods.PushPageModel<PartyPickerViewModel>());
-        public Command<PartyCommitmentParameter> PartyCommitmentStateChangedCommand => new Command<PartyCommitmentParameter>(CommitmentStateChanged);
+        public Command<PartyCommitmentParameter> PartyCommitmentStateChangedCommand => new Command<PartyCommitmentParameter>(async  (parameter) => await CommitmentStateChanged(parameter));
 
-        private void CommitmentStateChanged(PartyCommitmentParameter parameter)
+        private async Task CommitmentStateChanged(PartyCommitmentParameter parameter)
         {
-             
+            await _dataService.ChangeCommitmentState(parameter.Party.Id, parameter.CommitmentState);
         }
 
         public DashboardPageModel(IDataService dataService) : base()
