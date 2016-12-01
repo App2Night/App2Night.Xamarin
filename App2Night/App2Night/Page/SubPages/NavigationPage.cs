@@ -1,6 +1,5 @@
-﻿using System.Linq;
-using App2Night.CustomView.View;
-using FreshMvvm;
+﻿using App2Night.CustomView.View;
+using App2Night.Data.Language;
 using Xamarin.Forms;
 
 namespace App2Night.Page.SubPages
@@ -8,45 +7,108 @@ namespace App2Night.Page.SubPages
     public class NavigationPage : ContentPage
     {
         private readonly ListView _menuListView;
-        Grid _layoutGrid;
+        Label _nameLabel = new Label();
+
+        private Button _logoutBtn = new Button
+        {
+            Text = AppResources.Logout
+        };
+
+        private CustomButton _logInButton = new CustomButton
+        {
+            ButtonLabel = { Text = AppResources.Login },
+            VerticalOptions = LayoutOptions.Center,
+            HorizontalOptions = LayoutOptions.Center
+        };
 
         public NavigationPage(ListView menuListView)
         {
-            var userInfoContainer = new ContentView();
+            _nameLabel.SetBinding(Label.TextProperty, "User.Name", stringFormat:"Hello {0}");
+
+            _logoutBtn.SetBinding(Button.CommandProperty, "LogOutCommand");
+            _logInButton.SetBinding(CustomButton.CommandProperty, "LogInCommand");
+
+            var loginContentView = LoginContentView();
+            var partyContentView = PartyContentView();
+            var logoutContentView = LogoutContentView();
+
+            loginContentView.SetBinding(IsVisibleProperty, "IsLogInContentView");
+            logoutContentView.SetBinding(IsVisibleProperty, "IsLogOutContentView");
+            _logoutBtn.SetBinding(IsVisibleProperty, "IsLogInContentView");
+
             _menuListView = menuListView;
             if(Device.OS == TargetPlatform.iOS) Padding = new Thickness(0, 20, 0, 0);
-            Title = "Menü";
-            var syncButton = new CustomButton
-            {
-                Text = "Sync \uf0e2"
-            };
-            //DetailListView.ItemTemplate = new DataTemplate(typeof(MenuTemplate));
-
-            syncButton.ButtonLabel.FontSize = 40;
-            syncButton.ButtonLabel.FontFamily = "FontAwesome";
-            syncButton.SetBinding(CustomButton.CommandProperty,"SyncCommand");
-             
-            _layoutGrid = new Grid
+            Title = AppResources.Menu;
+            
+            Content = new Grid
             {  
+                RowSpacing = 0,
                 RowDefinitions =
                 {
                     new RowDefinition { Height = new GridLength(2, GridUnitType.Star)},
-                    new RowDefinition { Height = new GridLength(7, GridUnitType.Star)} 
+                    new RowDefinition { Height = new GridLength(7, GridUnitType.Star)},
+                    new RowDefinition { Height = new GridLength(50, GridUnitType.Absolute)}
                 },
                 Children =
                 {
-                    userInfoContainer,
-                    { menuListView, 0, 1}
+                    loginContentView,
+                   // partyContentView,
+                    logoutContentView,
+                    {menuListView, 0, 1},
+                    {_logoutBtn, 0, 2}
                 }
             };
 
-            Content = _layoutGrid;
         }
 
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
-            _menuListView.RowHeight =  (int) ((Height/9.0*7) / 6);
+            _menuListView.RowHeight =  (int) (((Height-50)/9.0*7) / 6);
+        }
+
+        private ContentView LoginContentView ()
+        {
+            return new ContentView
+            {
+                Content = new Grid
+                {
+                    ColumnDefinitions = new ColumnDefinitionCollection
+                    {
+                        new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)},
+                        new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)},
+                    },
+                    Children =
+                    {
+                        {_nameLabel,1,0 }
+                    }
+                }
+            };
+        }
+        private ContentView PartyContentView ()
+        {
+            return new ContentView
+            {
+                Content = new Grid
+                {
+                    ColumnDefinitions = new ColumnDefinitionCollection
+                    {
+                        new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)},
+                        new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)},
+                    },
+                    Children =
+                    {
+                        {_nameLabel,1,0 }
+                    }
+                }
+            };
+        }
+        private ContentView LogoutContentView ()
+        {
+            return new ContentView
+            {
+                Content = _logInButton
+            };
         }
     }
 }

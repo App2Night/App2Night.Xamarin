@@ -79,10 +79,11 @@ namespace App2Night
         { 
             _listView.ItemsSource = _pages.Keys;
             _listView.ItemTemplate = new DataTemplate(typeof(MenuTemplate));
-            _listView.ItemSelected += (sender, args) => {
-                if (_pages.ContainsKey((MenuCellData)args.SelectedItem))
+            _listView.ItemSelected += (sender, args) =>
+            {
+                if (_pages.ContainsKey((MenuCellData) args.SelectedItem))
                 {
-                    Detail = _pages[(MenuCellData)args.SelectedItem];
+                    Detail = _pages[(MenuCellData) args.SelectedItem];
                 }
 
                 IsPresented = false;
