@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
 using FreshMvvm;
@@ -9,18 +10,21 @@ namespace App2Night.PageModel
 {
     public class PartyPickerViewModel : FreshBasePageModel
     {
+        private readonly IDataService _dataService;
         private Party _selectedParty = null;
         public ObservableCollection<Party> Parties => FreshIOC.Container.Resolve<IDataService>().InterestingPartys;
 
+        public bool NearPartyAvailable { get; private set; }
 
-        public PartyPickerViewModel()
+        public PartyPickerViewModel(IDataService dataService)
         {
-            FreshIOC.Container.Resolve<IDataService>().PartiesUpdated += OnPartiesUpdated;
+            _dataService = dataService;
+            FreshIOC.Container.Resolve<IDataService>().NearPartiesUpdated += OnNearPartiesUpdated;
         }
 
-        private void OnPartiesUpdated(object sender, EventArgs eventArgs)
+        private void OnNearPartiesUpdated(object sender, EventArgs eventArgs)
         {
-             
+            NearPartyAvailable = _dataService.InterestingPartys.Any();
         } 
 
         public Party SelectedParty

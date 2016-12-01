@@ -13,6 +13,21 @@ namespace App2Night.CustomView.Page
 {
     public class  CustomContentPage : FreshBaseContentPage
     {
+
+        public static BindableProperty ShowNoContentWarningProperty = BindableProperty.Create(nameof(ShowNoContentWarning), 
+            typeof(bool), 
+            typeof(CustomContentPage), 
+            false,
+            propertyChanged: (bindable, value, newValue) =>
+            {
+                ((CustomContentPage)bindable).ContentAvailabilityChanged();
+            });
+        public bool ShowNoContentWarning
+        {
+            get { return (bool)GetValue(ShowNoContentWarningProperty); }
+            set { SetValue(ShowNoContentWarningProperty, value); }
+        } 
+    
         private static readonly double _size = 50;
         private static Color _infoBackgroundColor = Khaki.ToXamarinColor();
         private static Color _infoTextColor = DimGray.ToXamarinColor();
@@ -22,7 +37,12 @@ namespace App2Night.CustomView.Page
             get { return _infoLabel.Text; }
             set { _infoLabel.Text = value; }
         }
-
+        
+        public string NoContentWarningMessage
+        {
+            get { return _noContentWarningLabel.Text; }
+            set {  _noContentWarningLabel.Text = value; } 
+        }
 
         private ContentView _previewContainer1 = new ContentView
         {
@@ -44,6 +64,12 @@ namespace App2Night.CustomView.Page
         private bool _isPreviewVisible;
         private int _selectedPreviewContainer;
         private PreviewView _preview;
+
+        private Label _noContentWarningLabel = new Label
+        {
+            Text = "No content availably",
+            IsVisible = false
+        };
 
         Label _infoLabel = new Label
         {
@@ -80,6 +106,7 @@ namespace App2Night.CustomView.Page
             {
                 Children =
                 {
+                    _noContentWarningLabel,
                     _infoContainer,
                     _previewContainer1,
                     _previewContainer2
@@ -91,6 +118,12 @@ namespace App2Night.CustomView.Page
             //Set start connectivity value.
             _oldValue = CrossConnectivity.Current.IsConnected;
             CrossConnectivity.Current.ConnectivityChanged += ConnectionChanged; 
+        }
+         
+        public void ContentAvailabilityChanged()
+        {
+            _noContentWarningLabel.IsVisible = ShowNoContentWarning;
+
         }
 
         private bool _oldValue;
@@ -144,9 +177,9 @@ namespace App2Night.CustomView.Page
             get { return _infoContainer.Children.Count>2?  _infoContainer.Children[1] : null; }
             set
             {
-                if (_infoContainer.Children.Count > 2)
+                if (_infoContainer.Children.Count > 3)
                 {
-                    _infoContainer.Children.RemoveAt(2);
+                    _infoContainer.Children.RemoveAt(3);
                 }
                 _infoContainer.Children.Add(value, 0, 1); 
             }

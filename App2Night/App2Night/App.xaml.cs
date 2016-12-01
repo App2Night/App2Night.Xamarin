@@ -117,7 +117,7 @@ namespace App2Night
         private void SetupGeolocator()
         {
             CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
-            FreshIOC.Container.Resolve<IDataService>().PartiesUpdated +=
+            FreshIOC.Container.Resolve<IDataService>().NearPartiesUpdated +=
                 (sender, args) => { CrossGeolocator.Current.StartListeningAsync(1, 100); };
         }
 

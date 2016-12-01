@@ -1,6 +1,8 @@
 ﻿using App2Night.CustomView.Page;
 using App2Night.CustomView.Template;
 using App2Night.CustomView.View;
+using App2Night.PageModel;
+using App2Night.ValueConverter;
 using FreshMvvm;
 using Xamarin.Forms;
 
@@ -36,6 +38,8 @@ namespace App2Night.Page
 
             swipeView.SetBinding( SwipeView.ItemsSourceProperty, "Parties");
             listView.SetBinding( ListView.ItemsSourceProperty, "Parties");
+            this.SetBinding(CustomContentPage.ShowNoContentWarningProperty, nameof(PartyPickerViewModel.NearPartyAvailable),
+                converter: new InvertBooleanConverter());
 
             Content = listView;
         }
