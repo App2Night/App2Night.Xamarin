@@ -39,12 +39,13 @@
     <Compile Include="Credentials.cs" />
     <Compile Include="HttpModel\SignUp.cs" />
     <Compile Include="Model\Coordinates.cs" />
-    <Compile Include="Enum\EventCommitmentState.cs" />
+    <Compile Include="Enum\PartyCommitmentState.cs" />
     <Compile Include="Enum\MusicGenre.cs" />
     <Compile Include="Model\License.cs" />
     <Compile Include="Model\Party.cs" />
     <Compile Include="Model\Location.cs" />
     <Compile Include="Enum\PartyType.cs" />
+    <Compile Include="Model\PartyCommitmentParameter.cs" />
     <Compile Include="Model\Result.cs" />
     <Compile Include="Model\Storage.cs" />
     <Compile Include="Model\Token.cs" />

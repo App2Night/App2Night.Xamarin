@@ -13,7 +13,7 @@ namespace App2Night.Model.Model
     {
         [JsonProperty(PropertyName = "PartyName")]
         public string Name { get; set; }
-        public EventCommitmentState MyEventCommitmentState { get; set; }
+        public PartyCommitmentState MyPartyCommitmentState { get; set; }
         [JsonProperty(PropertyName = "PartyDate")]
         public DateTime Date { get; set; }
         public DateTime CreationDateTime { get; set; }

@@ -102,7 +102,7 @@ namespace App2Night.Service.Service
                 {
                     MusicGenre = MusicGenre.Pop,
                     Name = "DH goes Ballermann",
-                    MyEventCommitmentState = EventCommitmentState.Accepted,
+                    MyPartyCommitmentState = PartyCommitmentState.Accepted,
                     CreationDateTime = DateTime.Today,
                     Date = DateTime.Today.AddDays(40)
                 }

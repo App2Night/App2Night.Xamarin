@@ -1,8 +1,11 @@
 ﻿using System;
 using App2Night.CustomView.View;
+using App2Night.Model.Enum;
 using App2Night.Model.Model;
+using App2Night.PageModel;
 using App2Night.Service.Helper;
 using App2Night.ValueConverter;
+using FreshMvvm;
 using Xamarin.Forms;
 
 namespace App2Night.CustomView.Template
@@ -43,21 +46,25 @@ namespace App2Night.CustomView.Template
         #endregion
 
         readonly TapGestureRecognizer _tapGestureRecognizer = new TapGestureRecognizer();
-        private CommitmentState _commitmentState = CommitmentState.Rejected;
+        private PartyCommitmentState _commitmentState = PartyCommitmentState.Rejected;
         public QuadraticPartyTemplate()
         {
             BackgroundColor = Color.White;
             Padding = 8;
             HasShadow = true;
-
-            _titleLabel.SetBinding(Label.TextProperty, "Name");
-            _distanceLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
-            _shareIconLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
-            _likeButton.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
+            SetBindings();
 
             _tapGestureRecognizer.Tapped += TappedLikeBtn;
             _likeButton.GestureRecognizers.Add(_tapGestureRecognizer);
             Content = CreateInputColumns();
+        }
+
+        private void SetBindings()
+        {
+            _titleLabel.SetBinding(Label.TextProperty, "Name");
+            _distanceLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
+            _shareIconLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
+            _likeButton.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter()); 
         }
 
         private Grid CreateInputColumns()
@@ -98,35 +105,50 @@ namespace App2Night.CustomView.Template
         /// <param name="e"></param>
         private void TappedLikeBtn(object sender, EventArgs e)
         {
-            if (_commitmentState == CommitmentState.Rejected)
+            if (_commitmentState == PartyCommitmentState.Rejected)
             {
-                // sets btn to star, change color to 
-                _likeButton.Text = "\uf005";
-                _likeButton.ButtonLabel.TextColor = Color.Yellow;
-                _commitmentState = CommitmentState.Noted;
-            } else if (_commitmentState == CommitmentState.Accepted)
-            {
-                // sets btn back to star with a white color
-                _likeButton.Text = "\uf006";
-                _likeButton.ButtonLabel.TextColor = Color.White;
-                _commitmentState = CommitmentState.Rejected;
-            } else if (_commitmentState == CommitmentState.Noted)
-            {
-                // sets btn to heart with a red color
-                _likeButton.Text = "\uf004";
-                _likeButton.ButtonLabel.TextColor = Color.Red;
-                _commitmentState = CommitmentState.Accepted;
+                NoteParty();
             }
+            else if (_commitmentState == PartyCommitmentState.Accepted)
+            {
+                RejectParty();
+            }
+            else if (_commitmentState == PartyCommitmentState.Noted)
+            {
+                AcceptParty();
+            }
+
+            var commitmentParameter = new PartyCommitmentParameter
+            {
+                Party = (Party) BindingContext,
+                CommitmentState = _commitmentState
+            };
+            FreshIOC.Container.Resolve<DashboardPageModel>().PartyCommitmentStateChangedCommand.Execute(commitmentParameter);
         }
-        /// <summary>
-        /// CommitmentState of the User for a Party.
-        /// </summary>
-        public enum CommitmentState
+
+        private void RejectParty()
         {
-            Accepted,
-            Noted,
-            Rejected
+            // sets btn back to star with a white color
+            _likeButton.Text = "\uf006";
+            _likeButton.ButtonLabel.TextColor = Color.White;
+            _commitmentState = PartyCommitmentState.Rejected;
         }
+
+        private void AcceptParty()
+        {
+            // sets btn to heart with a red color
+            _likeButton.Text = "\uf004";
+            _likeButton.ButtonLabel.TextColor = Color.Red;
+            _commitmentState = PartyCommitmentState.Accepted;
+        }
+
+        private void NoteParty()
+        {
+            // sets btn to star, change color to 
+            _likeButton.Text = "\uf005";
+            _likeButton.ButtonLabel.TextColor = Color.Yellow;
+            _commitmentState = PartyCommitmentState.Noted;
+        } 
 
         protected override void OnPropertyChanged(string propertyName = null)
         {

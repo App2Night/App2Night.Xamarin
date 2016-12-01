@@ -1,6 +1,6 @@
 ﻿namespace App2Night.Model.Enum
 {
-    public enum EventCommitmentState
+    public enum PartyCommitmentState
     {
         Accepted,
         Noted,
