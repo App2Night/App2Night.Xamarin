@@ -101,87 +101,76 @@ namespace App2Night.Page.SubPages
             // bind to view model
             SetBindings();
             // set Content with two grids. first one contains all information about the user. last one has a cancel and ok btn.
-            var stackLayout = CreateInputColumns();
-            var mainScroll = new ScrollView
+            var inputColumns = CreateInputColumns();
+            Grid.SetRowSpan(inputColumns, 2);
+            Grid.SetColumnSpan(inputColumns, 2);
+            var gradientLayer = new BoxView
             {
-                Content = stackLayout,
-                Orientation = ScrollOrientation.Horizontal
+                Color = Color.White.MultiplyAlpha(0.3)
             };
-            Content = stackLayout;
-        }
 
-
-        private Grid CreateInputColumns()
-        {
-            return new Grid
+            Content = new Grid
             {
-                RowDefinitions = new RowDefinitionCollection
+                RowSpacing = 0,
+                ColumnDefinitions =
                 {
-                    new RowDefinition {Height = new GridLength(5, GridUnitType.Star)},
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Star)}
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
+                },
+                RowDefinitions =
+                {
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
+                    new RowDefinition {Height = new GridLength(70, GridUnitType.Absolute)}
                 },
                 Children =
                 {
+                    inputColumns,
+                    {gradientLayer, 0, 1},
+                    {_cancelBtn, 0, 1},
+                    {_okBtn, 1, 1}
+                }
+            };
+
+            Grid.SetColumnSpan(gradientLayer, 2);
+        }
+
+
+        private StackLayout CreateInputColumns()
+        {
+            return new StackLayout
+            {
+                Children =
+                {
+                    _nameEntry,
+                    _emailEntry,
+                    _ageEntry,
+                    _genderPicker,
+                    new Grid
                     {
-                        new StackLayout
+                        ColumnDefinitions = new ColumnDefinitionCollection
                         {
-                            Children =
-                            {
-                                _nameEntry,
-                                _emailEntry,
-                                _ageEntry,
-                                _genderPicker,
-                                new Grid
-                                {
-                                    ColumnDefinitions = new ColumnDefinitionCollection
-                                    {
-                                        new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
-                                        new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
-                                    },
-                                    Children =
-                                    {
-                                        {_streetEntry, 0, 0},
-                                        {_numberEntry, 1, 0},
-                                    }
-                                },
-                                new Grid
-                                {
-                                    ColumnDefinitions = new ColumnDefinitionCollection
-                                    {
-                                        new ColumnDefinition {Width = new GridLength(2, GridUnitType.Star)},
-                                        new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
-                                    },
-                                    Children =
-                                    {
-                                        {_addressEntry, 0, 0},
-                                        {_zipCodetEntry, 1, 0},
-                                    }
-                                },
-                                new BoxView
-                                {
-                                    HeightRequest = 1,
-                                    BackgroundColor = Color.Black
-                                },
-                            }
+                            new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
+                            new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
                         },
-                        0, 0
+                        Children =
+                        {
+                            {_streetEntry, 0, 0},
+                            {_numberEntry, 1, 0},
+                        }
                     },
+                    new Grid
                     {
-                        new Grid
+                        ColumnDefinitions = new ColumnDefinitionCollection
                         {
-                            ColumnDefinitions = new ColumnDefinitionCollection
-                            {
-                                new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
-                                new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
-                            },
-                            Children =
-                            {
-                                {_cancelBtn, 0, 0},
-                                {_okBtn, 1, 0},
-                            }
+                            new ColumnDefinition {Width = new GridLength(2, GridUnitType.Star)},
+                            new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
                         },
-                        0, 1
-                    }
+                        Children =
+                        {
+                            {_addressEntry, 0, 0},
+                            {_zipCodetEntry, 1, 0},
+                        }
+                    },
                 }
             };
         }
