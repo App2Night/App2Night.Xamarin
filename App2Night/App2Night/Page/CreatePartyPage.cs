@@ -277,9 +277,6 @@ namespace App2Night.Page
 
             _zipCodetEntry.Input.SetBinding(Entry.TextProperty, "Zipcode");
             _zipCodetEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, "ValidZipcode");
-
-            //Buttons
-           
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -299,58 +296,5 @@ namespace App2Night.Page
                 ((InputContainer<Entry>) sender).Input.Text = text; //Set the Old value
             }
         }
-
-        #region Events
-
-        private async void MediaPicker(Object o, EventArgs e)
-        {
-            //await CrossMedia.Current.Initialize();
-
-            //if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
-            //{
-            //    await DisplayAlert("No Camera", ":( No camera available.", "OK");
-            //}
-
-            //var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
-            //{
-            //    Directory = "Sample",
-            //    Name = "test.jpg"
-            //});
-
-            //if (file == null)
-
-            //await DisplayAlert("File Location", file.Path, "OK");
-
-            //_image.Source = ImageSource.FromStream(() =>
-            //{
-            //    var stream = file.GetStream();
-            //    file.Dispose();
-            //    return stream;
-            //});
-        }
-
-
-        /*
-        /// <summary>
-        /// Tappeds the animation.
-        /// </summary>
-        /// <param name="view">View.</param>
-        void TappedAnimation(Xamarin.Forms.View view)
-        {
-            var animation = new Animation(d => { view.Scale = d; }, 1, 1.6);
-            var nextAnimation = new Animation(d => { view.Scale = d; }, 1.6, 1);
-            animation.Commit(this, "Scale", length: 250, finished: delegate { nextAnimation.Commit(this, "Descale"); });
-        }
-
-        protected override void OnDisappearing()
-        {
-            // reset event handler
-            _acceptButton.ButtonTapped -= Accept;
-            _clearButton.ButtonTapped -= Delete;
-            base.OnDisappearing();
-        } 
-        */
-
-        #endregion
     }
 }
