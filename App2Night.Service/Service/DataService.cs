@@ -281,6 +281,16 @@ namespace App2Night.Service.Service
             return result;
         }
 
+        public async Task<Result> ChangeCommitmentState(Guid partyId, PartyCommitmentState commitmentState)
+        {
+            if (!await CheckIfTokenIsValid()) return new Result();
+            var result =
+                await
+                    _clientService.SendRequest("/api/UserParty/commitmentState", RestType.Put,
+                        urlQuery: "/id=" + partyId.ToString("D"), bodyParameter: commitmentState, token: Token.AccessToken);
+            return result;
+        }
+
         /// <summary>
         /// Creates a dictiory containg all values for the /connect/revocation endpoint.
         /// </summary>

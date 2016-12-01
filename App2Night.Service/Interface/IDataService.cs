@@ -145,5 +145,7 @@ namespace App2Night.Service.Interface
         /// </summary>
         /// <returns></returns>
         Task<Result> RefreshToken();
+
+        Task<Result> ChangeCommitmentState(Guid partyId, PartyCommitmentState commitmentState);
     }
 }
