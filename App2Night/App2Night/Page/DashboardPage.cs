@@ -6,18 +6,39 @@ using App2Night.CustomView.Template;
 using App2Night.CustomView.View;
 using App2Night.Data.Language;
 using App2Night.Model.Model;
+using App2Night.PageModel;
 using App2Night.ValueConverter;
 using FreshMvvm;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
+using Xamarin.Forms.Xaml;
 using Position = Xamarin.Forms.Maps.Position;
 
 namespace App2Night.Page
 { 
     public class DashboardPage : CustomContentPage 
     {
+
+        public static BindableProperty MapPinsProperty = BindableProperty.Create(nameof(MapPins), 
+            typeof(IList<Pin>), 
+            typeof(DashboardPage),
+            propertyChanged: (bindable, value, newValue) =>
+            {
+                if (newValue != null)
+                {
+                    ((DashboardPage) bindable).MapPinsSet((IList<Pin>) newValue);
+                } 
+            });
+        public IList<Pin> MapPins
+        {
+            get { return (IList<Pin>)GetValue(MapPinsProperty); }
+            set { SetValue(MapPinsProperty, value); }
+        }
+
+
+
         #region Views
         readonly EnhancedContainer _interestingPartieContainer = new EnhancedContainer
         {
@@ -78,6 +99,8 @@ namespace App2Night.Page
 
         public DashboardPage()
         {
+            this.SetBinding(DashboardPage.MapPinsProperty, nameof(DashboardPageModel.MapPins));
+
             Device.BeginInvokeOnMainThread(async ()=> await InitializeMapCoordinates());
 
             CrossGeolocator.Current.PositionChanged += PositionChanged;
@@ -121,6 +144,16 @@ namespace App2Night.Page
             if (coordinates != null)
             {
                 MoveMapToCoordinates(coordinates); 
+            }
+        }
+
+        private void MapPinsSet(IList<Pin> pins)
+        {
+            _headerMap.Pins.Clear();
+
+            foreach (Pin pin in pins)
+            {
+                _headerMap.Pins.Add(pin);
             }
         }
 
