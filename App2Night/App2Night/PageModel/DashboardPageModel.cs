@@ -21,7 +21,6 @@ namespace App2Night.PageModel
         public ObservableCollection<Party> PartyHistory => FreshIOC.Container.Resolve<IDataService>().PartyHistory;
         public ObservableCollection<Party> Selectedparties => FreshIOC.Container.Resolve<IDataService>().SelectedPartys;
 
-		public Command MoveToUserEditCommand => new Command(async () => await CoreMethods.PushPageModel<EditProfileViewModel>());
         public Command MoveToMyPartiesCommand => new Command(async () => await CoreMethods.PushPageModel<MyPartysViewModel>());
         public Command MoveToHistoryCommand => new Command(async () => await CoreMethods.PushPageModel<HistoryViewModel>());
         public Command MoveToPartyPicker => new Command(async () => await CoreMethods.PushPageModel<PartyPickerViewModel>());
@@ -30,6 +29,7 @@ namespace App2Night.PageModel
         {
             _dataService = dataService;
             _dataService.PartiesUpdated += OnPartiesUpdated;
+            User = _dataService.User;
         }
 
         private void OnPartiesUpdated(object sender, EventArgs eventArgs)
