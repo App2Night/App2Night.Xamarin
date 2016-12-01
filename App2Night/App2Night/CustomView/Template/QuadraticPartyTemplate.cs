@@ -39,14 +39,6 @@ namespace App2Night.CustomView.Template
             Margin = new Thickness(8, 0),
             ButtonLabel = { FontSize = 35}
         };
-
-        Image _image = new Image
-        {
-            Aspect = Aspect.AspectFill,
-            InputTransparent = true,
-            Source = ImageSource.FromResource("App2Night.Data.IconCode.icon.png"),
-            IsOpaque = false
-        };
         #endregion
 
         readonly TapGestureRecognizer _tapGestureRecognizer = new TapGestureRecognizer();
@@ -78,7 +70,6 @@ namespace App2Night.CustomView.Template
                 },
                 Children =
                 {
-                    //_image,
                     new BoxView {Color = Color.Green.MultiplyAlpha(0.9), InputTransparent = true},
                     _distanceLabel,
                     _likeButton,
