@@ -41,5 +41,7 @@ namespace App2Night.Service.Interface
         /// <returns></returns>
         Task SetToken(Token token);
         //TODO Add party caching
+
+        Task ClearCache();
     }
 }
