@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using App2Night.Model.Enum;
 using App2Night.Model.HttpModel;
 using App2Night.Model.Model;
@@ -183,7 +184,12 @@ namespace App2Night.Service.Service
 
         public Task<Result> UpdateUser()
         {
-            throw new NotImplementedException();
+            UserDialogs.Instance.Toast(new ToastConfig("This Feature is not available"));
+            return Task.FromResult(new Result
+            {
+                Success = false,
+                Message = "Not possible"
+            });
         }
 
         public Task<Result> DeleteAccount(string password)

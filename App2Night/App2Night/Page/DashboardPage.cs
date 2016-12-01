@@ -15,15 +15,6 @@ namespace App2Night.Page
     public class DashboardPage : CustomContentPage 
     {
         #region Views
-
-        readonly EnhancedContainer _userInfoContainer = new EnhancedContainer
-        {
-            Name = AppResources.User,
-            ButtonText = "\uf0ad",
-            NoContentWarningVisible = false,
-            TopSpacerVisible = false
-        };
-
         readonly EnhancedContainer _interestingPartieContainer = new EnhancedContainer
         {
             Name = AppResources.IntParty,
@@ -80,39 +71,6 @@ namespace App2Night.Page
 
         public DashboardPage()
         {
-            #region UserInfoView
-            var userInfoView = new Grid
-            {
-                ColumnDefinitions =
-                {
-                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Auto)},
-                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
-                },
-                Children =
-                {
-                    _profilePicture
-                }
-            };
-            _userInfoContainer.Content = userInfoView;
-            _usernameLabel.SetBinding(Label.TextProperty, "User.Name");
-            _emaiLabel.SetBinding(Label.TextProperty,"User.Email");
-            var profileDetails = new List<Xamarin.Forms.View>
-            {
-                _usernameLabel,
-                _emaiLabel
-            };
-            userInfoView.RowDefinitions.Add(new RowDefinition {Height = new GridLength(1, GridUnitType.Star)});
-            for (int index = 0; index < profileDetails.Count; index++)
-            {
-                Xamarin.Forms.View view = profileDetails[index];
-                userInfoView.RowDefinitions.Add(new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)});
-                userInfoView.Children.Add(view, 1, index + 1);
-            }
-            userInfoView.RowDefinitions.Add(new RowDefinition {Height = new GridLength(1, GridUnitType.Star)});
-            Grid.SetRowSpan(_profilePicture, profileDetails.Count + 2);
-             _userInfoContainer.SetBinding(EnhancedContainer.CommandProperty, "MoveToUserEditCommand");
-            #endregion
-
             #region InterestingPartieView
             _interestingPartieContainer.Content = _interestingPartieGallerie;
             _interestingPartieGallerie.ElementTapped += PartieSelected;
@@ -154,7 +112,6 @@ namespace App2Night.Page
                 Children =
                 {
                     new MapWrapper(_headerMap),
-                    {_userInfoContainer, 0, 1},
                     {_myPartiesContainer, 0, 2},
                     {_interestingPartieContainer, 0, 3},
                     {_historyContainer, 0, 4}
