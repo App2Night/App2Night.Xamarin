@@ -37,9 +37,9 @@ namespace App2Night.PageModel.SubPages
             } 
         }
 
-        public bool IsLogInContentView { get; private set; }
+        public bool IsLogInContentView { get; private set; } 
 
-        public bool IsLogOutContentView { get; private set; }
+        public bool IsLogOutContentView { get; private set; } = true;
 
         public bool IsPartyContentView { get; private set; }
 

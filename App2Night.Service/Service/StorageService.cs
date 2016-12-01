@@ -112,6 +112,10 @@ namespace App2Night.Service.Service
                     var decryptedString = DecriptString(encryptedString);
                     storage = JsonConvert.DeserializeObject<Storage>(decryptedString);
                     cached = true;
+                    if (storage.Token != null)
+                    {
+                        LogInChanged(true);
+                    }
                 }
                 catch (Exception e)
                 {

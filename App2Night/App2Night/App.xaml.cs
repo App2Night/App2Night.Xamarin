@@ -81,13 +81,13 @@ namespace App2Night
             {
                 SetupGeolocator();
 
-                await FreshIOC.Container.Resolve<IStorageService>().OpenStorage();
-                bool isLoggedIn = await ResumeLastSession();
+                var storage = FreshIOC.Container.Resolve<IStorageService>();
+                await storage.OpenStorage(); 
 
                 //Make an inital token refresh 
                 await FreshIOC.Container.Resolve<IDataService>().RequestPartyWithFilter();
 
-                if (!isLoggedIn)
+                if (!storage.IsLogIn)
                 {
                     await ShowLoginModal();
                 }
@@ -98,20 +98,6 @@ namespace App2Night
         {
             var page = FreshPageModelResolver.ResolvePageModel<LoginViewModel>();
             await _masterDetailNav.PushPage(page, null, true);
-        }
-
-        private async Task<bool> ResumeLastSession()
-        {
-            bool isLoggedIn = false;
-            var storage = FreshIOC.Container.Resolve<IStorageService>().Storage;
-            if (storage.Token != null)
-            {
-                //Set token from last session and update user information.
-                isLoggedIn = await FreshIOC.Container.Resolve<IDataService>().SetToken(storage.Token);
-            }
-            DebugHelper.PrintDebug(DebugType.Info,
-                isLoggedIn ? "Log in from last session." : "User not logged in. No token available.");
-            return isLoggedIn;
         }
 
         private void SetupGeolocator()
