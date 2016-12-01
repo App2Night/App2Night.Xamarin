@@ -12,6 +12,8 @@ namespace App2Night.Model.Model
     [ImplementPropertyChanged]
     public class Party : INotifyPropertyChanged
     {
+        [JsonProperty(PropertyName = "PartyId")]
+        public Guid Id { get; set; }
         [JsonProperty(PropertyName = "PartyName")]
         public string Name { get; set; }
         public PartyCommitmentState MyPartyCommitmentState { get; set; }
@@ -25,11 +27,10 @@ namespace App2Night.Model.Model
         public int Price { get; set; } 
         public Host Host { get; set; }
         public bool HostedByUser { get; set; }
-
-        [JsonProperty("CommittedUser")]
+        [JsonProperty(PropertyName = "CommittedUser")]
         public List<Participant> Participants { get; set; }
 
-        [JsonProperty("UserCommitmentState")]
+        [JsonProperty(PropertyName = "UserCommitmentState")]
         public PartyCommitmentState CommitmentState { get; set; }
         [JsonIgnore]
         public double DistanceToParty { get; set; } = -1;

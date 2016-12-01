@@ -86,7 +86,6 @@
     <Compile Include="PageModel\SubPages\PartyDetailViewModel.cs" />
     <Compile Include="PageModel\SubPages\ThirdPartyInfoViewModel.cs" />
     <Compile Include="PageModel\SubPages\ThirdPartyViewModel.cs" />
-    <Compile Include="PageModel\TestViewModel.cs" />
     <Compile Include="PageModel\PartyPickerViewModel.cs" />
     <Compile Include="Page\AboutTabbedPage.cs" />
     <Compile Include="Page\CreatePartyPage.cs" />
