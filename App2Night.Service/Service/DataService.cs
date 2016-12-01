@@ -34,7 +34,7 @@ namespace App2Night.Service.Service
         private Token Token
         {
             get { return _storageService.Storage.Token; }
-            set { _storageService.Storage.Token = value; }
+            set { _storageService.SetToken(value); }
         } 
 
         public DataService(IClientService clientService, IStorageService storageService)
