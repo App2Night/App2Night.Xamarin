@@ -38,12 +38,10 @@ namespace App2Night.PageModel.SubPages
         public Model.Model.User User { get; set; }
 
         readonly IDataService _dataService;
-        readonly IClientService _clientService;
 
-        public EditProfileViewModel(IDataService dataService, IClientService clientService)
+        public EditProfileViewModel(IDataService dataService)
         {
             _dataService = dataService;
-            _clientService = clientService;
             User = _dataService.User;
             SetAttributes();
         }
