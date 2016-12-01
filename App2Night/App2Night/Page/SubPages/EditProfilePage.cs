@@ -11,7 +11,6 @@ namespace App2Night.Page.SubPages
     public class EditProfilePage : FreshBaseContentPage
     {
         #region Nodes
-
         readonly InputContainer<Entry> _nameEntry = new InputContainer<Entry>
         {
             Input = {Placeholder = AppResources.Username},
@@ -54,41 +53,6 @@ namespace App2Night.Page.SubPages
             Text = "\uf00c",
             ButtonLabel = {FontFamily = "FontAwesome", FontSize = 50},
         };
-
-        private InputContainer<Entry> _cityNameEntry = new InputContainer<Entry>
-        {
-            Input = {Placeholder = AppResources.Cityname},
-            IconCode = "\uf279",
-            ValidationVisible = true
-        };
-
-        private InputContainer<Entry> _streetEntry = new InputContainer<Entry>
-        {
-            Input = {Placeholder = AppResources.StrName},
-            ValidationVisible = true,
-            IconCode = "\uf0f3"
-        };
-
-        private InputContainer<Entry> _numberEntry = new InputContainer<Entry>
-        {
-            Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.HNumber},
-            ValidationVisible = true
-        };
-
-        private InputContainer<Entry> _locationEntry = new InputContainer<Entry>
-        {
-            Input = {Placeholder = AppResources.Location},
-            IconCode = "\uf015",
-            ValidationVisible = true,
-            Margin = new Thickness(5, 0)
-        };
-
-        InputContainer<Entry> _zipCodetEntry = new InputContainer<Entry>
-        {
-            Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.Zipcode},
-            ValidationVisible = true
-        };
-
         #endregion
 
         /// <summary>
@@ -100,7 +64,7 @@ namespace App2Night.Page.SubPages
             Title = AppResources.EditProfile;
             // bind to view model
             SetBindings();
-            // set Content with two grids. first one contains all information about the user. last one has a cancel and ok btn.
+            // set entries to stackLayout
             var inputColumns = CreateInputColumns();
             Grid.SetRowSpan(inputColumns, 2);
             Grid.SetColumnSpan(inputColumns, 2);
@@ -145,32 +109,6 @@ namespace App2Night.Page.SubPages
                     _emailEntry,
                     _ageEntry,
                     _genderPicker,
-                    new Grid
-                    {
-                        ColumnDefinitions = new ColumnDefinitionCollection
-                        {
-                            new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
-                            new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
-                        },
-                        Children =
-                        {
-                            {_streetEntry, 0, 0},
-                            {_numberEntry, 1, 0},
-                        }
-                    },
-                    new Grid
-                    {
-                        ColumnDefinitions = new ColumnDefinitionCollection
-                        {
-                            new ColumnDefinition {Width = new GridLength(2, GridUnitType.Star)},
-                            new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
-                        },
-                        Children =
-                        {
-                            {_addressEntry, 0, 0},
-                            {_zipCodetEntry, 1, 0},
-                        }
-                    },
                 }
             };
         }
