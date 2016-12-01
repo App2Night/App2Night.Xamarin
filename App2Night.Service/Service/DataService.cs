@@ -94,9 +94,7 @@ namespace App2Night.Service.Service
         private User _user = new User
         {
             Name = "Hardy",
-            Addresse = new Location(),
-            Gender = Gender.Unkown,
-            Age = 21,
+            Addresse = new Location(), 
             Email = "hardy@party.de",
             LastGpsLocation = new Location(),
             Events = new ObservableCollection<Party>
