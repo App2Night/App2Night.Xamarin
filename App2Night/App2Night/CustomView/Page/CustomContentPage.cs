@@ -104,16 +104,29 @@ namespace App2Night.CustomView.Page
 
             var previewGrid = new Grid
             {
+                RowDefinitions =
+                {
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}
+                },
+                Children = {
+                    { _previewContainer1, 0,1},
+                    { _previewContainer2, 0, 1 }
+
+                 }
+            };
+
+            var combinationGrid = new Grid
+            {
                 Children =
                 {
                     _noContentWarningLabel,
                     _infoContainer,
-                    _previewContainer1,
-                    _previewContainer2
+                    previewGrid
                 }
             }; 
 
-            base.Content = previewGrid;
+            base.Content = combinationGrid;
 
             //Set start connectivity value.
             _oldValue = CrossConnectivity.Current.IsConnected;

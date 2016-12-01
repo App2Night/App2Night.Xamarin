@@ -150,7 +150,7 @@ namespace App2Night.PageModel
 
         public bool ValidateDate()
         {
-            return Date >= DateTime.Today && Date <= DateTime.Today.AddMonths(12);
+            return Date > DateTime.Today && Date <= DateTime.Today.AddMonths(12);
         } 
 
         private bool ValidateLocationname()
@@ -160,12 +160,12 @@ namespace App2Night.PageModel
 
         bool ValidateName()
         {
-            return !string.IsNullOrEmpty(Name) && Name.Length > 3;
+            return !string.IsNullOrEmpty(Name) && Name.Length <= 32;
         }
 
         bool ValidateDescription()
 		{
-			return !string.IsNullOrEmpty(Description);
+			return !string.IsNullOrEmpty(Description) && Description.Length <= 256;
 		}
 
         private async Task CreateParty()
@@ -244,6 +244,12 @@ namespace App2Night.PageModel
             if (result.Success)
             {
                 var resLocation = result.Data;
+
+                if (IsEqualOrContains(resLocation.CityName, CityName))
+                    CityName = resLocation.CityName;
+
+                if (IsEqualOrContains(resLocation.StreetName, StreetName))
+                    StreetName = resLocation.StreetName;
 
                 ValidCityname = IsNameEqual(resLocation.CityName, CityName);
                 ValidZipcode = IsNameEqual(resLocation.Zipcode, Zipcode);

@@ -5,7 +5,8 @@ using App2Night.DependencyService;
 using App2Night.Model.Model;
 using App2Night.PageModel;
 using App2Night.PageModel.SubPages;
-using FreshMvvm; 
+using FreshMvvm;
+using Plugin.Geolocator;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -39,9 +40,6 @@ namespace App2Night.CustomView.View
             }
         };
 
-        private readonly IUserLocationService _userLocationService =
-            Xamarin.Forms.DependencyService.Get<IUserLocationService>();
-
         private readonly TapGestureRecognizer _closeTapGestureRecognizer = new TapGestureRecognizer();
 
         #endregion
@@ -51,12 +49,21 @@ namespace App2Night.CustomView.View
             BackgroundColor = Color.White;
             // set button to calculate route
             _routeBtn.Clicked += OpenNavigationToParty;
-            Coordinates userCoordinates = _userLocationService.GetUserCoordinates();
+ 
+            var position = new Position(party.Location.Latitude, party.Location.Longitude);
             _map = new MapWrapper(new Map(MapSpan.FromCenterAndRadius(
-                new Position(userCoordinates.Latitude, userCoordinates.Longitude),
+                position,
                 Distance.FromMiles(0.3)))
             {
-                IsShowingUser = true
+                IsShowingUser = true,
+                Pins =
+                {
+                    new Pin
+                    {
+                        Label = party.Name,
+                        Position = position
+                    }
+                }
             });
             Grid.SetColumnSpan(_map, 2);
 

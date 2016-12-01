@@ -9,14 +9,13 @@ using App2Night.Model.Enum;
 using App2Night.Model.HttpModel;
 using App2Night.Model.Model;
 using App2Night.Service.Helper;
-using App2Night.Service.Interface;
-using Newtonsoft.Json.Linq;
+using App2Night.Service.Interface; 
 using Plugin.Connectivity;
 using Plugin.Geolocator;
 
 namespace App2Night.Service.Service
 {
-    public class DataService : IDataService 
+    public class DataService : IDataService
     {
         //Service references
         private readonly IClientService _clientService;
@@ -43,27 +42,26 @@ namespace App2Night.Service.Service
             _clientService = clientService;
             _storageService = storageService;
         }
-         
-        public ObservableCollection<Party> InterestingPartys { get; } = new ObservableCollection<Party>();
-         
-        public ObservableCollection<Party> SelectedPartys { get; } = new ObservableCollection<Party>();
-         
-        public ObservableCollection<Party> PartyHistory { get; } = new ObservableCollection<Party>();
 
+        public ObservableCollection<Party> InterestingPartys { get; } = new ObservableCollection<Party>();
+
+        public ObservableCollection<Party> SelectedPartys { get; } = new ObservableCollection<Party>();
+
+        public ObservableCollection<Party> PartyHistory { get; } = new ObservableCollection<Party>();
 
 
         public async Task<bool> SetToken(Token token)
         {
-            Token = token; 
+            Token = token;
             /*
              * Check if the user is online.
              * User is online: Check if the token is valid.
              * User is offline: Assume that the token is valid.
              */
             if (!CrossConnectivity.Current.IsConnected) return true;
-            
+
             var tokenValid = await CheckIfTokenIsValid();
-             
+
             return tokenValid;
         }
 
@@ -74,7 +72,7 @@ namespace App2Night.Service.Service
             if (tokenValid)
             {
                 //Validate the given location an return the location suggested by the server.
-               return await _clientService.SendRequest<Location>("/api/Party/validate", RestType.Post,
+                return await _clientService.SendRequest<Location>("/api/Party/validate", RestType.Post,
                     bodyParameter: location, token: _storageService.Storage.Token.AccessToken);
             }
             //Signal that the used token is not valid.
@@ -99,33 +97,35 @@ namespace App2Night.Service.Service
             Email = "hardy@party.de",
             LastGpsLocation = new Location(),
             Events = new ObservableCollection<Party>
-                    {
-                        new Party
-                        {
-                            MusicGenre = MusicGenre.Pop,
-                            Name = "DH goes Ballermann",
-                            MyEventCommitmentState = EventCommitmentState.Accepted,
-                            CreationDateTime = DateTime.Today,
-                            Date = DateTime.Today.AddDays(40)
-                        }
-                    }
+            {
+                new Party
+                {
+                    MusicGenre = MusicGenre.Pop,
+                    Name = "DH goes Ballermann",
+                    MyEventCommitmentState = EventCommitmentState.Accepted,
+                    CreationDateTime = DateTime.Today,
+                    Date = DateTime.Today.AddDays(40)
+                }
+            }
         };
 
-		public User User 
-		{ 
-			get { return _user; } 
-			set 
-			{ 
-				_user = value;
+        public User User
+        {
+            get { return _user; }
+            set
+            {
+                _user = value;
                 //Fire UserUpdate event since a new user is set.
-				UserUpdated?.Invoke(this, EventArgs.Empty);
-			} 
-		}
+                UserUpdated?.Invoke(this, EventArgs.Empty);
+            }
+        }
 
-		public async Task<Result<Party>> CreateParty(string name, DateTime date, MusicGenre genre, string country, string cityName, string street, string houseNr, string zipcode, PartyType type, string description)
-        { 
+        public async Task<Result<Party>> CreateParty(string name, DateTime date, MusicGenre genre, string country,
+            string cityName, string street, string houseNr, string zipcode, PartyType type, string description)
+        {
             //Create an object from the given parameters for the party creation
-            dynamic partyCreationObject = CreatePartyCreateObject(name, date, genre, country, cityName, street, houseNr, zipcode, type, description);
+            dynamic partyCreationObject = CreatePartyCreateObject(name, date, genre, country, cityName, street, houseNr,
+                zipcode, type, description);
 
             //Send the create party request
             var result =
@@ -134,27 +134,27 @@ namespace App2Night.Service.Service
                         token: Token.AccessToken);
             DebugHelper.PrintDebug(DebugType.Info, $"Guid of the created party is {result.Data}");
 
-		    if (!result.Success) return result; 
+            if (!result.Success) return result;
 
             //Get the created party if the creation was successfull. 
             var party = await GetParty(result.Data);
 
             //Return the created party
             return party;
-
         }
 
         /// <summary>
         /// Creates a party object for the api/party post endpoint.
         /// </summary> 
-        private dynamic CreatePartyCreateObject(string name, DateTime date, MusicGenre genre, string country, string cityName, string street, string houseNr, string zipcode, PartyType type, string description)
+        private dynamic CreatePartyCreateObject(string name, DateTime date, MusicGenre genre, string country,
+            string cityName, string street, string houseNr, string zipcode, PartyType type, string description)
         {
             dynamic partyCreationObject = new ExpandoObject();
             partyCreationObject.partyName = name;
 
             partyCreationObject.partyDate = date;
 
-            partyCreationObject.musicGenre = (int)genre;
+            partyCreationObject.musicGenre = (int) genre;
 
             partyCreationObject.countryName = country;
 
@@ -166,7 +166,7 @@ namespace App2Night.Service.Service
 
             partyCreationObject.zipcode = zipcode;
 
-            partyCreationObject.partyType = (int)type;
+            partyCreationObject.partyType = (int) type;
 
             partyCreationObject.description = description;
             return partyCreationObject;
@@ -202,14 +202,17 @@ namespace App2Night.Service.Service
             try
             {
 //SendKEY the create user request
-                var creationResult = await _clientService.SendRequest("api/user", RestType.Post, bodyParameter: signUpModels, endpoint: Endpoint.User);
-            
+                var creationResult =
+                    await
+                        _clientService.SendRequest("api/user", RestType.Post, bodyParameter: signUpModels,
+                            endpoint: Endpoint.User);
+
                 //Login user after a successfull creation
                 if (creationResult.Success)
                 {
                     var loginResult = await RequestToken(signUpModels.Username, signUpModels.Password);
                     //TODO Handle what should happen if login request fails
-                } 
+                }
                 return creationResult;
             }
             catch (Exception e)
@@ -219,22 +222,22 @@ namespace App2Night.Service.Service
             return new Result();
         }
 
-        public async Task<Result>  RequestToken(string username, string password)
+        public async Task<Result> RequestToken(string username, string password)
         {
             Dictionary<string, string> tokenRequestValues = CreateLoginDictionary(username, password);
 
             //Request the user login
             var result =
-                    await
-                        _clientService.SendRequest<Token>("/connect/token", RestType.Post,
-                            wwwFormData: tokenRequestValues, endpoint: Endpoint.User, enableHttps: false);
+                await
+                    _clientService.SendRequest<Token>("/connect/token", RestType.Post,
+                        wwwFormData: tokenRequestValues, endpoint: Endpoint.User, enableHttps: false);
 
             //Save the new token to the storage
             if (result.Success)
             {
                 Token = result.Data;
                 Token.LastRefresh = DateTime.Now;
-                
+
                 //Save the modified storage
                 await _storageService.SaveStorage();
             }
@@ -259,14 +262,15 @@ namespace App2Night.Service.Service
         }
 
         public async Task<Result> RefreshToken()
-        { 
+        {
             Dictionary<string, string> tokenRefreshObject = CreateRefreshDictionary();
 
             //Request token refresh 
             var result =
                 await
                     _clientService.SendRequest<Token>("connect/revocation", RestType.Post,
-                        wwwFormData: tokenRefreshObject, token: Token.AccessToken, endpoint: Endpoint.User, enableHttps: false);
+                        wwwFormData: tokenRefreshObject, token: Token.AccessToken, endpoint: Endpoint.User,
+                        enableHttps: false);
 
             if (result.Success)
             {
@@ -297,12 +301,12 @@ namespace App2Night.Service.Service
             throw new NotImplementedException();
         }
 
-        public async Task<Result<IEnumerable<Party>>>  RequestPartyWithFilter()
-        { 
+        public async Task<Result<IEnumerable<Party>>> RequestPartyWithFilter()
+        {
             Result<IEnumerable<Party>> requestResult = new Result<IEnumerable<Party>>();
 
             try
-            { 
+            {
                 var location = await CrossGeolocator.Current.GetPositionAsync(3000);
                 string lat = location.Latitude.ToString();
                 lat = lat.Replace(",", ".");
@@ -317,13 +321,13 @@ namespace App2Night.Service.Service
             }
             catch (TaskCanceledException e)
             {
-                DebugHelper.PrintDebug(DebugType.Error, "Getting location in time failed.\n" + e); 
+                DebugHelper.PrintDebug(DebugType.Error, "Getting location in time failed.\n" + e);
                 requestResult.RequestFailedToException = true;
             }
             catch (Exception e)
             {
                 DebugHelper.PrintDebug(DebugType.Error, "Fetching parties failed.\n" + e);
-                requestResult.RequestFailedToException = true; 
+                requestResult.RequestFailedToException = true;
             }
 
             //Check if the request was a success
@@ -335,39 +339,43 @@ namespace App2Night.Service.Service
             {
                 var cachedData = new List<Party>();
                 string buf = "";
-                    for (int j = 0; j < 31; j++)
-                    {
-                        buf += "A";
-                    }
+                for (int j = 0; j < 31; j++)
+                {
+                    buf += "A";
+                }
                 for (int i = 0; i < 5; i++)
                 {
-                    
-                        cachedData.Add(new Party
+                    cachedData.Add(new Party
+                    {
+                        Name = buf + (i + 1),
+                        Date = DateTime.Today.AddDays(i).AddMonths(i),
+                        Location = new Location
                         {
-                            Name = buf + (i + 1),
-                            Date = DateTime.Today.AddDays(i).AddMonths(i)
-                        }); 
-                    
+                             Latitude= 48.444120,
+                            Longitude = 8.679107
+                        }
+                    });
                 }
                 //TODO Replace with real caching
                 if (cachedData.Count > 0)
                 {
                     requestResult.Data = cachedData;
-                    requestResult.IsCached = true; 
+                    requestResult.IsCached = true;
                 }
             }
             if (requestResult.Data != null)
-            { 
-                PopulateObservableCollection(InterestingPartys, requestResult.Data.OrderBy(o => o.Date).Take(5).Where(o => o.Date >= DateTime.Today));
-            } 
+            {
+                PopulateObservableCollection(InterestingPartys,
+                    requestResult.Data.OrderBy(o => o.Date).Take(5).Where(o => o.Date >= DateTime.Today));
+            }
             NearPartiesUpdated?.Invoke(this, EventArgs.Empty);
             return requestResult;
         }
 
         public async Task<Result<Party>> GetParty(Guid id)
         {
-            if(!await CheckIfTokenIsValid()) return new Result<Party>(); //Empty result with success = false
-            
+            if (!await CheckIfTokenIsValid()) return new Result<Party>(); //Empty result with success = false
+
             //Request the party with the given id
             var result =
                 await
@@ -377,7 +385,7 @@ namespace App2Night.Service.Service
         }
 
         async Task<bool> CheckIfTokenIsValid()
-        { 
+        {
             if (Token == null) return false;
 
             //Check if token is expired
@@ -393,13 +401,14 @@ namespace App2Night.Service.Service
         /// </summary> 
         /// <param name="collection">Collection to be filled with objects.</param>
         /// <param name="newObjects">The new items that should be put into the collection.</param>
-        void PopulateObservableCollection<TObservable>(TObservable collection, IEnumerable<Party> newObjects) where TObservable : ObservableCollection<Party>
+        void PopulateObservableCollection<TObservable>(TObservable collection, IEnumerable<Party> newObjects)
+            where TObservable : ObservableCollection<Party>
         {
             collection.Clear();
             foreach (Party party in newObjects)
             {
                 collection.Add(party);
             }
-        } 
+        }
     }
 }

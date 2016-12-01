@@ -257,8 +257,7 @@ namespace App2Night.Page
 
             _musicGenreSwitch.Input.SetBinding(EnumBindablePicker<MusicGenre>.SelectedItemProperty, "MusicGenre");
             // date and time
-            _datePicker.Input.SetBinding(DatePicker.DateProperty, "Date");
-            _datePicker.SetBinding(InputContainer<DatePicker>.InputValidateProperty, "ValidDate");
+            _datePicker.Input.SetBinding(DatePicker.DateProperty, "Date"); 
 
             _timePicker.Input.SetBinding(TimePicker.TimeProperty, "Time");
             // address
