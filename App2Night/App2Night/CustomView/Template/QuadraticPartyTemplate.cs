@@ -9,7 +9,6 @@ namespace App2Night.CustomView.Template
     public class QuadraticPartyTemplate : Frame
     {
         #region Views
-
         Label _distanceLabel = new Label
         {
             TextColor = Color.White
@@ -48,11 +47,10 @@ namespace App2Night.CustomView.Template
             Source = ImageSource.FromResource("App2Night.Data.IconCode.icon.png"),
             IsOpaque = false
         };
-
         #endregion
 
         readonly TapGestureRecognizer _tapGestureRecognizer = new TapGestureRecognizer();
-        private CommitmentState _state = CommitmentState.Rejected;
+        private CommitmentState _commitmentState = CommitmentState.Rejected;
         public QuadraticPartyTemplate()
         {
             BackgroundColor = Color.White;
@@ -66,8 +64,12 @@ namespace App2Night.CustomView.Template
 
             _tapGestureRecognizer.Tapped += TappedLikeBtn;
             _likeButton.GestureRecognizers.Add(_tapGestureRecognizer);
+            Content = CreateInputColumns();
+        }
 
-            Content = new Grid
+        private Grid CreateInputColumns()
+        {
+           return new Grid
             {
                 RowDefinitions = new RowDefinitionCollection
                 {
@@ -96,6 +98,7 @@ namespace App2Night.CustomView.Template
                 }
             };
         }
+
         /// <summary>
         /// Sets <see cref="_likeButton"/> to CommimentState. 
         /// </summary>
@@ -103,24 +106,24 @@ namespace App2Night.CustomView.Template
         /// <param name="e"></param>
         private void TappedLikeBtn(object sender, EventArgs e)
         {
-            if (_state == CommitmentState.Rejected)
+            if (_commitmentState == CommitmentState.Rejected)
             {
                 // sets btn to star, change color to 
-                _likeButton.Text = "\uf006";
+                _likeButton.Text = "\uf005";
                 _likeButton.ButtonLabel.TextColor = Color.Yellow;
-                _state = CommitmentState.Noted;
-            } else if (_state == CommitmentState.Accepted)
+                _commitmentState = CommitmentState.Noted;
+            } else if (_commitmentState == CommitmentState.Accepted)
             {
                 // sets btn back to star with a white color
                 _likeButton.Text = "\uf006";
                 _likeButton.ButtonLabel.TextColor = Color.White;
-                _state = CommitmentState.Rejected;
-            } else if (_state == CommitmentState.Noted)
+                _commitmentState = CommitmentState.Rejected;
+            } else if (_commitmentState == CommitmentState.Noted)
             {
                 // sets btn to heart with a red color
                 _likeButton.Text = "\uf004";
                 _likeButton.ButtonLabel.TextColor = Color.Red;
-                _state = CommitmentState.Noted;
+                _commitmentState = CommitmentState.Accepted;
             }
         }
         /// <summary>
