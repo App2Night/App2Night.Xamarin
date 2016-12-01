@@ -32,7 +32,7 @@ namespace App2Night.PageModel
             User = _dataService.User;
         }
 
-        private void OnPartiesUpdated(object sender, EventArgs eventArgs)
+        private void OnNearPartiesUpdated(object sender, EventArgs eventArgs)
         {
             SetAvailabilitys();
         }

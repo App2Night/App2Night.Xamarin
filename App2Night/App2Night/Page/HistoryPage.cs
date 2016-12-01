@@ -2,6 +2,8 @@
 using App2Night.CustomView.Template;
 using App2Night.CustomView.View;
 using App2Night.Model.Model;
+using App2Night.PageModel;
+using App2Night.ValueConverter;
 using FreshMvvm;
 using Xamarin.Forms;
 
@@ -15,6 +17,8 @@ namespace App2Night.Page
         public HistoryPage()
         {
             Title = "History";
+            NoContentWarningMessage = "You did not participate a party yet.";
+
             var listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 RowHeight = 150,
@@ -29,6 +33,8 @@ namespace App2Night.Page
                 Orientation = ScrollOrientation.Vertical
             };
             Content = mainScroll;
+
+            this.SetBinding(CustomContentPage.ShowNoContentWarningProperty, nameof(HistoryViewModel.PartyAvailable), converter: new InvertBooleanConverter());
         }
 
         /// <summary>

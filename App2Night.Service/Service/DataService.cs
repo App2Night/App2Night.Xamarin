@@ -18,6 +18,16 @@ namespace App2Night.Service.Service
 {
     public class DataService : IDataService 
     {
+        //Service references
+        private readonly IClientService _clientService;
+        private readonly IStorageService _storageService;
+
+        public event EventHandler NearPartiesUpdated;
+        public event EventHandler HistoryPartisUpdated;
+        public event EventHandler SelectedPartiesUpdated;
+        public event EventHandler UserUpdated;
+
+
         /// <summary>
         /// Provides the token from the storage. 
         /// </summary>
@@ -25,11 +35,7 @@ namespace App2Night.Service.Service
         {
             get { return _storageService.Storage.Token; }
             set { _storageService.Storage.Token = value; }
-        }
-
-        //Service references
-        private readonly IClientService _clientService;
-        private readonly IStorageService _storageService;
+        } 
 
         public DataService(IClientService clientService, IStorageService storageService)
         {
@@ -44,8 +50,7 @@ namespace App2Night.Service.Service
          
         public ObservableCollection<Party> PartyHistory { get; } = new ObservableCollection<Party>();
 
-        public event EventHandler PartiesUpdated;
-		public event EventHandler UserUpdated;
+
 
         public async Task<bool> SetToken(Token token)
         {
@@ -355,7 +360,7 @@ namespace App2Night.Service.Service
             { 
                 PopulateObservableCollection(InterestingPartys, requestResult.Data.OrderBy(o => o.Date).Take(5).Where(o => o.Date >= DateTime.Today));
             } 
-            PartiesUpdated?.Invoke(this, EventArgs.Empty);
+            NearPartiesUpdated?.Invoke(this, EventArgs.Empty);
             return requestResult;
         }
 

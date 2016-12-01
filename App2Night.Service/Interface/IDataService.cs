@@ -14,9 +14,19 @@ namespace App2Night.Service.Interface
     public interface IDataService
     {
         /// <summary>
-        /// Gets triggered if parties are updated.
+        /// Gets triggered if parties get updated.
         /// </summary>
-        event EventHandler PartiesUpdated;
+        event EventHandler NearPartiesUpdated;
+
+        /// <summary>
+        /// Gets triggered if the party history get updated.
+        /// </summary>
+        event EventHandler HistoryPartisUpdated;
+
+        /// <summary>
+        /// Gets triggered if the selected parties get updated.
+        /// </summary>
+        event EventHandler SelectedPartiesUpdated;
 
         /// <summary>
         /// Gets triggerd if the user is updated.
