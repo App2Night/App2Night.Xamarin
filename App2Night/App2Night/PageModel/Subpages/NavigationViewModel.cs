@@ -24,7 +24,7 @@ namespace App2Night.PageModel.SubPages
             //
         }
         public Command<License> OpenLicenseCommand => new Command<License>(async (license) => await CoreMethods.PushPageModel<EditProfileViewModel>(license));
-
+        public Command MoveToUserEditCommand => new Command(async () => await CoreMethods.PushPageModel<EditProfileViewModel>());
 
         private async Task Sync()
         {
