@@ -106,7 +106,7 @@ namespace App2Night.CustomView.Template
             if (_state == CommitmentState.Rejected)
             {
                 // sets btn to star, change color to 
-                _likeButton.Text = "\uf004";
+                _likeButton.Text = "\uf006";
                 _likeButton.ButtonLabel.TextColor = Color.Yellow;
                 _state = CommitmentState.Noted;
             } else if (_state == CommitmentState.Accepted)
