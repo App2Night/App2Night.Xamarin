@@ -135,6 +135,15 @@
   <data name="EmailAdress" xml:space="preserve">
     <value>E-Mail</value>
   </data>
+  <data name="Login" xml:space="preserve">
+    <value>Jetzt anmelden!</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Abmelden</value>
+  </data>
+  <data name="Menu" xml:space="preserve">
+    <value>Menü</value>
+  </data>
   <data name="PartyHistory" xml:space="preserve">
     <value>Besuchte Partys</value>
   </data>

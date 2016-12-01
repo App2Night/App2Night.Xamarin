@@ -228,4 +228,13 @@
   <data name="Cityname" xml:space="preserve">
     <value>City</value>
   </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login now!</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="Menu" xml:space="preserve">
+    <value>Menu</value>
+  </data>
 </root>
