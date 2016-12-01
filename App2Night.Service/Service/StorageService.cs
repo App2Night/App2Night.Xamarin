@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
 using Newtonsoft.Json;
@@ -138,6 +139,11 @@ namespace App2Night.Service.Service
             await SaveStorage();
             LogInChanged(true);
            
+        }
+
+        public async Task ClearCache()
+        {
+            UserDialogs.Instance.Toast(new ToastConfig("Not Available"));
         }
 
         private void LogInChanged(bool isLogIn)
