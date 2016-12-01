@@ -79,7 +79,7 @@ namespace App2Night.Service.Service
                 errorMessage = await requestResult.Content.ReadAsStringAsync(); 
             }
             timer.PrintTime(
-                $"Request to {uri} failed {(string.IsNullOrEmpty(errorMessage) ? "" : $"to:\n{errorMessage}")}");
+                $"Request to {uri} failed with {requestResult.StatusCode} {(string.IsNullOrEmpty(errorMessage) ? "." : $"to:\n{errorMessage}")}");
         }
 
         /// <summary>
