@@ -51,8 +51,8 @@ namespace App2Night
             masterDetailNav.Init("App2Night");
             masterDetailNav.AddPage<DashboardPageModel>(AppResources.Dashboard, "\uf015");
             masterDetailNav.AddPage<PartyPickerViewModel>(AppResources.PickAParty, "\uf29b");
-            masterDetailNav.AddPage<CreatePartyViewModel>(AppResources.CreateAParty, "\uf271");
-            masterDetailNav.AddPage<HistoryViewModel>(AppResources.History, "\uf187");
+            masterDetailNav.AddPage<CreatePartyViewModel>(AppResources.CreateAParty, "\uf271", requiresLogin: true);
+            masterDetailNav.AddPage<HistoryViewModel>(AppResources.History, "\uf187", requiresLogin: true);
             masterDetailNav.AddPage<SettingViewModel>(AppResources.Settings, "\uf085");
             masterDetailNav.AddPage<AboutTabbedViewModel>(AppResources.About, "\uf05a");
             return masterDetailNav;

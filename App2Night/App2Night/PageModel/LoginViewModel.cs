@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.Model.HttpModel;
 using App2Night.Model.Model;
@@ -78,7 +79,7 @@ namespace App2Night.PageModel
             }
         }
 
-        public Command ContinueAnonymCommand => new Command(async()=> await ContinueAnonym());
+        public Command ContinueAnonymCommand => new Command(async()=> await ContinueAnonym()); 
 
         private async Task ContinueAnonym()
         {
@@ -110,11 +111,13 @@ namespace App2Night.PageModel
                 }
             }
             if (result != null && result.Success)
-                await ClosePage();
+            {
+                await ClosePage(); 
+            }
         }
 
         private async Task ClosePage()
-        {
+        { 
             await CoreMethods.PopPageModel(true);
         }
     }

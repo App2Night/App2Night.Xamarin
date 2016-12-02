@@ -1,7 +1,6 @@
 ﻿using App2Night.CustomView.Page;
-using FreshMvvm;
 
-namespace App2Night.Page
+namespace App2Night.Page.SubPages
 {
     public class ParticipantPage : CustomContentPage
     {

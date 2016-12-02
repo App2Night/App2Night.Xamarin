@@ -2,11 +2,11 @@
 using App2Night.Data.Language;
 using Xamarin.Forms;
 
-namespace App2Night.Page.SubPages
+namespace App2Night.Page
 {
     public class NavigationPage : ContentPage
     {
-        private readonly ListView _menuListView;
+        public ListView MenuListView { get; }= new ListView();
         Label _nameLabel = new Label();
 
         private Button _logoutBtn = new Button
@@ -21,7 +21,7 @@ namespace App2Night.Page.SubPages
             HorizontalOptions = LayoutOptions.Center
         };
 
-        public NavigationPage(ListView menuListView)
+        public NavigationPage()
         {
             _nameLabel.SetBinding(Label.TextProperty, "User.Name", stringFormat:"Hello {0}");
 
@@ -35,8 +35,7 @@ namespace App2Night.Page.SubPages
             loginContentView.SetBinding(IsVisibleProperty, "IsLogInContentView");
             logoutContentView.SetBinding(IsVisibleProperty, "IsLogOutContentView");
             _logoutBtn.SetBinding(IsVisibleProperty, "IsLogInContentView");
-
-            _menuListView = menuListView;
+             
             if(Device.OS == TargetPlatform.iOS) Padding = new Thickness(0, 20, 0, 0);
             Title = AppResources.Menu;
             
@@ -54,7 +53,7 @@ namespace App2Night.Page.SubPages
                     loginContentView,
                    // partyContentView,
                     logoutContentView,
-                    {menuListView, 0, 1},
+                    {MenuListView, 0, 1},
                     {_logoutBtn, 0, 2}
                 }
             };
@@ -64,7 +63,7 @@ namespace App2Night.Page.SubPages
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
-            _menuListView.RowHeight =  (int) (((Height-50)/9.0*7) / 6);
+            MenuListView.RowHeight =  (int) (((Height-50)/9.0*7) / 6);
         }
 
         private ContentView LoginContentView ()

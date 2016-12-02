@@ -76,7 +76,7 @@
     <Compile Include="PageModel\PartyViewModel.cs" />
     <Compile Include="PageModel\HistoryViewModel.cs" />
     <Compile Include="PageModel\LoginViewModel.cs" />
-    <Compile Include="PageModel\SubPages\NavigationViewModel.cs" />
+    <Compile Include="PageModel\NavigationViewModel.cs" />
     <Compile Include="PageModel\SettingViewModel.cs" />
     <Compile Include="PageModel\SubPages\AboutAppViewModel.cs" />
     <Compile Include="PageModel\SubPages\EditPartyViewModel.cs" />
@@ -94,13 +94,13 @@
     <Compile Include="Page\PartyPickerPage.cs" />
     <Compile Include="Page\HistoryPage.cs" />
     <Compile Include="Page\LoginPage.cs" />
-    <Compile Include="Page\SubPages\NavigationPage.cs" />
+    <Compile Include="Page\NavigationPage.cs" />
     <Compile Include="Page\SettingPage.cs" />
     <Compile Include="Page\SubPages\AboutAppPage.cs" />
     <Compile Include="Page\SubPages\EditPartyPage.cs" />
     <Compile Include="Page\SubPages\EditProfilePage.cs" />
     <Compile Include="Page\SubPages\MyPartysPage.cs" />
-    <Compile Include="Page\ParticipantPage.cs" />
+    <Compile Include="Page\SubPages\ParticipantPage.cs" />
     <Compile Include="DependencyService\ILoadImage.cs" />
     <Compile Include="Page\SubPages\PartyDetailPage.cs" />
     <Compile Include="Page\SubPages\ThirdPartyInfoPage.cs" />

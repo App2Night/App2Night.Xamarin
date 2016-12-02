@@ -1,13 +1,13 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.Model.Model;
+using App2Night.PageModel.SubPages;
 using App2Night.Service.Interface;
 using FreshMvvm;
 using PropertyChanged;
 using Xamarin.Forms;
 
-namespace App2Night.PageModel.SubPages
+namespace App2Night.PageModel
 {
     [ImplementPropertyChanged]
     public class NavigationViewModel : FreshBasePageModel
