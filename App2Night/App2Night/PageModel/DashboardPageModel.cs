@@ -67,6 +67,11 @@ namespace App2Night.PageModel
             MapPins = list;
         }
 
+        public async Task OpenMore(Party party)
+        {
+            await CoreMethods.PushPageModel<PartyDetailViewModel>(party);
+        }
+
         void SetAvailabilitys()
         {
             InterestingPartieAvailable = InterestingPartiesForUser.Any();

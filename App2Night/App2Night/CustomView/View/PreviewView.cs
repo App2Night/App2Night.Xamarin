@@ -1,4 +1,5 @@
 ﻿using System;
+using App2Night.Model.Model;
 using Xamarin.Forms;
 
 namespace App2Night.CustomView.View
@@ -75,6 +76,7 @@ namespace App2Night.CustomView.View
             // add events
             _closeButton.ButtonTapped += CloseButtonOnButtonTapped;
             _moreButton.ButtonTapped += MoreButtonOnTapped;
+            _moreButton.ButtonTapped += (sender, args) => MoreEvent?.Invoke(null, EventArgs.Empty);
             Grid mainGrid = SetInputColumns();
             base.Content = mainGrid;
         }
@@ -168,18 +170,10 @@ namespace App2Night.CustomView.View
 
         public void CloseView()
         {
-            if (CloseViewEvent != null)
-                CloseViewEvent(this, EventArgs.Empty);
+            CloseViewEvent?.Invoke(this, EventArgs.Empty);
         }
 
-        public event EventHandler<object> MoreEvent;
-
-        public virtual void More()
-        {
-            if (MoreEvent != null)
-                MoreEvent(this, EventArgs.Empty);
-        }
-
+        public event EventHandler MoreEvent;
         #endregion
     }
 

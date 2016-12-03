@@ -35,7 +35,6 @@ namespace App2Night.CustomView.View
                 }
             }
         };
-
         #endregion
 
         public PartyPreviewView(Party party, double parentHeight, double parentWidth) : base(party.Name, party)
@@ -43,7 +42,7 @@ namespace App2Night.CustomView.View
             BackgroundColor = Color.White;
             // set button to calculate route
             _routeBtn.Clicked += OpenNavigationToParty;
- 
+            MoreEvent += (sender, args) => More();
             var position = new Position(party.Location.Latitude, party.Location.Longitude);
             _map = new MapWrapper(new Map(MapSpan.FromCenterAndRadius(
                 position,
@@ -60,7 +59,6 @@ namespace App2Night.CustomView.View
                 }
             });
             Grid.SetColumnSpan(_map, 2);
-
             var dateLabel = new Label {Style = _infoLabelStyle};
             dateLabel.SetBinding(Label.TextProperty, "Date", stringFormat: AppResources.Date);
             var startTimeLabel = new Label {Style = _infoLabelStyle};
@@ -109,9 +107,8 @@ namespace App2Night.CustomView.View
         /// <summary>
         /// Change view to PartyDetailPage, if btn is pressed.
         /// </summary>
-        public override async void More()
+        public  async void More()
         {
-            base.More();
             await FreshIOC.Container.Resolve<NavigationViewModel>().OpenMore(Party);
         }
 
@@ -135,7 +132,7 @@ namespace App2Night.CustomView.View
         /// <param name="eventArgs"></param>
         private void OpenNavigationToParty(object sender, EventArgs eventArgs)
         {
-
+            
         }
         #endregion
     }

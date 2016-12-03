@@ -54,10 +54,6 @@ namespace App2Night.PageModel
             IsLogIn = b;
         }
 
-        public async Task OpenMore(Party party)
-        {
-            await CoreMethods.PushPageModel<PartyDetailViewModel>(party);
-        }
         public async Task OpenLogin()
         {
             //Check if user is loged in -> Token is available 
