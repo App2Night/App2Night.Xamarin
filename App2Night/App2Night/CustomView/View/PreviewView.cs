@@ -77,11 +77,11 @@ namespace App2Night.CustomView.View
             _closeButton.ButtonTapped += CloseButtonOnButtonTapped;
             _moreButton.ButtonTapped += MoreButtonOnTapped;
             _moreButton.ButtonTapped += (sender, args) => MoreEvent?.Invoke(null, EventArgs.Empty);
-            Grid mainGrid = SetInputColumns();
+            Grid mainGrid = CreateInputRows();
             base.Content = mainGrid;
         }
 
-        private Grid SetInputColumns()
+        private Grid CreateInputRows()
         {
             var mainGrid = new Grid
             {

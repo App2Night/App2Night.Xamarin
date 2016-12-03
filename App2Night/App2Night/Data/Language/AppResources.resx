@@ -252,4 +252,13 @@
   <data name="Time" xml:space="preserve">
     <value>{0:hh:mm tt}</value>
   </data>
+  <data name="ClearCache" xml:space="preserve">
+    <value>Clear Cache</value>
+  </data>
+  <data name="ClearCacheSettingsHeader" xml:space="preserve">
+    <value>Cache Settings</value>
+  </data>
+  <data name="ClearCacheUsage" xml:space="preserve">
+    <value>It will delete local caches on device. Your aren't able anymore to load cached parties.</value>
+  </data>
 </root>

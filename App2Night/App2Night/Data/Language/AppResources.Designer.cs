@@ -107,6 +107,33 @@ namespace App2Night.Data.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Clear Cache.
+        /// </summary>
+        public static string ClearCache {
+            get {
+                return ResourceManager.GetString("ClearCache", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cache Settings.
+        /// </summary>
+        public static string ClearCacheSettingsHeader {
+            get {
+                return ResourceManager.GetString("ClearCacheSettingsHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It will delete local caches on device. Your aren&apos;t able anymore to load cached parties..
+        /// </summary>
+        public static string ClearCacheUsage {
+            get {
+                return ResourceManager.GetString("ClearCacheUsage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You didn&apos;t attend to a party yet! Former parties will be visible here..
         /// </summary>
         public static string ContHistory {
