@@ -132,6 +132,9 @@
   <data name="Dashboard" xml:space="preserve">
     <value>Dashboard</value>
   </data>
+  <data name="Date" xml:space="preserve">
+    <value>Datum</value>
+  </data>
   <data name="EmailAdress" xml:space="preserve">
     <value>E-Mail</value>
   </data>
@@ -161,6 +164,9 @@
   </data>
   <data name="SignUp" xml:space="preserve">
     <value>Registrieren</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>Uhrzeit</value>
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Absenden</value>
