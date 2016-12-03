@@ -148,15 +148,18 @@ namespace App2Night
 
         public Task PushPage(Xamarin.Forms.Page page, FreshBasePageModel model, bool modal = false, bool animate = true)
         {
-            if (modal)
+            if (IsPresented)
+                IsPresented = false;
+
+            if (modal)  
                 return Detail.Navigation.PushModalAsync(page);
 
             KeyValuePair<MenuCellData, Xamarin.Forms.Page>  innerPage = _pages.FirstOrDefault(p => ((NavigationPage)p.Value).CurrentPage.GetType() == page.GetType());
             if (innerPage.Key != null)
             {
                 return Task.FromResult(ListView.SelectedItem = innerPage.Key);
-            }  
-            return (Detail as NavigationPage).PushAsync(page, animate);    
+            }
+            return (Detail as NavigationPage).PushAsync(page, animate);   
          }
 
         public Task PopPage(bool modal = false, bool animate = true)

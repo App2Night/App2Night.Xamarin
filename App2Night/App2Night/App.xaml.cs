@@ -19,7 +19,7 @@ namespace App2Night
     {
         public static bool MapAvailable { get; private set; }
 
-        CustomMasterDetailContainer _masterDetailNav; 
+        public static CustomMasterDetailContainer _masterDetailNav; 
 
         public App()
         {

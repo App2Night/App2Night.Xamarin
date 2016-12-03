@@ -5,16 +5,13 @@ namespace App2Night.PageModel.SubPages
 {
     public class PartyDetailViewModel : FreshBasePageModel 
     {
-        Party _party;
-        public Party Party
-        {
-            get { return _party;}
-            set { _party = value;  }
-        }
+        public Party Party { get; set; }
 
-        public PartyDetailViewModel(Party parameter)
+
+        public override void Init(object initData)
         {
-            Party = parameter;
-        } 
+            base.Init(initData);
+            Party = (Party) initData;
+        }
     }
 }

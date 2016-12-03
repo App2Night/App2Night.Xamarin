@@ -54,6 +54,8 @@ namespace App2Night.CustomView.Page
             IsVisible = false
         };
 
+        BoxView _referenceView;
+
         public uint OpeningAnimationLength { get; set; } = 500;
         public uint ClosingAnimationLength { get; set; } = 500;
         public uint SwitchingAnimationLength { get; set; } = 500;
@@ -101,15 +103,21 @@ namespace App2Night.CustomView.Page
                      _infoLabel 
                 }
             };
-
+            
+            _referenceView = new BoxView
+            {
+                Color = DeepPink.ToXamarinColor().MultiplyAlpha(0.2),
+                InputTransparent = true
+            };
             var previewGrid = new Grid
             {
                 RowDefinitions =
                 {
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
-                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}
+                    new RowDefinition {Height = new GridLength(4, GridUnitType.Star)},
+                    new RowDefinition {Height = new GridLength(5, GridUnitType.Star)}
                 },
                 Children = {
+                    {_referenceView ,0,1 },
                     { _previewContainer1, 0,1},
                     { _previewContainer2, 0, 1 }
 
@@ -204,7 +212,7 @@ namespace App2Night.CustomView.Page
         /// <typeparam name="TPreviewType">A derivation <see cref="PreviewView"/> that will show the object.</typeparam>
         /// <param name="sender">Object that will be shown in the preview.</param>
         /// <param name="parameter">Parameter for the <see cref="TPreviewType"/>.</param>
-        public async void PreviewItemSelected<TItemType, TPreviewType>(TItemType sender, object[] parameter) where TPreviewType : PreviewView
+        public void PreviewItemSelected<TItemType, TPreviewType>(TItemType sender, object[] parameter) where TPreviewType : PreviewView
         {
             var p = new List<object> { sender };
             p.AddRange(parameter);
@@ -212,13 +220,21 @@ namespace App2Night.CustomView.Page
             //Create an instance of the PreviewView
             _preview = (TPreviewType)Activator.CreateInstance(typeof(TPreviewType), p.ToArray());
             _preview.CloseViewEvent += ClosePreviewEvent;
-            await ShowPreview(_preview);
+            Device.BeginInvokeOnMainThread(async () => await ShowPreview(_preview));
         }
 
-        private async void ClosePreviewEvent(object sender, EventArgs eventArgs)
+        private void ClosePreviewEvent(object sender, EventArgs eventArgs)
         {
             _preview.CloseViewEvent -= ClosePreviewEvent;
-            await ClosePreview();
+            Device.BeginInvokeOnMainThread(async ()=>  await ClosePreview() );
+        } 
+
+        private async Task ShowPreview(PreviewView view)
+        {
+            if (_isPreviewVisible)
+                ChangeToPreview(view);
+            else
+                await OpenPreview(view);
         }
 
         private async Task ClosePreview()
@@ -232,38 +248,45 @@ namespace App2Night.CustomView.Page
             //Preview is not longer visible
             _isPreviewVisible = false;
             //Hide container
-            _previewContainer1.HeightRequest = 0;
-            _previewContainer1.IsVisible = false;
+            //currentContainerRef.HeightRequest = 0;
+            currentContainerRef.IsVisible = false;
             _preview = null;
-            _previewContainer1.Content = null;
-            _previewContainer1.TranslationY = 0;
-        }
-
-        private async Task ShowPreview(PreviewView view)
-        {
-            if (_isPreviewVisible)
-                ChangeToPreview(view);
-            else
-                await OpenPreview(view);
+            currentContainerRef.Content = null;
+            currentContainerRef.TranslationY = 0;
         }
 
         private async Task OpenPreview(PreviewView newView)
         {
+            var height = Height / 9.0 * 5;
+            
+
+            _preview = newView;
             _selectedPreviewContainer = 0;
             //Select previewContainer1 as final container
-            _previewContainer1.Content = newView;
+            _previewContainer1.Content = _preview;
             //Move container to bottom
-            _previewContainer1.TranslationY = newView.HeightRequest;
+            _previewContainer1.TranslationY = height;
+            _previewContainer1.HeightRequest = height;
+            _previewContainer1.WidthRequest = Width;
+
+
             //Make container visible
-            _previewContainer1.IsVisible = true;
+            _previewContainer1.IsVisible = true; 
+            ForceLayout();
             //Start animations in view
-            newView.StartOpeningAnimation(OpeningAnimationLength);
+            _preview.StartOpeningAnimation(OpeningAnimationLength);
             //Move container up
-            await _previewContainer1.TranslateTo(0, 0, OpeningAnimationLength, Easing.CubicInOut);
+
+            var animation = new Animation(d =>
+            {
+                _previewContainer1.TranslationY = d*height;
+            },1,0);
+            animation.Commit(this, "OpeningAnimation", easing: Easing.CubicInOut);
+            //await _previewContainer1.TranslateTo(0, 0, OpeningAnimationLength, Easing.CubicInOut);
             //Preview is visible now
             _isPreviewVisible = true;
             //Set the preview to the new view.
-            _preview = newView;
+            
         }
 
         private void ChangeToPreview(PreviewView newView)

@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks;
-using App2Night.CustomView.Template;
-using App2Night.Model.Enum;
+using System.Threading.Tasks; 
 using App2Night.Model.Model;
 using App2Night.PageModel.SubPages;
 using App2Night.Service.Interface;
@@ -67,9 +65,13 @@ namespace App2Night.PageModel
             MapPins = list;
         }
 
-        public async Task OpenMore(Party party)
+        public void OpenMore(Party party)
         {
-            await CoreMethods.PushPageModel<PartyDetailViewModel>(party);
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                var page = FreshPageModelResolver.ResolvePageModel<PartyDetailViewModel>(party);
+                await App._masterDetailNav.PushPage(page, null);
+            }); 
         }
 
         void SetAvailabilitys()

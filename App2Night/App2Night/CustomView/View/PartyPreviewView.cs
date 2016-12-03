@@ -42,7 +42,7 @@ namespace App2Night.CustomView.View
             BackgroundColor = Color.White;
             // set button to calculate route
             _routeBtn.Clicked += OpenNavigationToParty;
-            MoreEvent += (sender, args) => More();
+            MoreEvent += OnMoreEventTapped;
             var position = new Position(party.Location.Latitude, party.Location.Longitude);
             _map = new MapWrapper(new Map(MapSpan.FromCenterAndRadius(
                 position,
@@ -103,19 +103,12 @@ namespace App2Night.CustomView.View
             Content = new ScrollView {Content = layoutGrid};
         }
 
-        #region Events
-        /// <summary>
-        /// Change view to PartyDetailPage, if btn is pressed.
-        /// </summary>
-        public  async void More()
+        private void OnMoreEventTapped(object sender, EventArgs eventArgs)
         {
-            await FreshIOC.Container.Resolve<DashboardPageModel>().OpenMore(Party);
-        }
+             FreshIOC.Container.Resolve<DashboardPageModel>().OpenMore(Party);
 
-        protected override void OnBindingContextChanged()
-        {
-            base.OnBindingContextChanged();
-        }
+        } 
+         
         /// <summary>
         /// Closes <code>PartyPreviewView</code>.
         /// </summary>
@@ -123,6 +116,7 @@ namespace App2Night.CustomView.View
         /// <param name="eventArgs"></param>
         private void CloseTapGestureRecognizerOnTapped(object sender, EventArgs eventArgs)
         {
+            MoreEvent -= OnMoreEventTapped;
             CloseView();
         }
         /// <summary>
@@ -133,7 +127,6 @@ namespace App2Night.CustomView.View
         private void OpenNavigationToParty(object sender, EventArgs eventArgs)
         {
             
-        }
-        #endregion
+        }  
     }
 }

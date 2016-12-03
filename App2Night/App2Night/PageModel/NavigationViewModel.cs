@@ -66,7 +66,7 @@ namespace App2Night.PageModel
 
         public Command LogOutCommand => new Command(async () => await _storageService.DeleteStorage());
 
-        public Command LogInCommand => new Command(async () => await CoreMethods.PushPageModel<LoginViewModel>());
+        public Command LogInCommand => new Command(async () => await CoreMethods.PushPageModel<LoginViewModel>(null, modal:true));
 
         private async Task Sync()
         {
