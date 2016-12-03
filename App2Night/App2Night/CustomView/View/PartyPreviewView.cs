@@ -109,7 +109,7 @@ namespace App2Night.CustomView.View
         /// </summary>
         public  async void More()
         {
-            await FreshIOC.Container.Resolve<NavigationViewModel>().OpenMore(Party);
+            await FreshIOC.Container.Resolve<DashboardPageModel>().OpenMore(Party);
         }
 
         protected override void OnBindingContextChanged()
