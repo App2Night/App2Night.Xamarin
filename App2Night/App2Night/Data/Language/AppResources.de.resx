@@ -133,6 +133,9 @@
     <value>Dashboard</value>
   </data>
   <data name="Date" xml:space="preserve">
+    <value>{0:dd.MM.yyyy}</value>
+  </data>
+  <data name="DateTime" xml:space="preserve">
     <value>Datum</value>
   </data>
   <data name="EmailAdress" xml:space="preserve">
@@ -170,6 +173,9 @@
   </data>
   <data name="Submit" xml:space="preserve">
     <value>Absenden</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>{0:HH:mm}</value>
   </data>
   <data name="Username" xml:space="preserve">
     <value>Benutzername</value>

@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using App2Night.DependencyService;
+using App2Night.Data.Language;
 using App2Night.Model.Model;
 using App2Night.PageModel;
-using App2Night.PageModel.SubPages;
 using FreshMvvm;
-using Plugin.Geolocator;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -18,9 +15,8 @@ namespace App2Night.CustomView.View
     public class PartyPreviewView : PreviewView
     {
         #region Views
-
         private Party Party => (Party) Item;
-        private MapWrapper _map;
+        private readonly MapWrapper _map;
 
         Button _routeBtn = new Button
         {
@@ -39,8 +35,6 @@ namespace App2Night.CustomView.View
                 }
             }
         };
-
-        private readonly TapGestureRecognizer _closeTapGestureRecognizer = new TapGestureRecognizer();
 
         #endregion
 
@@ -68,17 +62,17 @@ namespace App2Night.CustomView.View
             Grid.SetColumnSpan(_map, 2);
 
             var dateLabel = new Label {Style = _infoLabelStyle};
-            dateLabel.SetBinding(Label.TextProperty, "Date");
+            dateLabel.SetBinding(Label.TextProperty, "Date", stringFormat: AppResources.Date);
             var startTimeLabel = new Label {Style = _infoLabelStyle};
-            startTimeLabel.SetBinding(Label.TextProperty, "Date");
+            startTimeLabel.SetBinding(Label.TextProperty, "Date", stringFormat: AppResources.Time);
             var genreLabel = new Label {Style = _infoLabelStyle};
-            genreLabel.SetBinding(Label.TextProperty, "Genre");
+            genreLabel.SetBinding(Label.TextProperty, "MusicGenre");
 
             var views = new ResourceDictionary()
             {
-                {"Date", dateLabel},
-                {"Start time", startTimeLabel},
-                {"Genre", genreLabel}
+                {AppResources.DateTime, dateLabel},
+                {AppResources.StartTime, startTimeLabel},
+                {AppResources.Genre, genreLabel}
             };
 
             var layoutGrid = new Grid()
@@ -115,16 +109,15 @@ namespace App2Night.CustomView.View
         /// <summary>
         /// Change view to PartyDetailPage, if btn is pressed.
         /// </summary>
-        public override void More()
+        public override async void More()
         {
             base.More();
-            FreshIOC.Container.Resolve<NavigationViewModel>().OpenMore(Party);
+            await FreshIOC.Container.Resolve<NavigationViewModel>().OpenMore(Party);
         }
 
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
-            var test = BindingContext;
         }
         /// <summary>
         /// Closes <code>PartyPreviewView</code>.
@@ -142,6 +135,7 @@ namespace App2Night.CustomView.View
         /// <param name="eventArgs"></param>
         private void OpenNavigationToParty(object sender, EventArgs eventArgs)
         {
+
         }
         #endregion
     }
