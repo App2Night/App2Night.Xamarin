@@ -6,7 +6,6 @@ namespace App2Night.CustomView.View
     public class PreviewView : ContentView
     {
         #region views  
-
         static Style _labelStyle = new Style(typeof(Label))
         {
             BaseResourceKey = "AccentLabel",
@@ -24,7 +23,7 @@ namespace App2Night.CustomView.View
 
         CustomButton _closeButton = new CustomButton()
         {
-            HorizontalOptions = LayoutOptions.Start,
+            HorizontalOptions = LayoutOptions.End,
             WidthRequest = 50,
             Text = "\uf078",
             VerticalOptions = LayoutOptions.Center,
@@ -43,7 +42,8 @@ namespace App2Night.CustomView.View
         Label _titleLabel = new Label
         {
             Style = _labelStyle,
-            HorizontalOptions = LayoutOptions.Center
+            HorizontalOptions = LayoutOptions.CenterAndExpand,
+            VerticalOptions = LayoutOptions.Center
         };
 
         private BoxView _middleBoxView = new BoxView
@@ -63,7 +63,6 @@ namespace App2Night.CustomView.View
         }
 
         readonly ContentView _content = new ContentView();
-
         #endregion
 
         public PreviewView(string title, object item)
@@ -76,6 +75,12 @@ namespace App2Night.CustomView.View
             // add events
             _closeButton.ButtonTapped += CloseButtonOnButtonTapped;
             _moreButton.ButtonTapped += MoreButtonOnTapped;
+            Grid mainGrid = SetInputColumns();
+            base.Content = mainGrid;
+        }
+
+        private Grid SetInputColumns()
+        {
             var mainGrid = new Grid
             {
                 RowSpacing = 0,
@@ -94,7 +99,7 @@ namespace App2Night.CustomView.View
                     {
                         new Grid
                         {
-                            ColumnSpacing = 0,
+                            ColumnSpacing = 2,
                             ColumnDefinitions =
                             {
                                 new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
@@ -114,7 +119,7 @@ namespace App2Night.CustomView.View
                     {_content, 0, 3}
                 }
             };
-            base.Content = mainGrid;
+            return mainGrid;
         }
 
         #region Events
