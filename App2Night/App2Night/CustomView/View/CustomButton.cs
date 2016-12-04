@@ -3,10 +3,13 @@ using System.Threading.Tasks;
 using Xamarin.Forms;
 
 namespace App2Night.CustomView.View
-{
+{  
     public class CustomButton : ContentView
     {
-        public Label ButtonLabel { get; } = new Label();
+        public Label ButtonLabel { get; } = new Label(); 
+        public Animation OnTabAnimation { get; set; }
+
+        public Action<double, bool> AnimationCallback { get; set; } 
 
         public event EventHandler ButtonTapped;
 
@@ -86,29 +89,30 @@ namespace App2Night.CustomView.View
         TapGestureRecognizer gestureRecognizer = new TapGestureRecognizer();
         public CustomButton()
         {
+            OnTabAnimation = new Animation
+            {
+                {
+                    0, 0.5, new Animation(d => { ButtonLabel.Scale = d; }, 1, ScaleAnimation)
+                },
+                {
+                    0.5, 1, new Animation(d => { ButtonLabel.Scale = d; }, ScaleAnimation, 1)
+                }
+            };
+
             var gestureRecognizer = new TapGestureRecognizer
             {
-                Command = new Command(async () =>
-                {
-                    await Animation();
-                    Command?.Execute(null);
-                    await OnButtonTapped();
-                })
+                Command = new Command(async ()=> await OnButtonTapped())
             };
             GestureRecognizers.Add(gestureRecognizer);
             Content = ButtonLabel;
 
             _defaultOpacity = ButtonLabel.Opacity;
-        }
-        private async Task Animation()
-        {
-            var animation = new Animation(d => { ButtonLabel.Scale = d; }, 1, ScaleAnimation);
-            var nextAnimation = new Animation(d => { ButtonLabel.Scale = d; }, ScaleAnimation, 1);
-            animation.Commit(this, "Scale", length: 100U , finished: delegate { nextAnimation.Commit(this, "Descale"); });
-        }
+        }  
 
         protected async Task OnButtonTapped()
         {
+            OnTabAnimation?.Commit(this, "OnTabAnimation", finished: AnimationCallback);
+            Command?.Execute(null);
             ButtonTapped?.Invoke(this, EventArgs.Empty);
         }
     }
