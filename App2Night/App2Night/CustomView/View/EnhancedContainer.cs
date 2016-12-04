@@ -60,7 +60,13 @@ namespace App2Night.CustomView.View
             HorizontalOptions = LayoutOptions.Center,
             Padding = new Thickness(0,20)
         };
-        Label _noContentText = new Label {Text = "No data loaded." }; 
+
+        Label _noContentLabel = new Label
+        {
+            Text = "No data loaded.",
+            Margin = new Thickness(20, 0),
+            HorizontalTextAlignment = TextAlignment.Center
+        }; 
 
         public Color SeperatorColor
         {
@@ -154,8 +160,8 @@ namespace App2Night.CustomView.View
 
         public string ContentMissingText
         {
-            get { return _noContentText.Text; }
-            set { _noContentText.Text = value; }
+            get { return _noContentLabel.Text; }
+            set { _noContentLabel.Text = value; }
         }
 
         public bool TopSpacerVisible
@@ -186,20 +192,20 @@ namespace App2Night.CustomView.View
         private bool _noContentWarningVisible = true;  
 
         public EnhancedContainer()
-        {
-            var noContentViewContainer = new Grid
-            { 
-                Children = {_noContentView}
-            };
-            _moreBtn.ButtonLabel.Style = (Style) Application.Current.Resources["AccentLabel"];
-            _topBoxView.IsVisible = false;
+        { 
+            
             _noContentView.Children.Add(new Label
             {
                 FontFamily = "FontAwesome",
                 Text = "\uf11a",
-                FontSize = 100,
+                FontSize = 100, 
                 FontAttributes = FontAttributes.Bold
             });
+            _noContentView.Children.Add(_noContentLabel);
+
+
+            _moreBtn.ButtonLabel.Style = (Style)Application.Current.Resources["AccentLabel"];
+            _topBoxView.IsVisible = false;
             _moreBtn.ButtonTapped += MoreBtnOnButtonTapped;
             SetNoContentViewVisiblity(ContentWarningVisible);
             _moreBtn.ButtonLabel.FontSize = 25; 
@@ -222,7 +228,7 @@ namespace App2Night.CustomView.View
             Children.Add(_nameLabel, 0, 1);
             Children.Add(_moreBtn, 0, 1);
             Children.Add(_middleBoxView, 0, 2);
-            Children.Add(noContentViewContainer, 0, 3); 
+            Children.Add(_noContentView, 0, 3); 
             Children.Add(_bottomBoxView, 0, 4);
 
             SpacerSize = _spacerSize; 

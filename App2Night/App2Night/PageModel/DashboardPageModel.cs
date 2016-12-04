@@ -7,6 +7,7 @@ using App2Night.Model.Model;
 using App2Night.PageModel.SubPages;
 using App2Night.Service.Interface;
 using FreshMvvm;
+using Plugin.Share;
 using PropertyChanged;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
@@ -64,6 +65,14 @@ namespace App2Night.PageModel
             }
             MapPins = list;
         }
+
+        public async Task ShareParty(Party party)
+        {
+            await
+                CrossShare.Current.Share($"Hey, wanna join the {party.Name} party?",
+                    $"{party.Name} is on {party.Date.ToString("d")}");
+        }
+
 
         public void OpenMore(Party party)
         {

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using App2Night.CustomView.View;
 using App2Night.Model.Enum;
 using App2Night.Model.Model;
@@ -65,9 +66,15 @@ namespace App2Night.CustomView.Template
             HasShadow = true;
             SetBindings();
 
+            _shareIconLabel.ButtonTapped += ShareIconLabelOnButtonTapped;
             _tapGestureRecognizer.Tapped += TappedLikeBtn;
             _likeButton.GestureRecognizers.Add(_tapGestureRecognizer);
             Content = CreateInputColumns();
+        }
+
+        private void ShareIconLabelOnButtonTapped(object sender, EventArgs eventArgs)
+        {
+            Task.Run(async ()=> await FreshIOC.Container.Resolve<DashboardPageModel>().ShareParty((Party) BindingContext));
         }
 
         private void SetBindings()

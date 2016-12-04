@@ -72,10 +72,16 @@ namespace App2Night.CustomView.View
             Item = item;
             _titleLabel.Text = title;
             _moreButton.ButtonLabel.Style = _labelStyle;
+            _moreButton.OnTabAnimation = new Animation(d => { _moreButton.TranslationX = d * 100; }, 0, 1);
+            _moreButton.AnimationCallback = (d, b) =>
+            {
+                _moreButton.TranslationX = 0;
+            };
+
             _closeButton.ButtonLabel.Style = _labelStyle;
+            _closeButton.OnTabAnimation = null;
             // add events
-            _closeButton.ButtonTapped += CloseButtonOnButtonTapped;
-            _moreButton.ButtonTapped += MoreButtonOnTapped;
+            _closeButton.ButtonTapped += CloseButtonOnButtonTapped; 
             _moreButton.ButtonTapped += (sender, args) => MoreEvent?.Invoke(null, EventArgs.Empty);
             Grid mainGrid = CreateInputRows();
             base.Content = mainGrid;
@@ -134,8 +140,8 @@ namespace App2Night.CustomView.View
         {
             _titleLabel.SetBinding(Label.TextProperty, "Name");
 
-            _closeButton.ButtonLabel.Rotation = 180;
-            Animation openingAnimation = new Animation(d => { _closeButton.ButtonLabel.Rotation = 180*d; }, 1, 0);
+            _closeButton.ButtonLabel.RotationX = 180;
+            Animation openingAnimation = new Animation(d => { _closeButton.ButtonLabel.RotationX = 180*d; }, 1, 0);
             openingAnimation.Commit(this, "StartOpeningAnimation", length: length);
         }
 
@@ -145,21 +151,10 @@ namespace App2Night.CustomView.View
         /// <param name="length"><see cref="uint"/>of the length of the animation.</param>
         public void StartClosingAnimataion(uint length = 500U)
         {
-            _closeButton.ButtonLabel.Rotation = 0;
-            Animation openingAnimation = new Animation(d => { _closeButton.ButtonLabel.Rotation = 180*d; }, 0, 1);
+            _closeButton.ButtonLabel.RotationX = 0;
+            Animation openingAnimation = new Animation(d => { _closeButton.ButtonLabel.RotationX = 180*d; }, 0, 1);
             openingAnimation.Commit(this, "StartOpeningAnimation", length: length);
-        }
-
-        /// <summary>
-        /// Handles <see cref="_moreButton"/> tapped event. Animation fired and <see cref="VisualElement.TranslationX"/> changes.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        private void MoreButtonOnTapped(object sender, EventArgs e)
-        {
-            Animation moveAnimation = new Animation(d => { _moreButton.TranslationX = d*100; }, 0, 1);
-            moveAnimation.Commit(this, "MoveMoreButton", length: 1000U, finished: (d, b) => _moreButton.TranslationX = 0);
-        }
+        } 
 
         private void CloseButtonOnButtonTapped(object sender, EventArgs eventArgs)
         {
