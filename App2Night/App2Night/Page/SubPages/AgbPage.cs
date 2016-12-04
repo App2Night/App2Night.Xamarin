@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Reflection;
 using App2Night.Data.Language;
+using App2Night.PageModel.SubPages;
 using FreshMvvm;
 using Xamarin.Forms;
 
@@ -8,18 +9,14 @@ namespace App2Night.Page.SubPages
 {
     public class AgbPage : FreshBaseContentPage
     {
+        private Label _agbLabel = new Label();
         public AgbPage()
         {
             Title = AppResources.AgbHeader;
 
-            var assembly = typeof(AgbPage).GetTypeInfo().Assembly;
-            Stream stream = assembly.GetManifestResourceStream("App2Night.Data.Licenses.AGB.txt");
-            string text = "";
-            using (var reader = new System.IO.StreamReader(stream))
-            {
-                text = reader.ReadToEnd();
-            }
-            Content = new ScrollView {Content = new Label {Text = text} , Padding = new Thickness(5)};
+            _agbLabel.SetBinding(Label.TextProperty, nameof(AgbViewModel.AgbText));
+            
+            Content = new ScrollView {Content = _agbLabel , Padding = new Thickness(5)};
         }
     }
 }
