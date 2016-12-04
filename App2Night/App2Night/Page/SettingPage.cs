@@ -11,9 +11,10 @@ namespace App2Night.Page
 {
     public class SettingPage : CustomContentPage
     {
-        private static Thickness _defaultMargin = new Thickness(5, 0);
+        private static int _defaultFontSize = 18;
 
         #region Views
+
         private InputContainer<Entry> _cityNameEntry = new InputContainer<Entry>
         {
             Input =
@@ -59,35 +60,31 @@ namespace App2Night.Page
 
         private Grid _grid;
 
-        Label _gpsSettingHeader = new Label
-        {
-            Text = AppResources.GpsSettingHeader
-        };
-
-        Label _clearCacheLabel = new Label
-        {
-            Text = AppResources.ClearCacheSettingsHeader,
-            Margin = new Thickness(0,25,0,0)
-        };
         Button _clearCacheButton = new Button
         {
             Text = AppResources.ClearCache,
             HorizontalOptions = LayoutOptions.FillAndExpand
         };
+
+        CustomButton _readAgButton = new CustomButton
+        {
+            ButtonLabel = { FontFamily = "FontAwesome", Text = "\uf061", FontSize = 25},
+            HorizontalOptions = LayoutOptions.End,
+        };
+
         #endregion
 
         public SettingPage()
         {
             SetBindings();
             _gpsEnabledSwitch.Toggled += LocationChanger;
-            _clearCacheButton.Clicked += ClearCache;
             _grid = CreateInputRows();
             var stackLayout = new StackLayout
             {
                 Padding = new Thickness(5),
                 Children =
                 {
-                    _gpsSettingHeader,
+                    new Label {Text = AppResources.GpsSettingHeader, FontSize = _defaultFontSize},
                     _gpsRangeSlider,
                     new Grid
                     {
@@ -99,50 +96,69 @@ namespace App2Night.Page
                     },
                     _grid,
                     new Label {Text = AppResources.GpsUsage},
-                    _clearCacheLabel,
+                    new Label {Text = AppResources.ClearCacheSettingsHeader, Margin = new Thickness(0,50,0,15),FontSize = _defaultFontSize},
                     _clearCacheButton,
                     new Label {Text = AppResources.ClearCacheUsage},
+                    new Label {Text = AppResources.AgbHeader, Margin = new Thickness(0,50,0,15),FontSize = _defaultFontSize},
+                    new Grid
+                    {
+                        Children =
+                        {
+                            _readAgButton,
+                            new Label {Text = AppResources.AgbContent, HorizontalOptions = LayoutOptions.Start}
+                        }
+                    },
                 }
             };
-            Content = stackLayout;
+            Content = new ScrollView{Content = stackLayout};
         }
 
         private void SetBindings()
         {
+            // configure GPS range 
             _gpsRangeSlider.SetBinding(Slider.ValueProperty, nameof(SettingViewModel.SelectedRange));
             _gpsEnabledSwitch.SetBinding(Switch.IsToggledProperty, nameof(SettingViewModel.GpsEnabled));
+            // bind entries to validate input
             _zipCodetEntry.SetBinding(Entry.TextProperty, nameof(SettingViewModel.Zipcode));
             _cityNameEntry.SetBinding(Entry.TextProperty, nameof(SettingViewModel.CityName));
             _numberEntry.SetBinding(Entry.TextProperty, nameof(SettingViewModel.HouseNumber));
             _streetEntry.SetBinding(Entry.TextProperty, nameof(SettingViewModel.StreetName));
-
+            // checks if current input is position on map and change symbol
             _zipCodetEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, nameof(SettingViewModel.ValidZipcode));
-            _cityNameEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, nameof(SettingViewModel.ValidCityname));
-            _numberEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, nameof(SettingViewModel.ValidHousenumber));
-            _streetEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, nameof(SettingViewModel.ValidHousenumber));
+            _cityNameEntry.SetBinding(InputContainer<Entry>.InputValidateProperty,
+                nameof(SettingViewModel.ValidCityname));
+            _numberEntry.SetBinding(InputContainer<Entry>.InputValidateProperty,
+                nameof(SettingViewModel.ValidHousenumber));
+            _streetEntry.SetBinding(InputContainer<Entry>.InputValidateProperty,
+                nameof(SettingViewModel.ValidHousenumber));
+            // checks if user want to delete cache
+            _clearCacheButton.SetBinding(Button.CommandProperty, nameof(SettingViewModel.ValidateClearCacheCommand));
+            _readAgButton.SetBinding(CustomButton.CommandProperty, nameof(SettingViewModel.MoveToReadAgbCommand));
         }
 
-        private void ClearCache(object sender, EventArgs e)
-        {
-            UserDialogs.Instance.Confirm(new ConfirmConfig().SetMessage("").SetAction(b => {}));
-        }
-
+        /// <summary>
+        /// Expands entries for manuel location input if <see cref="Switch.IsToggled"/>, otherwise entries collapse and hidden for user.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void LocationChanger(object sender, ToggledEventArgs e)
         {
             if (((Switch) sender).IsToggled)
             {
                 _gpsRangeSlider.IsEnabled = true;
-                _gpsSettingHeader.IsEnabled = true;
                 await CollapseLocationChanger();
             }
             else
             {
                 _gpsRangeSlider.IsEnabled = false;
-                _gpsSettingHeader.IsEnabled = false;
                 await ExpandLocationChanger();
             }
         }
 
+        /// <summary>
+        ///  Animates <see cref="Grid.HeightRequest"/> from 0 to 1 to show it. Changes visibility to true.
+        /// </summary>
+        /// <returns></returns>
         private async Task ExpandLocationChanger()
         {
             _zipCodetEntry.IsVisible = true;
@@ -153,10 +169,14 @@ namespace App2Night.Page
             entryAnimation.Commit(this, "Animation", easing: Easing.BounceOut, length: 500U);
         }
 
+        /// <summary>
+        /// Animates <see cref="Grid.HeightRequest"/> from 1 to 0 to hide it. Finally changes visibility to false.
+        /// </summary>
+        /// <returns></returns>
         private async Task CollapseLocationChanger()
         {
             Animation entryAnimation = new Animation(d => { _grid.HeightRequest = d*100; }, 1, 0);
-            entryAnimation.Commit(this, "Animation", easing: Easing.Linear, length: 500U, finished: (d, b) =>
+            entryAnimation.Commit(this, "Animation", easing: Easing.Linear, finished: (d, b) =>
             {
                 _zipCodetEntry.IsVisible = false;
                 _cityNameEntry.IsVisible = false;
@@ -165,18 +185,10 @@ namespace App2Night.Page
             });
         }
 
-        private void TextLength(object sender, TextChangedEventArgs e)
-        {
-            int _limit = 6; //Enter text limit
-
-            string text = ((InputContainer<Entry>) sender).Input.Text; //Get Current Text
-            if (text.Length > _limit) //If it is more than your character restriction
-            {
-                text = text.Remove(text.Length - 1); // Remove Last character
-                ((InputContainer<Entry>) sender).Input.Text = text; //Set the Old value
-            }
-        }
-
+        /// <summary>
+        /// Initializes Grid for <see cref="Entry"/>'s
+        /// </summary>
+        /// <returns></returns>
         private Grid CreateInputRows()
         {
             return new Grid
@@ -190,6 +202,7 @@ namespace App2Night.Page
                 Children =
                 {
                     {
+                        // Street name and house number entry
                         new Grid
                         {
                             ColumnDefinitions = new ColumnDefinitionCollection
@@ -208,6 +221,7 @@ namespace App2Night.Page
                     {
                         new Grid
                         {
+                            // City name and zipcode
                             ColumnDefinitions = new ColumnDefinitionCollection
                             {
                                 new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},

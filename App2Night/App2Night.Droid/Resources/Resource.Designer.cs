@@ -3604,11 +3604,11 @@ namespace App2Night.Droid
 		public partial class String
 		{
 			
-			// aapt resource value: 0x7f060047
-			public const int ApplicationName = 2131099719;
-			
 			// aapt resource value: 0x7f060046
-			public const int Hello = 2131099718;
+			public const int ApplicationName = 2131099718;
+			
+			// aapt resource value: 0x7f060045
+			public const int Hello = 2131099717;
 			
 			// aapt resource value: 0x7f06002e
 			public const int abc_action_bar_home_description = 2131099694;
@@ -3982,8 +3982,8 @@ namespace App2Night.Droid
 			// aapt resource value: 0x7f06008e
 			public const int hockeyapp_update_version_details_label = 2131099790;
 			
-			// aapt resource value: 0x7f060045
-			public const int library_name = 2131099717;
+			// aapt resource value: 0x7f060047
+			public const int library_name = 2131099719;
 			
 			// aapt resource value: 0x7f06008f
 			public const int maps_key = 2131099791;

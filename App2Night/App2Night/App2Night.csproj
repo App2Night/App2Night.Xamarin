@@ -69,6 +69,8 @@
     </Compile>
     <Compile Include="DependencyService\IUserLocationService.cs" />
     <Compile Include="DependencyService\IAndroidAppLookupService.cs" />
+    <Compile Include="PageModel\SubPages\AgbViewModel.cs" />
+    <Compile Include="Page\SubPages\AgbPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PageModel\AboutTabbedViewModel.cs" />
     <Compile Include="PageModel\CreatePartyViewModel.cs" />
@@ -250,6 +252,7 @@
     <EmbeddedResource Include="Data\Licenses\XamPlugin.txt" />
     <EmbeddedResource Include="Data\Licenses\JsonNet.txt" />
     <EmbeddedResource Include="Data\Image\icon.png" />
+    <EmbeddedResource Include="Data\Licenses\AGB.txt" />
     <Content Include="FodyWeavers.xml" />
   </ItemGroup>
   <ItemGroup>

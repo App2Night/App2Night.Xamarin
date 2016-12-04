@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
+using App2Night.Data.Language;
 using App2Night.Model.Model;
+using App2Night.PageModel.SubPages;
 using App2Night.Service.Helper;
 using App2Night.Service.Interface;
 using FreshMvvm;
@@ -14,8 +17,10 @@ namespace App2Night.PageModel
     public class SettingViewModel : FreshBasePageModel
     {
         private readonly IStorageService _storageService;
+        private readonly IDataService _dataService;
         private int _selectedRange;
         private string _cityName;
+
         public string CityName
         {
             get { return _cityName; }
@@ -23,10 +28,11 @@ namespace App2Night.PageModel
             {
                 _cityName = value;
                 StartLocationValidation();
-                
             }
         }
+
         private string _houseNumber;
+
         public string HouseNumber
         {
             get { return _houseNumber; }
@@ -36,7 +42,9 @@ namespace App2Night.PageModel
                 StartLocationValidation();
             }
         }
+
         private string _streetName;
+
         public string StreetName
         {
             get { return _streetName; }
@@ -46,7 +54,9 @@ namespace App2Night.PageModel
                 StartLocationValidation();
             }
         }
+
         private string _zipcode;
+
         public string Zipcode
         {
             get { return _zipcode; }
@@ -55,22 +65,20 @@ namespace App2Night.PageModel
                 _zipcode = value;
                 StartLocationValidation();
             }
-
         }
 
+        [AlsoNotifyFor(nameof(GpsManuel))]
         public bool ValidStreetname { get; private set; }
 
+        [AlsoNotifyFor(nameof(GpsManuel))]
         public bool ValidCityname { get; private set; }
 
+        [AlsoNotifyFor(nameof(GpsManuel))]
         public bool ValidHousenumber { get; private set; }
 
+        [AlsoNotifyFor(nameof(GpsManuel))]
         public bool ValidZipcode { get; private set; }
 
-
-        public SettingViewModel(IStorageService storageService)
-        {
-            _storageService = storageService; 
-        }
 
         public int SelectedRange
         {
@@ -89,15 +97,60 @@ namespace App2Night.PageModel
             {
                 _storageService.Storage.UseGps = value;
                 _storageService.SaveStorage();
-                //TODO show a manuel position entry view if usegps = false 
             }
         }
 
-        public Command ClearCacheCommand => new Command(async () => await _storageService.ClearCache());
+        private Location _gpsManuelLocation;
+
+        /// <summary>
+        /// Returns specified location of the user. Checks if GPS is disenabled, otherwise value is null.
+        /// </summary>
+        public Location GpsManuel
+        {
+            get { return _gpsManuelLocation; }
+            set
+            {
+                var result = ValidCityname
+                             && ValidHousenumber
+                             && ValidStreetname
+                             && ValidZipcode;
+                _gpsManuelLocation = new Location
+                {
+                    CityName = CityName,
+                    HouseNumber = HouseNumber,
+                    StreetName = StreetName,
+                    Zipcode = Zipcode
+                };
+                if (result && GpsEnabled)
+                {
+                    //TODO Update Position of user
+                }
+            }
+        }
+
+        public Command ValidateClearCacheCommand => new Command(() =>
+        {
+            UserDialogs.Instance.Confirm(
+                new ConfirmConfig().SetMessage(AppResources.ClearCacheValid)
+                    .SetOkText(AppResources.Yes)
+                    .SetCancelText(AppResources.No)
+                    .SetAction(async b =>
+                    {
+                        if (b)
+                        {
+                            await _storageService.ClearCache();
+                        }
+                    }));
+        });
+
+        public Command MoveToReadAgbCommand => new Command(async () => await CoreMethods.PushPageModel<AgbViewModel>());
+
         #region ValidatePosition
+
         DateTime _lastLocationChange = new DateTime();
 
         private CancellationTokenSource _lastCancellationTokenSource;
+
         private void StartLocationValidation()
         {
             if (_lastCancellationTokenSource != null)
@@ -180,7 +233,9 @@ namespace App2Night.PageModel
                 }
             }
         }
+
         #endregion
+
         bool IsEqualOrContains(string final, string notFinal)
         {
             if (string.IsNullOrEmpty(final)) return false;
@@ -202,6 +257,12 @@ namespace App2Night.PageModel
         string NormalizeString(string s)
         {
             return s.ToLower().Replace(" ", "");
+        }
+
+        public SettingViewModel(IStorageService storageService, IDataService dataService)
+        {
+            _storageService = storageService;
+            _dataService = dataService;
         }
     }
 }
