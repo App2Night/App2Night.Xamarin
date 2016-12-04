@@ -261,4 +261,19 @@
   <data name="ClearCacheUsage" xml:space="preserve">
     <value>It will delete local caches on device. Your aren't able anymore to load cached parties.</value>
   </data>
+  <data name="ClearCacheValid" xml:space="preserve">
+    <value>Do you really want to clear all cache?.</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="AgbContent" xml:space="preserve">
+    <value>Read AGB</value>
+  </data>
+  <data name="AgbHeader" xml:space="preserve">
+    <value>AGB of this App</value>
+  </data>
 </root>

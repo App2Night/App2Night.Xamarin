@@ -89,6 +89,24 @@ namespace App2Night.Data.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Read AGB.
+        /// </summary>
+        public static string AgbContent {
+            get {
+                return ResourceManager.GetString("AgbContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to AGB of this App.
+        /// </summary>
+        public static string AgbHeader {
+            get {
+                return ResourceManager.GetString("AgbHeader", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Age.
         /// </summary>
         public static string Age {
@@ -130,6 +148,15 @@ namespace App2Night.Data.Language {
         public static string ClearCacheUsage {
             get {
                 return ResourceManager.GetString("ClearCacheUsage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Do you really want to clear all cache?..
+        /// </summary>
+        public static string ClearCacheValid {
+            get {
+                return ResourceManager.GetString("ClearCacheValid", resourceCulture);
             }
         }
         
@@ -359,6 +386,15 @@ namespace App2Night.Data.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No.
+        /// </summary>
+        public static string No {
+            get {
+                return ResourceManager.GetString("No", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Recent parties.
         /// </summary>
         public static string PartyHistory {
@@ -481,6 +517,15 @@ namespace App2Night.Data.Language {
         public static string Username {
             get {
                 return ResourceManager.GetString("Username", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Yes.
+        /// </summary>
+        public static string Yes {
+            get {
+                return ResourceManager.GetString("Yes", resourceCulture);
             }
         }
         
