@@ -128,19 +128,31 @@ namespace App2Night.Service.Service
                 zipcode, type, description);
 
             //Send the create party request
-            var result =
+            Result <Guid> result =
                 await
                     _clientService.SendRequest<Guid>("api/party", RestType.Post, bodyParameter: partyCreationObject,
                         token: Token.AccessToken);
-            DebugHelper.PrintDebug(DebugType.Info, $"Guid of the created party is {result.Data}");
 
-            if (!result.Success) return result;
 
-            //Get the created party if the creation was successfull. 
-            var party = await GetParty(result.Data);
+            Result<Party> partyResult = new Result<Party>
+            {
+                IsCached = result.IsCached,
+                Message = result.Message,
+                RequestFailedToException = result.RequestFailedToException,
+                StatusCode = result.StatusCode,
+                Success = result.Success
+            };
+
+            if (result.Success)
+            {
+                DebugHelper.PrintDebug(DebugType.Info, $"Guid of the created party is {result.Data}");
+                //Get the created party if the creation was successfull. 
+
+                partyResult = await GetParty(result.Data);
+            } 
 
             //Return the created party
-            return party;
+            return partyResult;
         }
 
         /// <summary>
@@ -389,9 +401,18 @@ namespace App2Night.Service.Service
             //Request the party with the given id
             var result =
                 await
-                    _clientService.SendRequest<Party>("api/party", RestType.Get, urlQuery: "/id=" + id.ToString("D"),
+                    _clientService.SendRequest<Party []>("api/party", RestType.Get, urlQuery: "/id=" + id.ToString("D"),
                         token: Token.AccessToken);
-            return result;
+
+            //We have to correct the result since the backend is sending us bullshit data.
+            var fixedResult = new Result<Party>
+            {
+                StatusCode = result.StatusCode,
+                Success = result.Success,
+                Data = result.Data?[0]
+            };
+
+            return fixedResult;
         }
 
         async Task<bool> CheckIfTokenIsValid()

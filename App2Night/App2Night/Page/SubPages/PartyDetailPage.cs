@@ -46,12 +46,12 @@ namespace App2Night.Page.SubPages
 
         public PartyDetailPage()
         {
-            this.SetBinding(TitleProperty,  "Party.Name");
+            this.SetBinding(TitleProperty, "Party.Name");
             _nameLabel.Input.SetBinding(Label.TextProperty, "Party.Name");
-            _descriptionLabel.Input.SetBinding( Label.TextProperty, "Party.Description");
-            _dateLabel.Input.SetBinding( Label.TextProperty, "Party.Date");
-            _partyTypeLabel.Input.SetBinding( Label.TextProperty, "Party.PartyType");
-            _creationDateLabel.Input.SetBinding( Label.TextProperty, "Party.CreationDateTime");
+            _descriptionLabel.Input.SetBinding(Label.TextProperty, "Party.Description");
+            _dateLabel.Input.SetBinding(Label.TextProperty, "Party.Date");
+            _partyTypeLabel.Input.SetBinding(Label.TextProperty, "Party.PartyType");
+            _creationDateLabel.Input.SetBinding(Label.TextProperty, "Party.CreationDateTime");
             // TODO Bind coodinates to Map
             //BindToViewModel(_partyLocation.Map, Map.NavigationProperty, vm => vm.Party.Coordinates);
             Content = new StackLayout

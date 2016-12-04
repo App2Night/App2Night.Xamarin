@@ -109,7 +109,7 @@ namespace App2Night.CustomView.Page
         /// </summary>
         public new Xamarin.Forms.View Content
         {
-            get { return _infoContainer.Children.Count > 2 ? _infoContainer.Children[3] : null; }
+            get { return _infoContainer.Children.Count > 2 ? _infoContainer.Children[2] : null; }
             set
             {
                 if (_infoContainer.Children.Count > 2)

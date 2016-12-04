@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.Model.Enum;
 using App2Night.Model.Model;
+using App2Night.PageModel.SubPages;
 using App2Night.Service.Helper;
 using App2Night.Service.Interface;
 using FreshMvvm;
@@ -94,15 +95,17 @@ namespace App2Night.PageModel
         public bool AcceptButtonEnabled
         {
             get
-            {
-                var enabled = ValidCityname
-                       && ValidDate
-                       && ValidDescription
-                       && ValidHousenumber
+            { 
+                //TODO add again after backend fixes his endpoint.
+                var enabled =
+                       //ValidCityname&&  
+                       ValidDescription
+                       //&& ValidHousenumber
                        && ValidLocationname
                        && ValidName
-                       && ValidZipcode
-                       && ValidStreetname;
+                       //&& ValidZipcode
+                       //&& ValidStreetname
+                       ;
                 return enabled;
             }
         }
@@ -183,7 +186,7 @@ namespace App2Night.PageModel
                     //The user should come to the dashboard after popping the party detail page.
                     await CoreMethods.SwitchSelectedMaster<DashboardPageModel>();
 
-                    await CoreMethods.PushPageModel<PartyViewModel>(result.Data, true);
+                    await CoreMethods.PushPageModel<PartyDetailViewModel>(result.Data);
                 } 
                 //TODO Handle create party failure
             }   
