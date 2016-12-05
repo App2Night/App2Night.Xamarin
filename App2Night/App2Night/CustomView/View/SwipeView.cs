@@ -36,11 +36,22 @@ namespace App2Night.CustomView.View
                         Content = new Label() {Text = "Override this template with SetTemplate."}
                     };
                 }
+                //Little shake to give a natural feeling
+                card.Rotation = GenerateRandomNumber();
                 card.BindingContext = o;
                 card.InputTransparent = true;
                 _mainGrid.Children.Add(card);
             }
             SetCardSize();
+        }
+
+
+        private int lastRandom = 1337;
+        double GenerateRandomNumber()
+        {
+            var random = new Random(lastRandom);
+            lastRandom = random.Next(-750, 750);
+            return lastRandom/100.0;
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -90,48 +101,53 @@ namespace App2Night.CustomView.View
         double _lastX = 0;
         double _lastY = 0;
         private bool _removed = false;
-        private async void GestureOnPanUpdated(object sender, PanUpdatedEventArgs panUpdatedEventArgs)
+         
+
+        private void GestureOnPanUpdated(object sender, PanUpdatedEventArgs panUpdatedEventArgs)
         {
-            var x = panUpdatedEventArgs.TotalX;
-            var y = panUpdatedEventArgs.TotalY;
-            if (_topView != null)
+            Device.BeginInvokeOnMainThread(async () =>
             {
-                if (x == 0 && y == 0) //reset view!
+                var x = panUpdatedEventArgs.TotalX;
+                var y = panUpdatedEventArgs.TotalY;
+                if (_topView != null)
                 {
-                    Debug.WriteLine("Reset");
-                    _removed = false;
-                    if (_lastX != 0 || _lastY != 0)
-                        await _topView.TranslateTo(0, 0, 500U, Easing.CubicInOut);
-                }
-                else if(!_removed)
-                {
-                    Debug.WriteLine("Pan: " + x+ " " + y);
-
-                    _lastX = x;
-                    _lastY = y; 
-                    var bound = Width*(5/7.0);
-                    _removed = true;
-                   
-
-                    if (x > bound) //Move right out of the picture
+                    if (x == 0 && y == 0) //reset view!
                     {
-                        await _topView.TranslateTo(Width, y);
-                        _mainGrid.Children.Remove(_topView);
-                    }
-                    else if (x < -bound) //Move left out of the picture
-                    {
-                        await _topView.TranslateTo(-Width, y);
-                        _mainGrid.Children.Remove(_topView); 
-                    }
-                    else
-                    {
-                        await _topView.TranslateTo(x, y, 10U);
+                        Debug.WriteLine("Reset");
                         _removed = false;
+                        if (_lastX != 0 || _lastY != 0)
+                            await _topView.TranslateTo(0, 0, 500U, Easing.CubicInOut);
+                    }
+                    else if (!_removed)
+                    {
+                        Debug.WriteLine("Pan: " + x + " " + y);
+
+                        _lastX = x;
+                        _lastY = y;
+                        var bound = Width * (5 / 7.0);
+                        _removed = true;
+
+
+                        if (x > bound) //Move right out of the picture
+                        {
+                            await _topView.TranslateTo(Width, y);
+                            _mainGrid.Children.Remove(_topView);
+                        }
+                        else if (x < -bound) //Move left out of the picture
+                        {
+                            await _topView.TranslateTo(-Width, y);
+                            _mainGrid.Children.Remove(_topView);
+                        }
+                        else
+                        {
+                            await _topView.TranslateTo(x, y, 10U);
+                            _removed = false;
+
+                        }
 
                     }
-
-                } 
-            }   
+                }
+            });
         } 
     }
 }
