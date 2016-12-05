@@ -15,8 +15,7 @@ namespace App2Night.Model.Model
         [JsonProperty(PropertyName = "PartyId")]
         public Guid Id { get; set; }
         [JsonProperty(PropertyName = "PartyName")]
-        public string Name { get; set; }
-        public PartyCommitmentState MyPartyCommitmentState { get; set; }
+        public string Name { get; set; } 
         [JsonProperty(PropertyName = "PartyDate")]
         public DateTime Date { get; set; }
         public DateTime CreationDateTime { get; set; }

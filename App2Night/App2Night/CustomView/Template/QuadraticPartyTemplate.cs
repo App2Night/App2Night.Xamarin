@@ -83,7 +83,7 @@ namespace App2Night.CustomView.Template
             _distanceLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
             _shareIconLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
             _likeButton.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter()); 
-            this.SetBinding(QuadraticPartyTemplate.CommitmentStateProperty, "CommitmentState");
+            this.SetBinding(CommitmentStateProperty, nameof(Party.CommitmentState));
         }
 
         private Grid CreateInputColumns()

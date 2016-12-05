@@ -101,8 +101,7 @@ namespace App2Night.Service.Service
                 new Party
                 {
                     MusicGenre = MusicGenre.Pop,
-                    Name = "DH goes Ballermann",
-                    MyPartyCommitmentState = PartyCommitmentState.Accepted,
+                    Name = "DH goes Ballermann", 
                     CreationDateTime = DateTime.Today,
                     Date = DateTime.Today.AddDays(40)
                 }
@@ -353,34 +352,87 @@ namespace App2Night.Service.Service
             var allResults = new List<Result>();
             await Task.WhenAll(new Task[]
             {
-                Task.Run(async ()=> allResults.Add(await RequestPartyWithFilter()))
+                Task.Run(async ()=> allResults.Add(await RequestPartyWithFilter())),
+                Task.Run(async ()=> allResults.Add(await RefreshPartyHistory())),
+                Task.Run(async ()=> allResults.Add(await RefreshSelectedParties())) 
             });
 
             return allResults;
+        }
+
+        public async Task<Result<IEnumerable<Party>>> RefreshPartyHistory()
+        {
+            var result = await
+                       _clientService.SendRequest<IEnumerable<Party>>("api/party/history", RestType.Get,
+                           token: Token?.AccessToken);
+
+            await HandleCaching(result);
+
+            PopulateObservableCollection(PartyHistory, result.Data);
+            HistoryPartisUpdated?.Invoke(this, EventArgs.Empty);
+
+            return result;
+        }
+
+        public async Task<Result<IEnumerable<Party>>> RefreshSelectedParties()
+        {
+            var result = await
+                        _clientService.SendRequest<IEnumerable<Party>>("api/party/myParties", RestType.Get,  
+                            token: Token?.AccessToken);
+
+            await HandleCaching(result);
+
+            PopulateObservableCollection(SelectedPartys, result.Data);
+            SelectedPartiesUpdated?.Invoke(this, EventArgs.Empty);
+
+            return result;
         }
 
         public async Task<Result<IEnumerable<Party>>> RequestPartyWithFilter()
         {
             Result<IEnumerable<Party>> requestResult = new Result<IEnumerable<Party>>();
 
+            Coordinates coordinates = null;
+
+            //TODO check if user is alowed to use gps
+            var _storageEnabled = _storageService.Storage.UseGps //Check if gps usage is enabled in the settigns.
+                && CrossGeolocator.Current.IsGeolocationAvailable  //Check if gps usage is available on the device.
+                && CrossGeolocator.Current.IsGeolocationEnabled; //Check if gps usage is enabled on the device.
+
+            if (_storageEnabled) 
+            {
+                try
+                {
+                    //Get coordinates from GPS
+                    var location = await CrossGeolocator.Current.GetPositionAsync(10000);
+                    coordinates = new Coordinates()
+                    {
+                        Latitude = location.Latitude,
+                        Longitude = location.Longitude
+                    };
+                }
+                catch (TaskCanceledException e)
+                {
+                    DebugHelper.PrintDebug(DebugType.Error, "Getting location in time failed.\n" + e); 
+                }
+            }
+
+            //Backup if gps is disabled or fetching from gps didnt return a valid result.
+            if (_storageEnabled || coordinates == null)
+            {
+                //TODO Resolve gps data from the storage
+            }
+
             try
             {
-                var location = await CrossGeolocator.Current.GetPositionAsync(10000);
-                string lat = location.Latitude.ToString();
-                lat = lat.Replace(",", ".");
-                string lon = location.Longitude.ToString();
-                lon = lon.Replace(",", ".");
-                var radius = _storageService.Storage.FilterRadius;
-                var uri = $"?lat={lat}&lon={lon}&radius={radius.ToString()}";
+                //Format coordinates 
+                var uri = $"?lat={coordinates.Latitude}&lon={coordinates.Longitude}&radius={_storageService.Storage.FilterRadius}"
+                    .Replace(",", ".");  //Backend does not like , in the request
+
                 requestResult =
                     await
                         _clientService.SendRequest<IEnumerable<Party>>("api/party", RestType.Get, urlQuery: uri,
                             token: Token?.AccessToken);
-            }
-            catch (TaskCanceledException e)
-            {
-                DebugHelper.PrintDebug(DebugType.Error, "Getting location in time failed.\n" + e);
-                requestResult.RequestFailedToException = true;
             }
             catch (Exception e)
             {
@@ -388,46 +440,56 @@ namespace App2Night.Service.Service
                 requestResult.RequestFailedToException = true;
             }
 
+            await HandleCaching(requestResult);
             //Check if the request was a success
-            if (requestResult.Success)
+
+            PopulateObservableCollection(InterestingPartys, requestResult.Data);
+            NearPartiesUpdated?.Invoke(this, EventArgs.Empty);
+            
+            return requestResult;
+        }
+
+        async Task HandleCaching(Result<IEnumerable<Party>> rawResult)
+        {
+            if (rawResult.Success)
             {
                 //TODO cache data 
             }
             else
             {
-                var cachedData = new List<Party>();
-                string buf = "";
-                for (int j = 0; j < 31; j++)
-                {
-                    buf += "A";
-                }
-                for (int i = 0; i < 5; i++)
-                {
-                    cachedData.Add(new Party
-                    {
-                        Name = buf + (i + 1),
-                        Date = DateTime.Today.AddDays(i).AddMonths(i),
-                        Location = new Location
-                        {
-                             Latitude= 48.444120,
-                            Longitude = 8.679107
-                        }
-                    });
-                }
-                //TODO Replace with real caching
+                //TODO Replace dummy data with real caching
+                var cachedData = GenerateFakeCachedParties();
+
                 if (cachedData.Count > 0)
                 {
-                    requestResult.Data = cachedData;
-                    requestResult.IsCached = true;
-                }
+                    rawResult.Data = cachedData;
+                    rawResult.IsCached = true;
+                } 
             }
-            if (requestResult.Data != null)
+        }
+
+        IList<Party> GenerateFakeCachedParties()
+        {
+            var cachedData = new List<Party>();
+            string buf = "";
+            for (int j = 0; j < 31; j++)
             {
-                PopulateObservableCollection(InterestingPartys,
-                    requestResult.Data.OrderBy(o => o.Date).Take(5).Where(o => o.Date >= DateTime.Today));
+                buf += "A";
             }
-            NearPartiesUpdated?.Invoke(this, EventArgs.Empty);
-            return requestResult;
+            for (int i = 0; i < 5; i++)
+            {
+                cachedData.Add(new Party
+                {
+                    Name = buf + (i + 1),
+                    Date = DateTime.Today.AddDays(i).AddMonths(i),
+                    Location = new Location
+                    {
+                        Latitude = 48.444120,
+                        Longitude = 8.679107
+                    }
+                });
+            }
+            return cachedData;
         }
 
         public async Task<Result<Party>> GetParty(Guid id)
@@ -472,12 +534,13 @@ namespace App2Night.Service.Service
             where TObservable : ObservableCollection<Party>
         {
             collection.Clear();
-            foreach (Party party in newObjects)
+            if (newObjects != null)
             {
-                collection.Add(party);
-            }
-        }
-
-        
+                foreach (Party party in newObjects)
+                {
+                    collection.Add(party);
+                }
+            } 
+        } 
     }
 }

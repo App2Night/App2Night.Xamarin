@@ -88,6 +88,16 @@ namespace App2Night.Service.Interface
         Task<Result<IEnumerable<Party>>> RequestPartyWithFilter();
 
         /// <summary>
+        /// Refresh the <see cref="PartyHistory"/> collection.
+        /// </summary> 
+        Task<Result<IEnumerable<Party>>> RefreshPartyHistory();
+
+        /// <summary>
+        /// Refresh the <see cref="SelectedPartys"/> collection.
+        /// </summary> 
+        Task<Result<IEnumerable<Party>>> RefreshSelectedParties();
+
+        /// <summary>
         /// Returns a single party to the given id.
         /// </summary>
         /// <param name="id"><see cref="Guid"/> of the party.</param>

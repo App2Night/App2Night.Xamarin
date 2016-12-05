@@ -46,15 +46,20 @@ namespace App2Night.CustomView.View
                 }
                 else
                 {
-                    var rnd = new Random();
+
                     card = new ContentView
-                    { 
-                        BackgroundColor =
-                            Color.FromRgb(rnd.Next(0, 100)/100.0, rnd.Next(0, 100)/100.0, rnd.Next(0, 100)/100.0),
+                    {
                         Content = new Label() {Text = "Override this template with SetTemplate."}
                     };
                 }
-                //Little shake to give a natural feeling
+
+                //Give the new card a random background color
+                var rnd = new Random();
+                card.BackgroundColor =
+                    Color.FromRgb(rnd.Next(0, 100) / 100.0, rnd.Next(0, 100) / 100.0, rnd.Next(0, 100) / 100.0);
+               
+
+                //Little shake to give a natural feeling 
                 card.Rotation = GenerateRandomNumber();
                 card.BindingContext = o;
                 card.InputTransparent = true;
@@ -94,9 +99,9 @@ namespace App2Night.CustomView.View
 
         private Type _templateType;
 
-        public void SetTemplate<TType>(TType t) where TType : Xamarin.Forms.View
+        public void SetTemplate<TType>( ) where TType : Xamarin.Forms.View
         {
-            _templateType = t.GetType();
+            _templateType = typeof(TType);
         }
 
         public List<Xamarin.Forms.View> AllCards = new List<Xamarin.Forms.View>();

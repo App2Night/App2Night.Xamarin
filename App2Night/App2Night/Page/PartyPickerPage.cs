@@ -22,6 +22,7 @@ namespace App2Night.Page
 
             var swipeView =  
                  new SwipeView();
+            swipeView.SetTemplate<SwipeViewTemplate>();
 
            
             var changeViewToolbarItem = new ToolbarItem()
