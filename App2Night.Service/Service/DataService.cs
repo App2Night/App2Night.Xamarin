@@ -296,10 +296,35 @@ namespace App2Night.Service.Service
         public async Task<Result> ChangeCommitmentState(Guid partyId, PartyCommitmentState commitmentState)
         {
             if (!await CheckIfTokenIsValid()) return new Result();
-            var result =
+
+            dynamic bodyObject = new ExpandoObject();
+            bodyObject.eventCommitment = commitmentState;
+            
+
+            Result result =
                 await
                     _clientService.SendRequest("/api/UserParty/commitmentState", RestType.Put,
-                        urlQuery: "/id=" + partyId.ToString("D"), bodyParameter: commitmentState, token: Token.AccessToken);
+                        urlQuery: "/id=" + partyId.ToString("D"), bodyParameter: bodyObject, token: Token.AccessToken);
+
+            if (result.Success)
+            {
+                foreach (Party interestingParty in InterestingPartys)
+                {
+                    if (interestingParty.Id == partyId)
+                    {
+                        interestingParty.CommitmentState = commitmentState;
+                    }
+                }
+
+                foreach (Party interestingParty in SelectedPartys)
+                {
+                    if (interestingParty.Id == partyId)
+                    {
+                        interestingParty.CommitmentState = commitmentState;
+                    }
+                }
+            }
+
             return result;
         }
 

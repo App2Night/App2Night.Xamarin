@@ -8,11 +8,29 @@ namespace App2Night.CustomView.View
 {
     public class SwipeView : ContentView
     {
-        private Xamarin.Forms.View _topView => _mainGrid.Children.LastOrDefault(); 
+        private Xamarin.Forms.View TopView => _mainGrid.Children.LastOrDefault(); 
 
         public static BindableProperty ItemsSourceProperty =
             BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable<object>), typeof(SwipeView),
                 propertyChanged: (bindable, value, newValue) => ((SwipeView)bindable).CollectionSet());
+
+
+        public static BindableProperty SwipedOutLeftCommandProperty = BindableProperty.Create(nameof(SwipedOutLeft), typeof(Command<object>), typeof(SwipeView));
+
+        public Command<object> SwipedOutLeft
+        {
+            get { return (Command<object>)GetValue(SwipedOutLeftCommandProperty); }
+            set { SetValue(SwipedOutLeftCommandProperty, value); }
+        }
+
+
+        public static BindableProperty SwipeOutRightCommandProperty = BindableProperty.Create(nameof(SwipeOutRightCommand), typeof(Command<object>), typeof(SwipeView));
+        public Command<object> SwipeOutRightCommand
+        {
+            get { return (Command<object>)GetValue(SwipeOutRightCommandProperty); }
+            set { SetValue(SwipeOutRightCommandProperty, value); }
+        }
+
 
         private void CollectionSet()
         {
@@ -109,19 +127,17 @@ namespace App2Night.CustomView.View
             {
                 var x = panUpdatedEventArgs.TotalX;
                 var y = panUpdatedEventArgs.TotalY;
-                if (_topView != null)
+                if (TopView != null)
                 {
-                    if (x == 0 && y == 0) //reset view!
+                    if (x == 0 && y == 0) //reset view to the stack!
                     {
-                        Debug.WriteLine("Reset");
+                        Debug.WriteLine("Reset card to stack");
                         _removed = false;
                         if (_lastX != 0 || _lastY != 0)
-                            await _topView.TranslateTo(0, 0, 500U, Easing.CubicInOut);
+                            await TopView.TranslateTo(0, 0, 500U, Easing.CubicInOut);
                     }
                     else if (!_removed)
-                    {
-                        Debug.WriteLine("Pan: " + x + " " + y);
-
+                    { 
                         _lastX = x;
                         _lastY = y;
                         var bound = Width * (5 / 7.0);
@@ -130,17 +146,21 @@ namespace App2Night.CustomView.View
 
                         if (x > bound) //Move right out of the picture
                         {
-                            await _topView.TranslateTo(Width, y);
-                            _mainGrid.Children.Remove(_topView);
+                            await TopView.TranslateTo(Width, y);
+                            MovedOutRight();
+                            _mainGrid.Children.Remove(TopView);
+                            
                         }
                         else if (x < -bound) //Move left out of the picture
                         {
-                            await _topView.TranslateTo(-Width, y);
-                            _mainGrid.Children.Remove(_topView);
+                            await TopView.TranslateTo(-Width, y);
+                            MovedOutLeft();
+                            _mainGrid.Children.Remove(TopView);
+                            
                         }
                         else
                         {
-                            await _topView.TranslateTo(x, y, 10U);
+                            await TopView.TranslateTo(x, y, 10U);
                             _removed = false;
 
                         }
@@ -148,6 +168,16 @@ namespace App2Night.CustomView.View
                     }
                 }
             });
-        } 
+        }
+
+        void MovedOutLeft()
+        {
+            SwipedOutLeft?.Execute(TopView.BindingContext);
+        }
+
+        void MovedOutRight()
+        {
+            SwipeOutRightCommand?.Execute(TopView.BindingContext);
+        }
     }
 }

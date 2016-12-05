@@ -38,6 +38,9 @@ namespace App2Night.Page
             ToolbarItems.Add(changeViewToolbarItem);
 
             swipeView.SetBinding( SwipeView.ItemsSourceProperty, "Parties");
+            swipeView.SetBinding(SwipeView.SwipedOutLeftCommandProperty, "NotePartyCommand");
+            swipeView.SetBinding(SwipeView.SwipeOutRightCommandProperty, "AcceptPartyCommand");
+
 
             //List view bindings
             listView.SetBinding( ListView.ItemsSourceProperty, "Parties");

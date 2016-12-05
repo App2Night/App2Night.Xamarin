@@ -2,6 +2,8 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
+using App2Night.Model.Enum;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
 using FreshMvvm;
@@ -24,6 +26,10 @@ namespace App2Night.PageModel
 
         public Command RefreshCommand => new Command(async ()=> await Refresh()); 
 
+        public Command<object> NotePartyCommand => new Command<object>(async(o)=> await NoteParty((Party) o)); 
+        
+        public Command<object> AcceptPartyCommand => new Command<object>(async (o) => await AcceptParty((Party)o)); 
+
         public bool NearPartyAvailable { get; private set; }
 
         public PartyPickerViewModel(IDataService dataService, IAlertService alertService)
@@ -31,6 +37,26 @@ namespace App2Night.PageModel
             _dataService = dataService;
             _alertService = alertService;
             FreshIOC.Container.Resolve<IDataService>().NearPartiesUpdated += OnNearPartiesUpdated;
+        }
+
+        private async Task NoteParty(Party party)
+        {
+            await ChangeCommitmentState(party, PartyCommitmentState.Noted);
+        }
+
+        private async Task AcceptParty(Party party)
+        {
+            await ChangeCommitmentState(party, PartyCommitmentState.Accepted);
+        }
+
+        private async Task ChangeCommitmentState(Party party, PartyCommitmentState commitmentState)
+        {
+            using (UserDialogs.Instance.Loading(commitmentState + " party")) //RESOURCE 
+            {
+                var result = await _dataService.ChangeCommitmentState(party.Id, commitmentState);
+
+                _alertService.CommitmentStateChangedAlert(commitmentState, result.Success);
+            }
         }
 
         private async Task Refresh()

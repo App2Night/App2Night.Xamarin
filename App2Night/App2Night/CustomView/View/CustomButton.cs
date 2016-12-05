@@ -101,7 +101,7 @@ namespace App2Night.CustomView.View
 
             var gestureRecognizer = new TapGestureRecognizer
             {
-                Command = new Command(async ()=> await OnButtonTapped())
+                Command = new Command(OnButtonTapped)
             };
             GestureRecognizers.Add(gestureRecognizer);
             Content = ButtonLabel;
@@ -109,11 +109,14 @@ namespace App2Night.CustomView.View
             _defaultOpacity = ButtonLabel.Opacity;
         }  
 
-        protected async Task OnButtonTapped()
+        protected void OnButtonTapped()
         {
-            OnTabAnimation?.Commit(this, "OnTabAnimation", finished: AnimationCallback);
-            Command?.Execute(null);
-            ButtonTapped?.Invoke(this, EventArgs.Empty);
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                OnTabAnimation?.Commit(this, "OnTabAnimation" + DateTime.Now.Millisecond, finished: AnimationCallback);
+                Command?.Execute(null);
+                ButtonTapped?.Invoke(this, EventArgs.Empty);
+            }); 
         }
     }
 }
