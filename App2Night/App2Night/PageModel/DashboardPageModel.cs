@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Threading.Tasks; 
+using System.Threading.Tasks;
+using App2Night.Model.Enum;
 using App2Night.Model.Model;
 using App2Night.PageModel.SubPages;
 using App2Night.Service.Interface;
@@ -33,11 +34,23 @@ namespace App2Night.PageModel
         public Command MoveToMyPartiesCommand => new Command(async () => await CoreMethods.PushPageModel<MyPartysViewModel>());
         public Command MoveToHistoryCommand => new Command(async () => await CoreMethods.PushPageModel<HistoryViewModel>());
         public Command MoveToPartyPicker => new Command(async () => await CoreMethods.PushPageModel<PartyPickerViewModel>());
-        public Command<PartyCommitmentParameter> PartyCommitmentStateChangedCommand => new Command<PartyCommitmentParameter>(async  (parameter) => await CommitmentStateChanged(parameter));
+        public Command<Party> PartyCommitmentStateChangedCommand => new Command<Party>(async  (party) => await CommitmentStateChanged(party));
 
-        private async Task CommitmentStateChanged(PartyCommitmentParameter parameter)
+        private async Task CommitmentStateChanged(Party party)
         {
-            await _dataService.ChangeCommitmentState(parameter.Party.Id, parameter.CommitmentState);
+            PartyCommitmentState nextState = PartyCommitmentState.Noted;
+
+            //Find the next logical commitment state
+            if (party.CommitmentState == PartyCommitmentState.Rejected)
+                nextState = PartyCommitmentState.Noted;
+
+            if (party.CommitmentState == PartyCommitmentState.Noted)
+                nextState = PartyCommitmentState.Accepted;
+
+            if (party.CommitmentState == PartyCommitmentState.Accepted)
+                nextState = PartyCommitmentState.Rejected;
+
+            await _dataService.ChangeCommitmentState(party.Id, nextState);
         }
 
         public DashboardPageModel(IDataService dataService) : base()

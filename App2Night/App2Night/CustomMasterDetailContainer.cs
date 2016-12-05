@@ -158,7 +158,7 @@ namespace App2Night
             if (innerPage.Key != null)
             {
                 return Task.FromResult(ListView.SelectedItem = innerPage.Key);
-            }
+            } 
             return (Detail as NavigationPage).PushAsync(page, animate);   
          }
 
@@ -190,8 +190,8 @@ namespace App2Night
         public Task<FreshBasePageModel> SwitchSelectedRootPageModel<T>() where T : FreshBasePageModel
         {
             var tabIndex = _pagesInner.FindIndex(o => o.GetModel().GetType().FullName == typeof(T).FullName);
-             
-            ListView.SelectedItem = _pageNames[tabIndex];
+
+            ListView.SelectedItem = _pages.ElementAt(tabIndex).Key;
             return Task.FromResult((Detail as NavigationPage).CurrentPage.GetModel());
         }
     } 

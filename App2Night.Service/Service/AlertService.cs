@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
+using App2Night.Model.Enum;
 using App2Night.Model.Model;
 using App2Night.Service.Helper;
 using App2Night.Service.Interface;
@@ -60,6 +61,17 @@ namespace App2Night.Service.Service
                 RequestFailureHandler(requestResult, "Login failed");
         }
 
+        public void CommitmentStateChangedAlert(PartyCommitmentState noted, bool success)
+        {
+            var message = success
+                ? string.Format("Commitment state changed to {0}", noted) //RESOURCE
+                : "Changing the commitment state failed"; //RESOURCE
+
+            var toastConfig = CreateToastConfig(message, success ? ToastState.Success : ToastState.Failure);
+
+            UserDialogs.Instance.Toast(toastConfig);
+        }
+
         /// <summary>
         /// Handles request results that failed.
         /// Creates fitting messages for differnt request errors.
@@ -110,7 +122,7 @@ namespace App2Night.Service.Service
                     break; 
             }
             return config;
-        }
+        } 
     }
 
     /// <summary>

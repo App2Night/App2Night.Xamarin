@@ -83,6 +83,7 @@ namespace App2Night.CustomView.Template
             _distanceLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
             _shareIconLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
             _likeButton.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter()); 
+            this.SetBinding(CommitmentStateProperty, nameof(Party.CommitmentState));
         }
 
         private Grid CreateInputColumns()
@@ -138,14 +139,8 @@ namespace App2Night.CustomView.Template
         /// <param name="sender"></param>
         /// <param name="e"></param>
         private void TappedLikeBtn(object sender, EventArgs e)
-        {
-            
-            var commitmentParameter = new PartyCommitmentParameter
-            {
-                Party = (Party) BindingContext,
-                CommitmentState = _commitmentState
-            };
-            FreshIOC.Container.Resolve<DashboardPageModel>().PartyCommitmentStateChangedCommand.Execute(commitmentParameter);
+        { 
+            FreshIOC.Container.Resolve<DashboardPageModel>().PartyCommitmentStateChangedCommand.Execute((Party)BindingContext);
         }
 
         private void RejectParty()

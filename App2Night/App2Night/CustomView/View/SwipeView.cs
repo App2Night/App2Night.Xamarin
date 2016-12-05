@@ -8,11 +8,29 @@ namespace App2Night.CustomView.View
 {
     public class SwipeView : ContentView
     {
-        private Xamarin.Forms.View _topView => _mainGrid.Children.LastOrDefault(); 
+        private Xamarin.Forms.View TopView => _mainGrid.Children.LastOrDefault(); 
 
         public static BindableProperty ItemsSourceProperty =
             BindableProperty.Create(nameof(ItemsSource), typeof(IEnumerable<object>), typeof(SwipeView),
                 propertyChanged: (bindable, value, newValue) => ((SwipeView)bindable).CollectionSet());
+
+
+        public static BindableProperty SwipedOutLeftCommandProperty = BindableProperty.Create(nameof(SwipedOutLeft), typeof(Command<object>), typeof(SwipeView));
+
+        public Command<object> SwipedOutLeft
+        {
+            get { return (Command<object>)GetValue(SwipedOutLeftCommandProperty); }
+            set { SetValue(SwipedOutLeftCommandProperty, value); }
+        }
+
+
+        public static BindableProperty SwipeOutRightCommandProperty = BindableProperty.Create(nameof(SwipeOutRightCommand), typeof(Command<object>), typeof(SwipeView));
+        public Command<object> SwipeOutRightCommand
+        {
+            get { return (Command<object>)GetValue(SwipeOutRightCommandProperty); }
+            set { SetValue(SwipeOutRightCommandProperty, value); }
+        }
+
 
         private void CollectionSet()
         {
@@ -28,19 +46,35 @@ namespace App2Night.CustomView.View
                 }
                 else
                 {
-                    var rnd = new Random();
+
                     card = new ContentView
-                    { 
-                        BackgroundColor =
-                            Color.FromRgb(rnd.Next(0, 100)/100.0, rnd.Next(0, 100)/100.0, rnd.Next(0, 100)/100.0),
+                    {
                         Content = new Label() {Text = "Override this template with SetTemplate."}
                     };
                 }
+
+                //Give the new card a random background color
+                var rnd = new Random();
+                card.BackgroundColor =
+                    Color.FromRgb(rnd.Next(0, 100) / 100.0, rnd.Next(0, 100) / 100.0, rnd.Next(0, 100) / 100.0);
+               
+
+                //Little shake to give a natural feeling 
+                card.Rotation = GenerateRandomNumber();
                 card.BindingContext = o;
                 card.InputTransparent = true;
                 _mainGrid.Children.Add(card);
             }
             SetCardSize();
+        }
+
+
+        private int lastRandom = 1337;
+        double GenerateRandomNumber()
+        {
+            var random = new Random(lastRandom);
+            lastRandom = random.Next(-750, 750);
+            return lastRandom/100.0;
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -65,9 +99,9 @@ namespace App2Night.CustomView.View
 
         private Type _templateType;
 
-        public void SetTemplate<TType>(TType t) where TType : Xamarin.Forms.View
+        public void SetTemplate<TType>( ) where TType : Xamarin.Forms.View
         {
-            _templateType = t.GetType();
+            _templateType = typeof(TType);
         }
 
         public List<Xamarin.Forms.View> AllCards = new List<Xamarin.Forms.View>();
@@ -90,48 +124,65 @@ namespace App2Night.CustomView.View
         double _lastX = 0;
         double _lastY = 0;
         private bool _removed = false;
-        private async void GestureOnPanUpdated(object sender, PanUpdatedEventArgs panUpdatedEventArgs)
+         
+
+        private void GestureOnPanUpdated(object sender, PanUpdatedEventArgs panUpdatedEventArgs)
         {
-            var x = panUpdatedEventArgs.TotalX;
-            var y = panUpdatedEventArgs.TotalY;
-            if (_topView != null)
+            Device.BeginInvokeOnMainThread(async () =>
             {
-                if (x == 0 && y == 0) //reset view!
+                var x = panUpdatedEventArgs.TotalX;
+                var y = panUpdatedEventArgs.TotalY;
+                if (TopView != null)
                 {
-                    Debug.WriteLine("Reset");
-                    _removed = false;
-                    if (_lastX != 0 || _lastY != 0)
-                        await _topView.TranslateTo(0, 0, 500U, Easing.CubicInOut);
-                }
-                else if(!_removed)
-                {
-                    Debug.WriteLine("Pan: " + x+ " " + y);
-
-                    _lastX = x;
-                    _lastY = y; 
-                    var bound = Width*(5/7.0);
-                    _removed = true;
-                   
-
-                    if (x > bound) //Move right out of the picture
+                    if (x == 0 && y == 0) //reset view to the stack!
                     {
-                        await _topView.TranslateTo(Width, y);
-                        _mainGrid.Children.Remove(_topView);
-                    }
-                    else if (x < -bound) //Move left out of the picture
-                    {
-                        await _topView.TranslateTo(-Width, y);
-                        _mainGrid.Children.Remove(_topView); 
-                    }
-                    else
-                    {
-                        await _topView.TranslateTo(x, y, 10U);
+                        Debug.WriteLine("Reset card to stack");
                         _removed = false;
+                        if (_lastX != 0 || _lastY != 0)
+                            await TopView.TranslateTo(0, 0, 500U, Easing.CubicInOut);
+                    }
+                    else if (!_removed)
+                    { 
+                        _lastX = x;
+                        _lastY = y;
+                        var bound = Width * (5 / 7.0);
+                        _removed = true;
+
+
+                        if (x > bound) //Move right out of the picture
+                        {
+                            await TopView.TranslateTo(Width, y);
+                            MovedOutRight();
+                            _mainGrid.Children.Remove(TopView);
+                            
+                        }
+                        else if (x < -bound) //Move left out of the picture
+                        {
+                            await TopView.TranslateTo(-Width, y);
+                            MovedOutLeft();
+                            _mainGrid.Children.Remove(TopView);
+                            
+                        }
+                        else
+                        {
+                            await TopView.TranslateTo(x, y, 10U);
+                            _removed = false;
+
+                        }
 
                     }
+                }
+            });
+        }
 
-                } 
-            }   
-        } 
+        void MovedOutLeft()
+        {
+            SwipedOutLeft?.Execute(TopView.BindingContext);
+        }
+
+        void MovedOutRight()
+        {
+            SwipeOutRightCommand?.Execute(TopView.BindingContext);
+        }
     }
 }

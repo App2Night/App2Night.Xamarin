@@ -101,8 +101,7 @@ namespace App2Night.Service.Service
                 new Party
                 {
                     MusicGenre = MusicGenre.Pop,
-                    Name = "DH goes Ballermann",
-                    MyPartyCommitmentState = PartyCommitmentState.Accepted,
+                    Name = "DH goes Ballermann", 
                     CreationDateTime = DateTime.Today,
                     Date = DateTime.Today.AddDays(40)
                 }
@@ -128,19 +127,31 @@ namespace App2Night.Service.Service
                 zipcode, type, description);
 
             //Send the create party request
-            var result =
+            Result <Guid> result =
                 await
                     _clientService.SendRequest<Guid>("api/party", RestType.Post, bodyParameter: partyCreationObject,
                         token: Token.AccessToken);
-            DebugHelper.PrintDebug(DebugType.Info, $"Guid of the created party is {result.Data}");
 
-            if (!result.Success) return result;
 
-            //Get the created party if the creation was successfull. 
-            var party = await GetParty(result.Data);
+            Result<Party> partyResult = new Result<Party>
+            {
+                IsCached = result.IsCached,
+                Message = result.Message,
+                RequestFailedToException = result.RequestFailedToException,
+                StatusCode = result.StatusCode,
+                Success = result.Success
+            };
+
+            if (result.Success)
+            {
+                DebugHelper.PrintDebug(DebugType.Info, $"Guid of the created party is {result.Data}");
+                //Get the created party if the creation was successfull. 
+
+                partyResult = await GetParty(result.Data);
+            } 
 
             //Return the created party
-            return party;
+            return partyResult;
         }
 
         /// <summary>
@@ -284,10 +295,35 @@ namespace App2Night.Service.Service
         public async Task<Result> ChangeCommitmentState(Guid partyId, PartyCommitmentState commitmentState)
         {
             if (!await CheckIfTokenIsValid()) return new Result();
-            var result =
+
+            dynamic bodyObject = new ExpandoObject();
+            bodyObject.eventCommitment = commitmentState;
+            
+
+            Result result =
                 await
                     _clientService.SendRequest("/api/UserParty/commitmentState", RestType.Put,
-                        urlQuery: "/id=" + partyId.ToString("D"), bodyParameter: commitmentState, token: Token.AccessToken);
+                        urlQuery: "/id=" + partyId.ToString("D"), bodyParameter: bodyObject, token: Token.AccessToken);
+
+            if (result.Success)
+            {
+                foreach (Party interestingParty in InterestingPartys)
+                {
+                    if (interestingParty.Id == partyId)
+                    {
+                        interestingParty.CommitmentState = commitmentState;
+                    }
+                }
+
+                foreach (Party interestingParty in SelectedPartys)
+                {
+                    if (interestingParty.Id == partyId)
+                    {
+                        interestingParty.CommitmentState = commitmentState;
+                    }
+                }
+            }
+
             return result;
         }
 
@@ -311,28 +347,92 @@ namespace App2Night.Service.Service
             throw new NotImplementedException();
         }
 
+        public async Task<IEnumerable<Result>> BatchRefresh()
+        {
+            var allResults = new List<Result>();
+            await Task.WhenAll(new Task[]
+            {
+                Task.Run(async ()=> allResults.Add(await RequestPartyWithFilter())),
+                Task.Run(async ()=> allResults.Add(await RefreshPartyHistory())),
+                Task.Run(async ()=> allResults.Add(await RefreshSelectedParties())) 
+            });
+
+            return allResults;
+        }
+
+        public async Task<Result<IEnumerable<Party>>> RefreshPartyHistory()
+        {
+            var result = await
+                       _clientService.SendRequest<IEnumerable<Party>>("api/party/history", RestType.Get,
+                           token: Token?.AccessToken);
+
+            await HandleCaching(result);
+
+            PopulateObservableCollection(PartyHistory, result.Data);
+            HistoryPartisUpdated?.Invoke(this, EventArgs.Empty);
+
+            return result;
+        }
+
+        public async Task<Result<IEnumerable<Party>>> RefreshSelectedParties()
+        {
+            var result = await
+                        _clientService.SendRequest<IEnumerable<Party>>("api/party/myParties", RestType.Get,  
+                            token: Token?.AccessToken);
+
+            await HandleCaching(result);
+
+            PopulateObservableCollection(SelectedPartys, result.Data);
+            SelectedPartiesUpdated?.Invoke(this, EventArgs.Empty);
+
+            return result;
+        }
+
         public async Task<Result<IEnumerable<Party>>> RequestPartyWithFilter()
         {
             Result<IEnumerable<Party>> requestResult = new Result<IEnumerable<Party>>();
 
+            Coordinates coordinates = null;
+
+            //TODO check if user is alowed to use gps
+            var _storageEnabled = _storageService.Storage.UseGps //Check if gps usage is enabled in the settigns.
+                && CrossGeolocator.Current.IsGeolocationAvailable  //Check if gps usage is available on the device.
+                && CrossGeolocator.Current.IsGeolocationEnabled; //Check if gps usage is enabled on the device.
+
+            if (_storageEnabled) 
+            {
+                try
+                {
+                    //Get coordinates from GPS
+                    var location = await CrossGeolocator.Current.GetPositionAsync(10000);
+                    coordinates = new Coordinates()
+                    {
+                        Latitude = location.Latitude,
+                        Longitude = location.Longitude
+                    };
+                }
+                catch (TaskCanceledException e)
+                {
+                    DebugHelper.PrintDebug(DebugType.Error, "Getting location in time failed.\n" + e); 
+                }
+            }
+
+            //Backup if gps is disabled or fetching from gps didnt return a valid result.
+            if (_storageEnabled || coordinates == null)
+            {
+                //TODO Resolve gps data from the storage
+            }
+
             try
             {
-                var location = await CrossGeolocator.Current.GetPositionAsync(10000);
-                string lat = location.Latitude.ToString();
-                lat = lat.Replace(",", ".");
-                string lon = location.Longitude.ToString();
-                lon = lon.Replace(",", ".");
-                var radius = _storageService.Storage.FilterRadius;
-                var uri = $"?lat={lat}&lon={lon}&radius={radius.ToString()}";
+                //Format coordinates 
+                var uri = $"?lat={coordinates.Latitude}&lon={coordinates.Longitude}&radius={_storageService.Storage.FilterRadius}"
+                    .Replace(",", ".");  //Backend does not like , in the request
+
                 requestResult =
                     await
                         _clientService.SendRequest<IEnumerable<Party>>("api/party", RestType.Get, urlQuery: uri,
                             token: Token?.AccessToken);
-            }
-            catch (TaskCanceledException e)
-            {
-                DebugHelper.PrintDebug(DebugType.Error, "Getting location in time failed.\n" + e);
-                requestResult.RequestFailedToException = true;
             }
             catch (Exception e)
             {
@@ -340,46 +440,56 @@ namespace App2Night.Service.Service
                 requestResult.RequestFailedToException = true;
             }
 
+            await HandleCaching(requestResult);
             //Check if the request was a success
-            if (requestResult.Success)
+
+            PopulateObservableCollection(InterestingPartys, requestResult.Data);
+            NearPartiesUpdated?.Invoke(this, EventArgs.Empty);
+            
+            return requestResult;
+        }
+
+        async Task HandleCaching(Result<IEnumerable<Party>> rawResult)
+        {
+            if (rawResult.Success)
             {
                 //TODO cache data 
             }
             else
             {
-                var cachedData = new List<Party>();
-                string buf = "";
-                for (int j = 0; j < 31; j++)
-                {
-                    buf += "A";
-                }
-                for (int i = 0; i < 5; i++)
-                {
-                    cachedData.Add(new Party
-                    {
-                        Name = buf + (i + 1),
-                        Date = DateTime.Today.AddDays(i).AddMonths(i),
-                        Location = new Location
-                        {
-                             Latitude= 48.444120,
-                            Longitude = 8.679107
-                        }
-                    });
-                }
-                //TODO Replace with real caching
+                //TODO Replace dummy data with real caching
+                var cachedData = GenerateFakeCachedParties();
+
                 if (cachedData.Count > 0)
                 {
-                    requestResult.Data = cachedData;
-                    requestResult.IsCached = true;
-                }
+                    rawResult.Data = cachedData;
+                    rawResult.IsCached = true;
+                } 
             }
-            if (requestResult.Data != null)
+        }
+
+        IList<Party> GenerateFakeCachedParties()
+        {
+            var cachedData = new List<Party>();
+            string buf = "";
+            for (int j = 0; j < 31; j++)
             {
-                PopulateObservableCollection(InterestingPartys,
-                    requestResult.Data.OrderBy(o => o.Date).Take(5).Where(o => o.Date >= DateTime.Today));
+                buf += "A";
             }
-            NearPartiesUpdated?.Invoke(this, EventArgs.Empty);
-            return requestResult;
+            for (int i = 0; i < 5; i++)
+            {
+                cachedData.Add(new Party
+                {
+                    Name = buf + (i + 1),
+                    Date = DateTime.Today.AddDays(i).AddMonths(i),
+                    Location = new Location
+                    {
+                        Latitude = 48.444120,
+                        Longitude = 8.679107
+                    }
+                });
+            }
+            return cachedData;
         }
 
         public async Task<Result<Party>> GetParty(Guid id)
@@ -389,9 +499,18 @@ namespace App2Night.Service.Service
             //Request the party with the given id
             var result =
                 await
-                    _clientService.SendRequest<Party>("api/party", RestType.Get, urlQuery: "/id=" + id.ToString("D"),
+                    _clientService.SendRequest<Party []>("api/party", RestType.Get, urlQuery: "/id=" + id.ToString("D"),
                         token: Token.AccessToken);
-            return result;
+
+            //We have to correct the result since the backend is sending us bullshit data.
+            var fixedResult = new Result<Party>
+            {
+                StatusCode = result.StatusCode,
+                Success = result.Success,
+                Data = result.Data?[0]
+            };
+
+            return fixedResult;
         }
 
         async Task<bool> CheckIfTokenIsValid()
@@ -415,10 +534,13 @@ namespace App2Night.Service.Service
             where TObservable : ObservableCollection<Party>
         {
             collection.Clear();
-            foreach (Party party in newObjects)
+            if (newObjects != null)
             {
-                collection.Add(party);
-            }
-        }
+                foreach (Party party in newObjects)
+                {
+                    collection.Add(party);
+                }
+            } 
+        } 
     }
 }

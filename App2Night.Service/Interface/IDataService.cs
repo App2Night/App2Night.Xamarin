@@ -32,7 +32,14 @@ namespace App2Night.Service.Interface
         /// Gets triggerd if the user is updated.
         /// </summary>
         event EventHandler UserUpdated;
-        
+
+        /// <summary>
+        /// Refreshes the party history, interesting parties and selected parties.
+        /// </summary>
+        /// <returns>Results of all refreshs.</returns>
+        Task<IEnumerable<Result>> BatchRefresh();
+
+
         /// <summary>
         /// Sets the token.
         /// </summary>
@@ -79,6 +86,16 @@ namespace App2Night.Service.Interface
         /// Refresh the <see cref="InterestingPartys"/> collection.
         /// </summary> 
         Task<Result<IEnumerable<Party>>> RequestPartyWithFilter();
+
+        /// <summary>
+        /// Refresh the <see cref="PartyHistory"/> collection.
+        /// </summary> 
+        Task<Result<IEnumerable<Party>>> RefreshPartyHistory();
+
+        /// <summary>
+        /// Refresh the <see cref="SelectedPartys"/> collection.
+        /// </summary> 
+        Task<Result<IEnumerable<Party>>> RefreshSelectedParties();
 
         /// <summary>
         /// Returns a single party to the given id.

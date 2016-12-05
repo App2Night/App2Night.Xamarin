@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.Model.Model;
+using App2Night.Service.Helper;
 using App2Night.Service.Interface;
 using Newtonsoft.Json;
 using PCLStorage;
@@ -48,10 +49,18 @@ namespace App2Night.Service.Service
 
             //Serialize the data
             string data = JsonConvert.SerializeObject(Storage);
-            data = EncryptString(data); 
+            data = EncryptString(data);
 
-            //Save the encrypted data.
-            await file.WriteAllTextAsync(data);
+            try
+            {
+                //Save the encrypted data.
+                await file.WriteAllTextAsync(data);
+            }
+            catch (Exception ex)
+            {
+                
+                DebugHelper.PrintDebug(DebugType.Error, "Saving storage failed" + ex);
+            }
         }
 
         /// <summary>
