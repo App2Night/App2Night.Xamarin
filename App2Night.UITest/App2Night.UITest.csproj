@@ -8,6 +8,8 @@
     <RootNamespace>App2Night.UITest</RootNamespace>
     <AssemblyName>App2Night.UITest</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
