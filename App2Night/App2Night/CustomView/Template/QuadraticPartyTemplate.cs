@@ -195,10 +195,13 @@ namespace App2Night.CustomView.Template
                         {
                             distance = Math.Round(distance*100);
                             unit = "m";
-                        }
+                        } 
 
-                        _distanceLabel.Text =
-                            $"{distance} {unit}";
+                        Device.BeginInvokeOnMainThread(() =>
+                        {
+                            _distanceLabel.Text =
+                           $"{distance} {unit}";
+                        }); 
                     }
                 };
             }
