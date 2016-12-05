@@ -17,6 +17,7 @@ namespace App2Night.Page
             {
                 ItemTemplate = new DataTemplate(typeof(PartyTemplate)), 
                 RowHeight = 100,
+                IsPullToRefreshEnabled = true
             };
 
             var swipeView =  
@@ -37,7 +38,12 @@ namespace App2Night.Page
             ToolbarItems.Add(changeViewToolbarItem);
 
             swipeView.SetBinding( SwipeView.ItemsSourceProperty, "Parties");
+
+            //List view bindings
             listView.SetBinding( ListView.ItemsSourceProperty, "Parties");
+            listView.SetBinding(ListView.RefreshCommandProperty, "RefreshCommand");
+            listView.SetBinding(ListView.IsRefreshingProperty, "IsRefreshing"); 
+
             this.SetBinding(CustomContentPage.ShowNoContentWarningProperty, nameof(PartyPickerViewModel.NearPartyAvailable),
                 converter: new InvertBooleanConverter());
 

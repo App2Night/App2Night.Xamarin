@@ -32,7 +32,14 @@ namespace App2Night.Service.Interface
         /// Gets triggerd if the user is updated.
         /// </summary>
         event EventHandler UserUpdated;
-        
+
+        /// <summary>
+        /// Refreshes the party history, interesting parties and selected parties.
+        /// </summary>
+        /// <returns>Results of all refreshs.</returns>
+        Task<IEnumerable<Result>> BatchRefresh();
+
+
         /// <summary>
         /// Sets the token.
         /// </summary>

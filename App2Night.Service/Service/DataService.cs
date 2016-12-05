@@ -323,6 +323,17 @@ namespace App2Night.Service.Service
             throw new NotImplementedException();
         }
 
+        public async Task<IEnumerable<Result>> BatchRefresh()
+        {
+            var allResults = new List<Result>();
+            await Task.WhenAll(new Task[]
+            {
+                Task.Run(async ()=> allResults.Add(await RequestPartyWithFilter()))
+            });
+
+            return allResults;
+        }
+
         public async Task<Result<IEnumerable<Party>>> RequestPartyWithFilter()
         {
             Result<IEnumerable<Party>> requestResult = new Result<IEnumerable<Party>>();
@@ -441,5 +452,7 @@ namespace App2Night.Service.Service
                 collection.Add(party);
             }
         }
+
+        
     }
 }
