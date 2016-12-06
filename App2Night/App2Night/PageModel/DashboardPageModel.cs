@@ -89,11 +89,22 @@ namespace App2Night.PageModel
 
         public void OpenMore(Party party)
         {
-            Device.BeginInvokeOnMainThread(async () =>
+            if (party.HostedByUser)
             {
-                var page = FreshPageModelResolver.ResolvePageModel<PartyDetailViewModel>(party);
-                await App._masterDetailNav.PushPage(page, null);
-            }); 
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    var page = FreshPageModelResolver.ResolvePageModel<MyPartyDetailViewModel>(party);
+                    await App._masterDetailNav.PushPage(page, null);
+                });
+            }
+            else
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    var page = FreshPageModelResolver.ResolvePageModel<PartyDetailViewModel>(party);
+                    await App._masterDetailNav.PushPage(page, null);
+                });
+            }
         }
 
         void SetAvailabilitys()
