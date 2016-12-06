@@ -55,9 +55,10 @@ namespace App2Night.CustomView.View
 
                 //Give the new card a random background color
                 var rnd = new Random();
-                card.BackgroundColor =
+                var cardBackgroundColor =
                     Color.FromRgb(rnd.Next(0, 100) / 100.0, rnd.Next(0, 100) / 100.0, rnd.Next(0, 100) / 100.0);
-               
+                cardBackgroundColor.AddLuminosity(50);
+                card.BackgroundColor = cardBackgroundColor;
 
                 //Little shake to give a natural feeling 
                 card.Rotation = GenerateRandomNumber();

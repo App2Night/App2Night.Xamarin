@@ -41,6 +41,7 @@
     <Compile Include="CustomMasterDetailContainer.cs" />
     <Compile Include="CustomView\Template\MenuTemplate.cs" />
     <Compile Include="CustomView\Template\SwipeViewTemplate.cs" />
+    <Compile Include="CustomView\View\HideToolBarItem.cs" />
     <Compile Include="CustomView\View\InputContainer.cs" />
     <Compile Include="CustomView\View\EnumBindablePicker.cs" />
     <Compile Include="CustomView\Page\CustomContentPage.cs" />
@@ -71,7 +72,9 @@
     <Compile Include="DependencyService\IUserLocationService.cs" />
     <Compile Include="DependencyService\IAndroidAppLookupService.cs" />
     <Compile Include="PageModel\SubPages\AgbViewModel.cs" />
+    <Compile Include="PageModel\SubPages\MyPartyDetailViewModel.cs" />
     <Compile Include="Page\SubPages\AgbPage.cs" />
+    <Compile Include="Page\SubPages\MyPartyDetailPage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="PageModel\AboutTabbedViewModel.cs" />
     <Compile Include="PageModel\CreatePartyViewModel.cs" />
