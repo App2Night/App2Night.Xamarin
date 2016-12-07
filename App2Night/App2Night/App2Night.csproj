@@ -55,6 +55,7 @@
     <Compile Include="CustomView\View\PartyPreviewView.cs" />
     <Compile Include="CustomView\Template\PartyTemplate.cs" />
     <Compile Include="CustomView\View\PreviewView.cs" />
+    <Compile Include="CustomView\View\RateView.cs" />
     <Compile Include="CustomView\View\SwipeView.cs" />
     <Compile Include="CustomView\View\EnhancedContainer.cs" />
     <Compile Include="CustomView\View\VerticalGallerieView.cs" />
