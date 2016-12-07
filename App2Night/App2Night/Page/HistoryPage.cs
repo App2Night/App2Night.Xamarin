@@ -44,10 +44,14 @@ namespace App2Night.Page
         /// </summary> 
         private void PartieSelected(object sender, object o)
         {
-            var listView = (ListView) sender;
-            var party = (Party) listView.SelectedItem;
-            listView.SelectedItem = null;
-            //PreviewItemSelected<Party, PartyPreviewView>(party, new object[] {Width, Height});
+            var listView = (ListView)sender;
+
+            if (listView.SelectedItem != null)
+            {
+                var party = (Party)listView.SelectedItem;
+                PreviewItemSelected<Party, PartyPreviewView>(party, new object[] {Width, Height});
+                listView.SelectedItem = null; 
+            }
         }
     }
 }

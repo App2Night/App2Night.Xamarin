@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
@@ -98,14 +99,13 @@ namespace App2Night.PageModel
             { 
                 //TODO add again after backend fixes his endpoint.
                 var enabled =
-                       //ValidCityname&&  
-                       ValidDescription
-                       //&& ValidHousenumber
+                       ValidCityname 
+                       && ValidDescription
+                       && ValidHousenumber
                        && ValidLocationname
                        && ValidName
-                       //&& ValidZipcode
-                       //&& ValidStreetname
-                       ;
+                       && ValidZipcode
+                       && ValidStreetname;
                 return enabled;
             }
         }
@@ -187,52 +187,55 @@ namespace App2Night.PageModel
                     await CoreMethods.SwitchSelectedMaster<DashboardPageModel>();
 
                     await CoreMethods.PushPageModel<PartyDetailViewModel>(result.Data);
-                } 
-                //TODO Handle create party failure
+                }
+                else
+                {
+                    //TODO Handle failure
+                }
             }   
         }
 
-        DateTime _lastLocationChange = new DateTime();
+        #region location validation
+         
+        private DateTime _lastInputTime;
 
-        private CancellationTokenSource _lastCancellationTokenSource; 
+        private Task _validationTask;
 
+        /// <summary>
+        /// Starts a task that sets a timestamp to the current time and starts the validation when the time between the timestamp and the current time is greater then 500 ms.
+        /// Calling this method while the task is still running will reset the timestamp to the current time.
+        /// </summary>
         private void StartLocationValidation()
         {
-            if (_lastCancellationTokenSource != null)
+            if (_validationTask!= null && !_validationTask.IsCompleted)
             {
-                _lastCancellationTokenSource.Cancel();
-                _lastCancellationTokenSource.Dispose();
+                _lastInputTime = DateTime.Now;
             }
-                
-            _lastCancellationTokenSource = new CancellationTokenSource(); 
-            var task =Task.Run(async () =>
+            else
             {
-                try
+                _validationTask = Task.Run(async () =>
                 {
-                    var timestamp = DateTime.Now;
-                    _lastLocationChange = timestamp;
-                    //Wait for another user input that cancels this task
-                    await Task.Delay(1000);
-                    //Check if this was the last user input
-                    if (timestamp == _lastLocationChange)
+                    _lastInputTime = DateTime.Now;
+                    try
                     {
+                        while ((DateTime.Now - _lastInputTime).TotalMilliseconds < 500)
+                        {
+                            await Task.Delay(50);
+                        } 
+
                         //Start location check
-                        await CheckLocation();
+                        await CheckLocation(); 
+                    } 
+                    catch (Exception e)
+                    {
+                        DebugHelper.PrintDebug(DebugType.Error, "Starting location validation process failed\n" + e);
                     }
-                }
-                catch (TaskCanceledException e)
-                {
-                    // ignored
-                }
-                catch (Exception e)
-                {
-                    DebugHelper.PrintDebug(DebugType.Error, "Starting location validation process failed\n" + e);
-                }
-            }, _lastCancellationTokenSource.Token); 
+                });
+            } 
         }
 
         private async Task CheckLocation()
-        {
+        { 
             var locationData = new Location
             {
                 CityName = CityName,
@@ -244,7 +247,7 @@ namespace App2Night.PageModel
 
             var result =await FreshIOC.Container.Resolve<IDataService>().ValidateLocation(locationData);
 
-            if (result.Success)
+            if (result.StatusCode == (int)HttpStatusCode.NotAcceptable || result.Success)
             {
                 var resLocation = result.Data;
 
@@ -254,13 +257,11 @@ namespace App2Night.PageModel
                 if (IsEqualOrContains(resLocation.StreetName, StreetName))
                     StreetName = resLocation.StreetName;
 
-                ValidCityname = IsNameEqual(resLocation.CityName, CityName);
-                ValidZipcode = IsNameEqual(resLocation.Zipcode, Zipcode);
-                ValidStreetname = IsNameEqual(resLocation.StreetName, StreetName);
-                ValidHousenumber = IsNameEqual(resLocation.HouseNumber, HouseNumber);
+                ValidateAllLocationInputs(resLocation);
 
                 if (ValidCityname && IsEqualOrContains(resLocation.Zipcode, Zipcode))
-                    Zipcode = resLocation.Zipcode;
+                    Zipcode = resLocation.Zipcode; 
+               
 
                 if (IsEqualOrContains(resLocation.StreetName, StreetName))
                 {
@@ -275,8 +276,18 @@ namespace App2Night.PageModel
 
                     ValidCityname = true;
                     ValidZipcode = true;
-                }  
-            }
+                }
+
+                ValidateAllLocationInputs(resLocation);
+            } 
+        }
+
+        void ValidateAllLocationInputs(Location comparisonLocation)
+        {
+            ValidCityname = IsNameEqual(comparisonLocation.CityName, CityName);
+            ValidZipcode = IsNameEqual(comparisonLocation.Zipcode, Zipcode);
+            ValidStreetname = IsNameEqual(comparisonLocation.StreetName, StreetName);
+            ValidHousenumber = IsNameEqual(comparisonLocation.HouseNumber, HouseNumber);
         }
 
         bool IsEqualOrContains(string final, string notFinal)
@@ -301,5 +312,7 @@ namespace App2Night.PageModel
         {
             return s.ToLower().Replace(" ", "");
         }
+
+        #endregion
     }
 }

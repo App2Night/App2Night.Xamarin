@@ -12,6 +12,7 @@ using App2Night.Service.Helper;
 using App2Night.Service.Interface; 
 using Plugin.Connectivity;
 using Plugin.Geolocator;
+using Xamarin.Forms;
 
 namespace App2Night.Service.Service
 {
@@ -212,7 +213,7 @@ namespace App2Night.Service.Service
         {
             try
             {
-//SendKEY the create user request
+                //SendKEY the create user request
                 var creationResult =
                     await
                         _clientService.SendRequest("api/user", RestType.Post, bodyParameter: signUpModels,
@@ -294,7 +295,10 @@ namespace App2Night.Service.Service
 
         public async Task<Result> ChangeCommitmentState(Guid partyId, PartyCommitmentState commitmentState)
         {
-            if (!await CheckIfTokenIsValid()) return new Result();
+            if (!await CheckIfTokenIsValid()) return new Result
+            {
+                NeedLogin = true
+            };
 
             dynamic bodyObject = new ExpandoObject();
             bodyObject.eventCommitment = commitmentState;
@@ -303,7 +307,7 @@ namespace App2Night.Service.Service
             Result result =
                 await
                     _clientService.SendRequest("/api/UserParty/commitmentState", RestType.Put,
-                        urlQuery: "/id=" + partyId.ToString("D"), bodyParameter: bodyObject, token: Token.AccessToken);
+                        urlQuery: "?id=" + partyId.ToString("D"), bodyParameter: bodyObject, token: Token.AccessToken);
 
             if (result.Success)
             {
@@ -362,28 +366,42 @@ namespace App2Night.Service.Service
 
         public async Task<Result<IEnumerable<Party>>> RefreshPartyHistory()
         {
+            if (!await CheckIfTokenIsValid())
+                return new Result<IEnumerable<Party>> { NeedLogin = true};
+
             var result = await
                        _clientService.SendRequest<IEnumerable<Party>>("api/party/history", RestType.Get,
                            token: Token?.AccessToken);
 
             await HandleCaching(result);
 
-            PopulateObservableCollection(PartyHistory, result.Data);
-            HistoryPartisUpdated?.Invoke(this, EventArgs.Empty);
+            
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                PopulateObservableCollection(PartyHistory, result.Data);
+                HistoryPartisUpdated?.Invoke(this, EventArgs.Empty);
+            });
 
             return result;
         }
 
         public async Task<Result<IEnumerable<Party>>> RefreshSelectedParties()
         {
+            if (!await CheckIfTokenIsValid())
+                return new Result<IEnumerable<Party>> { NeedLogin = true };
+
             var result = await
                         _clientService.SendRequest<IEnumerable<Party>>("api/party/myParties", RestType.Get,  
                             token: Token?.AccessToken);
 
             await HandleCaching(result);
 
-            PopulateObservableCollection(SelectedPartys, result.Data);
-            SelectedPartiesUpdated?.Invoke(this, EventArgs.Empty);
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                PopulateObservableCollection(SelectedPartys, result.Data);
+
+                SelectedPartiesUpdated?.Invoke(this, EventArgs.Empty);
+            });
 
             return result;
         }
@@ -392,36 +410,7 @@ namespace App2Night.Service.Service
         {
             Result<IEnumerable<Party>> requestResult = new Result<IEnumerable<Party>>();
 
-            Coordinates coordinates = null;
-
-            //TODO check if user is alowed to use gps
-            var _storageEnabled = _storageService.Storage.UseGps //Check if gps usage is enabled in the settigns.
-                && CrossGeolocator.Current.IsGeolocationAvailable  //Check if gps usage is available on the device.
-                && CrossGeolocator.Current.IsGeolocationEnabled; //Check if gps usage is enabled on the device.
-
-            if (_storageEnabled) 
-            {
-                try
-                {
-                    //Get coordinates from GPS
-                    var location = await CrossGeolocator.Current.GetPositionAsync(10000);
-                    coordinates = new Coordinates()
-                    {
-                        Latitude = location.Latitude,
-                        Longitude = location.Longitude
-                    };
-                }
-                catch (TaskCanceledException e)
-                {
-                    DebugHelper.PrintDebug(DebugType.Error, "Getting location in time failed.\n" + e); 
-                }
-            }
-
-            //Backup if gps is disabled or fetching from gps didnt return a valid result.
-            if (_storageEnabled || coordinates == null)
-            {
-                //TODO Resolve gps data from the storage
-            }
+            Coordinates coordinates = await CoordinateHelper.GetCoordinates(); 
 
             try
             {
@@ -443,8 +432,11 @@ namespace App2Night.Service.Service
             await HandleCaching(requestResult);
             //Check if the request was a success
 
-            PopulateObservableCollection(InterestingPartys, requestResult.Data);
-            NearPartiesUpdated?.Invoke(this, EventArgs.Empty);
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                PopulateObservableCollection(InterestingPartys, requestResult.Data);
+                NearPartiesUpdated?.Invoke(this, EventArgs.Empty);
+            });
             
             return requestResult;
         }

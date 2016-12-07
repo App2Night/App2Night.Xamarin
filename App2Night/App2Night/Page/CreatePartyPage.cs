@@ -146,6 +146,7 @@ namespace App2Night.Page
             Grid.SetRowSpan(inputRows, 2);
             Grid.SetColumnSpan(inputRows, 2);
 
+            //SKIA Replace with gradient layer
             var gradientLayer = new BoxView
             {
                 Color = Color.White.MultiplyAlpha(0.3)

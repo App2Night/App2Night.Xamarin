@@ -12,7 +12,11 @@ namespace App2Night.CustomView.Template
             InputTransparent = true
         };
 
-        Label _titleLabel = new Label();
+        Label _titleLabel = new Label
+        {
+            FontSize = 30,
+            Margin = 5
+        };
 
         Label _descriptionLabel = new Label();
 

@@ -44,14 +44,14 @@ namespace App2Night.CustomView.View
 
         private void Disabled()
         {
-            //Add the disabled opacity
+            //Add the disabled opacity 
             ButtonLabel.IsEnabled = false;
             ButtonLabel.Opacity = 0.6; 
         }
 
         private void Enabled()
         {
-            //Restore the original opacity
+            //Restore the original opacity 
             ButtonLabel.Opacity = _defaultOpacity;
             ButtonLabel.IsEnabled = true;
         }
@@ -111,12 +111,15 @@ namespace App2Night.CustomView.View
 
         protected void OnButtonTapped()
         {
-            Device.BeginInvokeOnMainThread(() =>
+            if (IsEnabled)
             {
-                OnTabAnimation?.Commit(this, "OnTabAnimation" + DateTime.Now.Millisecond, finished: AnimationCallback);
-                Command?.Execute(null);
-                ButtonTapped?.Invoke(this, EventArgs.Empty);
-            }); 
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    OnTabAnimation?.Commit(this, "OnTabAnimation" + DateTime.Now.Millisecond, finished: AnimationCallback);
+                    Command?.Execute(null);
+                    ButtonTapped?.Invoke(this, EventArgs.Empty);
+                });
+            } 
         }
     }
 }

@@ -54,7 +54,8 @@ namespace App2Night.Service.Service
 
 
                     //Check wheter or not the request was successfull.
-                    if (requestResult.IsSuccessStatusCode) 
+                    if (requestResult.IsSuccessStatusCode || 
+                        requestResult.StatusCode == HttpStatusCode.NotAcceptable)  //Basicly a workaround for a not so well made backend implementation that sends a 406 if a location is not correct while still sending data that are needed for the app.
                         await HandleSuccess(uri, result, timer, requestResult); 
                     else   
                         await HandleFailure(uri, timer, requestResult); 
@@ -220,12 +221,16 @@ namespace App2Night.Service.Service
         } 
 
         private HttpClient GetClient(Endpoint endpoint)
-        {
+        { 
             var domain = endpoint == Endpoint.Api ? "app2nightapi" : "app2nightuser";
-            HttpClient client = new HttpClient {BaseAddress = new Uri($"https://{domain}.azurewebsites.net")};
-            client.Timeout = TimeSpan.FromSeconds(5);
-            //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var client = new HttpClient() { BaseAddress = new Uri($"https://{domain}.azurewebsites.net")}; 
+
+            client.Timeout = TimeSpan.FromSeconds(15); 
+
+            //Explicity set the requested domain to avoid a bug.
             client.DefaultRequestHeaders.Host = $"{domain}.azurewebsites.net";
+
             return client;
         }
          
