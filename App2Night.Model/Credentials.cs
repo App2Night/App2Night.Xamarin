@@ -9,6 +9,8 @@
      */
     public static class Credentials
     {
-        public static string BingKey = "KEY_HERE"; 
+        public static string BingKey = "KEY_HERE";
+        public static string AnalyticsKey = "KEY_HERE";
+
     }
 }
