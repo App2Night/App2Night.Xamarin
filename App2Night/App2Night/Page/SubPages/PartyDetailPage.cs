@@ -12,12 +12,13 @@ namespace App2Night.Page.SubPages
     public class PartyDetailPage : FreshBaseContentPage
     {
         private static int _defaultFontSize = 16;
+        private static Thickness _defaultMargin = new Thickness(5, 0);
+        public static int CommandHeight = 70;
         #region Views
         InputContainer<Label> _descriptionLabel = new InputContainer<Label>
         {
             IconCode = "\uf040",
-            HeightRequest = 100,
-            Input = { HorizontalOptions = LayoutOptions.Center, FontSize = _defaultFontSize, VerticalOptions = LayoutOptions.Start},
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize },
             HorizontalOptions = LayoutOptions.Start,
             ValidationVisible = false
         };
@@ -25,50 +26,80 @@ namespace App2Night.Page.SubPages
         {
             IconCode = "\uf073",
             HorizontalOptions = LayoutOptions.Start,
-            Input = { HorizontalOptions = LayoutOptions.Center, FontSize = _defaultFontSize },
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize },
             ValidationVisible = false
         };
         InputContainer<Label> _startDateTimeLabel = new InputContainer<Label>
         {
             IconCode = "\uf017",
             HorizontalOptions = LayoutOptions.Start,
-            Input = { HorizontalOptions = LayoutOptions.Center, FontSize = _defaultFontSize },
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize },
             ValidationVisible = false
         };
         InputContainer<Label> _MusicGenreLabel = new InputContainer<Label>
         {
             IconCode = "\uf001",
             HorizontalOptions = LayoutOptions.Start,
-            Input = { HorizontalOptions = LayoutOptions.Center, FontSize = _defaultFontSize },
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize },
             ValidationVisible = false
         };
         InputContainer<Label> _partyTypeLabel = new InputContainer<Label>
         {
             IconCode = "\uf0fc",
             HorizontalOptions = LayoutOptions.Start,
-            Input = { HorizontalOptions = LayoutOptions.Center, FontSize = _defaultFontSize },
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize },
             ValidationVisible = false
         };
-        InputContainer<Label> _addressLabel = new InputContainer<Label>
+        InputContainer<Label> _streetNameLabel = new InputContainer<Label>
+        {
+            IconCode = "\uf0f3",
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize },
+            HorizontalOptions = LayoutOptions.Start,
+            ValidationVisible = false
+        };
+        InputContainer<Label> _houseNumberLabel = new InputContainer<Label>
+        {
+            HorizontalOptions = LayoutOptions.Start,
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize },
+            ValidationVisible = false
+        };
+        InputContainer<Label> _cityNameLabel = new InputContainer<Label>
         {
             IconCode = "\uf279",
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize },
             HorizontalOptions = LayoutOptions.Start,
-            Input = { HorizontalOptions = LayoutOptions.Center, FontSize = _defaultFontSize },
             ValidationVisible = false
         };
-
-        ToolbarItem _editToolbarItem = new ToolbarItem
+        InputContainer<Label> _zipcodeLabel = new InputContainer<Label>
         {
-            Text = "Edit",
-            
+            HorizontalOptions = LayoutOptions.Start,
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize },
+            ValidationVisible = false
         };
-
         readonly Map _partyLocation = new Map()
         {
             HeightRequest = 200,
             IsShowingUser = true,
         };
         private Position _partyPosition;
+
+        BoxView _gradientLayer = new BoxView
+        {
+            Color = Color.White.MultiplyAlpha(0.3),
+            IsVisible = false
+        };
+
+        CustomButton _rateButton = new CustomButton
+        {
+            Text = "Rate",
+            ButtonLabel =
+            {
+                FontSize = 50,
+                FontFamily = "FontAwesome",
+            },
+            HorizontalOptions = LayoutOptions.Center
+
+        };
 
         #endregion
         #region BindablePinProperty 
@@ -93,48 +124,92 @@ namespace App2Night.Page.SubPages
             set { SetValue(MapPinsProperty, value); }
         }
         #endregion
-        public static readonly BindableProperty ToolbarItemsVisibleProperty =
-        BindableProperty.Create<PartyDetailPage, bool>(ctrl => ctrl.ToolbarItemsVisible,
-        defaultValue: false,
-        defaultBindingMode: BindingMode.OneWay,
-        propertyChanging: (bindable, oldValue, newValue) => {
-            if (!oldValue && newValue)
-            {
-                // add your ToolBarItem(s)
-                var page = (PartyDetailPage)bindable;
-                page.ToolbarItems.Add(page._editToolbarItem);
-            }
-            else if (oldValue && !newValue)
-            {
-                var page = (PartyDetailPage)bindable;
-                page.ToolbarItems.Clear();
-            }
-        });
+        
 
-        public bool ToolbarItemsVisible
-        {
-            get { return (bool)GetValue(ToolbarItemsVisibleProperty); }
-            set { SetValue(ToolbarItemsVisibleProperty, value); }
-        }
+        
         public PartyDetailPage()
         {
             SetBindings();
             Device.BeginInvokeOnMainThread(async () => await InitializeMapCoordinates());
-            
-            this.SetBinding(ToolbarItemsVisibleProperty, nameof(PartyDetailViewModel.IsMyParty));
-            Content = new StackLayout
+            var inputRows = CreateInputRows();
+            //SKIA Replace with gradient layer
+            Grid.SetRowSpan(inputRows, 2);
+            Grid.SetColumnSpan(inputRows, 2);
+            Grid.SetColumn(_rateButton, 2);
+            Content = new Grid
             {
+                RowSpacing = 0,
+                ColumnDefinitions =
+                {
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
+                },
+                RowDefinitions =
+                {
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
+                    new RowDefinition {Height = new GridLength(CommandHeight, GridUnitType.Absolute)}
+                },
                 Children =
                 {
-                    _partyLocation,
-                    _descriptionLabel,
-                    _dateLabel,
-                    _startDateTimeLabel,
-                    _MusicGenreLabel,
-                    _partyTypeLabel
+                    inputRows,
+                    {_gradientLayer, 0, 1},
+                    {_rateButton, 0, 1},
                 }
             };
         }
+
+        private ScrollView CreateInputRows()
+        {
+            return new ScrollView
+            {
+                Content = new StackLayout
+                {
+                    Spacing = 5,
+                    Children =
+                    {
+                        _descriptionLabel,
+                        _MusicGenreLabel,
+                        _dateLabel,
+                        _startDateTimeLabel,
+                        _partyLocation,
+                        new Grid
+                        {
+                            ColumnDefinitions =
+                            {
+                                new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
+                                new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                            },
+                            Children =
+                            {
+                                {_streetNameLabel, 0, 0},
+                                {_houseNumberLabel, 1, 0}
+                            },
+                            Margin = _defaultMargin
+                        },
+                        new Grid
+                        {
+                            ColumnDefinitions =
+                            {
+                                new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
+                                new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                            },
+                            Children =
+                            {
+                                {_cityNameLabel, 0, 0},
+                                {_zipcodeLabel, 1, 0}
+                            },
+                            Margin = _defaultMargin
+                        },
+                        new BoxView
+                        {
+                            HeightRequest = CommandHeight,
+                            Color = Color.Transparent
+                        }
+                    }
+                }
+            };
+        }
+
         private async Task InitializeMapCoordinates()
         {
             var coordinates = await CrossGeolocator.Current.GetPositionAsync();
@@ -150,13 +225,16 @@ namespace App2Night.Page.SubPages
         }
         private void SetBindings()
         {
-            this.SetBinding(TitleProperty, "Party.Name");
-            _descriptionLabel.Input.SetBinding(Label.TextProperty, "Party.Description");
-            _dateLabel.Input.SetBinding(Label.TextProperty, "Party.Date", stringFormat: AppResources.Date);
-            _MusicGenreLabel.Input.SetBinding(Label.TextProperty, "Party.MusicGenre");
-            _partyTypeLabel.Input.SetBinding(Label.TextProperty, "Party.PartyType");
-            _startDateTimeLabel.Input.SetBinding(Label.TextProperty, "Party.CreationDateTime",
-                stringFormat: AppResources.DateTime);
+            this.SetBinding(TitleProperty, nameof(PartyDetailViewModel.Name));
+            _descriptionLabel.Input.SetBinding(Label.TextProperty, nameof(PartyDetailViewModel.Description));
+            _dateLabel.Input.SetBinding(Label.TextProperty, nameof(PartyDetailViewModel.Date), stringFormat: AppResources.Date);
+            _MusicGenreLabel.Input.SetBinding(Label.TextProperty, nameof(PartyDetailViewModel.MusicGenre));
+            _partyTypeLabel.Input.SetBinding(Label.TextProperty, nameof(PartyDetailViewModel.PartyType));
+            _startDateTimeLabel.Input.SetBinding(Label.TextProperty, nameof(PartyDetailViewModel.CreationDateTime), stringFormat: AppResources.Time);
+            _streetNameLabel.Input.SetBinding(Label.TextProperty, "Location.StreetName");
+            _houseNumberLabel.Input.SetBinding(Label.TextProperty, "Location.HouseNumber");
+            _cityNameLabel.Input.SetBinding(Label.TextProperty, "Location.CityName");
+            _zipcodeLabel.Input.SetBinding(Label.TextProperty, "Location.Zipcode");
             this.SetBinding(DashboardPage.MapPinsProperty, nameof(PartyDetailViewModel.MapPins));
         }
     }
