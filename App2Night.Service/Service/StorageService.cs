@@ -39,26 +39,26 @@ namespace App2Night.Service.Service
         }
 
         public async Task SaveStorage()
-        {  
-            var folder = await GetFolder();
-
-            //Creates a file to save the storage in to.
-            //Open the file if it already exists.
-            var file = await folder.CreateFileAsync(_fileName,
-                CreationCollisionOption.ReplaceExisting);
-
-            //Serialize the data
-            string data = JsonConvert.SerializeObject(Storage);
-            data = EncryptString(data);
-
+        {
             try
             {
+                var folder = await GetFolder();
+
+                //Creates a file to save the storage in to.
+                //Open the file if it already exists.
+                var file = await folder.CreateFileAsync(_fileName,
+                    CreationCollisionOption.ReplaceExisting);
+
+                //Serialize the data
+                string data = JsonConvert.SerializeObject(Storage);
+                data = EncryptString(data);
+
+
                 //Save the encrypted data.
                 await file.WriteAllTextAsync(data);
             }
             catch (Exception ex)
             {
-                
                 DebugHelper.PrintDebug(DebugType.Error, "Saving storage failed" + ex);
             }
         }
@@ -97,7 +97,7 @@ namespace App2Night.Service.Service
         {
             //TODO Add decryption
             return encryptedData;
-        } 
+        }
 
         public async Task OpenStorage()
         {
@@ -107,15 +107,15 @@ namespace App2Night.Service.Service
             //Signal if the storage comes from the file system or is freshly created.
             var cached = false;
 
-            var folder = await GetFolder();
-            
-            //Check if the file exists in the folder.
-            var fileExists = await folder.CheckExistsAsync(_fileName);
+            try
+            {
+                var folder = await GetFolder();
 
-            if (fileExists == ExistenceCheckResult.FileExists) 
-            //File exists, get data
-            { 
-                try
+                //Check if the file exists in the folder.
+                var fileExists = await folder.CheckExistsAsync(_fileName);
+
+                if (fileExists == ExistenceCheckResult.FileExists)
+                    //File exists, get data
                 {
                     var file = await folder.GetFileAsync(_fileName);
                     string encryptedString = await file.ReadAllTextAsync();
@@ -127,15 +127,16 @@ namespace App2Night.Service.Service
                         LogInChanged(true);
                     }
                 }
-                catch (Exception e)
-                {
-                    Debug.WriteLine(e);
-                }
-                finally
-                {
-                    Storage = storage;
-                    if (!cached) await SaveStorage();
-                }
+            }
+
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
+            finally
+            {
+                Storage = storage;
+                if (!cached) await SaveStorage();
             }
         }
 

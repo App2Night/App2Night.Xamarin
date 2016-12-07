@@ -221,12 +221,16 @@ namespace App2Night.Service.Service
         } 
 
         private HttpClient GetClient(Endpoint endpoint)
-        {
+        { 
             var domain = endpoint == Endpoint.Api ? "app2nightapi" : "app2nightuser";
-            HttpClient client = new HttpClient {BaseAddress = new Uri($"https://{domain}.azurewebsites.net")};
-            client.Timeout = TimeSpan.FromSeconds(5);
-            //client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+            var client = new HttpClient() { BaseAddress = new Uri($"https://{domain}.azurewebsites.net")}; 
+
+            client.Timeout = TimeSpan.FromSeconds(15); 
+
+            //Explicity set the requested domain to avoid a bug.
             client.DefaultRequestHeaders.Host = $"{domain}.azurewebsites.net";
+
             return client;
         }
          

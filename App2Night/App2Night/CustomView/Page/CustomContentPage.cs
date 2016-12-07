@@ -76,11 +76,11 @@ namespace App2Night.CustomView.Page
             Color = _infoBackgroundColor
         }; 
          
-        private Grid _infoContainer;
+        private Grid _mainLayout;
 
         public  CustomContentPage()
         {
-            _infoContainer = new Grid
+            _mainLayout = new Grid
             {
                 RowSpacing = 0,
                 RowDefinitions =
@@ -93,11 +93,14 @@ namespace App2Night.CustomView.Page
                 {
                     
                      _infoBackgroundBoxView,
-                     _infoLabel, 
+                     _infoLabel,
+                     _noContentWarningLabel,
                 }
             };  
 
-            base.Content = _infoContainer;
+            Grid.SetRowSpan(_noContentWarningLabel,3);
+
+            base.Content = _mainLayout;
 
             //Set start connectivity value.
             _oldValue = CrossConnectivity.Current.IsConnected;
@@ -109,16 +112,20 @@ namespace App2Night.CustomView.Page
         /// </summary>
         public new Xamarin.Forms.View Content
         {
-            get { return _infoContainer.Children.Count > 2 ? _infoContainer.Children[2] : null; }
+            get { return _mainLayout.Children.Count > 3 ? _mainLayout.Children[2] : null; }
             set
             {
-                if (_infoContainer.Children.Count > 2)
+                _mainLayout.Children.Remove(_noContentWarningLabel);
+
+                if (_mainLayout.Children.Count > 2)
                 {
-                    _infoContainer.Children.RemoveAt(2);
+                    _mainLayout.Children.RemoveAt(2);
                 } 
 
-                _infoContainer.Children.Add(value, 0, 1);
-                Grid.SetRowSpan(value, 2); 
+                _mainLayout.Children.Add(value, 0, 1);
+                Grid.SetRowSpan(value, 2);
+
+                _mainLayout.Children.Add(_noContentWarningLabel);
             }
         }
 
@@ -150,7 +157,7 @@ namespace App2Night.CustomView.Page
             var animation = new Animation(d =>
             {
                 _infoLabel.TranslationY = -_size * d;
-                _infoContainer.RowDefinitions[0].Height = new GridLength((1 - d) * _size, GridUnitType.Absolute);
+                _mainLayout.RowDefinitions[0].Height = new GridLength((1 - d) * _size, GridUnitType.Absolute);
             }, 0, 1);
             animation.Commit(this, "SlideInInfo", easing: Easing.CubicInOut, length: 500U);
         }
@@ -160,7 +167,7 @@ namespace App2Night.CustomView.Page
             var animation = new Animation(d =>
             {
                 _infoLabel.TranslationY = -_size + _size * d;
-                _infoContainer.RowDefinitions[0].Height = new GridLength(d * _size, GridUnitType.Absolute);
+                _mainLayout.RowDefinitions[0].Height = new GridLength(d * _size, GridUnitType.Absolute);
             });
             animation.Commit(this, "SlideInInfo", easing: Easing.CubicInOut, length: 500U);
         }
@@ -169,7 +176,9 @@ namespace App2Night.CustomView.Page
         {
             CrossConnectivity.Current.ConnectivityChanged -= ConnectionChanged; 
             base.OnDisappearing();
-        } 
+        }
+
+        private object _lastSender;
 
         /// <summary>
         /// Opens a preview for the object.
@@ -179,18 +188,25 @@ namespace App2Night.CustomView.Page
         /// <param name="parameter">Parameter for the <see cref="TPreviewType"/>.</param>
         public void PreviewItemSelected<TItemType, TPreviewType>(TItemType sender, object[] parameter) where TPreviewType : PreviewView
         {
+            //Check if the new object is already displayed and close the view if it is already displayed
+            if (_lastSender != null && _lastSender == (object)sender)
+            {
+                Device.BeginInvokeOnMainThread(async () => await ClosePreview()); 
+                return;
+            }
+            _lastSender = sender;
+
             var p = new List<object> { sender };
             p.AddRange(parameter);
 
             //Create an instance of the PreviewView
-            _preview = (TPreviewType)Activator.CreateInstance(typeof(TPreviewType), p.ToArray());
-            _preview.CloseViewEvent += ClosePreviewEvent;
-            ShowPreview(_preview);
+            var nextView = (TPreviewType)Activator.CreateInstance(typeof(TPreviewType), p.ToArray());
+            nextView.CloseViewEvent += ClosePreviewEvent;
+            ShowPreview(nextView);
         }
 
         private void ClosePreviewEvent(object sender, EventArgs eventArgs)
-        {
-            _preview.CloseViewEvent -= ClosePreviewEvent;
+        { 
             Device.BeginInvokeOnMainThread(async ()=>  await ClosePreview() );
         } 
 
@@ -204,16 +220,22 @@ namespace App2Night.CustomView.Page
 
         private async Task ClosePreview()
         {
-            //Start closing animation in view 
-            _preview.StartClosingAnimataion(ClosingAnimationLength);
-            //Move container out of the view
-            await _preview.TranslateTo(0, _preview.HeightRequest, ClosingAnimationLength, Easing.CubicInOut);
-            //Preview is not longer visible
-            _isPreviewVisible = false;
-            //Hide container
-            //currentContainerRef.HeightRequest = 0;
-            _infoContainer.Children.RemoveAt(3);
-            _preview = null;
+            if (_isPreviewVisible)
+            {
+                _preview.CloseViewEvent -= ClosePreviewEvent;
+                //Preview is not longer visible
+                _isPreviewVisible = false;
+                //Start closing animation in view 
+                _preview.StartClosingAnimataion(ClosingAnimationLength);
+                //Move container out of the view
+                await _preview.TranslateTo(0, _preview.HeightRequest, ClosingAnimationLength, Easing.CubicInOut);
+
+                //Hide container
+                //currentContainerRef.HeightRequest = 0;
+                _mainLayout.Children.RemoveAt(4);
+                _preview = null;
+                _lastSender = null;
+            } 
         }
 
         private void OpenPreview(PreviewView newView)
@@ -221,7 +243,7 @@ namespace App2Night.CustomView.Page
             var height = Height / 9.0 * 5;
 
             _preview = newView;
-            _infoContainer.Children.Add(_preview, 0, 2);
+            _mainLayout.Children.Add(_preview, 0, 2);
             _preview.HeightRequest = height;
 
             //Move container to bottom
@@ -249,7 +271,7 @@ namespace App2Night.CustomView.Page
         {
             var nextPreview = newView;
             nextPreview.IsVisible = false;
-            _infoContainer.Children.Add(nextPreview, 0, 2);
+            _mainLayout.Children.Add(nextPreview, 0, 2);
             nextPreview.TranslationX = -Width; 
             nextPreview.IsVisible = true;
             
@@ -261,7 +283,7 @@ namespace App2Night.CustomView.Page
             animation.Commit(this, "swipeAnimation", length: SwitchingAnimationLength, easing: Easing.CubicInOut,
                 finished: (d, b) =>
                 {
-                    _infoContainer.Children.Remove(_preview);
+                    _mainLayout.Children.Remove(_preview);
                     _preview = newView;
                 }); 
         }

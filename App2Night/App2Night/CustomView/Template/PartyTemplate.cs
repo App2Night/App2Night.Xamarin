@@ -36,7 +36,11 @@ namespace App2Night.CustomView.Template
             base.OnPropertyChanged(propertyName);
             if (propertyName == "Parent" && Parent !=null )
             {
-                _grid.ColumnDefinitions[0].Width = ((ListView)Parent).RowHeight * 0.8;
+                var parentListViewRowHeight = ((ListView) Parent).RowHeight;
+                if (parentListViewRowHeight > 0)
+                {
+                    _grid.ColumnDefinitions[0].Width = ((ListView)Parent).RowHeight * 0.8;
+                } 
             }
 
         }

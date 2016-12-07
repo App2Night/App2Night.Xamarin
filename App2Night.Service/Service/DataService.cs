@@ -12,6 +12,7 @@ using App2Night.Service.Helper;
 using App2Night.Service.Interface; 
 using Plugin.Connectivity;
 using Plugin.Geolocator;
+using Xamarin.Forms;
 
 namespace App2Night.Service.Service
 {
@@ -212,7 +213,7 @@ namespace App2Night.Service.Service
         {
             try
             {
-//SendKEY the create user request
+                //SendKEY the create user request
                 var creationResult =
                     await
                         _clientService.SendRequest("api/user", RestType.Post, bodyParameter: signUpModels,
@@ -365,7 +366,7 @@ namespace App2Night.Service.Service
 
         public async Task<Result<IEnumerable<Party>>> RefreshPartyHistory()
         {
-            if (await CheckIfTokenIsValid())
+            if (!await CheckIfTokenIsValid())
                 return new Result<IEnumerable<Party>> { NeedLogin = true};
 
             var result = await
@@ -374,15 +375,19 @@ namespace App2Night.Service.Service
 
             await HandleCaching(result);
 
-            PopulateObservableCollection(PartyHistory, result.Data);
-            HistoryPartisUpdated?.Invoke(this, EventArgs.Empty);
+            
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                PopulateObservableCollection(PartyHistory, result.Data);
+                HistoryPartisUpdated?.Invoke(this, EventArgs.Empty);
+            });
 
             return result;
         }
 
         public async Task<Result<IEnumerable<Party>>> RefreshSelectedParties()
         {
-            if (await CheckIfTokenIsValid())
+            if (!await CheckIfTokenIsValid())
                 return new Result<IEnumerable<Party>> { NeedLogin = true };
 
             var result = await
@@ -391,8 +396,12 @@ namespace App2Night.Service.Service
 
             await HandleCaching(result);
 
-            PopulateObservableCollection(SelectedPartys, result.Data);
-            SelectedPartiesUpdated?.Invoke(this, EventArgs.Empty);
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                PopulateObservableCollection(SelectedPartys, result.Data);
+
+                SelectedPartiesUpdated?.Invoke(this, EventArgs.Empty);
+            });
 
             return result;
         }
@@ -423,8 +432,11 @@ namespace App2Night.Service.Service
             await HandleCaching(requestResult);
             //Check if the request was a success
 
-            PopulateObservableCollection(InterestingPartys, requestResult.Data);
-            NearPartiesUpdated?.Invoke(this, EventArgs.Empty);
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                PopulateObservableCollection(InterestingPartys, requestResult.Data);
+                NearPartiesUpdated?.Invoke(this, EventArgs.Empty);
+            });
             
             return requestResult;
         }

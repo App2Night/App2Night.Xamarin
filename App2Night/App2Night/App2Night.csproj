@@ -86,7 +86,7 @@
     <Compile Include="PageModel\SubPages\AboutAppViewModel.cs" />
     <Compile Include="PageModel\SubPages\EditPartyViewModel.cs" />
     <Compile Include="PageModel\SubPages\EditProfileViewModel.cs" />
-    <Compile Include="PageModel\SubPages\MyPartysViewModel.cs" />
+    <Compile Include="PageModel\MyPartysViewModel.cs" />
     <Compile Include="PageModel\SubPages\ParticipantViewModel.cs" />
     <Compile Include="PageModel\SubPages\PartyDetailViewModel.cs" />
     <Compile Include="PageModel\SubPages\ThirdPartyInfoViewModel.cs" />
@@ -104,7 +104,7 @@
     <Compile Include="Page\SubPages\AboutAppPage.cs" />
     <Compile Include="Page\SubPages\EditPartyPage.cs" />
     <Compile Include="Page\SubPages\EditProfilePage.cs" />
-    <Compile Include="Page\SubPages\MyPartysPage.cs" />
+    <Compile Include="Page\MyPartysPage.cs" />
     <Compile Include="Page\SubPages\ParticipantPage.cs" />
     <Compile Include="DependencyService\ILoadImage.cs" />
     <Compile Include="Page\SubPages\PartyDetailPage.cs" />

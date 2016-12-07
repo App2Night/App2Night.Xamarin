@@ -86,7 +86,7 @@ namespace App2Night
                 await storage.OpenStorage(); 
 
                 //Make an inital token refresh 
-                await FreshIOC.Container.Resolve<IDataService>().RequestPartyWithFilter();
+                await FreshIOC.Container.Resolve<IDataService>().BatchRefresh();
 
                 if (!storage.IsLogIn)
                 {
