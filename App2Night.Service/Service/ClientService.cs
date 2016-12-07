@@ -54,7 +54,8 @@ namespace App2Night.Service.Service
 
 
                     //Check wheter or not the request was successfull.
-                    if (requestResult.IsSuccessStatusCode) 
+                    if (requestResult.IsSuccessStatusCode || 
+                        requestResult.StatusCode == HttpStatusCode.NotAcceptable)  //Basicly a workaround for a not so well made backend implementation that sends a 406 if a location is not correct while still sending data that are needed for the app.
                         await HandleSuccess(uri, result, timer, requestResult); 
                     else   
                         await HandleFailure(uri, timer, requestResult); 

@@ -36,12 +36,12 @@ namespace App2Night.PageModel.SubPages
         {
             get
             {
-                return IsRefreshing;
+                return _isRefreshing;
             }
 
             set
             {
-                IsRefreshing = value;
+                _isRefreshing = value;
             }
         }
 

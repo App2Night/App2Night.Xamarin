@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
 using App2Night.Model.Model;
+using App2Night.Service.Interface;
+using FreshMvvm;
+using Plugin.Geolocator;
 
 namespace App2Night.Service.Helper
 {
@@ -8,6 +12,51 @@ namespace App2Night.Service.Helper
     /// </summary>
     public static class CoordinateHelper
     {
+        public static async Task<Coordinates> GetCoordinates(bool fallBackToDefaultCoordinates = true)
+        {
+            var storageService = FreshIOC.Container.Resolve<IStorageService>();
+
+            //TODO check if user is alowed to use gps
+            var storageEnabled = storageService.Storage.UseGps //Check if gps usage is enabled in the settigns.
+                && CrossGeolocator.Current.IsGeolocationAvailable  //Check if gps usage is available on the device.
+                && CrossGeolocator.Current.IsGeolocationEnabled; //Check if gps usage is enabled on the device.
+
+            Coordinates coordinates = null;
+
+            if (storageEnabled)
+            {
+                try
+                {
+                    //Get coordinates from GPS
+                    var location = await CrossGeolocator.Current.GetPositionAsync(10000);
+                    coordinates = new Coordinates()
+                    {
+                        Latitude = location.Latitude,
+                        Longitude = location.Longitude
+                    };
+                }
+                catch (TaskCanceledException e)
+                {
+                    DebugHelper.PrintDebug(DebugType.Error, "Getting location in time failed.\n" + e);
+                }
+            }
+
+            //Backup if gps is disabled or fetching from gps didnt return a valid result.
+            if (storageEnabled || coordinates == null)
+            {
+                //TODO Resolve gps data from the storage
+            }
+
+            //Take default coordinates if everything else fails.
+            if (coordinates == null && fallBackToDefaultCoordinates)
+            {
+                coordinates = new Coordinates(10.324663f, 51.273610f);
+            }
+
+            return coordinates;
+        }
+
+
         /// <summary>
         /// Calculates the distance between to coordinates. 
         /// Includs the fact that the earth is actually not a pizza.

@@ -41,7 +41,6 @@
     <Compile Include="CustomMasterDetailContainer.cs" />
     <Compile Include="CustomView\Template\MenuTemplate.cs" />
     <Compile Include="CustomView\Template\SwipeViewTemplate.cs" />
-    <Compile Include="CustomView\View\HideToolBarItem.cs" />
     <Compile Include="CustomView\View\InputContainer.cs" />
     <Compile Include="CustomView\View\EnumBindablePicker.cs" />
     <Compile Include="CustomView\Page\CustomContentPage.cs" />
