@@ -121,11 +121,11 @@ namespace App2Night.Service.Service
         }
 
         public async Task<Result<Party>> CreateParty(string name, DateTime date, MusicGenre genre, string country,
-            string cityName, string street, string houseNr, string zipcode, PartyType type, string description)
+            string cityName, string street, string houseNr, string zipcode, PartyType type, string description, int price)
         {
             //Create an object from the given parameters for the party creation
             dynamic partyCreationObject = CreatePartyCreateObject(name, date, genre, country, cityName, street, houseNr,
-                zipcode, type, description);
+                zipcode, type, description, price);
 
             //Send the create party request
             Result <Guid> result =
@@ -159,7 +159,8 @@ namespace App2Night.Service.Service
         /// Creates a party object for the api/party post endpoint.
         /// </summary> 
         private dynamic CreatePartyCreateObject(string name, DateTime date, MusicGenre genre, string country,
-            string cityName, string street, string houseNr, string zipcode, PartyType type, string description)
+            string cityName, string street, string houseNr, string zipcode, PartyType type, string description
+            , int price)
         {
             dynamic partyCreationObject = new ExpandoObject();
             partyCreationObject.partyName = name;
@@ -181,6 +182,9 @@ namespace App2Night.Service.Service
             partyCreationObject.partyType = (int) type;
 
             partyCreationObject.description = description;
+
+            partyCreationObject.price = price;
+
             return partyCreationObject;
         }
 

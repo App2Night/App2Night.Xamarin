@@ -36,9 +36,7 @@ namespace App2Night.Page
             get { return (IList<Pin>)GetValue(MapPinsProperty); }
             set { SetValue(MapPinsProperty, value); }
         }
-
-
-
+        
         #region Views
         readonly EnhancedContainer _interestingPartieContainer = new EnhancedContainer
         {
@@ -56,9 +54,7 @@ namespace App2Night.Page
         {
             Name = AppResources.History,
             ContentMissingText = AppResources.ContHistory
-        };
-
-      
+        }; 
 
         readonly Image _profilePicture = new Image
         {
@@ -99,6 +95,8 @@ namespace App2Night.Page
 
         public DashboardPage()
         {
+            AddReloadToolbarIcon();
+
             this.SetBinding(DashboardPage.MapPinsProperty, nameof(DashboardPageModel.MapPins));
 
             Device.BeginInvokeOnMainThread(async ()=> await InitializeMapCoordinates());
@@ -136,6 +134,16 @@ namespace App2Night.Page
                 Orientation = ScrollOrientation.Vertical
             };
             Content = mainScroll;
+        }
+
+        void AddReloadToolbarIcon()
+        {
+            var reloadToolbarIcon = new ToolbarItem
+            {
+                Text = "Reload"
+            };
+            ToolbarItems.Add(reloadToolbarIcon);
+            reloadToolbarIcon.SetBinding(MenuItem.CommandProperty, "ReloadCommand");
         }
 
         private async Task InitializeMapCoordinates()

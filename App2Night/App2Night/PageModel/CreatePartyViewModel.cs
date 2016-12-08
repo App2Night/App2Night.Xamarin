@@ -1,7 +1,5 @@
-﻿using System;
-using System.ComponentModel;
-using System.Net;
-using System.Threading;
+﻿using System; 
+using System.Net; 
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.Model.Enum;
@@ -23,12 +21,25 @@ namespace App2Night.PageModel
         string _zipcode;
 		string _houseNumber;
         private string _cityName;
+        private int _price;
+
 
         [AlsoNotifyFor(nameof(AcceptButtonEnabled),nameof(ClearButtonEnabled))] 
         public string Name { get; set; }
 
         [AlsoNotifyFor(nameof(ValidDescription))]
         public string Description { get; set; }
+
+        public string Price
+        {
+            get { return _price.ToString(); }
+            set
+            {
+                var newPrice = int.Parse(value);
+                if(newPrice >= 0)
+                    _price = newPrice;
+            }
+        }
 
         public MusicGenre MusicGenre { get; set; }
 
@@ -96,8 +107,7 @@ namespace App2Night.PageModel
         public bool AcceptButtonEnabled
         {
             get
-            { 
-                //TODO add again after backend fixes his endpoint.
+            {  
                 var enabled =
                        ValidCityname 
                        && ValidDescription
@@ -179,7 +189,7 @@ namespace App2Night.PageModel
                 var result = await
                         FreshIOC.Container.Resolve<IDataService>()
                             .CreateParty(Name, dateTime, MusicGenre, "Germany", CityName, StreetName, HouseNumber, Zipcode,
-                                PartyType.Bar, Description);
+                                PartyType.Bar, Description, _price);
 
                 if (result.Success)
                 {

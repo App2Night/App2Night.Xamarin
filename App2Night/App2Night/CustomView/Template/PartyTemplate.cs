@@ -10,8 +10,7 @@ namespace App2Night.CustomView.Template
     public class PartyTemplate : ViewCell
     {
         private Image _pictureImage = new Image
-        {
-            Source = ImageSource.FromResource("App2Night.Data.IconCode.icon.png"),
+        { 
             VerticalOptions = LayoutOptions.Center
         };  
 
@@ -53,6 +52,7 @@ namespace App2Night.CustomView.Template
 
         public PartyTemplate()
         { 
+            _pictureImage.SetBinding(Image.SourceProperty, nameof(Party.ImageSource));
             _nameLabel.SetBinding(Label.TextProperty, nameof(Party.Name));
             _grid= new Grid
             {

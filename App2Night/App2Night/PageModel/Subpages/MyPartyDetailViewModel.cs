@@ -228,7 +228,7 @@ namespace App2Night.PageModel.SubPages
                 var result = await
                     FreshIOC.Container.Resolve<IDataService>()
                         .CreateParty(Name, dateTime, MusicGenre, "Germany", CityName, StreetName, HouseNumber, Zipcode,
-                            PartyType.Bar, Description);
+                            PartyType.Bar, Description, 0);
 
                 if (result.Success)
                 {
