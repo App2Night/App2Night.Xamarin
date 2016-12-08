@@ -1,8 +1,10 @@
 ﻿using System;
+using App2Night.CustomView.View;
 using App2Night.Model.Enum;
 using App2Night.Model.Model;
 using FreshMvvm;
 using PropertyChanged;
+using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
 namespace App2Night.PageModel.SubPages
