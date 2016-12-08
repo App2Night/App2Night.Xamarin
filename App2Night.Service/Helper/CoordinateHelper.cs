@@ -44,7 +44,9 @@ namespace App2Night.Service.Helper
             //Backup if gps is disabled or fetching from gps didnt return a valid result.
             if (storageEnabled || coordinates == null)
             {
-                //TODO Resolve gps data from the storage
+                var savedLocationData = storageService.Storage.ManualLocation;
+                if (savedLocationData != null)
+                    coordinates = new Coordinates((float) savedLocationData.Longitude, (float) savedLocationData.Latitude);
             }
 
             //Take default coordinates if everything else fails.

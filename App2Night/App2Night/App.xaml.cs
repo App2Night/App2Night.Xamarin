@@ -9,10 +9,14 @@ using App2Night.Service.Helper;
 using App2Night.Service.Interface;
 using App2Night.Service.Service;
 using FreshMvvm;
+using Microsoft.Azure.Mobile;
+using Microsoft.Azure.Mobile.Analytics;
+using Microsoft.Azure.Mobile.Crashes;
 using Plugin.Connectivity;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using Xamarin.Forms;
+using Device = Xamarin.Forms.Device;
 
 namespace App2Night
 {
@@ -24,6 +28,8 @@ namespace App2Night
 
         public App()
         {
+            MobileCenter.Start(typeof(Analytics), typeof(Crashes)); 
+
             InitializeComponent();
             CheckIfMapsIsAvailable();
 
@@ -53,7 +59,7 @@ namespace App2Night
             masterDetailNav.AddPage<DashboardPageModel>(AppResources.Dashboard, "\uf015");
             masterDetailNav.AddPage<PartyPickerViewModel>(AppResources.PickAParty, "\uf29b");
             masterDetailNav.AddPage<CreatePartyViewModel>(AppResources.CreateAParty, "\uf271", requiresLogin: true);
-            masterDetailNav.AddPage<MyPartysViewModel>("My parties", "\uf274", requiresLogin: true);
+            masterDetailNav.AddPage<MyPartysViewModel>("My parties", "\uf274", requiresLogin: true); //RESOURCE
             masterDetailNav.AddPage<SettingViewModel>(AppResources.Settings, "\uf085");
             masterDetailNav.AddPage<AboutTabbedViewModel>(AppResources.About, "\uf05a");
             return masterDetailNav;

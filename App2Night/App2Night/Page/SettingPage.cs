@@ -141,17 +141,17 @@ namespace App2Night.Page
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private async void LocationChanger(object sender, ToggledEventArgs e)
+        private void LocationChanger(object sender, ToggledEventArgs e)
         {
             if (((Switch) sender).IsToggled)
             {
                 _gpsRangeSlider.IsEnabled = true;
-                await CollapseLocationChanger();
+                CollapseLocationChanger();
             }
             else
             {
                 _gpsRangeSlider.IsEnabled = false;
-                await ExpandLocationChanger();
+                ExpandLocationChanger();
             }
         }
 
@@ -159,7 +159,7 @@ namespace App2Night.Page
         ///  Animates <see cref="Grid.HeightRequest"/> from 0 to 1 to show it. Changes visibility to true.
         /// </summary>
         /// <returns></returns>
-        private async Task ExpandLocationChanger()
+        private void ExpandLocationChanger()
         {
             _zipCodetEntry.IsVisible = true;
             _cityNameEntry.IsVisible = true;
@@ -173,7 +173,7 @@ namespace App2Night.Page
         /// Animates <see cref="Grid.HeightRequest"/> from 1 to 0 to hide it. Finally changes visibility to false.
         /// </summary>
         /// <returns></returns>
-        private async Task CollapseLocationChanger()
+        private void CollapseLocationChanger()
         {
             Animation entryAnimation = new Animation(d => { _grid.HeightRequest = d*100; }, 1, 0);
             entryAnimation.Commit(this, "Animation", easing: Easing.Linear, finished: (d, b) =>

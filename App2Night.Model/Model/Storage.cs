@@ -8,5 +8,7 @@
 
         public bool UseGps { get; set; } = true;
 
+        public Location ManualLocation { get; set; }
+
     }
 }
