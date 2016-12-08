@@ -45,7 +45,7 @@ namespace App2Night
                 Xamarin.Forms.DependencyService.Get<ICultureService>().SetLocale(ci); // set the Thread for locale-aware methods
             }
 
-            Device.BeginInvokeOnMainThread(async () => await GenerelSetup());
+            Task.Run(async () => await GenerelSetup());
         }
 
         /// <summary>
@@ -96,15 +96,18 @@ namespace App2Night
 
                 if (!storage.IsLogIn)
                 {
-                    await ShowLoginModal();
+                    ShowLoginModal();
                 }
             }
         }
 
-        private async Task ShowLoginModal()
+        private void ShowLoginModal()
         {
-            var page = FreshPageModelResolver.ResolvePageModel<LoginViewModel>();
-            await _masterDetailNav.PushPage(page, null, true);
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                var page = FreshPageModelResolver.ResolvePageModel<LoginViewModel>();
+                await _masterDetailNav.PushPage(page, null, true);
+            }); 
         }
 
         private void SetupGeolocator()

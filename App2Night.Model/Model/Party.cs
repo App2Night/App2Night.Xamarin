@@ -6,6 +6,7 @@ using App2Night.Model.Enum;
 using App2Night.Model.Properties;
 using Newtonsoft.Json;
 using PropertyChanged;
+using Xamarin.Forms;
 
 namespace App2Night.Model.Model
 {
@@ -34,6 +35,8 @@ namespace App2Night.Model.Model
         [JsonIgnore]
         public double DistanceToParty { get; set; } = -1;
 
+        public string ImageSource { get; set; }
+
         [JsonIgnore]
         public Coordinates Coordinates => new Coordinates()
         {
@@ -47,6 +50,11 @@ namespace App2Night.Model.Model
         protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        public Party()
+        {
+            ImageSource = "dummy.png";
         }
     }
 }

@@ -108,7 +108,7 @@ namespace App2Night.Service.Interface
         /// Creates a new party.
         /// </summary>
         /// <returns>The created <see cref="Party"/></returns>
-        Task<Result<Party>> CreateParty(string name, DateTime date, MusicGenre genre, string country, string cityName, string street, string houseNr, string zipcode, PartyType type, string description);
+        Task<Result<Party>> CreateParty(string name, DateTime date, MusicGenre genre, string country, string cityName, string street, string houseNr, string zipcode, PartyType type, string description, int price);
 
         /// <summary>
         /// Deletes a party.

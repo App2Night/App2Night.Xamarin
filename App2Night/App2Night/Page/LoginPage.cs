@@ -67,7 +67,7 @@ namespace App2Night.Page
         private readonly Image _image = new Image 
         {  
             Aspect = Aspect.AspectFit,
-            Source = ImageSource.FromResource("App2Night.Data.IconCode.icon.png")
+            Source = ImageSource.FromResource("App2Night.Data.Image.icon.png")
         };
 
         private readonly Switch _acceptAgbSwitch = new Switch

@@ -31,7 +31,7 @@ namespace App2Night.CustomView.Template
             FontFamily = "FontAwesome",
             HorizontalOptions = LayoutOptions.End,
             VerticalOptions = LayoutOptions.Start,
-            Margin = 10,
+            Padding = 10,
             FontSize = 50,
             ButtonLabel = {TextColor = Color.White}
         };
@@ -40,10 +40,16 @@ namespace App2Night.CustomView.Template
         {
             FontFamily = "FontAwesome",
             Text = "\uf1e0",
-            HorizontalOptions = LayoutOptions.Center,
-            Margin = new Thickness(8, 0),
-            ButtonLabel = { FontSize = 35}
+            HorizontalOptions = LayoutOptions.Center, 
+            ButtonLabel = { FontSize = 35},
+            Padding = 10
         };
+
+        private Image _image = new Image
+        {
+            Aspect = Aspect.AspectFill
+        };
+
         #endregion
 
         public PartyCommitmentState CommitmentState
@@ -79,6 +85,7 @@ namespace App2Night.CustomView.Template
 
         private void SetBindings()
         {
+            _image.SetBinding(Image.SourceProperty, nameof(Party.ImageSource));
             _titleLabel.SetBinding(Label.TextProperty, "Name");
             _distanceLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
             _shareIconLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
@@ -97,7 +104,7 @@ namespace App2Night.CustomView.Template
                 },
                 Children =
                 {
-                    new BoxView {Color = System.Drawing.Color.Goldenrod.ToXamarinColor(), InputTransparent = true},
+                    _image,
                     _distanceLabel,
                     _likeButton,
                     {new Grid

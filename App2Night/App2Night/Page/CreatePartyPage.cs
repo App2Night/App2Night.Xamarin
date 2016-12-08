@@ -93,6 +93,13 @@ namespace App2Night.Page
             Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.Zipcode},
         };
 
+        private InputContainer<Entry> _priceContainer = new InputContainer<Entry>
+        {
+            Input = {Keyboard = Keyboard.Numeric, Placeholder = "Price" }, //RESOURCE
+            IconCode = "\uf155",
+            Margin = _defaultMargin
+        };
+
         private CustomButton _clearButton = new CustomButton
         {
             Text = "\uf1f8",
@@ -130,7 +137,7 @@ namespace App2Night.Page
 
         public CreatePartyPage()
         {
-            Title = AppResources.CreateParty;
+            Title = AppResources.CreateParty; 
 
             _map = new MapWrapper(_headerMap);
             // set tap gesture reconizer
@@ -178,7 +185,7 @@ namespace App2Night.Page
 
             Grid.SetColumnSpan(gradientLayer, 2);
 
-        }
+        } 
 
         private ScrollView CreateInputRows()
         {
@@ -247,6 +254,7 @@ namespace App2Night.Page
             _image.SetBinding(Image.SourceProperty, "Image");
             _image.GestureRecognizers.Add(_tapGesture);
 
+            _priceContainer.Input.SetBinding(Entry.TextProperty, "Price");
 
             _nameEntry.Input.SetBinding(Entry.TextProperty, "Name");
 
