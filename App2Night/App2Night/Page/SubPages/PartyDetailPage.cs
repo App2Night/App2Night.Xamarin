@@ -100,7 +100,7 @@ namespace App2Night.Page.SubPages
 
         CustomButton _rateButton = new CustomButton
         {
-            Text = "Rate",
+            Text = AppResources.Rate,
             ButtonLabel =
             {
                 FontSize = 25,
@@ -211,6 +211,7 @@ namespace App2Night.Page.SubPages
                                 }
                             },
                         },
+                        // Set Frame with Location Label's
                         new Frame
                         {
                             Content = new StackLayout
@@ -248,6 +249,7 @@ namespace App2Night.Page.SubPages
                                 }
                             },
                         },
+                        // Creation Label
                         _creationPartyLabel,
                         new BoxView
                         {
@@ -378,7 +380,6 @@ namespace App2Night.Page.SubPages
             _cityNameLabel.Input.SetBinding(Label.TextProperty, "Location.CityName");
             _zipcodeLabel.Input.SetBinding(Label.TextProperty, "Location.Zipcode");
 
-            //_generalRateLabel.SetBinding(Label.TextProperty, );
             this.SetBinding(DashboardPage.MapPinsProperty, nameof(PartyDetailViewModel.MapPins));
         }
 
