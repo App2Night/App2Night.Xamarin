@@ -440,6 +440,15 @@ namespace App2Night.Data.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Rate!.
+        /// </summary>
+        public static string Rate {
+            get {
+                return ResourceManager.GetString("Rate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Setting.
         /// </summary>
         public static string Setting {

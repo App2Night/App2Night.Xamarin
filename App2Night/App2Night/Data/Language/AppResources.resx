@@ -276,4 +276,7 @@
   <data name="AgbHeader" xml:space="preserve">
     <value>AGB of this App</value>
   </data>
+  <data name="Rate" xml:space="preserve">
+    <value>Rate!</value>
+  </data>
 </root>

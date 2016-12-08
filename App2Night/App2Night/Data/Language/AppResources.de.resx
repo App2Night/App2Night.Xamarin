@@ -168,6 +168,9 @@
   <data name="PreferedLanguage" xml:space="preserve">
     <value>Prefered language</value>
   </data>
+  <data name="Rate" xml:space="preserve">
+    <value>Bewerten!</value>
+  </data>
   <data name="Settings" xml:space="preserve">
     <value>Einstellungen</value>
   </data>
