@@ -1,4 +1,6 @@
-﻿using App2Night.Model.Model;
+﻿using System;
+using App2Night.Model.Enum;
+using App2Night.Model.Model;
 using FreshMvvm;
 using PropertyChanged;
 using Xamarin.Forms.Maps;
@@ -9,6 +11,15 @@ namespace App2Night.PageModel.SubPages
     public class PartyDetailViewModel : FreshBasePageModel
     {
         public Party Party { get; set; }
+
+        public string Name => Party.Name;
+        public string Description => Party.Description;
+        public MusicGenre MusicGenre => Party.MusicGenre;
+        public DateTime Date => Party.Date;
+        public PartyType PartyType => Party.PartyType;
+        public DateTime CreationDateTime => Party.CreationDateTime;
+        public Location Location => Party.Location;
+
 
         public bool IsMyParty => Party.HostedByUser;
 
