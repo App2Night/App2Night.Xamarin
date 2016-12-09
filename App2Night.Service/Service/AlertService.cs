@@ -72,6 +72,22 @@ namespace App2Night.Service.Service
             UserDialogs.Instance.Toast(toastConfig);
         }
 
+        public async Task<bool> PartyBatchRefreshFinished(IEnumerable<Result> requestBatch)
+        {
+            var failedRequests = requestBatch.Count(o => !o.Success);
+            if (failedRequests == 0)
+            {
+                var toastConfig = CreateToastConfig("We successfully synchronised you parties.", ToastState.Success); //RESOURCE
+                UserDialogs.Instance.Toast(toastConfig);
+                return false;
+            } 
+
+            //Ask the user if he wants to retry loading the parties.
+            var result = await UserDialogs.Instance.ConfirmAsync(
+                "We were not able to load all party data, retry?", "Loading parties failed.", "Ok", "Cancel"); //RESOURCE
+            return result; 
+        }
+
         /// <summary>
         /// Handles request results that failed.
         /// Creates fitting messages for differnt request errors.

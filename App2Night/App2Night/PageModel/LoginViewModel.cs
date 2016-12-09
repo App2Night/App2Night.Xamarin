@@ -107,13 +107,21 @@ namespace App2Night.PageModel
                 else { 
                     loading.Title = "Login";
                      result = await _dataService.RequestToken(Username, Password);
-                    _alertService.LoginFinished(result);
+                    _alertService.LoginFinished(result); 
                 }
-            }
-            if (result != null && result.Success)
-            {
-                await ClosePage(); 
-            }
+                if (result != null && result.Success)
+                {
+                    
+                    await ClosePage();
+                    await SyncData();
+                } 
+            } 
+        }
+
+        async Task SyncData()
+        {
+            var result = await _dataService.BatchRefresh();
+            await _alertService.PartyBatchRefreshFinished(result);
         }
 
         private async Task ClosePage()

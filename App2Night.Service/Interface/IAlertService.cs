@@ -34,5 +34,10 @@ namespace App2Night.Service.Interface
         /// </summary>
         /// <param name="noted"></param>
         void CommitmentStateChangedAlert(PartyCommitmentState noted, bool success);
+
+        /// <summary>
+        /// Informs the user, that refreshing of all party lists happend.
+        /// </summary>
+        Task<bool> PartyBatchRefreshFinished(IEnumerable<Result> requestBatch);
     }
 }
