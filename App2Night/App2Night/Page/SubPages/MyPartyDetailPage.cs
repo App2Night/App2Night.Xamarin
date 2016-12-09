@@ -234,7 +234,7 @@ namespace App2Night.Page.SubPages
         }
 
         /// <summary>
-        /// Initialize ScrollView with Views 
+        /// Initializes ScrollView with Views. 
         /// </summary>
         /// <returns></returns>
         private ScrollView CreateInputRows()
@@ -372,9 +372,9 @@ namespace App2Night.Page.SubPages
         {
             this.SetBinding(TitleProperty, "Party.Name");
             //Buttons
-            //_acceptButton.SetBinding(CustomButton.IsEnabledProperty, nameof(MyPartyDetailViewModel.AcceptButtonEnabled));
-            //_acceptButton.SetBinding(CustomButton.CommandProperty, nameof(MyPartyDetailViewModel.UpdatePartyCommand));
-            //_cancelButton.SetBinding(CustomButton.CommandProperty, nameof(MyPartyDetailViewModel.ClearFormCommand));
+            _acceptButton.SetBinding(CustomButton.IsEnabledProperty, nameof(MyPartyDetailViewModel.AcceptButtonEnabled));
+            _acceptButton.SetBinding(CustomButton.CommandProperty, nameof(MyPartyDetailViewModel.UpdatePartyCommand));
+            _cancelButton.SetBinding(CustomButton.CommandProperty, nameof(MyPartyDetailViewModel.ClearFormCommand));
             // set name 
             _nameEntry.Input.SetBinding(Entry.TextProperty, nameof(MyPartyDetailViewModel.Name));
             _nameEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, nameof(MyPartyDetailViewModel.ValidName));
@@ -404,6 +404,13 @@ namespace App2Night.Page.SubPages
             _zipCodetEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, nameof(MyPartyDetailViewModel.ValidZipcode));
             // set MapPins
             this.SetBinding(DashboardPage.MapPinsProperty, nameof(PartyDetailViewModel.MapPins));
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            _editToolbarItem.Clicked -= SetEditEnable;
+            _cancelButton.ButtonTapped -= SetEditDisenable;
         }
     }
 }
