@@ -1,4 +1,5 @@
 ﻿using SQLite;
+using SQLite.Net;
 
 namespace App2Night.Service.Interface
 {

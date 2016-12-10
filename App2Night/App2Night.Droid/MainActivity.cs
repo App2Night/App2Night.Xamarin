@@ -2,7 +2,7 @@
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
-using Microsoft.Azure.Mobile;
+using Microsoft.Azure.Mobile; 
 
 namespace App2Night.Droid
 {
@@ -15,8 +15,8 @@ namespace App2Night.Droid
 
             global::Xamarin.Forms.Forms.Init(this, bundle); 
             UserDialogs.Init(this);
-            Xamarin.FormsMaps.Init(this, bundle);
-
+            Xamarin.FormsMaps.Init(this, bundle); 
+            
             //Init analytics
             MobileCenter.Configure(Model.Credentials.AnalyticsKey);
 

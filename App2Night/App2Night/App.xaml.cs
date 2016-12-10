@@ -144,6 +144,7 @@ namespace App2Night
         /// </summary>
         private void RegisterInterfaces()
         {
+            FreshIOC.Container.Register<IDatabaseService>(Xamarin.Forms.DependencyService.Get<IDatabaseService>(), "IDatabaseService");
             FreshIOC.Container.Register<IStorageService, StorageService>().AsSingleton();
             FreshIOC.Container.Register<IAlertService, AlertService>();
             FreshIOC.Container.Register<IClientService, ClientService>();

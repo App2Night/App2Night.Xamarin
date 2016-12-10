@@ -12,7 +12,8 @@ using Xamarin.Forms;
 namespace App2Night.Service.Service
 {
     public class AlertService : IAlertService
-    {  
+    {   
+
         public void UserCreationFinished(Result requestResult, string username)
         {
             if (requestResult.Success)

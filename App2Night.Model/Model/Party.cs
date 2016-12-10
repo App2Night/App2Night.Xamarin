@@ -6,6 +6,7 @@ using App2Night.Model.Enum;
 using App2Night.Model.Properties;
 using Newtonsoft.Json;
 using PropertyChanged;
+using SQLite.Net.Attributes;
 using Xamarin.Forms;
 
 namespace App2Night.Model.Model
@@ -13,7 +14,11 @@ namespace App2Night.Model.Model
     [ImplementPropertyChanged]
     public class Party : INotifyPropertyChanged
     {
-        [JsonProperty(PropertyName = "PartyId")]
+        //Table id
+        [PrimaryKey, AutoIncrement]
+        public int IdForTable { get; set; }
+
+        [JsonProperty(PropertyName = "PartyId")] 
         public Guid Id { get; set; }
 
         [JsonProperty(PropertyName = "PartyName")]
@@ -24,8 +29,11 @@ namespace App2Night.Model.Model
 
         public DateTime CreationDateTime { get; set; }
 
-        public MusicGenre MusicGenre { get; set; }
+        public MusicGenre MusicGenre { get; set; } 
 
+        public int LocationId { get; set; }
+
+        [Ignore]
         public Location Location { get; set; }
 
         public PartyType PartyType { get; set; }
@@ -34,11 +42,15 @@ namespace App2Night.Model.Model
 
         public int Price { get; set; }
 
+        public int HostId { get; set; }
+
+        [Ignore]
         public Host Host { get; set; }
 
         public bool HostedByUser { get; set; }
 
         [JsonProperty(PropertyName = "CommittedUser")]
+        [Ignore]
         public List<Participant> Participants { get; set; }
 
         public PartyListType PartyListType { get; set; }
@@ -50,6 +62,8 @@ namespace App2Night.Model.Model
         public double DistanceToParty { get; set; } = -1;
 
         public string ImageSource { get; set; }
+
+        public bool IsCached { get; set; }
 
         [JsonIgnore]
         public Coordinates Coordinates => new Coordinates()

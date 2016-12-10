@@ -9,20 +9,23 @@ using App2Night.Model.Enum;
 using App2Night.Model.Model;
 using App2Night.Service.Helper;
 using App2Night.Service.Interface;
+using FreshMvvm;
 using Newtonsoft.Json;
-using PCLStorage;
-using SQLite;
+using PCLStorage; 
+using SQLite.Net;
 using Xamarin.Forms;
 
 namespace App2Night.Service.Service
 {
     public class StorageService : IStorageService
     {
-        
+        private readonly IDatabaseService _databaseService;
+
         //Path and file names
         private string _folderName = "SStorage";
         private string _fileName = "SStore.txt";
         private Storage _storage;
+        private SQLiteConnection _databaseConnection;
 
         public event EventHandler<bool> IsLoginChanged;
 
@@ -45,7 +48,16 @@ namespace App2Night.Service.Service
             }
         }
 
-        SQLiteConnection DatabaseConnection => DependencyService.Get<IDatabaseService>().GetConnection();
+        public StorageService()
+        { 
+            _databaseService = FreshIOC.Container.Resolve<IDatabaseService>("IDatabaseService");
+            _databaseConnection = _databaseService.GetConnection();
+
+            //Make sure that all tables exist  
+            _databaseConnection.CreateTable<Location>();
+            _databaseConnection.CreateTable<Party>();
+            _databaseConnection.CreateTable<Host>(); 
+        } 
 
         public async Task SaveStorage()
         {
@@ -166,7 +178,7 @@ namespace App2Night.Service.Service
 
         public async Task ClearCache()
         {
-            DatabaseConnection.DeleteAll<Party>();
+            _databaseConnection.DeleteAll<Party>();
         }
 
         private void LogInChanged(bool isLogIn)
@@ -177,26 +189,55 @@ namespace App2Night.Service.Service
 
         public Task CacheParty(IEnumerable<Party> parties, PartyListType partyListType)
         {
-            return Task.Run(() =>
+
+            try
             {
-                var connection = DatabaseConnection;
-                connection.CreateTable<Party>();
+                //Apply the party list type
+                foreach (Party party in parties)
+                {
+                    party.PartyListType = partyListType;
+                    party.IsCached = true;
+                }
+
+                var connection = _databaseConnection; 
 
                 //Delete the old cache for this party type.
+               
                 connection.Table<Party>()
                     .Delete(p => p.PartyListType == partyListType);
 
+                //Cache
                 foreach (Party party in parties)
                 {
-                    connection.Insert(party);
+                    //Map objects
+                    var locationId =  connection.Insert(party.Location);
+                    var hostId = connection.Insert(party.Host);
+                    party.HostId = hostId;
+                    party.LocationId = locationId; 
+                    
+                    connection.Insert(party); 
                 }
-            }); 
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e); 
+            }
+            return Task.Delay(100);
         }
 
-        public IEnumerable<Party> RestoreCachedParty(PartyListType listType)
+        public IList<Party> RestoreCachedParty(PartyListType listType)
         { 
-            var connection = DatabaseConnection;
-            return connection.Table<Party>().Where(p => p.PartyListType == listType).ToList(); 
+            var connection = _databaseConnection;
+            var parties = connection.Table<Party>().Where(p => p.PartyListType == listType).ToList();
+
+            //Map objects
+            foreach (Party party in parties)
+            {
+                party.Location = connection.Get<Location>(o => o.Id == party.LocationId);
+                party.Host = connection.Get<Host>(o => o.Id == party.HostId);
+            }
+
+            return parties;
         }
     }
 }
