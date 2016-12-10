@@ -18,9 +18,10 @@ namespace App2Night.Page.SubPages
         public static int CommandHeight = 70;
 
         #region Views
+
         private InputContainer<Entry> _nameEntry = new InputContainer<Entry>
         {
-            Input = { Placeholder = AppResources.PartyName, IsEnabled = false},
+            Input = {Placeholder = AppResources.PartyName, IsEnabled = false},
             ValidationVisible = true,
             IconCode = "\uf0fc",
             Margin = _defaultMargin
@@ -53,14 +54,14 @@ namespace App2Night.Page.SubPages
         {
             IconCode = "\uf017",
             Margin = _defaultMargin,
-            Input = { IsEnabled = false }
+            Input = {IsEnabled = false}
         };
 
         private InputContainer<EnumBindablePicker<MusicGenre>> _musicGenrePicker =
             new InputContainer<EnumBindablePicker<MusicGenre>>
             {
                 IconCode = "\uf001",
-                Input = { IsEnabled = false },
+                Input = {IsEnabled = false},
                 Margin = _defaultMargin
             };
 
@@ -78,8 +79,7 @@ namespace App2Night.Page.SubPages
 
         ToolbarItem _editToolbarItem = new ToolbarItem
         {
-            Text = "\uf044",
-            
+            Text = "Edit",
         };
 
         readonly Map _partyLocation = new Map()
@@ -97,7 +97,6 @@ namespace App2Night.Page.SubPages
             {
                 FontFamily = "FontAwesome",
                 FontSize = 50,
-                
             },
             IsVisible = false,
             IsEnabled = true
@@ -165,11 +164,13 @@ namespace App2Night.Page.SubPages
                 IsEnabled = false
             },
         };
+
         BoxView _gradientLayer = new BoxView
         {
             Color = Color.White.MultiplyAlpha(0.3),
             IsVisible = false
         };
+
         #endregion
 
         #region BindablePinProperty 
@@ -205,7 +206,6 @@ namespace App2Night.Page.SubPages
             ToolbarItems.Add(_editToolbarItem);
             _editToolbarItem.Clicked += SetEditEnable;
             _cancelButton.ButtonTapped += SetEditDisenable;
-            // 
             var inputRows = CreateInputRows();
             //SKIA Replace with gradient layer
             Grid.SetRowSpan(inputRows, 2);
@@ -246,39 +246,60 @@ namespace App2Night.Page.SubPages
                     Spacing = 5,
                     Children =
                     {
-                        _nameEntry,
-                        _descriptionEntry,
-                        _musicGenrePicker,
-                        _datePicker,
-                        _startTimePicker,
-                        _partyLocation,
-                        new Grid
+                        new Frame
                         {
-                            ColumnDefinitions =
+                            Content = new StackLayout
                             {
-                                new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
-                                new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                                Children =
+                                {
+                                    _nameEntry,
+                                    _descriptionEntry,
+                                    _musicGenrePicker,
+                                    _datePicker,
+                                    _startTimePicker,
+                                },
+                                Spacing = 5
                             },
-                            Children =
-                            {
-                                {_streetEntry, 0, 0},
-                                {_houseNumberEntry, 1, 0}
-                            },
-                            Margin = _defaultMargin
                         },
-                        new Grid
+                        new Frame
                         {
-                            ColumnDefinitions =
+                            Content = new StackLayout
                             {
-                                new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
-                                new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                                Children =
+                                {
+                                    _partyLocation,
+                                    _locationEntry,
+                                    new Grid
+                                    {
+                                        ColumnDefinitions =
+                                        {
+                                            new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
+                                            new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                                        },
+                                        Children =
+                                        {
+                                            {_streetEntry, 0, 0},
+                                            {_houseNumberEntry, 1, 0}
+                                        },
+                                        Margin = _defaultMargin
+                                    },
+                                    new Grid
+                                    {
+                                        ColumnDefinitions =
+                                        {
+                                            new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
+                                            new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                                        },
+                                        Children =
+                                        {
+                                            {_cityNameEntry, 0, 0},
+                                            {_zipCodetEntry, 1, 0}
+                                        },
+                                        Margin = _defaultMargin
+                                    },
+                                },
+                                Spacing = 5
                             },
-                            Children =
-                            {
-                                {_cityNameEntry, 0, 0},
-                                {_zipCodetEntry, 1, 0}
-                            },
-                            Margin = _defaultMargin
                         },
                         new BoxView
                         {
@@ -323,14 +344,13 @@ namespace App2Night.Page.SubPages
 
         private async Task SlideOutAnimtion()
         {
-           
             Animation slideOutAnimation = new Animation(d =>
             {
-                _cancelButton.HeightRequest = d * 70;
-                _acceptButton.HeightRequest = d * 70;
-                _gradientLayer.HeightRequest = d * 70;
+                _cancelButton.HeightRequest = d*70;
+                _acceptButton.HeightRequest = d*70;
+                _gradientLayer.HeightRequest = d*70;
             }, 1, 0);
-           slideOutAnimation.Commit(this, "SlideOut", length: 1000U, easing: Easing.Linear, finished: (d, b) =>
+            slideOutAnimation.Commit(this, "SlideOut", length: 1000U, easing: Easing.Linear, finished: (d, b) =>
             {
                 _cancelButton.IsVisible = false;
                 _acceptButton.IsVisible = false;
@@ -345,9 +365,9 @@ namespace App2Night.Page.SubPages
             _acceptButton.IsVisible = true;
             Animation slideOutAnimation = new Animation(d =>
             {
-                _cancelButton.HeightRequest = d * 70;
-                _acceptButton.HeightRequest = d * 70;
-                _gradientLayer.HeightRequest = d * 70;
+                _cancelButton.HeightRequest = d*70;
+                _acceptButton.HeightRequest = d*70;
+                _gradientLayer.HeightRequest = d*70;
             }, 0, 1);
             slideOutAnimation.Commit(this, "SlideOut", length: 1000U, easing: Easing.Linear);
         }
@@ -380,28 +400,35 @@ namespace App2Night.Page.SubPages
             _nameEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, nameof(MyPartyDetailViewModel.ValidName));
             // set description
             _descriptionEntry.Input.SetBinding(Editor.TextProperty, nameof(MyPartyDetailViewModel.Description));
-            _descriptionEntry.SetBinding(InputContainer<Editor>.InputValidateProperty, nameof(MyPartyDetailViewModel.ValidDescription));
+            _descriptionEntry.SetBinding(InputContainer<Editor>.InputValidateProperty,
+                nameof(MyPartyDetailViewModel.ValidDescription));
             // music genre
-            _musicGenrePicker.Input.SetBinding(EnumBindablePicker<MusicGenre>.SelectedItemProperty, nameof(MyPartyDetailViewModel.MusicGenre));
+            _musicGenrePicker.Input.SetBinding(EnumBindablePicker<MusicGenre>.SelectedItemProperty,
+                nameof(MyPartyDetailViewModel.MusicGenre));
             // date and time
             _datePicker.Input.SetBinding(DatePicker.DateProperty, nameof(MyPartyDetailViewModel.Date));
             // set start time
             _startTimePicker.Input.SetBinding(TimePicker.TimeProperty, nameof(MyPartyDetailViewModel.Time));
             // address
             _streetEntry.Input.SetBinding(Entry.TextProperty, nameof(MyPartyDetailViewModel.StreetName));
-            _streetEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, nameof(MyPartyDetailViewModel.ValidStreetname));
+            _streetEntry.SetBinding(InputContainer<Entry>.InputValidateProperty,
+                nameof(MyPartyDetailViewModel.ValidStreetname));
             // set city name
             _cityNameEntry.Input.SetBinding(Entry.TextProperty, nameof(MyPartyDetailViewModel.CityName));
-            _cityNameEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, nameof(MyPartyDetailViewModel.ValidCityname));
+            _cityNameEntry.SetBinding(InputContainer<Entry>.InputValidateProperty,
+                nameof(MyPartyDetailViewModel.ValidCityname));
             // set house number
             _houseNumberEntry.Input.SetBinding(Entry.TextProperty, nameof(MyPartyDetailViewModel.HouseNumber));
-            _houseNumberEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, nameof(MyPartyDetailViewModel.ValidHousenumber));
+            _houseNumberEntry.SetBinding(InputContainer<Entry>.InputValidateProperty,
+                nameof(MyPartyDetailViewModel.ValidHousenumber));
             // set location
             _locationEntry.Input.SetBinding(Entry.TextProperty, nameof(MyPartyDetailViewModel.LocationName));
-            _locationEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, nameof(MyPartyDetailViewModel.ValidLocationname));
+            _locationEntry.SetBinding(InputContainer<Entry>.InputValidateProperty,
+                nameof(MyPartyDetailViewModel.ValidLocationname));
             // set zipcode
             _zipCodetEntry.Input.SetBinding(Entry.TextProperty, nameof(MyPartyDetailViewModel.Zipcode));
-            _zipCodetEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, nameof(MyPartyDetailViewModel.ValidZipcode));
+            _zipCodetEntry.SetBinding(InputContainer<Entry>.InputValidateProperty,
+                nameof(MyPartyDetailViewModel.ValidZipcode));
             // set MapPins
             this.SetBinding(DashboardPage.MapPinsProperty, nameof(PartyDetailViewModel.MapPins));
         }

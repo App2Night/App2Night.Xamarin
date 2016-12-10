@@ -194,57 +194,61 @@ namespace App2Night.Page
                     Spacing = 5,
                     Children =
                     {
-                        new Frame {Content = new StackLayout
+                        new Frame
                         {
-                            Children =
+                            Content = new StackLayout
                             {
-                                _nameEntry,
-                                _descriptionEntry,
-                                _musicGenreSwitch,
-                                _datePicker,
-                                _timePicker,
+                                Children =
+                                {
+                                    _nameEntry,
+                                    _descriptionEntry,
+                                    _musicGenreSwitch,
+                                    _datePicker,
+                                    _timePicker,
+                                },
+                                Spacing = 5
                             },
-                            Spacing = 5
                         },
-                        HorizontalOptions = LayoutOptions.FillAndExpand},
-                        new Frame {Content =  new StackLayout
+                        new Frame
                         {
-                            Children =
+                            Content = new StackLayout
                             {
-                                _map,
-                                _locationEntry,
-                                new Grid
+                                Children =
                                 {
-                                    ColumnDefinitions =
+                                    _map,
+                                    _locationEntry,
+                                    new Grid
                                     {
-                                        new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
-                                        new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                                        ColumnDefinitions =
+                                        {
+                                            new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
+                                            new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                                        },
+                                        Children =
+                                        {
+                                            {_streetEntry, 0, 0},
+                                            {_numberEntry, 1, 0}
+                                        },
+                                        Margin = _defaultMargin
                                     },
-                                    Children =
+                                    new Grid
                                     {
-                                        {_streetEntry, 0, 0},
-                                        {_numberEntry, 1, 0}
+                                        ColumnDefinitions =
+                                        {
+                                            new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
+                                            new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                                        },
+                                        Children =
+                                        {
+                                            {_cityNameEntry, 0, 0},
+                                            {_zipCodetEntry, 1, 0}
+                                        },
+                                        Margin = _defaultMargin
                                     },
-                                    Margin = _defaultMargin
                                 },
-                                new Grid
-                                {
-                                    ColumnDefinitions =
-                                    {
-                                        new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
-                                        new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
-                                    },
-                                    Children =
-                                    {
-                                        {_cityNameEntry, 0, 0},
-                                        {_zipCodetEntry, 1, 0}
-                                    },
-                                    Margin = _defaultMargin
-                                },
+                                Spacing = 5
                             },
-                            Spacing = 5
                         },
-                        HorizontalOptions = LayoutOptions.FillAndExpand},
                         new BoxView
                         {
                             HeightRequest = CommandHeight,
