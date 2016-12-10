@@ -15,23 +15,37 @@ namespace App2Night.Model.Model
     {
         [JsonProperty(PropertyName = "PartyId")]
         public Guid Id { get; set; }
+
         [JsonProperty(PropertyName = "PartyName")]
-        public string Name { get; set; } 
+        public string Name { get; set; }
+
         [JsonProperty(PropertyName = "PartyDate")]
         public DateTime Date { get; set; }
+
         public DateTime CreationDateTime { get; set; }
+
         public MusicGenre MusicGenre { get; set; }
+
         public Location Location { get; set; }
+
         public PartyType PartyType { get; set; }
+
         public string Description { get; set; }
-        public int Price { get; set; } 
+
+        public int Price { get; set; }
+
         public Host Host { get; set; }
+
         public bool HostedByUser { get; set; }
+
         [JsonProperty(PropertyName = "CommittedUser")]
         public List<Participant> Participants { get; set; }
 
+        public PartyListType PartyListType { get; set; }
+
         [JsonProperty(PropertyName = "UserCommitmentState")]
         public PartyCommitmentState CommitmentState { get; set; }
+
         [JsonIgnore]
         public double DistanceToParty { get; set; } = -1;
 
@@ -54,6 +68,7 @@ namespace App2Night.Model.Model
 
         public Party()
         {
+            //Backend did not provide pictures but since pictures are important for the app experience we added dummy pictures.
             ImageSource = "dummy.png";
         }
     }

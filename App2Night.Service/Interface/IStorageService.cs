@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using App2Night.Model.Enum;
 using App2Night.Model.Model;
 
 namespace App2Night.Service.Interface
@@ -40,8 +42,24 @@ namespace App2Night.Service.Interface
         /// <param name="token"></param>
         /// <returns></returns>
         Task SetToken(Token token);
-        //TODO Add party caching
 
+        /// <summary>
+        /// Cache a party list.
+        /// </summary>
+        /// <param name="parties">To be cached parties.</param>
+        /// <param name="partyListType">Does the reference represent the party history, selected parties or local parties.</param>
+        Task CacheParty(IEnumerable<Party> parties, PartyListType partyListType);
+
+        /// <summary>
+        /// Restores cached partys.
+        /// </summary>
+        /// <param name="listType">Type of the party list, to resolve the right table.</param>
+        /// <returns>The cached party or null if nothing was cached yet.</returns>
+        IEnumerable<Party> RestoreCachedParty(PartyListType listType);
+
+        /// <summary>
+        /// Clears all cached parties.
+        /// </summary> 
         Task ClearCache();
     }
 }

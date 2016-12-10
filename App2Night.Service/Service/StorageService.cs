@@ -1,17 +1,24 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
+using App2Night.Model.Enum;
 using App2Night.Model.Model;
 using App2Night.Service.Helper;
 using App2Night.Service.Interface;
 using Newtonsoft.Json;
 using PCLStorage;
+using SQLite;
+using Xamarin.Forms;
 
 namespace App2Night.Service.Service
 {
     public class StorageService : IStorageService
     {
+        
         //Path and file names
         private string _folderName = "SStorage";
         private string _fileName = "SStore.txt";
@@ -37,6 +44,8 @@ namespace App2Night.Service.Service
                 _storage = value;
             }
         }
+
+        SQLiteConnection DatabaseConnection => DependencyService.Get<IDatabaseService>().GetConnection();
 
         public async Task SaveStorage()
         {
@@ -153,17 +162,41 @@ namespace App2Night.Service.Service
             await SaveStorage();
             LogInChanged(true);
            
-        }
+        } 
 
         public async Task ClearCache()
         {
-            UserDialogs.Instance.Toast(new ToastConfig("Not Available"));
+            DatabaseConnection.DeleteAll<Party>();
         }
 
         private void LogInChanged(bool isLogIn)
         {
             IsLogIn = isLogIn;
             IsLoginChanged?.Invoke(null, isLogIn);
+        }
+
+        public Task CacheParty(IEnumerable<Party> parties, PartyListType partyListType)
+        {
+            return Task.Run(() =>
+            {
+                var connection = DatabaseConnection;
+                connection.CreateTable<Party>();
+
+                //Delete the old cache for this party type.
+                connection.Table<Party>()
+                    .Delete(p => p.PartyListType == partyListType);
+
+                foreach (Party party in parties)
+                {
+                    connection.Insert(party);
+                }
+            }); 
+        }
+
+        public IEnumerable<Party> RestoreCachedParty(PartyListType listType)
+        { 
+            var connection = DatabaseConnection;
+            return connection.Table<Party>().Where(p => p.PartyListType == listType).ToList(); 
         }
     }
 }

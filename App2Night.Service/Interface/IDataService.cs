@@ -39,6 +39,16 @@ namespace App2Night.Service.Interface
         /// <returns>Results of all refreshs.</returns>
         Task<IEnumerable<Result>> BatchRefresh();
 
+        /// <summary>
+        /// Current user.
+        /// </summary>
+        User User { get; }
+
+        /// <summary>
+        /// Requests user information from the backend
+        /// </summary>
+        /// <returns></returns>
+        Task<Result> GetUser();
 
         /// <summary>
         /// Sets the token.
@@ -52,17 +62,7 @@ namespace App2Night.Service.Interface
         /// </summary>
         /// <param name="location">Location to be lookd up.</param>
         /// <returns>The best correspond to the given location.</returns>
-        Task<Result<Location>> ValidateLocation(Location location);
-
-        /// <summary>
-        /// Clears all data from the device storage and current objects, including the logged in user.
-        /// </summary>
-        Task WipeData();
-
-        /// <summary>
-        /// Returns the current <see cref="Model.Model.User"/>.
-        /// </summary>
-        User User { get; }
+        Task<Result<Location>> ValidateLocation(Location location); 
 
         /// <summary>
         /// Returns a cached collection of all <see cref="Party"/> filtered by last applied search criteria.
