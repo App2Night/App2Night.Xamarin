@@ -38,6 +38,7 @@
   <ItemGroup>
     <Compile Include="Credentials.cs" />
     <Compile Include="Enum\Participant.cs" />
+    <Compile Include="Enum\PartyListType.cs" />
     <Compile Include="HttpModel\LocationValidation.cs" />
     <Compile Include="HttpModel\SignUp.cs" />
     <Compile Include="Model\Coordinates.cs" />

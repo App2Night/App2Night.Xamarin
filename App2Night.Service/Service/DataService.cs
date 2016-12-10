@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Dynamic;
-using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.Model.Enum;
@@ -11,7 +10,6 @@ using App2Night.Model.Model;
 using App2Night.Service.Helper;
 using App2Night.Service.Interface; 
 using Plugin.Connectivity;
-using Plugin.Geolocator;
 using Xamarin.Forms;
 
 namespace App2Night.Service.Service
@@ -31,6 +29,7 @@ namespace App2Night.Service.Service
         /// <summary>
         /// Provides the token from the storage. 
         /// </summary>
+
         private Token Token
         {
             get { return _storageService.Storage.Token; }
@@ -66,6 +65,20 @@ namespace App2Night.Service.Service
             return tokenValid;
         }
 
+        async Task<bool> CheckIfTokenIsValid()
+        {
+            if (Token == null) return false;
+
+            //Check if token is expired
+            if (Token.ExpirationDate > DateTime.Now) return true;
+
+            //Try to refreh token if token is expired
+            var result = await RefreshToken();
+            return result.Success;
+        }
+
+        #region party creation, modification
+
         public async Task<Result<Location>> ValidateLocation(Location location)
         {
             var tokenValid = await CheckIfTokenIsValid();
@@ -81,44 +94,7 @@ namespace App2Night.Service.Service
             {
                 Message = "Token not valid."
             };
-        }
-
-        public Task WipeData()
-        {
-            //TODO Wipe all data from storage
-            //Could be moved to 
-            throw new NotImplementedException();
-        }
-
-        //TODO return real data here 
-        private User _user = new User
-        {
-            Name = "Hardy",
-            Addresse = new Location(),
-            Email = "hardy@party.de",
-            LastGpsLocation = new Location(),
-            Events = new ObservableCollection<Party>
-            {
-                new Party
-                {
-                    MusicGenre = MusicGenre.Pop,
-                    Name = "DH goes Ballermann", 
-                    CreationDateTime = DateTime.Today,
-                    Date = DateTime.Today.AddDays(40)
-                }
-            }
-        };
-
-        public User User
-        {
-            get { return _user; }
-            set
-            {
-                _user = value;
-                //Fire UserUpdate event since a new user is set.
-                UserUpdated?.Invoke(this, EventArgs.Empty);
-            }
-        }
+        }  
 
         public async Task<Result<Party>> CreateParty(string name, DateTime date, MusicGenre genre, string country,
             string cityName, string street, string houseNr, string zipcode, PartyType type, string description, int price)
@@ -194,9 +170,51 @@ namespace App2Night.Service.Service
         }
 
         public Task<Result> UpdateParty()
-        {
+        { 
             throw new NotImplementedException();
         }
+
+        public async Task<Result> ChangeCommitmentState(Guid partyId, PartyCommitmentState commitmentState)
+        {
+            if (!await CheckIfTokenIsValid()) return new Result
+            {
+                NeedLogin = true
+            };
+
+            dynamic bodyObject = new ExpandoObject();
+            bodyObject.eventCommitment = commitmentState;
+
+
+            Result result =
+                await
+                    _clientService.SendRequest("/api/UserParty/commitmentState", RestType.Put,
+                        urlQuery: "?id=" + partyId.ToString("D"), bodyParameter: bodyObject, token: Token.AccessToken);
+
+            if (result.Success)
+            {
+                foreach (Party interestingParty in InterestingPartys)
+                {
+                    if (interestingParty.Id == partyId)
+                    {
+                        interestingParty.CommitmentState = commitmentState;
+                    }
+                }
+
+                foreach (Party interestingParty in SelectedPartys)
+                {
+                    if (interestingParty.Id == partyId)
+                    {
+                        interestingParty.CommitmentState = commitmentState;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        #endregion
+
+        #region user handlign
 
         public Task<Result> UpdateUser()
         {
@@ -277,6 +295,12 @@ namespace App2Night.Service.Service
             };
         }
 
+        public Task<Result> RequestNewPasswort(string email)
+        {
+            //Not implemented by the backend yet, an idea for the next version.
+            throw new NotImplementedException();
+        }
+
         public async Task<Result> RefreshToken()
         {
             Dictionary<string, string> tokenRefreshObject = CreateRefreshDictionary();
@@ -297,44 +321,6 @@ namespace App2Night.Service.Service
             return result;
         }
 
-        public async Task<Result> ChangeCommitmentState(Guid partyId, PartyCommitmentState commitmentState)
-        {
-            if (!await CheckIfTokenIsValid()) return new Result
-            {
-                NeedLogin = true
-            };
-
-            dynamic bodyObject = new ExpandoObject();
-            bodyObject.eventCommitment = commitmentState;
-            
-
-            Result result =
-                await
-                    _clientService.SendRequest("/api/UserParty/commitmentState", RestType.Put,
-                        urlQuery: "?id=" + partyId.ToString("D"), bodyParameter: bodyObject, token: Token.AccessToken);
-
-            if (result.Success)
-            {
-                foreach (Party interestingParty in InterestingPartys)
-                {
-                    if (interestingParty.Id == partyId)
-                    {
-                        interestingParty.CommitmentState = commitmentState;
-                    }
-                }
-
-                foreach (Party interestingParty in SelectedPartys)
-                {
-                    if (interestingParty.Id == partyId)
-                    {
-                        interestingParty.CommitmentState = commitmentState;
-                    }
-                }
-            }
-
-            return result;
-        }
-
         /// <summary>
         /// Creates a dictiory containg all values for the /connect/revocation endpoint.
         /// </summary>
@@ -350,10 +336,9 @@ namespace App2Night.Service.Service
             };
         }
 
-        public Task<Result> RequestNewPasswort(string email)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion  
+
+        #region party requests
 
         public async Task<IEnumerable<Result>> BatchRefresh()
         {
@@ -454,7 +439,7 @@ namespace App2Night.Service.Service
             else
             {
                 //TODO Replace dummy data with real caching
-                var cachedData = GenerateFakeCachedParties();
+                var cachedData = new List<Party>();
 
                 if (cachedData.Count > 0)
                 {
@@ -462,31 +447,7 @@ namespace App2Night.Service.Service
                     rawResult.IsCached = true;
                 } 
             }
-        }
-
-        IList<Party> GenerateFakeCachedParties()
-        {
-            var cachedData = new List<Party>();
-            string buf = "";
-            for (int j = 0; j < 31; j++)
-            {
-                buf += "A";
-            }
-            for (int i = 0; i < 5; i++)
-            {
-                cachedData.Add(new Party
-                {
-                    Name = buf + (i + 1),
-                    Date = DateTime.Today.AddDays(i).AddMonths(i),
-                    Location = new Location
-                    {
-                        Latitude = 48.444120,
-                        Longitude = 8.679107
-                    }
-                });
-            }
-            return cachedData;
-        }
+        } 
 
         public async Task<Result<Party>> GetParty(Guid id)
         {
@@ -509,18 +470,6 @@ namespace App2Night.Service.Service
             return fixedResult;
         }
 
-        async Task<bool> CheckIfTokenIsValid()
-        {
-            if (Token == null) return false;
-
-            //Check if token is expired
-            if (Token.ExpirationDate > DateTime.Now) return true;
-
-            //Try to refreh token if token is expired
-            var result = await RefreshToken();
-            return result.Success;
-        }
-
         /// <summary>
         /// Clears and populates an <see cref="ObservableCollection{T}"/> without setting it.
         /// </summary> 
@@ -536,7 +485,16 @@ namespace App2Night.Service.Service
                 {
                     collection.Add(party);
                 }
-            } 
-        } 
+            }
+        }
+
+        public User User { get; }
+
+        public Task<Result> GetUser()
+        {
+            throw new NotImplementedException();
+        }
+
+        #endregion  
     }
 }
