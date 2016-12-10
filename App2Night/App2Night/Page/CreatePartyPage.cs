@@ -30,12 +30,12 @@ namespace App2Night.Page
         };
 
         private InputContainer<Editor> _descriptionEntry = new InputContainer<Editor>
-        {  
+        {
             Input =
             {
                 HeightRequest = 100
             },
-            IconCode = "\uf040", 
+            IconCode = "\uf040",
             Margin = _defaultMargin
         };
 
@@ -95,7 +95,7 @@ namespace App2Night.Page
 
         private InputContainer<Entry> _priceContainer = new InputContainer<Entry>
         {
-            Input = {Keyboard = Keyboard.Numeric, Placeholder = "Price" }, //RESOURCE
+            Input = {Keyboard = Keyboard.Numeric, Placeholder = "Price"}, //RESOURCE
             IconCode = "\uf155",
             Margin = _defaultMargin
         };
@@ -111,7 +111,7 @@ namespace App2Night.Page
         {
             Text = "\uf00c",
             ButtonLabel = {FontFamily = "FontAwesome", FontSize = 50},
-            IsEnabled =  false
+            IsEnabled = false
         };
 
         private Map _headerMap = new Map();
@@ -137,7 +137,7 @@ namespace App2Night.Page
 
         public CreatePartyPage()
         {
-            Title = AppResources.CreateParty; 
+            Title = AppResources.CreateParty;
 
             _map = new MapWrapper(_headerMap);
             // set tap gesture reconizer
@@ -158,15 +158,15 @@ namespace App2Night.Page
             {
                 Color = Color.White.MultiplyAlpha(0.3)
             };
-            
+
 
             Content = new Grid
             {
                 RowSpacing = 0,
                 ColumnDefinitions =
                 {
-                  new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
-                  new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)} 
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
                 },
                 RowDefinitions =
                 {
@@ -177,15 +177,13 @@ namespace App2Night.Page
                 {
                     inputRows,
                     {gradientLayer, 0, 1},
-                    {_clearButton, 0, 1 },
-                    {_acceptButton, 1,1 }
+                    {_clearButton, 0, 1},
+                    {_acceptButton, 1, 1}
                 }
-
             };
 
             Grid.SetColumnSpan(gradientLayer, 2);
-
-        } 
+        }
 
         private ScrollView CreateInputRows()
         {
@@ -196,41 +194,57 @@ namespace App2Night.Page
                     Spacing = 5,
                     Children =
                     {
-                        _nameEntry,
-                        _descriptionEntry,
-                        _musicGenreSwitch,
-                        _datePicker,
-                        _timePicker,
-                        _map,
-                        _locationEntry,
-                        new Grid
+                        new Frame {Content = new StackLayout
                         {
-                            ColumnDefinitions =
-                            {
-                                new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
-                                new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
-                            },
                             Children =
                             {
-                                {_streetEntry, 0, 0},
-                                {_numberEntry, 1, 0}
+                                _nameEntry,
+                                _descriptionEntry,
+                                _musicGenreSwitch,
+                                _datePicker,
+                                _timePicker,
                             },
-                            Margin = _defaultMargin
+                            Spacing = 5
                         },
-                        new Grid
+                        HorizontalOptions = LayoutOptions.FillAndExpand},
+                        new Frame {Content =  new StackLayout
                         {
-                            ColumnDefinitions =
-                            {
-                                new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
-                                new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
-                            },
                             Children =
                             {
-                                {_cityNameEntry, 0, 0},
-                                {_zipCodetEntry, 1, 0}
+                                _map,
+                                _locationEntry,
+                                new Grid
+                                {
+                                    ColumnDefinitions =
+                                    {
+                                        new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
+                                        new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                                    },
+                                    Children =
+                                    {
+                                        {_streetEntry, 0, 0},
+                                        {_numberEntry, 1, 0}
+                                    },
+                                    Margin = _defaultMargin
+                                },
+                                new Grid
+                                {
+                                    ColumnDefinitions =
+                                    {
+                                        new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
+                                        new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                                    },
+                                    Children =
+                                    {
+                                        {_cityNameEntry, 0, 0},
+                                        {_zipCodetEntry, 1, 0}
+                                    },
+                                    Margin = _defaultMargin
+                                },
                             },
-                            Margin = _defaultMargin
+                            Spacing = 5
                         },
+                        HorizontalOptions = LayoutOptions.FillAndExpand},
                         new BoxView
                         {
                             HeightRequest = CommandHeight,
@@ -244,7 +258,7 @@ namespace App2Night.Page
         private void SetBindings()
         {
             //Buttons
-             _acceptButton.SetBinding(CustomButton.IsEnabledProperty, nameof(CreatePartyViewModel.AcceptButtonEnabled));
+            _acceptButton.SetBinding(CustomButton.IsEnabledProperty, nameof(CreatePartyViewModel.AcceptButtonEnabled));
             _clearButton.SetBinding(CustomButton.IsEnabledProperty, nameof(CreatePartyViewModel.ClearButtonEnabled));
 
             _acceptButton.SetBinding(CustomButton.CommandProperty, "CreatePartyCommand");
@@ -266,7 +280,7 @@ namespace App2Night.Page
 
             _musicGenreSwitch.Input.SetBinding(EnumBindablePicker<MusicGenre>.SelectedItemProperty, "MusicGenre");
             // date and time
-            _datePicker.Input.SetBinding(DatePicker.DateProperty, "Date"); 
+            _datePicker.Input.SetBinding(DatePicker.DateProperty, "Date");
 
             _timePicker.Input.SetBinding(TimePicker.TimeProperty, "Time");
             // address
