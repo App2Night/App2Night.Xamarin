@@ -68,7 +68,7 @@ namespace App2Night.Page
 
         CustomButton _readAgButton = new CustomButton
         {
-            ButtonLabel = { FontFamily = "FontAwesome", Text = "\uf061", FontSize = 25},
+            ButtonLabel = {FontFamily = "FontAwesome", Text = "\uf061", FontSize = 25},
             HorizontalOptions = LayoutOptions.End,
         };
 
@@ -79,38 +79,93 @@ namespace App2Night.Page
             SetBindings();
             _gpsEnabledSwitch.Toggled += LocationChanger;
             _grid = CreateInputRows();
-            var stackLayout = new StackLayout
+            StackLayout stackLayout = CreateFrames();
+            Content = new ScrollView { Content = stackLayout };
+        }
+        /// <summary>
+        /// Creates Frames on Page.
+        /// </summary>
+        /// <returns></returns>
+        private StackLayout CreateFrames()
+        {
+            return new StackLayout
             {
                 Padding = new Thickness(5),
                 Children =
                 {
-                    new Label {Text = AppResources.GpsSettingHeader, FontSize = _defaultFontSize},
-                    _gpsRangeSlider,
-                    new Grid
+                    // Gps Setting Section
+                    new Frame
                     {
-                        Children =
+                        Content = new StackLayout
                         {
-                            _gpsEnabledSwitch,
-                            new Label {Text = AppResources.EnableGps, HorizontalOptions = LayoutOptions.Start}
+                            Children =
+                            {
+                                new Label {Text = AppResources.GpsSettingHeader, FontSize = _defaultFontSize},
+                                _gpsRangeSlider,
+                                new Grid
+                                {
+                                    Children =
+                                    {
+                                        _gpsEnabledSwitch,
+                                        new Label
+                                        {
+                                            Text = AppResources.EnableGps,
+                                            HorizontalOptions = LayoutOptions.Start
+                                        }
+                                    }
+                                },
+                                _grid,
+                                new Label {Text = AppResources.GpsUsage}
+                            }
                         }
                     },
-                    _grid,
-                    new Label {Text = AppResources.GpsUsage},
-                    new Label {Text = AppResources.ClearCacheSettingsHeader, Margin = new Thickness(0,50,0,15),FontSize = _defaultFontSize},
-                    _clearCacheButton,
-                    new Label {Text = AppResources.ClearCacheUsage},
-                    new Label {Text = AppResources.AgbHeader, Margin = new Thickness(0,50,0,15),FontSize = _defaultFontSize},
-                    new Grid
+                    // Clear Cache Section
+                    new Frame
                     {
-                        Children =
+                        Content = new StackLayout
                         {
-                            _readAgButton,
-                            new Label {Text = AppResources.AgbContent, HorizontalOptions = LayoutOptions.Start}
+                            Children =
+                            {
+                                new Label
+                                {
+                                    Text = AppResources.ClearCacheSettingsHeader,
+                                    FontSize = _defaultFontSize
+                                },
+                                _clearCacheButton,
+                                new Label {Text = AppResources.ClearCacheUsage}
+                            }
                         }
                     },
+                    // Agb Section
+                    new Frame
+                    {
+                        Content = new StackLayout
+                        {
+                            Children =
+                            {
+                                new Label
+                                {
+                                    Text = AppResources.AgbHeader,
+                                    FontSize = _defaultFontSize
+                                },
+                                new Grid
+                                {
+                                    Children =
+                                    {
+                                        _readAgButton,
+                                        new Label
+                                        {
+                                            Text = AppResources.AgbContent,
+                                            HorizontalOptions = LayoutOptions.Start
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    ,
                 }
             };
-            Content = new ScrollView{Content = stackLayout};
         }
 
         private void SetBindings()
