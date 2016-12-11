@@ -112,9 +112,15 @@ namespace App2Night
 
         private void SetupGeolocator()
         {
-            CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
-            FreshIOC.Container.Resolve<IDataService>().NearPartiesUpdated +=
-                (sender, args) => { CrossGeolocator.Current.StartListeningAsync(1, 100); };
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                if (await CoordinateHelper.HasGeolocationAccess())
+                {
+                    CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
+                    FreshIOC.Container.Resolve<IDataService>().NearPartiesUpdated +=
+                        (sender, args) => { CrossGeolocator.Current.StartListeningAsync(2000, 100); };
+                }
+            }); 
         }
 
         /// <summary>
@@ -143,7 +149,7 @@ namespace App2Night
         /// Registers all interfaces.
         /// </summary>
         private void RegisterInterfaces()
-        {
+        { 
             FreshIOC.Container.Register<IDatabaseService>(Xamarin.Forms.DependencyService.Get<IDatabaseService>(), "IDatabaseService");
             FreshIOC.Container.Register<IStorageService, StorageService>().AsSingleton();
             FreshIOC.Container.Register<IAlertService, AlertService>();

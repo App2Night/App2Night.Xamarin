@@ -120,13 +120,17 @@ namespace App2Night.PageModel
 
         async Task SyncData()
         {
+            //UserDialogs.Instance.Loading("Syncing parties"); //RESOURCE
             var result = await _dataService.BatchRefresh();
             await _alertService.PartyBatchRefreshFinished(result);
         }
 
         private async Task ClosePage()
         { 
-            await CoreMethods.PopPageModel(true);
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                await CoreMethods.PopPageModel(true); 
+            }); 
         }
     }
 }

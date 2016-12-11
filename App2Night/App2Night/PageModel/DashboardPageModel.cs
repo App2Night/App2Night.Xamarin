@@ -22,8 +22,7 @@ namespace App2Night.PageModel
         private readonly IDataService _dataService;
         public bool InterestingPartieAvailable { get; set; }
         public bool PartyHistoryAvailable { get; set; }
-        public bool SelectedpartiesAvailable { get; set; } 
-
+        public bool SelectedpartiesAvailable { get; set; }   
 
         public IList<Party> InterestingPartiesForUser { get; }
         public IList<Party> PartyHistory { get; }
@@ -49,19 +48,36 @@ namespace App2Night.PageModel
 
         private async Task CommitmentStateChanged(Party party)
         {
+
+            var message = string.Empty;
             PartyCommitmentState nextState = PartyCommitmentState.Noted;
 
             //Find the next logical commitment state
             if (party.CommitmentState == PartyCommitmentState.Rejected)
+            {
                 nextState = PartyCommitmentState.Noted;
+                message = "Noting party"; //RESOURCE
+            }
+
 
             if (party.CommitmentState == PartyCommitmentState.Noted)
+            {
                 nextState = PartyCommitmentState.Accepted;
+                message = "Accepting party"; //RESOURCE
+            }
 
             if (party.CommitmentState == PartyCommitmentState.Accepted)
+            {
                 nextState = PartyCommitmentState.Rejected;
+                message = "Rejecting party"; //RESOURCE
+            }
 
-            await _dataService.ChangeCommitmentState(party.Id, nextState);
+            using (UserDialogs.Instance.Loading(message))
+            {
+                party.CommitmentStatePending = true;
+                await _dataService.ChangeCommitmentState(party.Id, nextState);
+                party.CommitmentStatePending = false; 
+            }
         }
 
         public DashboardPageModel(IDataService dataService) : base()

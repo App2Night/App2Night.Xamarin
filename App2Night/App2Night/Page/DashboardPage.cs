@@ -7,6 +7,7 @@ using App2Night.CustomView.View;
 using App2Night.Data.Language;
 using App2Night.Model.Model;
 using App2Night.PageModel;
+using App2Night.Service.Helper;
 using App2Night.ValueConverter;
 using FreshMvvm;
 using Plugin.Geolocator;
@@ -98,10 +99,15 @@ namespace App2Night.Page
             AddReloadToolbarIcon();
 
             this.SetBinding(DashboardPage.MapPinsProperty, nameof(DashboardPageModel.MapPins));
-
-            Device.BeginInvokeOnMainThread(async ()=> await InitializeMapCoordinates());
-
-            CrossGeolocator.Current.PositionChanged += PositionChanged;
+             
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                if (await CoordinateHelper.HasGeolocationAccess())
+                {
+                        CrossGeolocator.Current.PositionChanged += PositionChanged;
+                        await InitializeMapCoordinates();
+                }
+            }); 
 
             InitializeNearPartyView();
             InitializeMyPartyView();
@@ -148,7 +154,8 @@ namespace App2Night.Page
 
         private async Task InitializeMapCoordinates()
         {
-            var coordinates = await CrossGeolocator.Current.GetPositionAsync();
+           
+            var coordinates = await CoordinateHelper.GetCoordinates(true);
             if (coordinates != null)
             {
                 MoveMapToCoordinates(coordinates); 
@@ -168,10 +175,10 @@ namespace App2Night.Page
         private void PositionChanged(object sender, PositionEventArgs positionEventArgs)
         {
             var coordinates = positionEventArgs.Position;
-            MoveMapToCoordinates(coordinates);
+            MoveMapToCoordinates(new Coordinates((float) coordinates.Longitude, (float) coordinates.Latitude));
         }
 
-        private void MoveMapToCoordinates(Plugin.Geolocator.Abstractions.Position coordinates)
+        private void MoveMapToCoordinates(Coordinates coordinates)
         {
             var mapSpan = MapSpan.FromCenterAndRadius(new Position(coordinates.Latitude, coordinates.Longitude), Distance.FromKilometers(2));
             _headerMap.MoveToRegion(mapSpan);

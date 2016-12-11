@@ -18,7 +18,7 @@ namespace App2Night.Page
             var listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 ItemTemplate = new DataTemplate(typeof(PartyTemplate)), 
-                RowHeight = 100,
+                RowHeight = 150,
                 IsPullToRefreshEnabled = true
             };
 

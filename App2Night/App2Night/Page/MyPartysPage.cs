@@ -23,7 +23,7 @@ namespace App2Night.Page
             historyToolbarIcon.SetBinding(MenuItem.CommandProperty, "NavigateToHistoryCommand");
             ToolbarItems.Add(historyToolbarIcon);
 
-            _partyListView = new ListView
+            _partyListView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                IsPullToRefreshEnabled = true,
                ItemTemplate = new DataTemplate(typeof(PartyTemplate)),

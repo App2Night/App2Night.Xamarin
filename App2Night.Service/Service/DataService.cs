@@ -217,6 +217,11 @@ namespace App2Night.Service.Service
                     if (interestingParty.Id == partyId)
                     {
                         interestingParty.CommitmentState = commitmentState;
+                        if (commitmentState == PartyCommitmentState.Noted)
+                        {
+                            SelectedPartys.Add(interestingParty);
+                        }
+                        break;
                     }
                 }
 
@@ -225,6 +230,7 @@ namespace App2Night.Service.Service
                     if (interestingParty.Id == partyId)
                     {
                         interestingParty.CommitmentState = commitmentState;
+                        break;
                     }
                 }
             }
@@ -471,7 +477,7 @@ namespace App2Night.Service.Service
         {
             if (rawResult.Success)
             {
-                await _storageService.CacheParty(rawResult.Data, listType);
+                _storageService.CacheParty(rawResult.Data, listType);
             }
             else
             { 
@@ -492,7 +498,7 @@ namespace App2Night.Service.Service
             //Request the party with the given id
             var result =
                 await
-                    _clientService.SendRequest<Party []>("api/party", RestType.Get, urlQuery: "/id=" + id.ToString("D"),
+                    _clientService.SendRequest<Party>("api/party", RestType.Get, urlQuery: "/id=" + id.ToString("D"),
                         token: Token.AccessToken);
 
             //We have to correct the result since the backend is sending us bullshit data.
@@ -500,7 +506,7 @@ namespace App2Night.Service.Service
             {
                 StatusCode = result.StatusCode,
                 Success = result.Success,
-                Data = result.Data?[0]
+                Data = result.Data
             };
 
             return fixedResult;

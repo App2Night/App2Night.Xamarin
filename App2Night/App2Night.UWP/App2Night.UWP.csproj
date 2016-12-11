@@ -107,6 +107,8 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Renderer\CustomLabel.cs" />
+    <Compile Include="Service\UwpLocationAccess.cs" />
+    <Compile Include="Service\UWPSQLite.cs" />
     <Compile Include="Service\WindowsUserLocationService.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -186,7 +188,14 @@
       <Name>App2Night</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <SDKReference Include="Microsoft.VCLibs, Version=14.0">
+      <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
+    </SDKReference>
+    <SDKReference Include="SQLite.UWP.2015, Version=3.15.2">
+      <Name>SQLite for Universal Windows Platform</Name>
+    </SDKReference>
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

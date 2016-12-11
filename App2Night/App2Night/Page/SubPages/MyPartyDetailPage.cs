@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using App2Night.CustomView.View;
 using App2Night.Data.Language;
 using App2Night.Model.Enum;
+using App2Night.Model.Model;
 using App2Night.PageModel.SubPages;
+using App2Night.Service.Helper;
 using FreshMvvm;
 using Plugin.Geolocator;
 using Xamarin.Forms;
@@ -182,7 +184,7 @@ namespace App2Night.Page.SubPages
             {
                 if (newValue != null)
                 {
-                    ((PartyDetailPage) bindable).MapPinsSet((Pin) newValue);
+                    ((MyPartyDetailPage) bindable).MapPinsSet((Pin) newValue);
                 }
             });
 
@@ -242,13 +244,14 @@ namespace App2Night.Page.SubPages
             return new ScrollView
             {
                 Content = new StackLayout
-                {
-                    Spacing = 5,
+                { 
                     Children =
                     {
                         // Description of Party
                         new Frame
                         {
+                            Margin = 5,
+                            Padding = 5,
                             Content = new StackLayout
                             {
                                 Children =
@@ -265,11 +268,13 @@ namespace App2Night.Page.SubPages
                         // Location of Party
                         new Frame
                         {
+                            Margin = 5,
+                            Padding = 5,
                             Content = new StackLayout
                             {
                                 Children =
-                                {
-                                    _partyLocation,
+                                { 
+                                    new MapWrapper(_partyLocation),
                                     _locationEntry,
                                     new Grid
                                     {
@@ -390,14 +395,14 @@ namespace App2Night.Page.SubPages
 
         private async Task InitializeMapCoordinates()
         {
-            var coordinates = await CrossGeolocator.Current.GetPositionAsync();
+            var coordinates = await CoordinateHelper.GetCoordinates();
             if (coordinates != null)
             {
                 MoveMapToCoordinates(coordinates);
             }
         }
 
-        private void MoveMapToCoordinates(Plugin.Geolocator.Abstractions.Position coordinates)
+        private void MoveMapToCoordinates(Coordinates coordinates)
         {
             var mapSpan = MapSpan.FromCenterAndRadius(new Position(coordinates.Latitude, coordinates.Longitude),
                 Distance.FromKilometers(2));

@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using App2Night.Service.Helper;
+using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
 namespace App2Night.CustomView.View
@@ -18,10 +19,21 @@ namespace App2Night.CustomView.View
             if (Device.OS == TargetPlatform.Android && !App.MapAvailable)
             {
                 BackgroundColor = Color.Gray.MultiplyAlpha(0.6);
-                Content = new Label {Text = "Google maps is not installed on this device."};
+                Content = new Label {Text = "Google maps is not installed on this device."}; //RESOURCE
+            } 
+            else if (Device.OS == TargetPlatform.Windows)
+            {
+                Device.BeginInvokeOnMainThread(async () =>
+                {
+                    if(await CoordinateHelper.HasGeolocationAccess())
+                        Content = map;
+                    else
+                        Content = new Label { Text = "Location is not enabled for this app or available on your device.\n" +
+                                                     "Activate the location for this device and restart the app to see a beautiful map here." }; //RESOURCE
+                });
             }
             else
-            {
+            { 
                 Content = map;
             }
         }

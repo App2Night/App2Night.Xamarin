@@ -81,10 +81,10 @@ namespace App2Night.Page
             Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.HNumber},
         };
 
-        private InputContainer<Entry> _locationEntry = new InputContainer<Entry>
+        private InputContainer<Entry> _priceEntry = new InputContainer<Entry>
         {
             Input = {Placeholder = AppResources.Location},
-            IconCode = "\uf015",
+            IconCode = "\uf155",
             Margin = _defaultMargin
         };
 
@@ -196,12 +196,15 @@ namespace App2Night.Page
                     {
                         new Frame
                         {
+                            Margin = 5,
+                            Padding = 0,
                             Content = new StackLayout
                             {
                                 Children =
                                 {
                                     _nameEntry,
                                     _descriptionEntry,
+                                    _priceEntry,
                                     _musicGenreSwitch,
                                     _datePicker,
                                     _timePicker,
@@ -211,12 +214,13 @@ namespace App2Night.Page
                         },
                         new Frame
                         {
+                            Margin = 5,
+                            Padding = 0,
                             Content = new StackLayout
                             {
                                 Children =
                                 {
-                                    _map,
-                                    _locationEntry,
+                                    _map, 
                                     new Grid
                                     {
                                         ColumnDefinitions =
@@ -298,8 +302,7 @@ namespace App2Night.Page
             _numberEntry.Input.SetBinding(Entry.TextProperty, "HouseNumber");
             _numberEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, "ValidHousenumber");
 
-            _locationEntry.Input.SetBinding(Entry.TextProperty, "LocationName");
-            _locationEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, "ValidLocationname");
+            _priceEntry.Input.SetBinding(Entry.TextProperty, "Price"); 
 
             _zipCodetEntry.Input.SetBinding(Entry.TextProperty, "Zipcode");
             _zipCodetEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, "ValidZipcode");

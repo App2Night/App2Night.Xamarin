@@ -48,7 +48,7 @@ namespace App2Night.Service.Interface
         /// </summary>
         /// <param name="parties">To be cached parties.</param>
         /// <param name="partyListType">Does the reference represent the party history, selected parties or local parties.</param>
-        Task CacheParty(IEnumerable<Party> parties, PartyListType partyListType);
+        void CacheParty(IEnumerable<Party> parties, PartyListType partyListType);
 
         /// <summary>
         /// Restores cached partys.

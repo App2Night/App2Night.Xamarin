@@ -89,13 +89,14 @@ namespace App2Night.Page
         private StackLayout CreateFrames()
         {
             return new StackLayout
-            {
-                Padding = new Thickness(5),
+            { 
                 Children =
                 {
                     // Gps Setting Section
                     new Frame
                     {
+                        Margin = 5,
+                        Padding = 5,
                         Content = new StackLayout
                         {
                             Children =
@@ -122,6 +123,8 @@ namespace App2Night.Page
                     // Clear Cache Section
                     new Frame
                     {
+                        Margin = 5,
+                        Padding = 5,
                         Content = new StackLayout
                         {
                             Children =
@@ -139,6 +142,8 @@ namespace App2Night.Page
                     // Agb Section
                     new Frame
                     {
+                        Margin = 5,
+                        Padding = 5,
                         Content = new StackLayout
                         {
                             Children =
@@ -163,7 +168,6 @@ namespace App2Night.Page
                             }
                         }
                     }
-                    ,
                 }
             };
         }

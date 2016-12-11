@@ -65,12 +65,31 @@ namespace App2Night.Model.Model
 
         public bool IsCached { get; set; }
 
+        public bool CommitmentStatePending { get; set; }
+
         [JsonIgnore]
         public Coordinates Coordinates => new Coordinates()
         {
             Latitude = Location!=null ?  Location.Latitude : 0,
             Longitude = Location != null ? Location.Longitude : 0
         };
+
+        [JsonIgnore]
+        public string AdressFormatted
+        {
+            get
+            {
+                var text = string.Empty;
+
+                if (Location != null)
+                {
+                    text += $"{Location.CityName}({Location.Zipcode}),\n";
+                    text += Location.StreetName + " " + Location.HouseNumber;
+                }
+
+                return text;
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
