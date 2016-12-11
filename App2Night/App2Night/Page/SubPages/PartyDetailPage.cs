@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
+using App2Night.CustomView.Page;
 using App2Night.CustomView.View;
 using App2Night.Data.Language;
+using App2Night.Model.Model;
 using App2Night.PageModel.SubPages;
 using FreshMvvm;
 using Plugin.Geolocator;
@@ -9,12 +11,11 @@ using Xamarin.Forms.Maps;
 
 namespace App2Night.Page.SubPages
 {
-    public class PartyDetailPage : FreshBaseContentPage
+    public class PartyDetailPage : CustomContentPage
     {
+        // Set values for views 
         private static int _defaultFontSize = 16;
         private static int _defaultIconSize = 50;
-        private static Thickness _defaultMargin = new Thickness(5, 0);
-        public static int CommandHeight = 70;
 
         #region Views
         InputContainer<Label> _descriptionLabel = new InputContainer<Label>
@@ -149,7 +150,7 @@ namespace App2Night.Page.SubPages
 
         public static BindableProperty MapPinsProperty = BindableProperty.Create(nameof(MapPins),
             typeof(Pin),
-            typeof(DashboardPage),
+            typeof(PartyDetailPage),
             propertyChanged: (bindable, value, newValue) =>
             {
                 if (newValue != null)
@@ -169,16 +170,40 @@ namespace App2Night.Page.SubPages
             set { SetValue(MapPinsProperty, value); }
         }
 
+        public static BindableProperty PartyProperty = BindableProperty.Create(nameof(Party), typeof(Party),
+            typeof(PartyDetailPage),
+            propertyChanged: (bindable, value, newValue) =>
+            {
+                if (newValue != null)
+                {
+                    ((PartyDetailPage) bindable).Party = (Party) newValue;
+                }
+            });
+
+        private Party _party;
+        public Party Party { get { return _party; } set { _party = value; } }
         #endregion
 
         public PartyDetailPage()
         {
             SetBindings();
+            this.SetBinding(PartyProperty, nameof(PartyDetailViewModel.Party));
             Device.BeginInvokeOnMainThread(async () => await InitializeMapCoordinates());
             var inputRows = CreateInputRows();
             Content = inputRows;
             // Set ColumnSpan over all Columns to centrate view
             Grid.SetColumnSpan(_rateButton, 4);
+            _rateButton.ButtonTapped += RateParty;
+            
+        }
+        /// <summary>
+        /// Opens seleted party with <see cref="PartyPreviewView"/>.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="o"></param>
+        private void RateParty(object sender, object o)
+        {
+            PreviewItemSelected<Party, RateView>(_party, new object[] { Height, Width });
         }
         /// <summary>
         /// Initialize ScrollView with all Views.
@@ -251,11 +276,6 @@ namespace App2Night.Page.SubPages
                         },
                         // Creation Label
                         _creationPartyLabel,
-                        new BoxView
-                        {
-                            HeightRequest = CommandHeight,
-                            Color = Color.Transparent
-                        }
                     }
                 }
             };
@@ -348,6 +368,7 @@ namespace App2Night.Page.SubPages
 
         private async Task InitializeMapCoordinates()
         {
+            // gets current position
             var coordinates = await CrossGeolocator.Current.GetPositionAsync();
             if (coordinates != null)
             {
@@ -357,6 +378,7 @@ namespace App2Night.Page.SubPages
 
         private void MoveMapToCoordinates(Plugin.Geolocator.Abstractions.Position coordinates)
         {
+            // adds current position to map 
             var mapSpan = MapSpan.FromCenterAndRadius(new Position(coordinates.Latitude, coordinates.Longitude),
                 Distance.FromKilometers(2));
             _partyLocation.MoveToRegion(mapSpan);
@@ -380,14 +402,21 @@ namespace App2Night.Page.SubPages
             _cityNameLabel.Input.SetBinding(Label.TextProperty, "Location.CityName");
             _zipcodeLabel.Input.SetBinding(Label.TextProperty, "Location.Zipcode");
 
-            this.SetBinding(DashboardPage.MapPinsProperty, nameof(PartyDetailViewModel.MapPins));
+            this.SetBinding(MapPinsProperty, nameof(PartyDetailViewModel.MapPins));
         }
 
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
-            // Set Size of Frame 
+            // Set Size of Grid, depends on width of device
             _ratingGrid.HeightRequest = Width/3;
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            // remove event of button
+            _rateButton.ButtonTapped -= RateParty;
         }
     }
 }
