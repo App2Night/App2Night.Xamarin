@@ -6,7 +6,7 @@ namespace App2Night.Page
 {
     public class NavigationPage : ContentPage
     {
-        public ListView MenuListView { get; }= new ListView();
+        public ListView MenuListView { get; }= new ListView(ListViewCachingStrategy.RecycleElement);
         Label _nameLabel = new Label();
 
         private Button _logoutBtn = new Button

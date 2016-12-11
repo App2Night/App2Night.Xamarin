@@ -16,7 +16,7 @@ namespace App2Night.Page.SubPages
                 return text;
             });
 
-            var libraryLicensesListView = new ListView
+            var libraryLicensesListView = new ListView(ListViewCachingStrategy.RecycleElement)
             { 
                 ItemTemplate = template,
                 HeightRequest = 40

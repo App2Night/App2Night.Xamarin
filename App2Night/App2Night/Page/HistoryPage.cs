@@ -22,10 +22,13 @@ namespace App2Night.Page
             var listView = new ListView(ListViewCachingStrategy.RecycleElement)
             {
                 RowHeight = 150,
-
+                IsPullToRefreshEnabled = true,
                 ItemTemplate = new DataTemplate(typeof(HistoryTemplate))
             };
             listView.SetBinding(ListView.ItemsSourceProperty, "Parties");
+            listView.SetBinding(ListView.RefreshCommandProperty, "RefreshCommand");
+            listView.SetBinding(ListView.IsRefreshingProperty, "IsRefreshing");
+
             listView.ItemTapped += PartieSelected;
             var mainScroll = new ScrollView
             {
