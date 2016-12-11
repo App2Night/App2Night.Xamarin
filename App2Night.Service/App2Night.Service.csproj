@@ -52,6 +52,7 @@
     <Compile Include="Interface\IAlertService.cs" />
     <Compile Include="Interface\IDataService.cs" />
     <Compile Include="Interface\IClientService.cs" />
+    <Compile Include="Interface\ILocationAccess.cs" />
     <Compile Include="Interface\IStorageService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\AlertService.cs" />

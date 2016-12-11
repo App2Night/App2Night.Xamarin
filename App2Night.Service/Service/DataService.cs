@@ -471,7 +471,7 @@ namespace App2Night.Service.Service
         {
             if (rawResult.Success)
             {
-                await _storageService.CacheParty(rawResult.Data, listType);
+                _storageService.CacheParty(rawResult.Data, listType);
             }
             else
             { 

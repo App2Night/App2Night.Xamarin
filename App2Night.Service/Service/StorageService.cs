@@ -11,7 +11,7 @@ using App2Night.Service.Helper;
 using App2Night.Service.Interface;
 using FreshMvvm;
 using Newtonsoft.Json;
-using PCLStorage; 
+using PCLStorage;
 using SQLite.Net;
 using Xamarin.Forms;
 
@@ -38,26 +38,27 @@ namespace App2Night.Service.Service
                 //Create a new storage if non is set yet.
                 if (_storage == null)
                 {
-                    _storage = new Storage(); 
+                    _storage = new Storage();
                 }
                 return _storage;
             }
-            set
-            {
-                _storage = value;
-            }
+            set { _storage = value; }
         }
 
         public StorageService()
-        { 
+        {
             _databaseService = FreshIOC.Container.Resolve<IDatabaseService>("IDatabaseService");
             _databaseConnection = _databaseService.GetConnection();
 
-            //Make sure that all tables exist  
-            _databaseConnection.CreateTable<Location>();
-            _databaseConnection.CreateTable<Party>();
-            _databaseConnection.CreateTable<Host>(); 
-        } 
+            //Make sure that all tables exist
+            if (_databaseConnection != null)
+            {
+                _databaseConnection.CreateTable<Location>();
+                _databaseConnection.CreateTable<Party>();
+                _databaseConnection.CreateTable<Host>();
+            }
+            
+        }
 
         public async Task SaveStorage()
         {
@@ -105,7 +106,7 @@ namespace App2Night.Service.Service
         /// <returns>The encrypted string.</returns>
         string EncryptString(string data)
         {
-           //TODO Add encryption
+            //TODO Add encryption
             return data;
         }
 
@@ -173,12 +174,12 @@ namespace App2Night.Service.Service
             Storage.Token = token;
             await SaveStorage();
             LogInChanged(true);
-           
-        } 
+        }
 
         public async Task ClearCache()
         {
-            _databaseConnection.DeleteAll<Party>();
+            if(_databaseConnection!=null)
+               _databaseConnection.DeleteAll<Party>();
         }
 
         private void LogInChanged(bool isLogIn)
@@ -187,9 +188,9 @@ namespace App2Night.Service.Service
             IsLoginChanged?.Invoke(null, isLogIn);
         }
 
-        public Task CacheParty(IEnumerable<Party> parties, PartyListType partyListType)
+        public void CacheParty(IEnumerable<Party> parties, PartyListType partyListType)
         {
-
+            if (_databaseConnection == null) return;
             try
             {
                 //Apply the party list type
@@ -199,10 +200,10 @@ namespace App2Night.Service.Service
                     party.IsCached = true;
                 }
 
-                var connection = _databaseConnection; 
+                var connection = _databaseConnection;
 
                 //Delete the old cache for this party type.
-               
+
                 connection.Table<Party>()
                     .Delete(p => p.PartyListType == partyListType);
 
@@ -210,24 +211,24 @@ namespace App2Night.Service.Service
                 foreach (Party party in parties)
                 {
                     //Map objects
-                    var locationId =  connection.Insert(party.Location);
+                    var locationId = connection.Insert(party.Location);
                     var hostId = connection.Insert(party.Host);
                     party.HostId = hostId;
-                    party.LocationId = locationId; 
-                    
-                    connection.Insert(party); 
+                    party.LocationId = locationId;
+
+                    connection.Insert(party);
                 }
             }
             catch (Exception e)
             {
-                Debug.WriteLine(e); 
-            }
-            return Task.Delay(100);
+                Debug.WriteLine(e);
+            } 
         }
 
         public IList<Party> RestoreCachedParty(PartyListType listType)
-        { 
+        {
             var connection = _databaseConnection;
+            if (connection == null) return new List<Party>(); 
             var parties = connection.Table<Party>().Where(p => p.PartyListType == listType).ToList();
 
             //Map objects

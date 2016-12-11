@@ -3,7 +3,9 @@ using System.Threading.Tasks;
 using App2Night.CustomView.View;
 using App2Night.Data.Language;
 using App2Night.Model.Enum;
+using App2Night.Model.Model;
 using App2Night.PageModel.SubPages;
+using App2Night.Service.Helper;
 using FreshMvvm;
 using Plugin.Geolocator;
 using Xamarin.Forms;
@@ -374,14 +376,14 @@ namespace App2Night.Page.SubPages
 
         private async Task InitializeMapCoordinates()
         {
-            var coordinates = await CrossGeolocator.Current.GetPositionAsync();
+            var coordinates = await CoordinateHelper.GetCoordinates();
             if (coordinates != null)
             {
                 MoveMapToCoordinates(coordinates);
             }
         }
 
-        private void MoveMapToCoordinates(Plugin.Geolocator.Abstractions.Position coordinates)
+        private void MoveMapToCoordinates(Coordinates coordinates)
         {
             var mapSpan = MapSpan.FromCenterAndRadius(new Position(coordinates.Latitude, coordinates.Longitude),
                 Distance.FromKilometers(2));

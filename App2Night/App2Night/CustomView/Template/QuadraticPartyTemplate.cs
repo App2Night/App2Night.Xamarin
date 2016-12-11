@@ -65,6 +65,7 @@ namespace App2Night.CustomView.Template
             });
         readonly TapGestureRecognizer _tapGestureRecognizer = new TapGestureRecognizer();
         private PartyCommitmentState _commitmentState = PartyCommitmentState.Rejected;
+
         public QuadraticPartyTemplate()
         {
             BackgroundColor = Color.White;
@@ -75,7 +76,7 @@ namespace App2Night.CustomView.Template
             _shareIconLabel.ButtonTapped += ShareIconLabelOnButtonTapped;
             _tapGestureRecognizer.Tapped += TappedLikeBtn;
             _likeButton.GestureRecognizers.Add(_tapGestureRecognizer);
-            Content = CreateInputColumns();
+            Content = CreateInputColumns(); 
         }
 
         private void ShareIconLabelOnButtonTapped(object sender, EventArgs eventArgs)
@@ -180,37 +181,43 @@ namespace App2Night.CustomView.Template
             if (BindingContext != null)
             {
                 var party = (Party) BindingContext;
+                ShowDistanceToParty(party);
                 party.PropertyChanged += (sender, args) =>
                 {
-                    if (party.DistanceToParty == -1)
-                    {
-                        //This is the default falue, distance not measured.
-                        _distanceLabel.Text =
-                            $"{party.Location.CityName}\n{party.Location.StreetName} {party.Location.HouseNumber}";
-                    }
-                    else
-                    {
-                        //Show the distance:
-                        var distance = party.DistanceToParty;
-                        var unit = string.Empty;
-                        if (distance > 1) //Check if distance is above one km
-                        {
-                            distance = Math.Round(distance, 3);
-                            unit = "km";
-                        }
-                        else
-                        {
-                            distance = Math.Round(distance*100);
-                            unit = "m";
-                        } 
-
-                        Device.BeginInvokeOnMainThread(() =>
-                        {
-                            _distanceLabel.Text =
-                           $"{distance} {unit}";
-                        }); 
-                    }
+                    ShowDistanceToParty(party);
                 };
+            }
+        }
+
+        private void ShowDistanceToParty(Party party)
+        {
+            if (party.DistanceToParty == -1)
+            {
+                //This is the default falue, distance not measured.
+                _distanceLabel.Text =
+                    $"{party.Location.CityName}\n{party.Location.StreetName} {party.Location.HouseNumber}";
+            }
+            else
+            {
+                //Show the distance:
+                var distance = party.DistanceToParty;
+                var unit = string.Empty;
+                if (distance > 1) //Check if distance is above one km
+                {
+                    distance = Math.Round(distance, 3);
+                    unit = "km";
+                }
+                else
+                {
+                    distance = Math.Round(distance * 100);
+                    unit = "m";
+                }
+
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    _distanceLabel.Text =
+                   $"{distance} {unit}";
+                });
             }
         }
     }
