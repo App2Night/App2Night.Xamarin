@@ -11,7 +11,7 @@
     "SQLite.Net.Async-PCL": "3.1.1",
     "Xam.Plugin.Connectivity": "2.2.12",
     "Xam.Plugin.Geolocator": "3.0.4",
-    "Xamarin.Forms": "2.3.3.175",
+    "Xamarin.Forms": "2.3.2.127",
     "Xamarin.Forms.Maps": "2.3.3.175"
   },
   "frameworks": {
