@@ -244,13 +244,14 @@ namespace App2Night.Page.SubPages
             return new ScrollView
             {
                 Content = new StackLayout
-                {
-                    Spacing = 5,
+                { 
                     Children =
                     {
                         // Description of Party
                         new Frame
                         {
+                            Margin = 5,
+                            Padding = 5,
                             Content = new StackLayout
                             {
                                 Children =
@@ -267,11 +268,13 @@ namespace App2Night.Page.SubPages
                         // Location of Party
                         new Frame
                         {
+                            Margin = 5,
+                            Padding = 5,
                             Content = new StackLayout
                             {
                                 Children =
-                                {
-                                    _partyLocation,
+                                { 
+                                    new MapWrapper(_partyLocation),
                                     _locationEntry,
                                     new Grid
                                     {

@@ -196,6 +196,8 @@ namespace App2Night.Page
                     {
                         new Frame
                         {
+                            Margin = 5,
+                            Padding = 0,
                             Content = new StackLayout
                             {
                                 Children =
@@ -211,6 +213,8 @@ namespace App2Night.Page
                         },
                         new Frame
                         {
+                            Margin = 5,
+                            Padding = 0,
                             Content = new StackLayout
                             {
                                 Children =
