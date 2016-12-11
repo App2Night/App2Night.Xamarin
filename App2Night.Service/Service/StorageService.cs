@@ -165,6 +165,7 @@ namespace App2Night.Service.Service
         public async Task DeleteStorage()
         {
             Storage = new Storage();
+            await ClearCache();
             await SaveStorage();
             LogInChanged(false);
         }

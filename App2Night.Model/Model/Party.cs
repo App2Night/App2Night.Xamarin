@@ -65,6 +65,8 @@ namespace App2Night.Model.Model
 
         public bool IsCached { get; set; }
 
+        public bool CommitmentStatePending { get; set; }
+
         [JsonIgnore]
         public Coordinates Coordinates => new Coordinates()
         {
