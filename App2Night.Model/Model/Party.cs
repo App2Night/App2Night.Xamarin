@@ -74,6 +74,23 @@ namespace App2Night.Model.Model
             Longitude = Location != null ? Location.Longitude : 0
         };
 
+        [JsonIgnore]
+        public string AdressFormatted
+        {
+            get
+            {
+                var text = string.Empty;
+
+                if (Location != null)
+                {
+                    text += $"{Location.CityName}({Location.Zipcode}),\n";
+                    text += Location.StreetName + " " + Location.HouseNumber;
+                }
+
+                return text;
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]

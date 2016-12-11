@@ -54,6 +54,7 @@ namespace App2Night.Page
                 var party = (Party)listView.SelectedItem;
                 PreviewItemSelected<Party, PartyPreviewView>(party, new object[] {Width, Height});
                 listView.SelectedItem = null; 
+
             }
         }
     }

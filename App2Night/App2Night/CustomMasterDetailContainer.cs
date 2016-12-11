@@ -37,13 +37,25 @@ namespace App2Night
         public CustomMasterDetailContainer() : this(Constants.DefaultNavigationServiceName)
         { 
             _storageService = FreshIOC.Container.Resolve<IStorageService>();
+            _storageService.IsLoginChanged += LoginChanged;
+        }
+
+        private void LoginChanged(object sender, bool b)
+        {
+            if (!b)
+            {
+                if (_currentPageData.RequiresLogin)
+                {
+                    SwitchSelectedRootPageModel<DashboardPageModel>();
+                }
+            }
         }
 
         public CustomMasterDetailContainer(string navigationServiceName)
         {
 
             NavigationServiceName = navigationServiceName;
-            RegisterNavigation();
+            RegisterNavigation(); 
         }
 
         public void Init(string menuTitle, string menuIcon = null)

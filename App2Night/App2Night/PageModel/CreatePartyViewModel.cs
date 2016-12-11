@@ -66,10 +66,7 @@ namespace App2Night.PageModel
                 _cityName = value;
                 StartLocationValidation();
             } 
-        }
-
-        [AlsoNotifyFor(nameof(ValidLocationname))]
-        public string LocationName { get; set; }
+        } 
 
         public string Zipcode
 		{
@@ -111,8 +108,7 @@ namespace App2Night.PageModel
                 var enabled =
                        ValidCityname 
                        && ValidDescription
-                       && ValidHousenumber
-                       && ValidLocationname
+                       && ValidHousenumber 
                        && ValidName
                        && ValidZipcode
                        && ValidStreetname;
@@ -129,14 +125,10 @@ namespace App2Night.PageModel
                                 && string.IsNullOrEmpty(Description)
                                 && string.IsNullOrEmpty(Zipcode)
                                 && string.IsNullOrEmpty(StreetName)
-                                && string.IsNullOrEmpty(HouseNumber)
-                                && string.IsNullOrEmpty(LocationName));
+                                && string.IsNullOrEmpty(HouseNumber));
                 return enabled;
             }
-        }
-
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(ClearButtonEnabled))]
-        public bool ValidLocationname => ValidateLocationname();
+        } 
 
         [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(ClearButtonEnabled))]
         public bool ValidDate => ValidateDate();
@@ -155,8 +147,7 @@ namespace App2Night.PageModel
             Zipcode = string.Empty;
             CityName = string.Empty;
             StreetName = string.Empty;
-            HouseNumber = string.Empty;
-            LocationName = string.Empty;
+            HouseNumber = string.Empty; 
             Name = string.Empty;
             Description = string.Empty;
         }
@@ -164,12 +155,7 @@ namespace App2Night.PageModel
         public bool ValidateDate()
         {
             return Date > DateTime.Today && Date <= DateTime.Today.AddMonths(12);
-        } 
-
-        private bool ValidateLocationname()
-        {
-            return !string.IsNullOrEmpty(LocationName);
-        }
+        }  
 
         bool ValidateName()
         {
@@ -196,7 +182,7 @@ namespace App2Night.PageModel
                     //The user should come to the dashboard after popping the party detail page.
                     await CoreMethods.SwitchSelectedMaster<DashboardPageModel>();
 
-                    await CoreMethods.PushPageModel<PartyDetailViewModel>(result.Data);
+                    await CoreMethods.PushPageModel<MyPartyDetailViewModel>(result.Data);
                 }
                 else
                 {

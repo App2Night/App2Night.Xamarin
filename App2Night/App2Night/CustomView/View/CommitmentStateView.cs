@@ -19,8 +19,16 @@ namespace App2Night.CustomView.View
         {
             get { return (bool)GetValue(CommitmentStatePendingProperty); }
             set { SetValue(CommitmentStatePendingProperty, value); }
-        }
+        } 
 
+        public static BindableProperty HostedByUserProperty = BindableProperty.Create(nameof(HostedByUser), typeof(object), typeof(CommitmentStateView), false,
+            propertyChanged: (bindable, value, newValue) => ((CommitmentStateView)bindable).HostedByUserSet((bool)newValue)); 
+
+        public bool HostedByUser
+        {
+            get { return (bool)GetValue(HostedByUserProperty); }
+            set { SetValue(HostedByUserProperty, value); }
+        } 
 
         public static BindableProperty CommitmentStateProperty = BindableProperty.Create(nameof(CommitmentState), 
             typeof(PartyCommitmentState), 
@@ -43,6 +51,17 @@ namespace App2Night.CustomView.View
             FontFamily = "FontAwesome";
             RejectParty();
         } 
+
+        private void HostedByUserSet(bool hostedByUser)
+        {
+            IsEnabled = !hostedByUser;
+            Text = hostedByUser ? "\uf015" : "\uf006";
+
+            if(HostedByUser)
+                ButtonLabel.TextColor = Color.Black;
+            else
+                CommitmentStateChanged(CommitmentState);
+        }
 
         private void CommitmentStatePendingChanged(bool pending)
         {
