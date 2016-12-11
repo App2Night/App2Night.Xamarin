@@ -248,6 +248,7 @@ namespace App2Night.Page.SubPages
                     Spacing = 5,
                     Children =
                     {
+                        // Description of Party
                         new Frame
                         {
                             Content = new StackLayout
@@ -263,6 +264,7 @@ namespace App2Night.Page.SubPages
                                 Spacing = 5
                             },
                         },
+                        // Location of Party
                         new Frame
                         {
                             Content = new StackLayout
@@ -312,7 +314,11 @@ namespace App2Night.Page.SubPages
                 }
             };
         }
-
+        /// <summary>
+        /// Sets editable of views true and start slide in animation
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void SetEditEnable(object sender, EventArgs e)
         {
             _nameEntry.Input.IsEnabled = true;
@@ -328,7 +334,11 @@ namespace App2Night.Page.SubPages
 
             await SlideInAnimtion();
         }
-
+        /// <summary>
+        /// Sets Views disenable and start slide out animation
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void SetEditDisenable(object sender, EventArgs e)
         {
             _nameEntry.Input.IsEnabled = false;
@@ -343,7 +353,10 @@ namespace App2Night.Page.SubPages
             _zipCodetEntry.Input.IsVisible = false;
             await SlideOutAnimtion();
         }
-
+        /// <summary>
+        /// Slides out cancel and accept <see cref="CustomButton"/>
+        /// </summary>
+        /// <returns></returns>
         private async Task SlideOutAnimtion()
         {
             Animation slideOutAnimation = new Animation(d =>
@@ -359,7 +372,10 @@ namespace App2Night.Page.SubPages
                 _gradientLayer.IsVisible = false;
             });
         }
-
+        /// <summary>
+        /// Slides in cancel and accept <see cref="CustomButton"/>
+        /// </summary>
+        /// <returns></returns>
         private async Task SlideInAnimtion()
         {
             _gradientLayer.IsVisible = true;
@@ -438,6 +454,7 @@ namespace App2Night.Page.SubPages
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
+            // remove events on button
             _editToolbarItem.Clicked -= SetEditEnable;
             _cancelButton.ButtonTapped -= SetEditDisenable;
         }
