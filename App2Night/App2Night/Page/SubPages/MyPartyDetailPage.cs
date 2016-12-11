@@ -184,7 +184,7 @@ namespace App2Night.Page.SubPages
             {
                 if (newValue != null)
                 {
-                    ((PartyDetailPage) bindable).MapPinsSet((Pin) newValue);
+                    ((MyPartyDetailPage) bindable).MapPinsSet((Pin) newValue);
                 }
             });
 
