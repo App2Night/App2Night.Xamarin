@@ -105,6 +105,7 @@
     <Compile Include="AppDelegate.cs" />
     <Compile Include="Reachability.cs" />
     <Compile Include="Service\iOSCultureService.cs" />
+    <Compile Include="Service\iOSSQLite.cs" />
     <None Include="app.config" />
     <None Include="Entitlements.plist" />
     <None Include="Info.plist">
