@@ -48,6 +48,7 @@
     <Compile Include="CustomView\Template\QuadraticPartyTemplate.cs" />
     <Compile Include="CustomView\View\GallerieView.cs" />
     <Compile Include="CustomView\View\CustomButton.cs" />
+    <Compile Include="CustomView\View\LikeView.cs" />
     <Compile Include="CustomView\View\MapWrapper.cs" />
     <Compile Include="CustomView\View\CustomScrollView.cs" />
     <Compile Include="CustomView\View\HorizontalGallerieView.cs" />
