@@ -127,8 +127,7 @@ namespace App2Night.Service.Service
             Result <Guid> result =
                 await
                     _clientService.SendRequest<Guid>("api/party", RestType.Post, bodyParameter: partyCreationObject,
-                        token: Token.AccessToken);
-
+                        token: Token.AccessToken); 
 
             Result<Party> partyResult = new Result<Party>
             {
@@ -141,6 +140,9 @@ namespace App2Night.Service.Service
 
             if (result.Success)
             {
+                //Accept to the party, as host you obviously appear.
+                await ChangeCommitmentState(result.Data, PartyCommitmentState.Accepted);
+
                 DebugHelper.PrintDebug(DebugType.Info, $"Guid of the created party is {result.Data}");
                 //Get the created party if the creation was successfull. 
 
