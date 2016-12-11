@@ -10,7 +10,6 @@ namespace App2Night.Model.Model
         public string Email { get; set; }
         public ObservableCollection<Party> Events { get; set; }
         public Location Addresse { get; set; }
-        public Location LastGpsLocation { get; set; }
-
+        public Location LastGpsLocation { get; set; } 
 	}
 }

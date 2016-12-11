@@ -35,7 +35,7 @@ namespace App2Night
         private ObservableCollection<string> PageNames { get { return _pageNames; } }
 
         public CustomMasterDetailContainer() : this(Constants.DefaultNavigationServiceName)
-        {
+        { 
             _storageService = FreshIOC.Container.Resolve<IStorageService>();
         }
 

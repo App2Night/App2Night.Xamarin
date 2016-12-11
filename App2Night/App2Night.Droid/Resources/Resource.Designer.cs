@@ -66,6 +66,8 @@ namespace App2Night.Droid
 			global::PCLStorage.Resource.String.ApplicationName = global::App2Night.Droid.Resource.String.ApplicationName;
 			global::PCLStorage.Resource.String.Hello = global::App2Night.Droid.Resource.String.Hello;
 			global::Splat.Resource.String.library_name = global::App2Night.Droid.Resource.String.library_name;
+			global::SQLite.Net.Platform.XamarinAndroid.Resource.String.ApplicationName = global::App2Night.Droid.Resource.String.ApplicationName;
+			global::SQLite.Net.Platform.XamarinAndroid.Resource.String.Hello = global::App2Night.Droid.Resource.String.Hello;
 			global::Xamarin.Forms.Platform.Android.Resource.Attribute.actionBarSize = global::App2Night.Droid.Resource.Attribute.actionBarSize;
 		}
 		

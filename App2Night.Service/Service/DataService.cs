@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Dynamic;
+using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.Model.Enum;
@@ -36,19 +37,38 @@ namespace App2Night.Service.Service
             set { _storageService.SetToken(value); }
         } 
 
+        /// <summary>
+        /// Constructor
+        /// </summary> 
         public DataService(IClientService clientService, IStorageService storageService)
         {
             //Get the dependencys
             _clientService = clientService;
             _storageService = storageService;
+            RestorePartiesFromCache();
+
+        }
+
+        private void RestorePartiesFromCache()
+        { 
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                var cachedLocalParties = _storageService.RestoreCachedParty(PartyListType.Local);
+                SetNearParties(cachedLocalParties);
+
+                var cachedPartyHistory = _storageService.RestoreCachedParty(PartyListType.History);
+                SetHistoryParty(cachedPartyHistory); 
+
+                var cachedSelectedParties = _storageService.RestoreCachedParty(PartyListType.ByUser);
+                SetSelectedParties(cachedSelectedParties);
+            }); 
         }
 
         public ObservableCollection<Party> InterestingPartys { get; } = new ObservableCollection<Party>();
 
         public ObservableCollection<Party> SelectedPartys { get; } = new ObservableCollection<Party>();
 
-        public ObservableCollection<Party> PartyHistory { get; } = new ObservableCollection<Party>();
-
+        public ObservableCollection<Party> PartyHistory { get; } = new ObservableCollection<Party>(); 
 
         public async Task<bool> SetToken(Token token)
         {
@@ -75,7 +95,7 @@ namespace App2Night.Service.Service
             //Try to refreh token if token is expired
             var result = await RefreshToken();
             return result.Success;
-        }
+        } 
 
         #region party creation, modification
 
@@ -216,6 +236,13 @@ namespace App2Night.Service.Service
 
         #region user handlign
 
+        public User User { get; }
+
+        public Task<Result> GetUser()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<Result> UpdateUser()
         {
             UserDialogs.Instance.Toast(new ToastConfig("This Feature is not available"));
@@ -343,12 +370,10 @@ namespace App2Night.Service.Service
         public async Task<IEnumerable<Result>> BatchRefresh()
         {
             var allResults = new List<Result>();
-            await Task.WhenAll(new Task[]
-            {
-                Task.Run(async ()=> allResults.Add(await RequestPartyWithFilter())),
-                Task.Run(async ()=> allResults.Add(await RefreshPartyHistory())),
-                Task.Run(async ()=> allResults.Add(await RefreshSelectedParties())) 
-            });
+
+            allResults.Add(await RequestPartyWithFilter());
+            allResults.Add(await RefreshPartyHistory());
+            allResults.Add(await RefreshSelectedParties());  
 
             return allResults;
         }
@@ -356,22 +381,25 @@ namespace App2Night.Service.Service
         public async Task<Result<IEnumerable<Party>>> RefreshPartyHistory()
         {
             if (!await CheckIfTokenIsValid())
-                return new Result<IEnumerable<Party>> { NeedLogin = true};
+                return new Result<IEnumerable<Party>> { NeedLogin = true };
 
             var result = await
                        _clientService.SendRequest<IEnumerable<Party>>("api/party/history", RestType.Get,
                            token: Token?.AccessToken);
 
-            await HandleCaching(result);
-
-            
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                PopulateObservableCollection(PartyHistory, result.Data);
-                HistoryPartisUpdated?.Invoke(this, EventArgs.Empty);
-            });
+            await HandleCaching(result, PartyListType.History);
+            SetHistoryParty(result.Data);
 
             return result;
+        }
+
+        private void SetHistoryParty(IEnumerable<Party> parties)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                PopulateObservableCollection(PartyHistory, parties);
+                HistoryPartisUpdated?.Invoke(this, EventArgs.Empty);
+            });
         }
 
         public async Task<Result<IEnumerable<Party>>> RefreshSelectedParties()
@@ -380,26 +408,30 @@ namespace App2Night.Service.Service
                 return new Result<IEnumerable<Party>> { NeedLogin = true };
 
             var result = await
-                        _clientService.SendRequest<IEnumerable<Party>>("api/party/myParties", RestType.Get,  
+                        _clientService.SendRequest<IEnumerable<Party>>("api/party/myParties", RestType.Get,
                             token: Token?.AccessToken);
 
-            await HandleCaching(result);
+            await HandleCaching(result, PartyListType.ByUser);
+            SetSelectedParties(result.Data);
 
+            return result;
+        }
+
+        private void SetSelectedParties(IEnumerable<Party> parties)
+        {
             Device.BeginInvokeOnMainThread(() =>
             {
-                PopulateObservableCollection(SelectedPartys, result.Data);
+                PopulateObservableCollection(SelectedPartys, parties);
 
                 SelectedPartiesUpdated?.Invoke(this, EventArgs.Empty);
             });
-
-            return result;
         }
 
         public async Task<Result<IEnumerable<Party>>> RequestPartyWithFilter()
         {
             Result<IEnumerable<Party>> requestResult = new Result<IEnumerable<Party>>();
 
-            Coordinates coordinates = await CoordinateHelper.GetCoordinates(); 
+            Coordinates coordinates = await CoordinateHelper.GetCoordinates();
 
             try
             {
@@ -418,30 +450,34 @@ namespace App2Night.Service.Service
                 requestResult.RequestFailedToException = true;
             }
 
-            await HandleCaching(requestResult);
+            await HandleCaching(requestResult, PartyListType.Local);
             //Check if the request was a success
 
-            Device.BeginInvokeOnMainThread(() =>
-            {
-                PopulateObservableCollection(InterestingPartys, requestResult.Data);
-                NearPartiesUpdated?.Invoke(this, EventArgs.Empty);
-            });
-            
+            SetNearParties(requestResult.Data);
+
             return requestResult;
         }
 
-        async Task HandleCaching(Result<IEnumerable<Party>> rawResult)
+        private void SetNearParties(IEnumerable<Party> parties)
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                PopulateObservableCollection(InterestingPartys, parties);
+                NearPartiesUpdated?.Invoke(this, EventArgs.Empty);
+            });
+        }
+
+        async Task HandleCaching(Result<IEnumerable<Party>> rawResult, PartyListType listType)
         {
             if (rawResult.Success)
             {
-                //TODO cache data 
+                await _storageService.CacheParty(rawResult.Data, listType);
             }
             else
-            {
-                //TODO Replace dummy data with real caching
-                var cachedData = new List<Party>();
+            { 
+                var cachedData = _storageService.RestoreCachedParty(listType);
 
-                if (cachedData.Count > 0)
+                if (cachedData != null && cachedData.Count > 0)
                 {
                     rawResult.Data = cachedData;
                     rawResult.IsCached = true;
@@ -486,14 +522,7 @@ namespace App2Night.Service.Service
                     collection.Add(party);
                 }
             }
-        }
-
-        public User User { get; }
-
-        public Task<Result> GetUser()
-        {
-            throw new NotImplementedException();
-        }
+        } 
 
         #endregion  
     }

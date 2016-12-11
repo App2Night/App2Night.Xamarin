@@ -55,7 +55,7 @@ namespace App2Night.Service.Interface
         /// </summary>
         /// <param name="listType">Type of the party list, to resolve the right table.</param>
         /// <returns>The cached party or null if nothing was cached yet.</returns>
-        IEnumerable<Party> RestoreCachedParty(PartyListType listType);
+        IList<Party> RestoreCachedParty(PartyListType listType);
 
         /// <summary>
         /// Clears all cached parties.
