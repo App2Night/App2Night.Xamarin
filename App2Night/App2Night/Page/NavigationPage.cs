@@ -14,13 +14,7 @@ namespace App2Night.Page
             FontSize = 18,
             VerticalOptions = LayoutOptions.Center,
             HorizontalOptions = LayoutOptions.Center,
-        };
-
-        Label _nextPartyLabel = new Label
-        {
-            FontSize = 18,
-            VerticalOptions = LayoutOptions.Center,
-            HorizontalOptions = LayoutOptions.Center,
+			Text="Username"
         };
 
         private Button _logoutBtn = new Button
@@ -34,17 +28,28 @@ namespace App2Night.Page
             VerticalOptions = LayoutOptions.Center,
             HorizontalOptions = LayoutOptions.Center
         };
+		private CustomButton _editProfileButton = new CustomButton 
+		{ 
+			ButtonLabel = {FontFamily="FontAwesome", Text= "\uf044" },
+
+		};
+		private CustomButton _nextPartyButton = new CustomButton 
+		{
+			
+		};
         #endregion
         
         public NavigationPage()
         {
-            _nameLabel.SetBinding(Label.TextProperty, "User.Name");
-
+			//_nameLabel.SetBinding(Label.TextProperty, "User.Name", stringFormat: "Hello " + "{0}");
             _logoutBtn.SetBinding(Button.CommandProperty, nameof(NavigationViewModel.LogOutCommand));
             _logInButton.SetBinding(CustomButton.CommandProperty, nameof(NavigationViewModel.LogInCommand));
+			//_nextPartyButton.ButtonLabel.SetBinding(Label.TextProperty, "NextParty.Name", stringFormat:"Your next Party " + "{0}");
+			_editProfileButton.SetBinding(CustomButton.CommandProperty, nameof(NavigationViewModel.MoveToUserEditCommand));
+
 
             var loginContentView = LoginContentView();
-            //var partyContentView = PartyContentView();
+            var partyContentView = PartyContentView();
             var logoutContentView = LogoutContentView();
 
             loginContentView.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogInContentView));
@@ -66,7 +71,7 @@ namespace App2Night.Page
                 Children =
                 {
                     loginContentView,
-                   // partyContentView,
+                   	partyContentView,
                     logoutContentView,
                     {MenuListView, 0, 1},
                     {_logoutBtn, 0, 2}
@@ -90,11 +95,12 @@ namespace App2Night.Page
                     ColumnDefinitions = new ColumnDefinitionCollection
                     {
                         new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)},
-                        new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)},
+                        new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto)},
                     },
                     Children =
                     {
-                        {_nameLabel,0,1 }
+      //                  {_nameLabel,0,0 },
+						//{_nameLabel,1,0 }
                     }
                 }
             };
@@ -112,7 +118,9 @@ namespace App2Night.Page
                     },
                     Children =
                     {
-                        {_nextPartyLabel,1,0 }
+						{_nameLabel,0,0 },
+						{_editProfileButton,1,0 },
+						{_nextPartyButton,0,1 }
                     }
                 }
             };
