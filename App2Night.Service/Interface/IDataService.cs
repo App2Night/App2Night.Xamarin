@@ -98,7 +98,7 @@ namespace App2Night.Service.Interface
         Task<Result<IEnumerable<Party>>> RefreshSelectedParties();
 
         /// <summary>
-        /// Returns a single party to the given id.
+        /// Returns a single party to the given partyId.
         /// </summary>
         /// <param name="id"><see cref="Guid"/> of the party.</param>
         /// <returns>The requested party.</returns>
@@ -113,9 +113,9 @@ namespace App2Night.Service.Interface
         /// <summary>
         /// Deletes a party.
         /// </summary>
-        /// <param name="id"><see cref="Guid"/> of the party.</param>
+        /// <param name="partyId"><see cref="Guid"/> of the party.</param>
         /// <returns>Request result.</returns>
-        Task<Result> DeleteParty(Guid id);
+        Task<Result> DeleteParty(Guid partyId);
 
         /// <summary>
         /// Updates an existing party.
@@ -164,5 +164,7 @@ namespace App2Night.Service.Interface
         Task<Result> RefreshToken();
 
         Task<Result> ChangeCommitmentState(Guid partyId, PartyCommitmentState commitmentState);
+
+        Task<Result> RateParty(Guid partyId, int general, int price, int location, int mood);
     }
 }

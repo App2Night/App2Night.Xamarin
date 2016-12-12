@@ -184,9 +184,12 @@ namespace App2Night.Service.Service
             return partyCreationObject;
         }
 
-        public Task<Result> DeleteParty(Guid id)
+        public async Task<Result> DeleteParty(Guid partyId)
         {
-            throw new NotImplementedException();
+            if(! await CheckIfTokenIsValid()) return new Result();
+            var result = await _clientService.SendRequest("/api/Party", RestType.Delete, 
+                            token: Token.AccessToken, urlQuery: "?id=" + partyId.ToString("D"));
+            return result;
         }
 
         public Task<Result> UpdateParty()
@@ -208,7 +211,7 @@ namespace App2Night.Service.Service
             Result result =
                 await
                     _clientService.SendRequest("/api/UserParty/commitmentState", RestType.Put,
-                        urlQuery: "?id=" + partyId.ToString("D"), bodyParameter: bodyObject, token: Token.AccessToken);
+                        urlQuery: "?partyId=" + partyId.ToString("D"), bodyParameter: bodyObject, token: Token.AccessToken);
 
             if (result.Success)
             {
@@ -236,6 +239,22 @@ namespace App2Night.Service.Service
             }
 
             return result;
+        }
+
+        public async Task<Result> RateParty(Guid partyId, int general, int price, int location, int mood)
+        {
+            if (!await CheckIfTokenIsValid())
+            {
+                return new Result();
+            }
+            dynamic o = new ExpandoObject();
+            o.generalRating = general;
+            o.priceRating = price;
+            o.locationRating = location;
+            o.moodRating = mood;
+
+            return await _clientService.SendRequest("/api/userParty/partyRating", RestType.Put, bodyParameter: o,
+                            token: Token.AccessToken, urlQuery:"?partyId=" + partyId.ToString("D"));
         }
 
         #endregion
@@ -495,10 +514,10 @@ namespace App2Night.Service.Service
         {
             if (!await CheckIfTokenIsValid()) return new Result<Party>(); //Empty result with success = false
 
-            //Request the party with the given id
+            //Request the party with the given partyId
             var result =
                 await
-                    _clientService.SendRequest<Party>("api/party", RestType.Get, urlQuery: "/id=" + id.ToString("D"),
+                    _clientService.SendRequest<Party>("api/party", RestType.Get, urlQuery: "/partyId=" + id.ToString("D"),
                         token: Token.AccessToken);
 
             //We have to correct the result since the backend is sending us bullshit data.
