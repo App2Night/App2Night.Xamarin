@@ -37,7 +37,6 @@ namespace App2Night.CustomView.View
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.End,
             FontSize = _defaultFontSize,
-            Text = "1"
         };
 
         Label _priceRateLabel = new Label
@@ -45,7 +44,6 @@ namespace App2Night.CustomView.View
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.End,
             FontSize = _defaultFontSize,
-            Text = "1"
         };
 
         Label _locationRateLabel = new Label
@@ -53,7 +51,6 @@ namespace App2Night.CustomView.View
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.End,
             FontSize = _defaultFontSize,
-            Text = "1"
         };
 
         Label _moodRateLabel = new Label
@@ -61,7 +58,6 @@ namespace App2Night.CustomView.View
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.End,
             FontSize = _defaultFontSize,
-            Text = "1"
         };
         Label _dateLabel, _startTimeLabel, _genreLabel, _priceLabel;
         private Frame _ratingFrame;
@@ -114,6 +110,10 @@ namespace App2Night.CustomView.View
             _startTimeLabel.SetBinding(Label.TextProperty, "Date", stringFormat: AppResources.Time);
             _genreLabel.SetBinding(Label.TextProperty, "MusicGenre");
             _priceLabel.SetBinding(Label.TextProperty, "Price");
+			_generalRateLabel.SetBinding(Label.TextProperty, "GeneralAvg");
+			_priceRateLabel.SetBinding(Label.TextProperty, "PriceAvg");
+			_locationRateLabel.SetBinding(Label.TextProperty, "LocationAvg");
+			_moodRateLabel.SetBinding(Label.TextProperty, "MoodAvg");
         }
         /// <summary>
         /// Initializes description label.

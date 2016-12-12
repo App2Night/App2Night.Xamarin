@@ -16,6 +16,7 @@ namespace App2Night.Page.SubPages
     public class MyPartyDetailPage : FreshBaseContentPage
     {
         private static int _defaultFontSize = 16;
+		private static int _defaultIconSize = 50;
         private static Thickness _defaultMargin = new Thickness(5, 0);
         public static int CommandHeight = 70;
 
@@ -178,6 +179,35 @@ namespace App2Night.Page.SubPages
             Color = Color.White.MultiplyAlpha(0.3),
             IsVisible = false
         };
+
+		Label _generalRateLabel = new Label
+		{
+			HorizontalOptions = LayoutOptions.Center,
+			VerticalOptions = LayoutOptions.End,
+			FontSize = _defaultFontSize,
+		};
+
+		Label _priceRateLabel = new Label
+		{
+			HorizontalOptions = LayoutOptions.Center,
+			VerticalOptions = LayoutOptions.End,
+			FontSize = _defaultFontSize,
+		};
+
+		Label _locationRateLabel = new Label
+		{
+			HorizontalOptions = LayoutOptions.Center,
+			VerticalOptions = LayoutOptions.End,
+			FontSize = _defaultFontSize,
+		};
+
+		Label _moodRateLabel = new Label
+		{
+			HorizontalOptions = LayoutOptions.Center,
+			VerticalOptions = LayoutOptions.End,
+			FontSize = _defaultFontSize,
+		};
+		Frame _ratingFrame;
         #endregion
 
         #region BindablePinProperty 
@@ -215,6 +245,7 @@ namespace App2Night.Page.SubPages
             _editToolbarItem.Clicked += SetEditEnable;
             _cancelButton.ButtonTapped += SetEditDisenable;
             _acceptButton.ButtonTapped += SetEditDisenable;
+			_ratingFrame = CreateRatingColumns();
             var inputRows = CreateInputRows();
             //SKIA Replace with gradient layer
             Grid.SetRowSpan(inputRows, 2);
@@ -241,6 +272,91 @@ namespace App2Night.Page.SubPages
                 }
             };
         }
+		/// <summary>
+		/// Initialize Frame for Rating of Party.
+		/// </summary>
+		/// <returns><see cref="Frame"/></returns>
+		private Frame CreateRatingColumns()
+		{
+			return new Frame
+			{
+				Margin = 5,
+				Padding = 5,
+				Content = new Grid
+				{
+					ColumnDefinitions = new ColumnDefinitionCollection
+					{
+						new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+						new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+						new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+						new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
+					},
+					RowDefinitions = new RowDefinitionCollection
+					{
+					  new RowDefinition {Height = new GridLength(100, GridUnitType.Absolute)},
+					},
+					Children =
+					{
+                        // Location Rating 
+                        {
+							new Label
+							{
+								Text = "\uf015",
+								FontFamily = "FontAwesome",
+								TextColor = Color.Gray.MultiplyAlpha(0.3),
+								FontSize = _defaultIconSize,
+								HorizontalOptions = LayoutOptions.Center,
+								VerticalOptions = LayoutOptions.Start,
+							},
+							0, 0
+						},
+						{_locationRateLabel, 0, 0},
+                        // Price Rating
+                        {
+							new Label
+							{
+								Text = "\uf155",
+								FontFamily = "FontAwesome",
+								TextColor = Color.Gray.MultiplyAlpha(0.3),
+								FontSize = _defaultIconSize,
+								HorizontalOptions = LayoutOptions.Center,
+								VerticalOptions = LayoutOptions.Start,
+							},
+							1, 0
+						},
+						{_priceRateLabel, 1, 0},
+                        // Mood Rating 
+                        {
+							new Label
+							{
+								Text = "\uf118",
+								FontFamily = "FontAwesome",
+								TextColor = Color.Gray.MultiplyAlpha(0.3),
+								FontSize = _defaultIconSize,
+								HorizontalOptions = LayoutOptions.Center,
+								VerticalOptions = LayoutOptions.Start,
+							},
+							2, 0
+						},
+						{_moodRateLabel, 2, 0},
+                        // General Rating
+                        {
+							new Label
+							{
+								Text = "\uf29b",
+								FontFamily = "FontAwesome",
+								TextColor = Color.Gray.MultiplyAlpha(0.3),
+								FontSize = _defaultIconSize,
+								HorizontalOptions = LayoutOptions.Center,
+								VerticalOptions = LayoutOptions.Start,
+							},
+							3, 0
+						},
+						{_generalRateLabel, 3, 0},
+					}
+				}
+			};
+		}
 
         /// <summary>
         /// Initializes ScrollView with Views. 
@@ -254,6 +370,7 @@ namespace App2Night.Page.SubPages
                 { 
                     Children =
                     {
+						_ratingFrame,
                         // Description of Party
                         new Frame
                         {
@@ -464,6 +581,11 @@ namespace App2Night.Page.SubPages
             // set MapPins
             this.SetBinding(DashboardPage.MapPinsProperty, nameof(PartyDetailViewModel.MapPins));
             _deleteParty.SetBinding(MenuItem.CommandProperty, nameof(MyPartyDetailViewModel.DeletePartyCommand));
+			// rating 
+			_generalRateLabel.SetBinding(Label.TextProperty, "Party.GeneralAvg");
+			_priceRateLabel.SetBinding(Label.TextProperty, "Party.PriceAvg");
+			_locationRateLabel.SetBinding(Label.TextProperty, "Party.LocationAvg");
+			_moodRateLabel.SetBinding(Label.TextProperty, "Party.MoodAvg");
         }
 
         protected override void OnDisappearing()
@@ -473,5 +595,11 @@ namespace App2Night.Page.SubPages
             _editToolbarItem.Clicked -= SetEditEnable;
             _cancelButton.ButtonTapped -= SetEditDisenable;
         }
+		protected override void OnSizeAllocated(double width, double height)
+		{
+			base.OnSizeAllocated(width, height);
+			// Set Size of Grid, depends on width of device
+			_ratingFrame.HeightRequest = Width / 3;
+		}
     }
 }
