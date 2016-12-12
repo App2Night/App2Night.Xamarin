@@ -9,33 +9,44 @@ namespace App2Night.CustomView.View
         {
             Text = "\uf087",
             HorizontalOptions = LayoutOptions.Center,
-            ButtonLabel = { FontFamily = "FontAwesome" }
+            ButtonLabel = {FontFamily = "FontAwesome"}
         };
+
         CustomButton _dislikeButton = new CustomButton
         {
             Text = "\uf088",
             HorizontalOptions = LayoutOptions.Center,
-            ButtonLabel = { FontFamily = "FontAwesome"},
+            ButtonLabel = {FontFamily = "FontAwesome"},
         };
 
-        //public double FontSize { get; set; }
+        private double _fontSize = 16;
+        public double FontSize
+        {
+            get { return _fontSize; }
+            set
+            {
+                _fontSize = value;
+                _likeButton.ButtonLabel.FontSize = _fontSize;
+                _dislikeButton.ButtonLabel.FontSize = _fontSize;
+            }
+        }
 
-        //public static BindableProperty LikeStateProperty = BindableProperty.Create(nameof(LikeState), typeof(int), typeof(LikeView),
-        //    propertyChanged: (bindable, value, newValue) =>
-        //    {
-        //        ((LikeView)bindable).LikeState = (int)newValue;
-        //    });
+        public static BindableProperty LikeStateProperty = BindableProperty.Create(nameof(LikeState), typeof(int),
+            typeof(LikeView), 0,
+            propertyChanged: (bindable, value, newValue) => { ((LikeView) bindable).LikeState = (int) newValue; });
 
-        public int LikeState { get; set; } = 0;
+        public int LikeState
+        {
+            get { return (int) GetValue(LikeStateProperty); }
+            set { SetValue(LikeStateProperty, value); }
+        }
+
         public LikeView()
         {
-            //_likeButton.FontSize = FontSize;
-            //_dislikeButton.FontSize = FontSize;
             _likeButton.ButtonTapped += TapLikeBtn;
             _dislikeButton.ButtonTapped += TapDislikeBtn;
             Grid grid = CreateInputColumns();
             Content = grid;
-
         }
 
         private void TapDislikeBtn(object sender, EventArgs e)
@@ -62,7 +73,7 @@ namespace App2Night.CustomView.View
             }
             else
             {
-               _likeButton.ButtonLabel.TextColor = Color.Lime;
+                _likeButton.ButtonLabel.TextColor = Color.Lime;
                 _dislikeButton.ButtonLabel.TextColor = Color.Gray;
                 LikeState = 1;
             }
@@ -79,12 +90,10 @@ namespace App2Night.CustomView.View
                 },
                 Children =
                 {
-                    {_dislikeButton,0,0 },
-                    {_likeButton,1,0 }
+                    {_dislikeButton, 0, 0},
+                    {_likeButton, 1, 0}
                 }
             };
         }
-
-
     }
 }

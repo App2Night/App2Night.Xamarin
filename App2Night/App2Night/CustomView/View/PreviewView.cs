@@ -64,6 +64,20 @@ namespace App2Night.CustomView.View
         }
 
         readonly ContentView _content = new ContentView();
+
+        public BindableProperty VisibleMoreBtnProperty = BindableProperty.Create(nameof(IsMoreBtnVisible), typeof(bool),
+            typeof(PreviewView), true, BindingMode.Default);
+
+        public bool IsMoreBtnVisible
+        {
+            get { return (bool) GetValue(VisibleMoreBtnProperty); }
+            set
+            {
+                SetValue(VisibleMoreBtnProperty, value);
+                _moreButton.IsVisible = value;
+                _moreButton.ButtonLabel.IsEnabled = value;
+            }
+        }
         #endregion
 
         public PreviewView(string title, object item)
