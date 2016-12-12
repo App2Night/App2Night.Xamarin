@@ -67,6 +67,7 @@ namespace App2Night.PageModel.SubPages
         string _zipcode;
         string _houseNumber;
         private string _cityName;
+        private PartyType _partyType;
 
         [AlsoNotifyFor(nameof(AcceptButtonEnabled))]
         public string Name
@@ -80,6 +81,13 @@ namespace App2Night.PageModel.SubPages
         {
             get { return _description; }
             set { _description = value; }
+        }
+
+        [AlsoNotifyFor(nameof(ValidPartyType))]
+        public PartyType PartyType
+        {
+            get { return _partyType; }
+            set { _partyType = value; }
         }
 
         public MusicGenre MusicGenre
@@ -170,6 +178,7 @@ namespace App2Night.PageModel.SubPages
                     && ValidName
                     && ValidZipcode
                     && ValidStreetname;
+                    
                 return enabled;
             }
         }
@@ -182,6 +191,9 @@ namespace App2Night.PageModel.SubPages
 
         [AlsoNotifyFor(nameof(AcceptButtonEnabled))]
         public bool ValidName => ValidateName();
+
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled))]
+        public bool ValidPartyType => ValidatePartyType();
 
         [AlsoNotifyFor(nameof(AcceptButtonEnabled))]
         public bool ValidDescription => ValidateDescription();
@@ -207,6 +219,11 @@ namespace App2Night.PageModel.SubPages
             return Date > DateTime.Now && Date <= DateTime.Today.AddMonths(12);
         }
 
+        public bool ValidatePartyType()
+        {
+            return PartyType.GetHashCode() != -1;
+        }
+
         private bool ValidatePrice()
         {
             return !string.IsNullOrEmpty(Price);
@@ -227,22 +244,31 @@ namespace App2Night.PageModel.SubPages
             using (UserDialogs.Instance.Loading("Update Party")) //RESOURCE 
             {
                 var dateTime = new DateTime(Date.Year, Date.Month, Date.Day, Time.Hours, Time.Minutes, 0);
+                Party.Name = Name;
+                Party.Description = Description;
+                Party.Date = Date;
+                Party.PartyType = PartyType;
+                Party.MusicGenre = MusicGenre;
+                Party.Price = int.Parse(Price);
+                Party.Location.CityName = CityName;
+                Party.Location.Zipcode = Zipcode;
+                Party.Location.HouseNumber = HouseNumber;
+                Party.Location.StreetName = StreetName;
                 var result = await
                     FreshIOC.Container.Resolve<IDataService>()
-                        .CreateParty(Name, dateTime, MusicGenre, "Germany", CityName, StreetName, HouseNumber, Zipcode,
-                            PartyType.Bar, Description, 0);
+                        .UpdateParty(Party);
 
-                if (result.Success)
-                {
-                    //The user should come to the dashboard after popping the party detail page.
-                    await CoreMethods.SwitchSelectedMaster<DashboardPageModel>();
+                //if (result.Success)
+                //{
+                //    //The user should come to the dashboard after popping the party detail page.
+                //    await CoreMethods.SwitchSelectedMaster<DashboardPageModel>();
 
-                    await CoreMethods.PushPageModel<PartyDetailViewModel>(result.Data);
-                }
-                else
-                {
-                    //TODO Handle failure
-                }
+                //    await CoreMethods.PushPageModel<PartyDetailViewModel>(result);
+                //}
+                //else
+                //{
+                //    //TODO Handle failure
+                //}
             }
         }
 

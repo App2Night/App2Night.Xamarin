@@ -213,8 +213,8 @@ namespace App2Night.Page.SubPages
             ToolbarItems.Add(_editToolbarItem);
             ToolbarItems.Add(_deleteParty);
             _editToolbarItem.Clicked += SetEditEnable;
-            _deleteParty.SetBinding(MenuItem.CommandProperty, nameof(MyPartyDetailViewModel.DeletePartyCommand));
             _cancelButton.ButtonTapped += SetEditDisenable;
+            _acceptButton.ButtonTapped += SetEditDisenable;
             var inputRows = CreateInputRows();
             //SKIA Replace with gradient layer
             Grid.SetRowSpan(inputRows, 2);
@@ -435,6 +435,8 @@ namespace App2Night.Page.SubPages
             // music genre
             _musicGenrePicker.Input.SetBinding(EnumBindablePicker<MusicGenre>.SelectedItemProperty,
                 nameof(MyPartyDetailViewModel.MusicGenre));
+            // party type
+            _partyTypePicker.Input.SetBinding(EnumBindablePicker<PartyType>.SelectedItemProperty, nameof(MyPartyDetailViewModel.PartyType));
             // date and time
             _datePicker.Input.SetBinding(DatePicker.DateProperty, nameof(MyPartyDetailViewModel.Date));
             // set start time
@@ -461,6 +463,7 @@ namespace App2Night.Page.SubPages
                 nameof(MyPartyDetailViewModel.ValidZipcode));
             // set MapPins
             this.SetBinding(DashboardPage.MapPinsProperty, nameof(PartyDetailViewModel.MapPins));
+            _deleteParty.SetBinding(MenuItem.CommandProperty, nameof(MyPartyDetailViewModel.DeletePartyCommand));
         }
 
         protected override void OnDisappearing()

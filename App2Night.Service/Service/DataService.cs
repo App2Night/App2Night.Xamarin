@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Dynamic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -194,9 +195,17 @@ namespace App2Night.Service.Service
             return result;
         }
 
-        public Task<Result> UpdateParty()
+        public async Task<Result> UpdateParty(Party party)
         { 
-            throw new NotImplementedException();
+            if (!await  CheckIfTokenIsValid()) return new Result();
+            dynamic o = CreatePartyCreateObject(party.Name, party.Date, party.MusicGenre, party.Location.CountryName,
+                party.Location.CityName, party.Location.StreetName, party.Location.HouseNumber, party.Location.Zipcode,
+                party.PartyType, party.Description, party.Price);
+            var result =
+                await
+                    _clientService.SendRequest("/api/Party", RestType.Put, bodyParameter: o, token: Token.AccessToken, 
+                        urlQuery: "?id=" + party.Id.ToString("D"));
+            return result;
         }
 
         public async Task<Result> ChangeCommitmentState(Guid partyId, PartyCommitmentState commitmentState)

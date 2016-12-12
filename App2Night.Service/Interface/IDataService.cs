@@ -121,7 +121,7 @@ namespace App2Night.Service.Interface
         /// Updates an existing party.
         /// </summary>
         /// <returns></returns>
-        Task<Result> UpdateParty();
+        Task<Result> UpdateParty(Party party);
 
         /// <summary>
         /// Updates an existing user.
