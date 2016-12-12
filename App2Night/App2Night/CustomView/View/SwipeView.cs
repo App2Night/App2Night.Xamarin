@@ -8,6 +8,8 @@ namespace App2Night.CustomView.View
 {
     public class SwipeView : ContentView
     {
+        Queue<object> _nextCards = new Queue<object>();
+
         private Xamarin.Forms.View TopView => _mainGrid.Children.LastOrDefault(); 
 
         public static BindableProperty ItemsSourceProperty =
@@ -35,40 +37,65 @@ namespace App2Night.CustomView.View
         private void CollectionSet()
         {
             AllCards.Clear();
+            _nextCards.Clear();
             _mainGrid.Children.Clear();
-            if (ItemsSource == null) return; 
+            if (ItemsSource == null) return;
+
+            //Add all items to the queue.
             foreach (object o in ItemsSource)
             {
-                Xamarin.Forms.View card;
-                if (_templateType != null)
-                {
-                    card = (Xamarin.Forms.View) Activator.CreateInstance(_templateType);
-                }
-                else
-                {
+                _nextCards.Enqueue(o);
+            }
 
-                    card = new ContentView
-                    {
-                        Content = new Label() {Text = "Override this template with SetTemplate."}
-                    };
-                }
-
-                //Give the new card a random background color
-                var rnd = new Random();
-                var cardBackgroundColor =
-                    Color.FromRgb(rnd.Next(0, 100) / 100.0, rnd.Next(0, 100) / 100.0, rnd.Next(0, 100) / 100.0);
-                cardBackgroundColor.AddLuminosity(50);
-                card.BackgroundColor = cardBackgroundColor;
-
-                //Little shake to give a natural feeling 
-                card.Rotation = GenerateRandomNumber();
-                card.BindingContext = o;
-                card.InputTransparent = true;
-                _mainGrid.Children.Add(card);
+            //Add the first three queue items as card to the view.
+            for (int i = 0; i < 3; i++)
+            {
+                AddCardFromQueue();
             }
             SetCardSize();
         }
 
+        void AddCardFromQueue()
+        {
+            if (_nextCards.Count > 0)
+            {
+                AddCard(_nextCards.Dequeue());
+            }
+        }
+
+        void AddCard(object o)
+        {
+            Xamarin.Forms.View card;
+            if (_templateType != null)
+            {
+                card = (Xamarin.Forms.View)Activator.CreateInstance(_templateType);
+            }
+            else
+            {
+                card = new ContentView
+                {
+                    Content = new Label() { Text = "Override this template with SetTemplate." }
+                };
+            }
+
+            //Give the new card a random background color
+            var rnd = new Random();
+            var cardBackgroundColor =
+                Color.FromRgb(rnd.Next(0, 100) / 100.0, rnd.Next(0, 100) / 100.0, rnd.Next(0, 100) / 100.0);
+            cardBackgroundColor.AddLuminosity(50);
+            card.BackgroundColor = cardBackgroundColor;
+
+            //Little shake to give a natural feeling 
+            card.Rotation = GenerateRandomNumber();
+            card.BindingContext = o;
+            card.InputTransparent = true;
+            card.Margin = RelativeMargin;
+            //var cardCount = _mainGrid.Children.Count;
+            //if (cardCount == 0)
+            //    _mainGrid.Children.Add(card);
+            //else
+            _mainGrid.Children.Insert(0, card);
+        } 
 
         private int lastRandom = 1337;
         double GenerateRandomNumber()
@@ -88,9 +115,11 @@ namespace App2Night.CustomView.View
         {
             foreach (Xamarin.Forms.View view in _mainGrid.Children)
             {
-                view.Margin = Width*(1.0/10); 
+                view.Margin = RelativeMargin;
             }
         }
+
+        Thickness RelativeMargin=> Width * (1.0 / 10);
 
         public IEnumerable<object> ItemsSource
         {
@@ -155,14 +184,18 @@ namespace App2Night.CustomView.View
                             await TopView.TranslateTo(Width, y);
                             MovedOutRight();
                             _mainGrid.Children.Remove(TopView);
-                            
+
+                            AddCardFromQueue();
+
                         }
                         else if (x < -bound) //Move left out of the picture
                         {
                             await TopView.TranslateTo(-Width, y);
                             MovedOutLeft();
                             _mainGrid.Children.Remove(TopView);
-                            
+
+                            AddCardFromQueue();
+
                         }
                         else
                         {
@@ -182,8 +215,8 @@ namespace App2Night.CustomView.View
         }
 
         void MovedOutRight()
-        {
+        { 
             SwipeOutRightCommand?.Execute(TopView.BindingContext);
-        }
+        } 
     }
 }

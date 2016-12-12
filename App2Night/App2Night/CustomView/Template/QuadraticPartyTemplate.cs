@@ -36,7 +36,8 @@ namespace App2Night.CustomView.Template
 
         private Image _image = new Image
         {
-            Aspect = Aspect.AspectFill
+            Aspect = Aspect.AspectFill,
+            IsOpaque = false
         };
 
         CommitmentStateView _likeButton = new CommitmentStateView
@@ -68,7 +69,7 @@ namespace App2Night.CustomView.Template
         private void SetBindings()
         {
             _likeButton.SetBinding(CommitmentStateView.CommitmentStatePendingProperty, "CommitmentStatePending");
-            _image.SetBinding(Image.SourceProperty, nameof(Party.ImageSource));
+            //_image.SetBinding(Image.SourceProperty, nameof(Party.ImageSource));
             _titleLabel.SetBinding(Label.TextProperty, "Name");
             _distanceLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
             _shareIconLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());

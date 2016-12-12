@@ -58,7 +58,7 @@ namespace App2Night.CustomView.Template
 
         public PartyTemplate()
         {
-            _pictureImage.SetBinding(Image.SourceProperty, nameof(Party.ImageSource));
+            //_pictureImage.SetBinding(Image.SourceProperty, nameof(Party.ImageSource));
             _nameLabel.SetBinding(Label.TextProperty, nameof(Party.Name));
 
             _commitmentView.SetBinding(CommitmentStateView.CommitmentStateProperty, nameof(Party.CommitmentState));
