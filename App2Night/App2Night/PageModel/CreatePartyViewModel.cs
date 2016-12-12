@@ -46,7 +46,7 @@ namespace App2Night.PageModel
         public TimeSpan Time { get; set; }
 
         [AlsoNotifyFor(nameof(ValidDate))]
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } = DateTime.Today;
          
         public string StreetName
 		{
