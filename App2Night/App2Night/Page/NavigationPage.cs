@@ -1,13 +1,27 @@
 ﻿using App2Night.CustomView.View;
 using App2Night.Data.Language;
+using App2Night.PageModel;
 using Xamarin.Forms;
 
 namespace App2Night.Page
 {
     public class NavigationPage : ContentPage
     {
+        #region Views
         public ListView MenuListView { get; }= new ListView(ListViewCachingStrategy.RecycleElement);
-        Label _nameLabel = new Label();
+        Label _nameLabel = new Label
+        {
+            FontSize = 18,
+            VerticalOptions = LayoutOptions.Center,
+            HorizontalOptions = LayoutOptions.Center,
+        };
+
+        Label _nextPartyLabel = new Label
+        {
+            FontSize = 18,
+            VerticalOptions = LayoutOptions.Center,
+            HorizontalOptions = LayoutOptions.Center,
+        };
 
         private Button _logoutBtn = new Button
         {
@@ -20,21 +34,22 @@ namespace App2Night.Page
             VerticalOptions = LayoutOptions.Center,
             HorizontalOptions = LayoutOptions.Center
         };
-
+        #endregion
+        
         public NavigationPage()
         {
-            _nameLabel.SetBinding(Label.TextProperty, "User.Name", stringFormat:"Hello {0}");
+            _nameLabel.SetBinding(Label.TextProperty, "User.Name");
 
-            _logoutBtn.SetBinding(Button.CommandProperty, "LogOutCommand");
-            _logInButton.SetBinding(CustomButton.CommandProperty, "LogInCommand");
+            _logoutBtn.SetBinding(Button.CommandProperty, nameof(NavigationViewModel.LogOutCommand));
+            _logInButton.SetBinding(CustomButton.CommandProperty, nameof(NavigationViewModel.LogInCommand));
 
             var loginContentView = LoginContentView();
-            var partyContentView = PartyContentView();
+            //var partyContentView = PartyContentView();
             var logoutContentView = LogoutContentView();
 
-            loginContentView.SetBinding(IsVisibleProperty, "IsLogInContentView");
-            logoutContentView.SetBinding(IsVisibleProperty, "IsLogOutContentView");
-            _logoutBtn.SetBinding(IsVisibleProperty, "IsLogInContentView");
+            loginContentView.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogInContentView));
+            logoutContentView.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogOutContentView));
+            _logoutBtn.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogInContentView));
              
             if(Device.OS == TargetPlatform.iOS) Padding = new Thickness(0, 20, 0, 0);
             Title = AppResources.Menu;
@@ -79,7 +94,7 @@ namespace App2Night.Page
                     },
                     Children =
                     {
-                        {_nameLabel,1,0 }
+                        {_nameLabel,0,1 }
                     }
                 }
             };
@@ -97,7 +112,7 @@ namespace App2Night.Page
                     },
                     Children =
                     {
-                        {_nameLabel,1,0 }
+                        {_nextPartyLabel,1,0 }
                     }
                 }
             };

@@ -18,13 +18,15 @@ namespace App2Night.PageModel
 
         public Model.Model.User User => FreshIOC.Container.Resolve<IDataService>().User;
 
+        public string Name => User.Name;
+
         public bool IsLogIn
         {
             get { return _isLogIn; }
             private set
             {
                 _isLogIn = value;
-                if (value == true)
+                if (value)
                 {
                     IsLogInContentView = true;
                     IsLogOutContentView = false;
@@ -46,6 +48,8 @@ namespace App2Night.PageModel
         public NavigationViewModel()
         {
             _storageService = FreshIOC.Container.Resolve<IStorageService>();
+            _dataService = FreshIOC.Container.Resolve<IDataService>();
+            _dataService.GetUser();
             _storageService.IsLoginChanged += LoginChanged;
         }
 

@@ -274,9 +274,12 @@ namespace App2Night.Service.Service
 
         public User User { get; }
 
-        public Task<Result> GetUser()
+        public async Task<Result> GetUser()
         {
-            throw new NotImplementedException();
+            if (!await CheckIfTokenIsValid()) return new Result();
+            var result = await _clientService.SendRequest("/api/userinfo", RestType.Get, 
+                            token: Token.AccessToken);
+            return result;
         }
 
         public Task<Result> UpdateUser()
