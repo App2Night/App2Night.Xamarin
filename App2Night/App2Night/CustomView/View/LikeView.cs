@@ -85,8 +85,8 @@ namespace App2Night.CustomView.View
             {
                 ColumnDefinitions = new ColumnDefinitionCollection
                 {
-                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Auto)},
-                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Auto)},
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
                 },
                 Children =
                 {

@@ -11,56 +11,58 @@ namespace App2Night.CustomView.View
 {
     public class RateView : PreviewView
     {
-        public static double _defaultFontSize = 35;
+        public static double _defaultIconSize = 35;
+        public static double _defaultFontSize = 18;
         #region Views
         InputContainer<Label> _generalRatingLabel = new InputContainer<Label>
         {
             IconCode = "\uf005",
-            Input = { Text = "General Rating" },
+            Input = { Text = "General Rating", FontSize = _defaultFontSize },
             ValidationVisible = false,
         };
         InputContainer<Label> _priceRatingLabel = new InputContainer<Label>
         {
             IconCode = "\uf155",
-            Input = { Text = "Price Rating" },
+            Input = { Text = "Price Rating", FontSize = _defaultFontSize },
             ValidationVisible = false
         };
         InputContainer<Label> _locationRatingLabel = new InputContainer<Label>
         {
             IconCode = "\uf041",
-            Input = { Text = "Location Rating" },
+            Input = { Text = "Location Rating", FontSize = _defaultFontSize },
             ValidationVisible = false
         };
         InputContainer<Label> _moodRatingLabel = new InputContainer<Label>
         {
             IconCode = "\uf0a1",
-            Input = { Text = "Mood Rating"},
+            Input = { Text = "Mood Rating", FontSize = _defaultFontSize },
             ValidationVisible = false
         };
         LikeView _likeGeneral = new LikeView
         {
-            FontSize = _defaultFontSize,
+            FontSize = _defaultIconSize,
             HorizontalOptions = LayoutOptions.End
         };
         LikeView _likePrice = new LikeView
         {
-            FontSize = _defaultFontSize,
+            FontSize = _defaultIconSize,
             HorizontalOptions = LayoutOptions.End,
         };
         LikeView _likeLocation = new LikeView
         {
-            FontSize = _defaultFontSize,
+            FontSize = _defaultIconSize,
             HorizontalOptions = LayoutOptions.End,
         };
         LikeView _likeMood = new LikeView
         {
-            FontSize = _defaultFontSize,
+            FontSize = _defaultIconSize,
             HorizontalOptions = LayoutOptions.End,
         };
         Button _sendRating = new Button
         {
             Text = "Senden",
-            HeightRequest = 50
+            HeightRequest = 50,
+            VerticalOptions = LayoutOptions.End
         };
 
         #endregion
@@ -79,27 +81,42 @@ namespace App2Night.CustomView.View
 
         private void SendRating(object sender, EventArgs e)
         {
-            Device.BeginInvokeOnMainThread(async () =>
+            if (_likeGeneral.LikeState != 0 || _likeLocation.LikeState != 0 || _likePrice.LikeState != 0 ||
+                _likeMood.LikeState != 0)
             {
-                using (UserDialogs.Instance.Loading("Rating")) // Resource
+                Device.BeginInvokeOnMainThread(async () =>
                 {
-                    var party = BindingContext as Party;
-                    var result = await FreshIOC.Container.Resolve<IDataService>().RateParty(party.Id, _likeGeneral.LikeState, _likePrice.LikeState, _likeLocation.LikeState, _likeMood.LikeState);
-                }
-            });
+                    using (UserDialogs.Instance.Loading("Rating")) // Resource
+                    {
+                        var party = BindingContext as Party;
+                        var result =
+                            await
+                                FreshIOC.Container.Resolve<IDataService>()
+                                    .RateParty(party.Id, _likeGeneral.LikeState, _likePrice.LikeState,
+                                        _likeLocation.LikeState, _likeMood.LikeState);
+                    }
+                });
+            }
+            else
+            {
+                Device.BeginInvokeOnMainThread(() =>
+                {
+                    UserDialogs.Instance.Alert(new AlertConfig().Message = "You have to like minium one aspect of the party");
+                });
+            }
         }
 
         private Frame CreateView()
         {
             return new Frame
             {
-                Padding = 0,
+                Padding = 5,
                 Margin = 5,
                 Content = new Grid
                 {
                     ColumnDefinitions = new ColumnDefinitionCollection
                     {
-                        new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                        new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
                         new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
                     },
                     RowDefinitions = new RowDefinitionCollection
@@ -108,7 +125,7 @@ namespace App2Night.CustomView.View
                         new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
                         new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
                         new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
-                        new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)},
+                        new RowDefinition {Height = new GridLength(1, GridUnitType.Star)},
                     },
                     Children =
                     {

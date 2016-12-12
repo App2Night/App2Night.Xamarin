@@ -264,7 +264,12 @@ namespace App2Night.CustomView.View
                 {
                     _map,
                     (_ratingFrame = CreateRatingColumns()),
-                    new Frame {Content = descriptionGrid},
+                    new Frame
+                    {
+                        Content = descriptionGrid,
+                        Margin = 5,
+                        Padding = 5,
+                    },
                 }
             };
         }
