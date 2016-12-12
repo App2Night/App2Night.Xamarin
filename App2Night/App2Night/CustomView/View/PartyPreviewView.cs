@@ -64,16 +64,6 @@ namespace App2Night.CustomView.View
             Text = "1"
         };
         Label _dateLabel, _startTimeLabel, _genreLabel, _priceLabel;
-        CustomButton _rateButton = new CustomButton
-        {
-            Text = AppResources.Rate,
-            ButtonLabel =
-            {
-                FontSize = 25,
-                FontFamily = "FontAwesome",
-            },
-            HorizontalOptions = LayoutOptions.CenterAndExpand
-        };
         private Frame _ratingFrame;
         #endregion
 
@@ -89,7 +79,6 @@ namespace App2Night.CustomView.View
             _map.Map.HeightRequest = 3*(parentWidth/5);
             var layoutGrid = CreateInputs();
             // Set columnSpan of rateButton to centrate 
-            Grid.SetColumnSpan(_rateButton, 4);
             // Set HeightRequest 
             HeightRequest = parentWidth * 2 / 3.0;
             Content = new ScrollView { Content = layoutGrid };
@@ -170,8 +159,7 @@ namespace App2Night.CustomView.View
                     },
                     RowDefinitions = new RowDefinitionCollection
                     {
-                      new RowDefinition {Height = new GridLength(3, GridUnitType.Star)},
-                      new RowDefinition {Height = new GridLength(1, GridUnitType.Star)}
+                      new RowDefinition {Height = new GridLength(100, GridUnitType.Absolute)},
                     },
                     Children =
                     {
@@ -231,7 +219,6 @@ namespace App2Night.CustomView.View
                             3, 0
                         },
                         {_generalRateLabel, 3, 0},
-                        {_rateButton,0,1 }
                     }
                 }
             };
