@@ -256,7 +256,11 @@ namespace App2Night.PageModel.SubPages
             Debug.WriteLine(Party.Id);
             UserDialogs.Instance.Confirm(new ConfirmConfig().SetMessage("Do you really want to delete your party?").SetOkText("Delete").SetAction(b =>
             {
-                var result = _dataService.DeleteParty(Party.Id);
+                if (b)
+                {
+                    var result = _dataService.DeleteParty(Party.Id);
+                }
+                
             }));
         });
 
