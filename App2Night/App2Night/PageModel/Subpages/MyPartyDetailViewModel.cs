@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
@@ -39,22 +40,6 @@ namespace App2Night.PageModel.SubPages
                     Label = Party.Name
                 };
             }
-        }
-
-        public override void Init(object initData)
-        {
-            base.Init(initData);
-            Party = (Party) initData;
-            Name = Party.Name;
-            Description = Party.Description;
-            MusicGenre = Party.MusicGenre;
-            Time = Party.Date.TimeOfDay;
-            Date = Party.Date;
-            StreetName = Party.Location.StreetName;
-            HouseNumber = Party.Location.HouseNumber;
-            CityName = Party.Location.CityName;
-            Zipcode = Party.Location.Zipcode;
-            Price = Party.Price.ToString();
         }
 
         private string _name;
@@ -198,8 +183,46 @@ namespace App2Night.PageModel.SubPages
         [AlsoNotifyFor(nameof(AcceptButtonEnabled))]
         public bool ValidDescription => ValidateDescription();
 
+        public bool ParticipantsVisible { get; set; }
+
         public Command UpdatePartyCommand => new Command(async () => await UpdateParty());
-        public Command ClearFormCommand => new Command(ClearForm);
+        public Command ClearFormCommand => new Command(ClearForm);  
+
+        public override void Init(object initData)
+        {
+            base.Init(initData);
+
+            Party = (Party)initData;
+
+            //Load more detailed infos about the party
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                using (UserDialogs.Instance.Loading(""))
+                {
+                    var result = await _dataService.GetParty(Party.Id);
+                    if (result.Success)
+                    {
+                        Party = result.Data;
+                        if (Party.Participants.Any())
+                        {
+                            RaisePropertyChanged(nameof(Party.Participants));
+                            ParticipantsVisible = true;
+                        } 
+                    }
+                }
+            });
+
+            Name = Party.Name;
+            Description = Party.Description;
+            MusicGenre = Party.MusicGenre;
+            Time = Party.Date.TimeOfDay;
+            Date = Party.Date;
+            StreetName = Party.Location.StreetName;
+            HouseNumber = Party.Location.HouseNumber;
+            CityName = Party.Location.CityName;
+            Zipcode = Party.Location.Zipcode;
+            Price = Party.Price.ToString();
+        }
 
         private void ClearForm()
         {

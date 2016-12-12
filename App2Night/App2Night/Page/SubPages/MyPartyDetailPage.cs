@@ -178,6 +178,11 @@ namespace App2Night.Page.SubPages
             Color = Color.White.MultiplyAlpha(0.3),
             IsVisible = false
         };
+
+        private VerticalGallerieView _gallerieView = new VerticalGallerieView
+        {
+
+        };
         #endregion
 
         #region BindablePinProperty 
@@ -315,6 +320,7 @@ namespace App2Night.Page.SubPages
                                 Spacing = 5
                             },
                         },
+                        _gallerieView,
                         new BoxView
                         {
                             HeightRequest = CommandHeight,
@@ -462,8 +468,12 @@ namespace App2Night.Page.SubPages
             _zipCodetEntry.SetBinding(InputContainer<Entry>.InputValidateProperty,
                 nameof(MyPartyDetailViewModel.ValidZipcode));
             // set MapPins
-            this.SetBinding(DashboardPage.MapPinsProperty, nameof(PartyDetailViewModel.MapPins));
+            this.SetBinding(MyPartyDetailPage.MapPinsProperty, nameof(MyPartyDetailViewModel.MapPins));
             _deleteParty.SetBinding(MenuItem.CommandProperty, nameof(MyPartyDetailViewModel.DeletePartyCommand));
+
+            //Participants
+            _gallerieView.SetBinding(GallerieView.ItemSourceProperty, "Party.Participants");
+            _gallerieView.SetBinding(GallerieView.IsVisibleProperty, "ParticipantsVisible"); 
         }
 
         protected override void OnDisappearing()

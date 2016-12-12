@@ -97,6 +97,11 @@ namespace App2Night.Page.SubPages
             IsShowingUser = true,
         };
 
+        private VerticalGallerieView _gallerieView = new VerticalGallerieView
+        {
+
+        };
+
         private Position _partyPosition;
 
         CustomButton _rateButton = new CustomButton
@@ -276,6 +281,7 @@ namespace App2Night.Page.SubPages
                                 }
                             },
                         },
+                        _gallerieView,
                         // Creation Label
                         _creationPartyLabel,
                     }
@@ -412,6 +418,9 @@ namespace App2Night.Page.SubPages
             _rateButton.SetBinding(CustomButton.IsVisibleProperty, nameof(PartyDetailViewModel.ValidRate));
             this.SetBinding(MapPinsProperty, nameof(PartyDetailViewModel.MapPins));
 
+            //Participants
+            _gallerieView.SetBinding(GallerieView.ItemSourceProperty, "Party.Participants");
+            _gallerieView.SetBinding(GallerieView.IsVisibleProperty, "ParticipantsVisible"); 
         }
 
         protected override void OnSizeAllocated(double width, double height)

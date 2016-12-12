@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
+using Acr.UserDialogs;
 using App2Night.CustomView.View;
 using App2Night.Model.Enum;
 using App2Night.Model.Model;
+using App2Night.Service.Interface;
 using FreshMvvm;
 using PropertyChanged;
 using Xamarin.Forms;
@@ -13,6 +16,7 @@ namespace App2Night.PageModel.SubPages
     [ImplementPropertyChanged]
     public class PartyDetailViewModel : FreshBasePageModel
     {
+        private readonly IDataService _dataService;
         public Party Party { get; set; }
 
         public string Name => Party.Name;
@@ -23,6 +27,7 @@ namespace App2Night.PageModel.SubPages
         public DateTime CreationDateTime => Party.CreationDateTime;
         public Location Location => Party.Location;
 
+        public bool ParticipantsVisible { get; set; }
 
         public bool IsMyParty => Party.HostedByUser;
 
@@ -46,6 +51,35 @@ namespace App2Night.PageModel.SubPages
             }
         }
 
+        public PartyDetailViewModel(IDataService dataService)
+        {
+            _dataService = dataService;
+        }
+
+        public override void Init(object initData)
+        {
+            base.Init(initData);
+            Party = (Party)initData;
+            Debug.WriteLine(Party.Id);
+            //Load more detailed infos about the party
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                using (UserDialogs.Instance.Loading(""))
+                {
+                    var result = await _dataService.GetParty(Party.Id);
+                    if (result.Success)
+                    {
+                        Party = result.Data;
+                        if (Party.Participants.Any())
+                        {
+                            RaisePropertyChanged(nameof(Party.Participants));
+                            ParticipantsVisible = true;
+                        }
+                    }
+                }
+            });
+        }
+
         public bool ValidRate => ValidateRating();
 
         public bool ValidateRating()
@@ -58,13 +92,6 @@ namespace App2Night.PageModel.SubPages
             if (Party.Date.Date == DateTime.Today.Date) return true;
             if (Party.Date.AddDays(1).Date == DateTime.Today.AddDays(1).Date) return true;
             return false;
-        }
-
-        public override void Init(object initData)
-        {
-            base.Init(initData);
-            Party = (Party) initData;
-            Debug.WriteLine(Party.Id);
-        }
+        } 
     }
 }

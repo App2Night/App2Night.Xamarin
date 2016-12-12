@@ -531,19 +531,38 @@ namespace App2Night.Service.Service
             //Request the party with the given partyId
             var result =
                 await
-                    _clientService.SendRequest<Party>("api/party", RestType.Get, urlQuery: "/partyId=" + id.ToString("D"),
+                    _clientService.SendRequest<Party>("api/party", RestType.Get, urlQuery: "/id=" + id.ToString("D"),
                         token: Token.AccessToken);
-
-            //We have to correct the result since the backend is sending us bullshit data.
-            var fixedResult = new Result<Party>
+             
+            if (result.Success)
             {
-                StatusCode = result.StatusCode,
-                Success = result.Success,
-                Data = result.Data
-            };
-
-            return fixedResult;
+                AddPartyToCollection(PartyHistory, result.Data);
+                AddPartyToCollection(SelectedPartys, result.Data);
+                AddPartyToCollection(InterestingPartys, result.Data); 
+            } 
+            return result;
         }
+
+        /// <summary>
+        /// Adds a party to a collection if the party was not part of the collection, adds missing attributes if it was already part of the collection.
+        /// </summary> 
+        void AddPartyToCollection<TCollection>(TCollection collection, Party party)
+            where TCollection : ObservableCollection<Party>
+        {
+            var alreadyInCollection = false;
+            foreach (Party item in collection)
+            {
+                if (item.Id == party.Id)
+                {
+                    item.Participants = party.Participants;
+                    alreadyInCollection = true;
+                    break;
+                } 
+            }
+
+            if(!alreadyInCollection)
+                collection.Add(party);
+        } 
 
         /// <summary>
         /// Clears and populates an <see cref="ObservableCollection{T}"/> without setting it.
