@@ -91,6 +91,33 @@ namespace App2Night.Model.Model
             }
         }
 
+        public int GeneralUpVoting { get; set; }
+        public int GeneralDownVoting { get; set; }
+        [JsonIgnore]
+        public double GeneralAvg => CalculateAvg(GeneralUpVoting, GeneralDownVoting);
+        public int PriceUpVoting { get; set; }
+        public int PriceDownVoting { get; set; }
+        [JsonIgnore]
+        public double PriceAvg => CalculateAvg(PriceUpVoting, PriceDownVoting);
+        public int LocationUpVoting { get; set; }
+        public int LocationDownVoting { get; set; }
+        [JsonIgnore]
+        public double LocationAvg => CalculateAvg(LocationUpVoting, LocationDownVoting);
+        public int MoodUpVoting { get; set; }
+        public int MoodDownVoting { get; set; }
+        [JsonIgnore]
+        public double MoodAvg => CalculateAvg(MoodUpVoting, MoodDownVoting);
+        /// <summary>
+        /// Calculates average of two digits. If last digit if 0, returns 1.
+        /// </summary>
+        /// <param name="up"></param>
+        /// <param name="down"></param>
+        /// <returns></returns>
+        private double CalculateAvg(int up, int down)
+        {
+            return (down != 0) ? Math.Round(((double)up / down), 2) : 1;
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         [NotifyPropertyChangedInvocator]
