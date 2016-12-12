@@ -340,7 +340,8 @@ namespace App2Night.Page.SubPages
             _streetEntry.Input.IsEnabled = true;
             _houseNumberEntry.Input.IsEnabled = true;
             _cityNameEntry.Input.IsEnabled = true;
-            _zipCodetEntry.Input.IsVisible = true;
+            _zipCodetEntry.Input.IsEnabled = true;
+            _priceEntry.Input.IsEnabled = true;
 
             await SlideInAnimtion();
         }
@@ -360,7 +361,8 @@ namespace App2Night.Page.SubPages
             _streetEntry.Input.IsEnabled = false;
             _houseNumberEntry.Input.IsEnabled = false;
             _cityNameEntry.Input.IsEnabled = false;
-            _zipCodetEntry.Input.IsVisible = false;
+            _zipCodetEntry.Input.IsEnabled = false;
+            _priceEntry.Input.IsEnabled = false;
             await SlideOutAnimtion();
         }
         /// <summary>
