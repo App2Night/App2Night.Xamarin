@@ -83,6 +83,10 @@ namespace App2Night.Page.SubPages
         {
             Text = "Edit",
         };
+        ToolbarItem _deleteParty = new ToolbarItem
+        {
+            Text = "Delete"
+        };
 
         readonly Map _partyLocation = new Map()
         {
@@ -146,15 +150,17 @@ namespace App2Night.Page.SubPages
             },
         };
 
-        private InputContainer<Entry> _locationEntry = new InputContainer<Entry>
+        private InputContainer<Entry> _priceEntry = new InputContainer<Entry>
         {
             Input =
             {
                 Placeholder = AppResources.Location,
-                IsEnabled = false
+                IsEnabled = false,
+                Keyboard = Keyboard.Numeric,
             },
-            IconCode = "\uf015",
-            Margin = _defaultMargin
+            IconCode = "\uf155",
+            Margin = _defaultMargin,
+
         };
 
         InputContainer<Entry> _zipCodetEntry = new InputContainer<Entry>
@@ -172,7 +178,6 @@ namespace App2Night.Page.SubPages
             Color = Color.White.MultiplyAlpha(0.3),
             IsVisible = false
         };
-
         #endregion
 
         #region BindablePinProperty 
@@ -206,7 +211,9 @@ namespace App2Night.Page.SubPages
             SetBindings();
             Device.BeginInvokeOnMainThread(async () => await InitializeMapCoordinates());
             ToolbarItems.Add(_editToolbarItem);
+            ToolbarItems.Add(_deleteParty);
             _editToolbarItem.Clicked += SetEditEnable;
+            _deleteParty.SetBinding(MenuItem.CommandProperty, nameof(MyPartyDetailViewModel.DeletePartyCommand));
             _cancelButton.ButtonTapped += SetEditDisenable;
             var inputRows = CreateInputRows();
             //SKIA Replace with gradient layer
@@ -261,6 +268,7 @@ namespace App2Night.Page.SubPages
                                     _musicGenrePicker,
                                     _datePicker,
                                     _startTimePicker,
+                                    _priceEntry
                                 },
                                 Spacing = 5
                             },
@@ -275,7 +283,6 @@ namespace App2Night.Page.SubPages
                                 Children =
                                 { 
                                     new MapWrapper(_partyLocation),
-                                    _locationEntry,
                                     new Grid
                                     {
                                         ColumnDefinitions =
@@ -443,9 +450,9 @@ namespace App2Night.Page.SubPages
             _houseNumberEntry.SetBinding(InputContainer<Entry>.InputValidateProperty,
                 nameof(MyPartyDetailViewModel.ValidHousenumber));
             // set location
-            _locationEntry.Input.SetBinding(Entry.TextProperty, nameof(MyPartyDetailViewModel.LocationName));
-            _locationEntry.SetBinding(InputContainer<Entry>.InputValidateProperty,
-                nameof(MyPartyDetailViewModel.ValidLocationname));
+            _priceEntry.Input.SetBinding(Entry.TextProperty, nameof(MyPartyDetailViewModel.Price));
+            _priceEntry.SetBinding(InputContainer<Entry>.InputValidateProperty,
+                nameof(MyPartyDetailViewModel.ValidPrice));
             // set zipcode
             _zipCodetEntry.Input.SetBinding(Entry.TextProperty, nameof(MyPartyDetailViewModel.Zipcode));
             _zipCodetEntry.SetBinding(InputContainer<Entry>.InputValidateProperty,

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
@@ -53,6 +54,7 @@ namespace App2Night.PageModel.SubPages
             HouseNumber = Party.Location.HouseNumber;
             CityName = Party.Location.CityName;
             Zipcode = Party.Location.Zipcode;
+            Price = Party.Price.ToString();
         }
 
         private string _name;
@@ -119,8 +121,8 @@ namespace App2Night.PageModel.SubPages
             }
         }
 
-        [AlsoNotifyFor(nameof(ValidLocationname))]
-        public string LocationName { get; set; }
+        [AlsoNotifyFor(nameof(ValidPrice))]
+        public string Price { get; set; }
 
         public string Zipcode
         {
@@ -164,7 +166,7 @@ namespace App2Night.PageModel.SubPages
                     ValidCityname
                     && ValidDescription
                     && ValidHousenumber
-                    && ValidLocationname
+                    && ValidPrice
                     && ValidName
                     && ValidZipcode
                     && ValidStreetname;
@@ -173,7 +175,7 @@ namespace App2Night.PageModel.SubPages
         }
 
         [AlsoNotifyFor(nameof(AcceptButtonEnabled))]
-        public bool ValidLocationname => ValidateLocationname();
+        public bool ValidPrice => ValidatePrice();
 
         [AlsoNotifyFor(nameof(AcceptButtonEnabled))]
         public bool ValidDate => ValidateDate();
@@ -205,9 +207,9 @@ namespace App2Night.PageModel.SubPages
             return Date > DateTime.Now && Date <= DateTime.Today.AddMonths(12);
         }
 
-        private bool ValidateLocationname()
+        private bool ValidatePrice()
         {
-            return !string.IsNullOrEmpty(LocationName);
+            return !string.IsNullOrEmpty(Price);
         }
 
         bool ValidateName()
@@ -243,6 +245,20 @@ namespace App2Night.PageModel.SubPages
                 }
             }
         }
+
+        private IDataService _dataService;
+        public MyPartyDetailViewModel(IDataService dataService)
+        {
+            _dataService = dataService;
+        }
+        public Command DeletePartyCommand => new Command(() =>
+        {
+            Debug.WriteLine(Party.Id);
+            UserDialogs.Instance.Confirm(new ConfirmConfig().SetMessage("Do you really want to delete your party?").SetOkText("Delete").SetAction(b =>
+            {
+                var result = _dataService.DeleteParty(Party.Id);
+            }));
+        });
 
         #region location validation
 

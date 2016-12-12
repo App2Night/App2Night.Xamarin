@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using App2Night.CustomView.View;
 using App2Night.Model.Enum;
 using App2Night.Model.Model;
@@ -45,10 +46,25 @@ namespace App2Night.PageModel.SubPages
             }
         }
 
+        public bool ValidRate => ValidateRating();
+
+        public bool ValidateRating()
+        {
+            if (Party.CommitmentState == PartyCommitmentState.Rejected)
+            {
+                return false;
+            }
+
+            if (Party.Date.Date == DateTime.Today.Date) return true;
+            if (Party.Date.AddDays(1).Date == DateTime.Today.AddDays(1).Date) return true;
+            return false;
+        }
+
         public override void Init(object initData)
         {
             base.Init(initData);
             Party = (Party) initData;
+            Debug.WriteLine(Party.Id);
         }
     }
 }

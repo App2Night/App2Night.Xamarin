@@ -1,158 +1,96 @@
 using System.Threading.Tasks;
+using App2Night.CustomView.Page;
 using App2Night.CustomView.View;
 using App2Night.Data.Language;
 using App2Night.Model.Model;
 using App2Night.PageModel.SubPages;
-using App2Night.Service.Helper;
 using FreshMvvm;
+using Plugin.Geolocator;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
 namespace App2Night.Page.SubPages
 {
-    public class PartyDetailPage : FreshBaseContentPage
+    public class PartyDetailPage : CustomContentPage
     {
+        // Set values for views 
         private static int _defaultFontSize = 16;
         private static int _defaultIconSize = 50;
-        private static Thickness _defaultMargin = new Thickness(5, 0);
-        public static int CommandHeight = 70;
 
         #region Views
-
         InputContainer<Label> _descriptionLabel = new InputContainer<Label>
         {
             IconCode = "\uf040",
-            Input =
-            {
-                HorizontalOptions = LayoutOptions.Start,
-                FontSize = _defaultFontSize,
-                VerticalOptions = LayoutOptions.Center
-            },
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize, VerticalOptions = LayoutOptions.Center },
             HorizontalOptions = LayoutOptions.Start,
             ValidationVisible = false
         };
-
         InputContainer<Label> _dateLabel = new InputContainer<Label>
         {
             IconCode = "\uf073",
             HorizontalOptions = LayoutOptions.Start,
-            Input =
-            {
-                HorizontalOptions = LayoutOptions.Start,
-                FontSize = _defaultFontSize,
-                VerticalOptions = LayoutOptions.Center
-            },
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize, VerticalOptions = LayoutOptions.Center },
             ValidationVisible = false
         };
-
         InputContainer<Label> _startDateTimeLabel = new InputContainer<Label>
         {
             IconCode = "\uf017",
             HorizontalOptions = LayoutOptions.Start,
-            Input =
-            {
-                HorizontalOptions = LayoutOptions.Start,
-                FontSize = _defaultFontSize,
-                VerticalOptions = LayoutOptions.Center
-            },
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize, VerticalOptions = LayoutOptions.Center },
             ValidationVisible = false
         };
-
         InputContainer<Label> _MusicGenreLabel = new InputContainer<Label>
         {
             IconCode = "\uf001",
             HorizontalOptions = LayoutOptions.Start,
-            Input =
-            {
-                HorizontalOptions = LayoutOptions.Start,
-                FontSize = _defaultFontSize,
-                VerticalOptions = LayoutOptions.Center
-            },
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize, VerticalOptions = LayoutOptions.Center },
             ValidationVisible = false
         };
-
         Label _creationPartyLabel = new Label
         {
             HorizontalOptions = LayoutOptions.Center,
             TextColor = Color.Gray.MultiplyAlpha(0.3),
         };
-
         InputContainer<Label> _partyTypeLabel = new InputContainer<Label>
         {
             IconCode = "\uf0fc",
             HorizontalOptions = LayoutOptions.Start,
-            Input =
-            {
-                HorizontalOptions = LayoutOptions.Start,
-                FontSize = _defaultFontSize,
-                VerticalOptions = LayoutOptions.Center
-            },
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize, VerticalOptions = LayoutOptions.Center },
             ValidationVisible = false
         };
-
         InputContainer<Label> _priceLabel = new InputContainer<Label>
         {
             IconCode = "\uf0fc",
             HorizontalOptions = LayoutOptions.Start,
-            Input =
-            {
-                HorizontalOptions = LayoutOptions.Start,
-                FontSize = _defaultFontSize,
-                VerticalOptions = LayoutOptions.Center
-            },
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize, VerticalOptions = LayoutOptions.Center },
             ValidationVisible = false
         };
-
         InputContainer<Label> _streetNameLabel = new InputContainer<Label>
         {
             IconCode = "\uf0f3",
-            Input =
-            {
-                HorizontalOptions = LayoutOptions.Start,
-                FontSize = _defaultFontSize,
-                VerticalOptions = LayoutOptions.Center
-            },
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize, VerticalOptions = LayoutOptions.Center },
             HorizontalOptions = LayoutOptions.Start,
             ValidationVisible = false
         };
-
         InputContainer<Label> _houseNumberLabel = new InputContainer<Label>
         {
             HorizontalOptions = LayoutOptions.Start,
-            Input =
-            {
-                HorizontalOptions = LayoutOptions.Start,
-                FontSize = _defaultFontSize,
-                VerticalOptions = LayoutOptions.Center
-            },
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize, VerticalOptions = LayoutOptions.Center },
             ValidationVisible = false
         };
-
         InputContainer<Label> _cityNameLabel = new InputContainer<Label>
         {
             IconCode = "\uf279",
-            Input =
-            {
-                HorizontalOptions = LayoutOptions.Start,
-                FontSize = _defaultFontSize,
-                VerticalOptions = LayoutOptions.Center
-            },
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize, VerticalOptions = LayoutOptions.Center },
             HorizontalOptions = LayoutOptions.Start,
             ValidationVisible = false
         };
-
         InputContainer<Label> _zipcodeLabel = new InputContainer<Label>
         {
             HorizontalOptions = LayoutOptions.Start,
-            Input =
-            {
-                HorizontalOptions = LayoutOptions.Start,
-                FontSize = _defaultFontSize,
-                VerticalOptions = LayoutOptions.Center
-            },
+            Input = { HorizontalOptions = LayoutOptions.Start, FontSize = _defaultFontSize, VerticalOptions = LayoutOptions.Center },
             ValidationVisible = false
         };
-
         readonly Map _partyLocation = new Map()
         {
             HeightRequest = 200,
@@ -177,7 +115,6 @@ namespace App2Night.Page.SubPages
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.End,
             FontSize = _defaultFontSize,
-            Text = "1"
         };
 
         Label _priceRateLabel = new Label
@@ -185,7 +122,6 @@ namespace App2Night.Page.SubPages
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.End,
             FontSize = _defaultFontSize,
-            Text = "1"
         };
 
         Label _locationRateLabel = new Label
@@ -193,7 +129,6 @@ namespace App2Night.Page.SubPages
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.End,
             FontSize = _defaultFontSize,
-            Text = "1"
         };
 
         Label _moodRateLabel = new Label
@@ -201,10 +136,11 @@ namespace App2Night.Page.SubPages
             HorizontalOptions = LayoutOptions.Center,
             VerticalOptions = LayoutOptions.End,
             FontSize = _defaultFontSize,
-            Text = "1"
         };
 
         private Frame _ratingGrid;
+
+        private CustomButton _defaultButton = new CustomButton {IsVisible = false};
 
         #endregion
 
@@ -212,12 +148,12 @@ namespace App2Night.Page.SubPages
 
         public static BindableProperty MapPinsProperty = BindableProperty.Create(nameof(MapPins),
             typeof(Pin),
-            typeof(DashboardPage),
+            typeof(PartyDetailPage),
             propertyChanged: (bindable, value, newValue) =>
             {
                 if (newValue != null)
                 {
-                    ((PartyDetailPage) bindable).MapPinsSet((Pin) newValue);
+                    ((PartyDetailPage)bindable).MapPinsSet((Pin)newValue);
                 }
             });
 
@@ -228,22 +164,45 @@ namespace App2Night.Page.SubPages
 
         public Pin MapPins
         {
-            get { return (Pin) GetValue(MapPinsProperty); }
+            get { return (Pin)GetValue(MapPinsProperty); }
             set { SetValue(MapPinsProperty, value); }
         }
 
+        public static BindableProperty PartyProperty = BindableProperty.Create(nameof(Party), typeof(Party),
+            typeof(PartyDetailPage),
+            propertyChanged: (bindable, value, newValue) =>
+            {
+                if (newValue != null)
+                {
+                    ((PartyDetailPage)bindable).Party = (Party)newValue;
+                }
+            });
+
+        private Party _party;
+        public Party Party { get { return _party; } set { _party = value; } }
         #endregion
 
         public PartyDetailPage()
         {
             SetBindings();
+            this.SetBinding(PartyProperty, nameof(PartyDetailViewModel.Party));
             Device.BeginInvokeOnMainThread(async () => await InitializeMapCoordinates());
             var inputRows = CreateInputRows();
             Content = inputRows;
             // Set ColumnSpan over all Columns to centrate view
             Grid.SetColumnSpan(_rateButton, 4);
-        }
+            _rateButton.ButtonTapped += RateParty;
 
+        }
+        /// <summary>
+        /// Opens seleted party with <see cref="PartyPreviewView"/>.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="o"></param>
+        private void RateParty(object sender, object o)
+        {
+            PreviewItemSelected<Party, RateView>(_party, new object[] { Height, Width });
+        }
         /// <summary>
         /// Initialize ScrollView with all Views.
         /// </summary>
@@ -261,6 +220,8 @@ namespace App2Night.Page.SubPages
                         (_ratingGrid = CreateRatingColumns()),
                         new Frame
                         {
+                            Margin = 5,
+                            Padding = 0,
                             Content = new StackLayout
                             {
                                 Spacing = 10,
@@ -278,6 +239,8 @@ namespace App2Night.Page.SubPages
                         // Set Frame with Location Label's
                         new Frame
                         {
+                            Margin = 5,
+                            Padding = 0,
                             Content = new StackLayout
                             {
                                 Spacing = 10,
@@ -315,16 +278,10 @@ namespace App2Night.Page.SubPages
                         },
                         // Creation Label
                         _creationPartyLabel,
-                        new BoxView
-                        {
-                            HeightRequest = CommandHeight,
-                            Color = Color.Transparent
-                        }
                     }
                 }
             };
         }
-
         /// <summary>
         /// Initialize Frame for Rating of Party.
         /// </summary>
@@ -344,8 +301,8 @@ namespace App2Night.Page.SubPages
                     },
                     RowDefinitions = new RowDefinitionCollection
                     {
-                        new RowDefinition {Height = new GridLength(3, GridUnitType.Star)},
-                        new RowDefinition {Height = new GridLength(1, GridUnitType.Star)}
+                      new RowDefinition {Height = new GridLength(3, GridUnitType.Star)},
+                      new RowDefinition {Height = new GridLength(1, GridUnitType.Star)}
                     },
                     Children =
                     {
@@ -353,7 +310,7 @@ namespace App2Night.Page.SubPages
                         {
                             new Label
                             {
-                                Text = "\uf015",
+                                Text = "\uf041",
                                 FontFamily = "FontAwesome",
                                 TextColor = Color.Gray.MultiplyAlpha(0.3),
                                 FontSize = _defaultIconSize,
@@ -381,7 +338,7 @@ namespace App2Night.Page.SubPages
                         {
                             new Label
                             {
-                                Text = "\uf118",
+                                Text = "\uf0a1",
                                 FontFamily = "FontAwesome",
                                 TextColor = Color.Gray.MultiplyAlpha(0.3),
                                 FontSize = _defaultIconSize,
@@ -395,7 +352,7 @@ namespace App2Night.Page.SubPages
                         {
                             new Label
                             {
-                                Text = "\uf29b",
+                                Text = "\uf005",
                                 FontFamily = "FontAwesome",
                                 TextColor = Color.Gray.MultiplyAlpha(0.3),
                                 FontSize = _defaultIconSize,
@@ -405,7 +362,7 @@ namespace App2Night.Page.SubPages
                             3, 0
                         },
                         {_generalRateLabel, 3, 0},
-                        {_rateButton, 0, 1}
+                        {_rateButton,0,1 }
                     }
                 }
             };
@@ -413,15 +370,17 @@ namespace App2Night.Page.SubPages
 
         private async Task InitializeMapCoordinates()
         {
-            var coordinates = await CoordinateHelper.GetCoordinates();
+            // gets current position
+            var coordinates = await CrossGeolocator.Current.GetPositionAsync();
             if (coordinates != null)
             {
                 MoveMapToCoordinates(coordinates);
             }
         }
 
-        private void MoveMapToCoordinates(Coordinates coordinates)
+        private void MoveMapToCoordinates(Plugin.Geolocator.Abstractions.Position coordinates)
         {
+            // adds current position to map 
             var mapSpan = MapSpan.FromCenterAndRadius(new Position(coordinates.Latitude, coordinates.Longitude),
                 Distance.FromKilometers(2));
             _partyLocation.MoveToRegion(mapSpan);
@@ -433,29 +392,40 @@ namespace App2Night.Page.SubPages
             this.SetBinding(TitleProperty, nameof(PartyDetailViewModel.Name));
             // general Information of Party
             _descriptionLabel.Input.SetBinding(Label.TextProperty, nameof(PartyDetailViewModel.Description));
-            _dateLabel.Input.SetBinding(Label.TextProperty, nameof(PartyDetailViewModel.Date),
-                stringFormat: AppResources.Date);
+            _dateLabel.Input.SetBinding(Label.TextProperty, nameof(PartyDetailViewModel.Date), stringFormat: AppResources.Date);
             _MusicGenreLabel.Input.SetBinding(Label.TextProperty, nameof(PartyDetailViewModel.MusicGenre));
             _partyTypeLabel.Input.SetBinding(Label.TextProperty, nameof(PartyDetailViewModel.PartyType));
-            _startDateTimeLabel.Input.SetBinding(Label.TextProperty, nameof(PartyDetailViewModel.CreationDateTime),
-                stringFormat: AppResources.Time);
-            _creationPartyLabel.SetBinding(Label.TextProperty, nameof(PartyDetailViewModel.CreationDateTime),
-                stringFormat: "Created on " + AppResources.Date);
+            _startDateTimeLabel.Input.SetBinding(Label.TextProperty, nameof(PartyDetailViewModel.CreationDateTime), stringFormat: AppResources.Time);
+            _creationPartyLabel.SetBinding(Label.TextProperty, nameof(PartyDetailViewModel.CreationDateTime), stringFormat: "Created on " + AppResources.Date);
             _priceLabel.Input.SetBinding(Label.TextProperty, "Party.Price");
             // Locationbinding of Party
             _streetNameLabel.Input.SetBinding(Label.TextProperty, "Location.StreetName");
             _houseNumberLabel.Input.SetBinding(Label.TextProperty, "Location.HouseNumber");
             _cityNameLabel.Input.SetBinding(Label.TextProperty, "Location.CityName");
             _zipcodeLabel.Input.SetBinding(Label.TextProperty, "Location.Zipcode");
+            // set binding of rating
+            _generalRateLabel.SetBinding(Label.TextProperty, "Party.GeneralAvg");
+            _priceRateLabel.SetBinding(Label.TextProperty, "Party.PriceAvg");
+            _locationRateLabel.SetBinding(Label.TextProperty, "Party.LocationAvg");
+            _moodRateLabel.SetBinding(Label.TextProperty, "Party.MoodAvg");
+            // rate btn
+            _rateButton.SetBinding(CustomButton.IsVisibleProperty, nameof(PartyDetailViewModel.ValidRate));
+            this.SetBinding(MapPinsProperty, nameof(PartyDetailViewModel.MapPins));
 
-            this.SetBinding(DashboardPage.MapPinsProperty, nameof(PartyDetailViewModel.MapPins));
         }
 
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
-            // Set Size of Frame 
-            _ratingGrid.HeightRequest = Width/3;
+            // Set Size of Grid, depends on width of device
+            _ratingGrid.HeightRequest = Width / 3;
+        }
+
+        protected override void OnDisappearing()
+        {
+            base.OnDisappearing();
+            // remove event of button
+            _rateButton.ButtonTapped -= RateParty;
         }
     }
-} 
+}
