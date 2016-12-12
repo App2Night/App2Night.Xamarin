@@ -83,7 +83,7 @@ namespace App2Night.Page
 
         private InputContainer<Entry> _priceEntry = new InputContainer<Entry>
         {
-            Input = {Placeholder = AppResources.Location},
+            Input = {Placeholder = AppResources.Location, Keyboard = Keyboard.Numeric},
             IconCode = "\uf155",
             Margin = _defaultMargin
         };
