@@ -115,7 +115,8 @@ namespace App2Night.Model.Model
         /// <returns></returns>
         private double CalculateAvg(int up, int down)
         {
-            return (down != 0) ? Math.Round(((double)up / down), 2) : 1;
+			if (down == 0) return (up != 0) ? 1 : 0;
+			return Math.Round(((double)up / down), 2);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

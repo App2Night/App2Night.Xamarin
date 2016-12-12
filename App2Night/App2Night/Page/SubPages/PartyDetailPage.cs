@@ -143,7 +143,7 @@ namespace App2Night.Page.SubPages
             FontSize = _defaultFontSize,
         };
 
-        private Frame _ratingGrid;
+		private Frame _ratingFrame;
 
         private CustomButton _defaultButton = new CustomButton {IsVisible = false};
 
@@ -222,7 +222,7 @@ namespace App2Night.Page.SubPages
                     Children =
                     {
                         // Add Party Rating
-                        (_ratingGrid = CreateRatingColumns()),
+                        (_ratingFrame = CreateRatingColumns()),
                         new Frame
                         {
                             Margin = 5,
@@ -427,7 +427,7 @@ namespace App2Night.Page.SubPages
         {
             base.OnSizeAllocated(width, height);
             // Set Size of Grid, depends on width of device
-            _ratingGrid.HeightRequest = Width / 3;
+            _ratingFrame.HeightRequest = Width / 3;
         }
 
         protected override void OnDisappearing()
