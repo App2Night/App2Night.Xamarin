@@ -222,7 +222,7 @@ namespace App2Night.Service.Service
             Result result =
                 await
                     _clientService.SendRequest("/api/UserParty/commitmentState", RestType.Put,
-                        urlQuery: "?partyId=" + partyId.ToString("D"), bodyParameter: bodyObject, token: Token.AccessToken);
+                        urlQuery: "?id=" + partyId.ToString("D"), bodyParameter: bodyObject, token: Token.AccessToken);
 
             if (result.Success)
             {
@@ -265,7 +265,7 @@ namespace App2Night.Service.Service
             o.moodRating = mood;
 
             return await _clientService.SendRequest("/api/userParty/partyRating", RestType.Put, bodyParameter: o,
-                            token: Token.AccessToken, urlQuery:"?partyId=" + partyId.ToString("D"));
+                            token: Token.AccessToken, urlQuery:"?id=" + partyId.ToString("D"));
         }
 
         #endregion
