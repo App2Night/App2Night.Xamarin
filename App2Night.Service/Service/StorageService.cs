@@ -19,6 +19,7 @@ namespace App2Night.Service.Service
 {
     public class StorageService : IStorageService
     {
+        private readonly IAlertService _alertService;
         private readonly IDatabaseService _databaseService;
 
         //Path and file names
@@ -45,8 +46,9 @@ namespace App2Night.Service.Service
             set { _storage = value; }
         }
 
-        public StorageService()
+        public StorageService(IAlertService alertService)
         {
+            _alertService = alertService; 
             _databaseService = FreshIOC.Container.Resolve<IDatabaseService>("IDatabaseService");
             _databaseConnection = _databaseService.GetConnection();
 
@@ -62,6 +64,9 @@ namespace App2Night.Service.Service
 
         public async Task SaveStorage()
         {
+            //Check if the user has access to the storage
+            if (!await _alertService.RequestStoragePermissions()) return;
+
             try
             {
                 var folder = await GetFolder();
@@ -122,15 +127,19 @@ namespace App2Night.Service.Service
         }
 
         public async Task OpenStorage()
-        {
+        {  
             //Create a fallback storage if opening the storage fails.
-            var storage = new Storage();
+            var storage = new Storage(); 
 
             //Signal if the storage comes from the file system or is freshly created.
             var cached = false;
 
             try
             {
+                //Check if the user has access to the storage
+                if (!await _alertService.RequestStoragePermissions()) 
+                    throw new Exception("User does not have storage access.");
+
                 var folder = await GetFolder();
 
                 //Check if the file exists in the folder.
@@ -153,7 +162,7 @@ namespace App2Night.Service.Service
 
             catch (Exception e)
             {
-                Debug.WriteLine(e);
+                DebugHelper.PrintDebug(DebugType.Error, "Saving storage failed " + e);
             }
             finally
             {
