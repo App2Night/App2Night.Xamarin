@@ -19,7 +19,7 @@ namespace App2Night.PageModel
         private IDataService _dataService;
 
 		[AlsoNotifyFor(nameof(UserName))]
-		public Model.Model.User User { get; private set;}
+		public Model.Model.User User { get; set;}
 		public string UserName => User != null ? User.Name : string.Empty;
 
 		private bool _isLogIn;
@@ -66,6 +66,7 @@ namespace App2Night.PageModel
 			_dataService.GetUser();
 			User = _dataService.User;
             _storageService.IsLoginChanged += LoginChanged;
+			_dataService.UserUpdated += UserUpdated;
 			_dataService.SelectedPartiesUpdated += SelectedPartiesChanged;
         }
 
@@ -74,12 +75,11 @@ namespace App2Night.PageModel
 			IsLogIn = b;
 			IsNextParty = b;
 			IsLogOut = !b;
-			if (User == null)
-			{
-				_dataService.GetUser();
-				User = _dataService.User;
-			} 
-
+		}
+		private void UserUpdated(object sender, Model.Model.User e)
+		{
+			User = e;
+			RaisePropertyChanged(nameof(UserName));
 		}
 
 		public async Task OpenLogin()

@@ -25,7 +25,7 @@ namespace App2Night.Service.Service
         public event EventHandler NearPartiesUpdated;
         public event EventHandler HistoryPartisUpdated;
         public event EventHandler SelectedPartiesUpdated;
-        public event EventHandler UserUpdated;
+        public event EventHandler<User> UserUpdated;
 
 
         /// <summary>
@@ -272,7 +272,7 @@ namespace App2Night.Service.Service
 
         #region user handlign
 
-        public User User { get; private set; }
+        public User User { get; set; }
 
         public async Task<Result> GetUser()
         {
@@ -280,6 +280,7 @@ namespace App2Night.Service.Service
             var result = await _clientService.SendRequest<User>("/connect/userinfo", RestType.Get, 
                             token: Token.AccessToken, endpoint:Endpoint.User);
             User = result.Data;
+			Device.BeginInvokeOnMainThread(() => UserUpdated?.Invoke(this, User));
             return result;
         }
 

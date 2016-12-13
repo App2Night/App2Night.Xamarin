@@ -31,7 +31,7 @@ namespace App2Night.Service.Interface
         /// <summary>
         /// Gets triggerd if the user is updated.
         /// </summary>
-        event EventHandler UserUpdated;
+        event EventHandler<User> UserUpdated;
 
         /// <summary>
         /// Refreshes the party history, interesting parties and selected parties.
