@@ -86,6 +86,8 @@ namespace App2Night
         {
             using (UserDialogs.Instance.Loading())
             {
+                var alertService = FreshIOC.Container.Resolve<IAlertService>(); 
+
                 SetupGeolocator();
 
                 var storage = FreshIOC.Container.Resolve<IStorageService>();
@@ -152,7 +154,7 @@ namespace App2Night
         { 
             FreshIOC.Container.Register<IDatabaseService>(Xamarin.Forms.DependencyService.Get<IDatabaseService>(), "IDatabaseService");
             FreshIOC.Container.Register<IStorageService, StorageService>().AsSingleton();
-            FreshIOC.Container.Register<IAlertService, AlertService>();
+            FreshIOC.Container.Register<IAlertService, AlertService>().AsSingleton();
             FreshIOC.Container.Register<IClientService, ClientService>();
             FreshIOC.Container.Register<IDataService, DataService>().AsSingleton();
         }
