@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.Model.Model;
@@ -16,83 +17,87 @@ namespace App2Night.PageModel
     {
         private readonly IStorageService _storageService;
         private IDataService _dataService;
-        private bool _isLogIn;
 
-        public Model.Model.User User => FreshIOC.Container.Resolve<IDataService>().User;
+		[AlsoNotifyFor(nameof(UserName))]
+		public Model.Model.User User { get; private set;}
+		public string UserName => User != null ? User.Name : string.Empty;
 
-        public string Name => User.Name;
-
+		private bool _isLogIn;
         public bool IsLogIn
 		{
 			get { return _isLogIn; }
-			private set
-			{
-				_isLogIn = value;
-				if (value)
-				{
-					IsLogInContentView = true;
-					IsLogOutContentView = false;
-				}
-				else
-				{
-					IsLogInContentView = false;
-					IsLogOutContentView = true;
-				}
-			}
+			private set {_isLogIn = value;}
 		}
 
-		private Party _party;
+		private bool _isLogOut;
+		public bool IsLogOut
+		{
+			get { return _isLogOut; }
+			private set {_isLogOut = value;}
+		}
+
+		bool _isNextParty;
+		public bool IsNextParty
+		{
+			get { return _isNextParty;}
+			private set {_isNextParty = value;}
+		}
+
+		Party _party;
+		[AlsoNotifyFor(nameof(PartyName))]
 		public Party NextParty 
 		{ 
 			get {return _party;} 
 			set {_party = value;}
 		}
 
+		public string PartyName => NextParty != null ? NextParty.Name : string.Empty;
+
 		private Party GetNextParty() 
 		{
-			ObservableCollection<Party> partyList = FreshIOC.Container.Resolve<IDataService>().SelectedPartys;
-			Party nextParty = new Party();
-			foreach (Party p in partyList)
-			{
-				if (p.Date > nextParty.Date) nextParty = p;
-			}
+			var nextParty = _dataService.SelectedPartys.OrderBy(o => o.Date).FirstOrDefault(o => o.Date.Date >= DateTime.Today);
 			return nextParty;
 		}
-
-		public bool IsLogInContentView { get; private set; } 
-
-        public bool IsLogOutContentView { get; private set; } = true;
-
-        public bool IsPartyContentView { get; private set; }
 
         public NavigationViewModel()
         {
             _storageService = FreshIOC.Container.Resolve<IStorageService>();
             _dataService = FreshIOC.Container.Resolve<IDataService>();
-            _dataService.GetUser();
+			_dataService.GetUser();
+			User = _dataService.User;
             _storageService.IsLoginChanged += LoginChanged;
 			_dataService.SelectedPartiesUpdated += SelectedPartiesChanged;
         }
 
-        private void LoginChanged(object sender, bool b)
-        {
-            IsLogIn = b;
-        }
+		private void LoginChanged(object sender, bool b)
+		{
+			IsLogIn = b;
+			IsNextParty = b;
+			IsLogOut = !b;
+			if (User == null)
+			{
+				_dataService.GetUser();
+				User = _dataService.User;
+			} 
+
+		}
+
+		public async Task OpenLogin()
+		{
+			//Check if user is loged in -> Token is available 
+			//If Token is available -> Refresh token
+			//If not -> Open SignUp! 
+			//
+		}
 		private void SelectedPartiesChanged(object sender, EventArgs b)
 		{
 			NextParty = GetNextParty();
+			if (IsLogIn && (NextParty != null)) IsNextParty = true;
 		}
 
-        public async Task OpenLogin()
-        {
-            //Check if user is loged in -> Token is available 
-            //If Token is available -> Refresh token
-            //If not -> Open SignUp! 
-            //
-        }
         public Command<License> OpenLicenseCommand => new Command<License>(async (license) => await CoreMethods.PushPageModel<EditProfileViewModel>(license));
-        public Command MoveToUserEditCommand => new Command(async () => await CoreMethods.PushPageModel<EditProfileViewModel>());
-		public Command MoveToPartyDetailPage => new Command(async () => await CoreMethods.PushPageModel<PartyDetailViewModel>(NextParty));
+		public Command MoveToUserEditCommand => new Command(async () => await CoreMethods.PushPageModel<EditProfileViewModel>(_dataService, modal:true));
+		public Command MoveToPartyDetailPage => new Command(async () => await CoreMethods.PushPageModel<PartyDetailViewModel>(NextParty, modal:true));
 
         public Command LogOutCommand => new Command(async () => await _storageService.DeleteStorage());
 
