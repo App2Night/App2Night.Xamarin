@@ -7,12 +7,16 @@ using App2Night.Model.Enum;
 using App2Night.Model.Model;
 using App2Night.Service.Helper;
 using App2Night.Service.Interface;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
 using Xamarin.Forms;
 
 namespace App2Night.Service.Service
 {
     public class AlertService : IAlertService
-    {   
+    {
+
+        #region request alerts
 
         public void UserCreationFinished(Result requestResult, string username)
         {
@@ -139,7 +143,65 @@ namespace App2Night.Service.Service
                     break; 
             }
             return config;
+        }
+
+        #endregion
+
+        #region permissions
+
+        private bool _alreadyRequestedLocation;
+        private bool _alreadyRequestedStorage;
+
+        public async Task<bool> RequestLocationPermissions()
+        { 
+            var message = "We need the permission to acccess your location to find parties near you."; //RESOURCE 
+
+            if (await IsPermissionAvailable(Permission.Location)) return true;
+
+            if (!_alreadyRequestedLocation)
+            {
+                _alreadyRequestedLocation = true;
+                return await RequestAnyPermission(Permission.Location, message);
+            }
+
+            return false;
         } 
+
+        public async Task<bool> RequestStoragePermissions()
+        {
+            var message = "We need to access your local storage to create a persistant user experience, the files wont be greater then 5mb and encrypted."; //RESOURCE 
+
+            if (await IsPermissionAvailable(Permission.Storage)) return true;
+
+            if (!_alreadyRequestedLocation)
+            {
+                _alreadyRequestedLocation = true;
+                return await RequestAnyPermission(Permission.Storage, message);
+            }
+
+            return false; 
+        }
+
+        async Task<bool> IsPermissionAvailable(Permission permissionType)
+        {
+            return await CrossPermissions.Current.CheckPermissionStatusAsync(permissionType) == PermissionStatus.Granted;
+        }
+
+        /// <summary>
+        /// Starts a permission request for the given permission type with the given message.
+        /// </summary> 
+        private static async Task<bool> RequestAnyPermission(Permission permissionType, string message)
+        { 
+            if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(permissionType))
+            {
+                await UserDialogs.Instance.AlertAsync(message, "Permission needed", "OK"); //RESOURCE
+            }
+            var results = await CrossPermissions.Current.RequestPermissionsAsync(new[] { permissionType });
+                var status = results[Permission.Location];
+             
+            return status == PermissionStatus.Granted;
+        } 
+        #endregion
     }
 
     /// <summary>

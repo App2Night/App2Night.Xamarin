@@ -114,7 +114,6 @@ namespace App2Night.PageModel
                     await ClosePage();
                 } 
         }
-
         void SyncData()
         {
 			Task.Run(async () => { 
@@ -126,7 +125,7 @@ namespace App2Night.PageModel
 
         private async Task ClosePage()
         { 
-                await CoreMethods.PopPageModel(true); 
+                await CoreMethods.PopPageModel(true);
         }
     }
 }

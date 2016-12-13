@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
 using FreshMvvm;
 using Plugin.Geolocator;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
 using Xamarin.Forms;
 
 namespace App2Night.Service.Helper
@@ -19,7 +22,11 @@ namespace App2Night.Service.Helper
 
             var storageEnabled = storageService.Storage.UseGps //Check if gps usage is enabled in the settigns.
                && CrossGeolocator.Current.IsGeolocationAvailable  //Check if gps usage is available on the device.
-               && CrossGeolocator.Current.IsGeolocationEnabled; //Check if gps usage is enabled on the device. 
+               && CrossGeolocator.Current.IsGeolocationEnabled; //Check if gps usage is enabled on the device.  
+
+            if (!storageEnabled) return false;
+
+            storageEnabled = await FreshIOC.Container.Resolve<IAlertService>().RequestLocationPermissions();
 
             //Since CrossGeolocator does not catch if uwp denied the access, ask uwp again!
             if (Device.OS == TargetPlatform.Windows && storageEnabled)
