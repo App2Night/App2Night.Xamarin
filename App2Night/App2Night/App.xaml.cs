@@ -84,8 +84,7 @@ namespace App2Night
         /// <returns></returns>
         private async Task GenerelSetup()
         {
-            using (UserDialogs.Instance.Loading())
-            {
+			Device.BeginInvokeOnMainThread(() => UserDialogs.Instance.ShowLoading());
                 var alertService = FreshIOC.Container.Resolve<IAlertService>(); 
 
                 SetupGeolocator();
@@ -100,7 +99,7 @@ namespace App2Night
                 {
                     ShowLoginModal();
                 }
-            }
+			Device.BeginInvokeOnMainThread(() => UserDialogs.Instance.HideLoading());
         }
 
         private void ShowLoginModal()
@@ -120,7 +119,11 @@ namespace App2Night
                 {
                     CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
                     FreshIOC.Container.Resolve<IDataService>().NearPartiesUpdated +=
-                        (sender, args) => { CrossGeolocator.Current.StartListeningAsync(2000, 100); };
+                        (sender, args) => 
+					{
+						if (!CrossGeolocator.Current.IsListening)
+						CrossGeolocator.Current.StartListeningAsync(2000, 100); 
+					};
                 }
             }); 
         }

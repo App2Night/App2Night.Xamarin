@@ -35,7 +35,9 @@ namespace App2Night.Page
 		};
 		private CustomButton _nextPartyButton = new CustomButton 
 		{
-			ButtonLabel = { FontSize = 18}
+			ButtonLabel = { FontSize = 18},
+			VerticalOptions = LayoutOptions.Center,
+			HorizontalOptions = LayoutOptions.Start,
 		};
 		private ContentView _logoutContentView, _loginContentView;
         #endregion
@@ -99,7 +101,7 @@ namespace App2Night.Page
 					RowSpacing = 0,
 					ColumnDefinitions = new ColumnDefinitionCollection
 					{
-						new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto)},
+						new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star)},
 						new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto)},
 					},
 					RowDefinitions = new RowDefinitionCollection
