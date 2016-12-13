@@ -410,10 +410,23 @@ namespace App2Night.Service.Service
         public async Task<IEnumerable<Result>> BatchRefresh()
         {
             var allResults = new List<Result>();
+			var allTasks = new Task[]
+			{
+				Task.Run(async () =>
+				{
+					allResults.Add(await RequestPartyWithFilter());
+				}),
+				Task.Run(async () =>
+				{
+					allResults.Add(await RefreshPartyHistory());
+				}),
+				Task.Run(async () =>
+				{
+					allResults.Add(await RefreshSelectedParties());
+				})	
+			};
 
-            allResults.Add(await RequestPartyWithFilter());
-            allResults.Add(await RefreshPartyHistory());
-            allResults.Add(await RefreshSelectedParties());  
+			await Task.WhenAll(allTasks);
 
             return allResults;
         }
