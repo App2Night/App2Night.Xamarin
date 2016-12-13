@@ -272,13 +272,14 @@ namespace App2Night.Service.Service
 
         #region user handlign
 
-        public User User { get; }
+        public User User { get; private set; }
 
         public async Task<Result> GetUser()
         {
             if (!await CheckIfTokenIsValid()) return new Result();
-            var result = await _clientService.SendRequest("/api/userinfo", RestType.Get, 
-                            token: Token.AccessToken);
+            var result = await _clientService.SendRequest<User>("/connect/userinfo", RestType.Get, 
+                            token: Token.AccessToken, endpoint:Endpoint.User);
+            User = result.Data;
             return result;
         }
 
@@ -356,7 +357,7 @@ namespace App2Night.Service.Service
                 {"grant_type", "password"},
                 {"username", username},
                 {"password", password},
-                {"scope", "App2NightAPI offline_access"},
+                {"scope", "App2NightAPI offline_access openid email profile"},
                 {"offline_access", "true"}
             };
         }
