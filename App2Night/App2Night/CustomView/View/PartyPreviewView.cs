@@ -30,7 +30,7 @@ namespace App2Night.CustomView.View
                 }
             }
         };
-        PartyRatingView _ratingView = new PartyRatingView();
+        PartyRatingView _ratingView = new PartyRatingView{ RatingVisible = false};
          
         Label _dateLabel, _startTimeLabel, _genreLabel, _priceLabel; 
         #endregion

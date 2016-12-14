@@ -120,11 +120,11 @@ namespace App2Night.PageModel
                 new ConfirmConfig().SetMessage(AppResources.ClearCacheValid)
                     .SetOkText(AppResources.Yes)
                     .SetCancelText(AppResources.No)
-                    .SetAction(async b =>
+                    .SetAction(b =>
                     {
                         if (b)
                         {
-                            await _storageService.ClearCache();
+                            _storageService.ClearCache();
                         }
                     }));
         });

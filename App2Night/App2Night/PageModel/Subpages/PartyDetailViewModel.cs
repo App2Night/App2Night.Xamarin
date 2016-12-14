@@ -86,13 +86,13 @@ namespace App2Night.PageModel.SubPages
 
         public bool ValidateRating()
         {
-            if (Party.CommitmentState == PartyCommitmentState.Rejected)
+            if (Party.CommitmentState == PartyCommitmentState.Rejected) //We can only rate when we noted or accepted a party
             {
                 return false;
             }
 
-            if (Party.Date.Date == DateTime.Today.Date) return true;
-            if (Party.Date.AddDays(1).Date == DateTime.Today.AddDays(1).Date) return true;
+            if (Party.Date.Date == DateTime.Today.Date) return true; //We can rate on the same day
+            if (Party.Date.AddDays(1).Date == DateTime.Today.Date) return true; //We can rate the next day
             return false;
         } 
     }

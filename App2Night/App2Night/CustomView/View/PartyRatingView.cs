@@ -36,7 +36,11 @@ namespace App2Night.CustomView.View
         public bool RatingVisible
         {
             get { return (bool)GetValue(RatingVisibleProperty); }
-            set { SetValue(RatingVisibleProperty, value); }
+            set
+            {
+                SetValue(RatingVisibleProperty, value);
+                RatingVisibilityUpdated();
+            }
         }
 
 
@@ -85,6 +89,7 @@ namespace App2Night.CustomView.View
 
         public PartyRatingView()
         {
+            _rateButton.IsVisible = false;
             _rateButton.ButtonTapped += RateButtonTapped; 
             CreateLayout();
         } 
@@ -126,7 +131,7 @@ namespace App2Night.CustomView.View
                 TextColor = Color.Gray.MultiplyAlpha(0.3),
                 FontSize = _defaultIconSize,
                 HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Start,
+                VerticalOptions = LayoutOptions.Center,
             });
             Children.Add(_locationRateLabel, 0, 1);
 
@@ -138,7 +143,7 @@ namespace App2Night.CustomView.View
                 TextColor = Color.Gray.MultiplyAlpha(0.3),
                 FontSize = _defaultIconSize,
                 HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Start,
+                VerticalOptions = LayoutOptions.Center ,
             }, 2, 0);
             Children.Add(_priceRateLabel, 2, 1);
 
@@ -150,7 +155,7 @@ namespace App2Night.CustomView.View
                 TextColor = Color.Gray.MultiplyAlpha(0.3),
                 FontSize = _defaultIconSize,
                 HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Start,
+                VerticalOptions = LayoutOptions.Center,
             }, 4, 0);
             Children.Add(_moodRateLabel, 4, 1);
 
@@ -162,7 +167,7 @@ namespace App2Night.CustomView.View
                 TextColor = Color.Gray.MultiplyAlpha(0.3),
                 FontSize = _defaultIconSize,
                 HorizontalOptions = LayoutOptions.Center,
-                VerticalOptions = LayoutOptions.Start,
+                VerticalOptions = LayoutOptions.Center,
             }, 6, 0);
 
             //Add spacings

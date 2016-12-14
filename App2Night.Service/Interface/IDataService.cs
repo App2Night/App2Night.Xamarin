@@ -166,5 +166,10 @@ namespace App2Night.Service.Interface
         Task<Result> ChangeCommitmentState(Guid partyId, PartyCommitmentState commitmentState);
 
         Task<Result> RateParty(Guid partyId, int general, int price, int location, int mood);
+
+        /// <summary>
+        /// Clears all user related data.
+        /// </summary> 
+        void ClearData();
     }
 }

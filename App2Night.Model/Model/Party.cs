@@ -116,7 +116,8 @@ namespace App2Night.Model.Model
         private double CalculateAvg(int up, int down)
         {
 			if (down == 0) return (up != 0) ? 1 : 0;
-			return Math.Round(((double)up / down), 2);
+            var positivePercentage =  up/((double)up + down);
+			return Math.Round(positivePercentage, 2);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

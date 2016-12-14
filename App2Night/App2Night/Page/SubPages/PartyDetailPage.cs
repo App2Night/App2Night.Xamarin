@@ -299,8 +299,7 @@ namespace App2Night.Page.SubPages
             _generalRateLabel.SetBinding(Label.TextProperty, "Party.GeneralAvg", converter:new PercentageValueConverter());
             _partyRating.SetBinding(PartyRatingView.PartyProperty, "Party");
             _partyRating.SetBinding(PartyRatingView.RateCommandProperty, "Party");
-            _partyRating.SetBinding(PartyRatingView.IsVisibleProperty, "ValidRate");
-
+            _partyRating.SetBinding(PartyRatingView.RatingVisibleProperty, "ValidRate");
 
             this.SetBinding(MapPinsProperty, nameof(PartyDetailViewModel.MapPins));
 

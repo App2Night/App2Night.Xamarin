@@ -592,7 +592,18 @@ namespace App2Night.Service.Service
                     collection.Add(party);
                 }
             }
-        } 
+        }
+
+        public void ClearData()
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                SelectedPartys.Clear();
+                PartyHistory.Clear();
+                SelectedPartiesUpdated?.Invoke(this, EventArgs.Empty);
+                HistoryPartisUpdated?.Invoke(this, EventArgs.Empty);
+            }); 
+        }
 
         #endregion  
     }

@@ -174,7 +174,7 @@ namespace App2Night.Service.Service
         public async Task DeleteStorage()
         {
             Storage = new Storage();
-            await ClearCache();
+            ClearCache();
             await SaveStorage();
             LogInChanged(false);
         }
@@ -186,10 +186,13 @@ namespace App2Night.Service.Service
             LogInChanged(true);
         }
 
-        public async Task ClearCache()
+        public void ClearCache()
         {
-            if(_databaseConnection!=null)
-               _databaseConnection.DeleteAll<Party>();
+            if (_databaseConnection != null)
+            {
+                FreshIOC.Container.Resolve<IDataService>().ClearData();
+                _databaseConnection.DeleteAll<Party>();
+            } 
         }
 
         private void LogInChanged(bool isLogIn)
