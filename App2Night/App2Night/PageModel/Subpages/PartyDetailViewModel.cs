@@ -51,11 +51,22 @@ namespace App2Night.PageModel.SubPages
                     Label = Party.Name
                 };
             }
-        }
+        } 
 
         public PartyDetailViewModel(IDataService dataService)
         {
             _dataService = dataService;
+            _dataService.SelectedPartyUpdated += SelectedPartyUpdated;
+        }
+
+        private void SelectedPartyUpdated(object sender, Party party)
+        {
+            Party = party;
+            if (Party.Participants.Any())
+            {
+                RaisePropertyChanged(nameof(Party.Participants));
+                ParticipantsVisible = true;
+            }
         }
 
         public override void Init(object initData)
@@ -63,21 +74,17 @@ namespace App2Night.PageModel.SubPages
             base.Init(initData);
             Party = (Party)initData;
             Debug.WriteLine(Party.Id);
+            LoadPartyDetails();
+        }
+
+        private void LoadPartyDetails()
+        {
             //Load more detailed infos about the party
             Device.BeginInvokeOnMainThread(async () =>
             {
                 using (UserDialogs.Instance.Loading(""))
                 {
-                    var result = await _dataService.GetParty(Party.Id);
-                    if (result.Success)
-                    {
-                        Party = result.Data;
-                        if (Party.Participants.Any())
-                        {
-                            RaisePropertyChanged(nameof(Party.Participants));
-                            ParticipantsVisible = true;
-                        }
-                    }
+                    await _dataService.GetParty(Party.Id); 
                 }
             });
         }

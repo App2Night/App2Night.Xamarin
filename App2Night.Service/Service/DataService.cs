@@ -23,6 +23,7 @@ namespace App2Night.Service.Service
         public event EventHandler NearPartiesUpdated;
         public event EventHandler HistoryPartisUpdated;
         public event EventHandler SelectedPartiesUpdated;
+        public event EventHandler<Party> SelectedPartyUpdated;
         public event EventHandler<User> UserUpdated;
 
 
@@ -202,6 +203,12 @@ namespace App2Night.Service.Service
                 await
                     _clientService.SendRequest("/api/Party", RestType.Put, bodyParameter: o, token: Token.AccessToken, 
                         urlQuery: "?id=" + party.Id.ToString("D"));
+
+            if (result.Success)
+            {
+                await GetParty(party.Id);
+            }
+
             return result;
         }
 
@@ -261,8 +268,15 @@ namespace App2Night.Service.Service
             o.locationRating = location;
             o.moodRating = mood;
 
-            return await _clientService.SendRequest("/api/userParty/partyRating", RestType.Put, bodyParameter: o,
+            var result =  await _clientService.SendRequest("/api/userParty/partyRating", RestType.Put, bodyParameter: o,
                             token: Token.AccessToken, urlQuery:"?id=" + partyId.ToString("D"));
+
+            if (result.Success)
+            {
+                await GetParty(partyId);
+            }
+
+            return result;
         }
 
         #endregion
@@ -550,7 +564,8 @@ namespace App2Night.Service.Service
             {
                 AddPartyToCollection(PartyHistory, result.Data);
                 AddPartyToCollection(SelectedPartys, result.Data);
-                AddPartyToCollection(InterestingPartys, result.Data); 
+                AddPartyToCollection(InterestingPartys, result.Data);
+                SelectedPartyUpdated?.Invoke(this, result.Data);
             } 
             return result;
         }
@@ -567,6 +582,20 @@ namespace App2Night.Service.Service
                 if (item.Id == party.Id)
                 {
                     item.Participants = party.Participants;
+                    item.Location = party.Location;
+                    item.Name = party.Name; 
+                    item.Date = party.Date;
+
+                    //Voting
+                    item.GeneralUpVoting = party.GeneralUpVoting;
+                    item.LocationUpVoting = party.LocationUpVoting;
+                    item.MoodUpVoting = party.MoodUpVoting;
+                    item.PriceUpVoting = party.PriceUpVoting;
+                    item.GeneralDownVoting = party.GeneralDownVoting;
+                    item.LocationDownVoting = party.LocationDownVoting;
+                    item.MoodDownVoting = party.MoodDownVoting;
+                    item.PriceDownVoting = party.PriceDownVoting;
+
                     alreadyInCollection = true;
                     break;
                 } 
@@ -604,6 +633,8 @@ namespace App2Night.Service.Service
                 HistoryPartisUpdated?.Invoke(this, EventArgs.Empty);
             }); 
         }
+
+        
 
         #endregion  
     }

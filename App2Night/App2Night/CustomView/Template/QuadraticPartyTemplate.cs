@@ -73,7 +73,7 @@ namespace App2Night.CustomView.Template
             _titleLabel.SetBinding(Label.TextProperty, "Name");
             _distanceLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
             _shareIconLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
-            _likeButton.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
+            _likeButton.SetBinding(CustomButton.IsEnabledProperty, "Date", converter: new DateInFutureConverter());
             _likeButton.SetBinding(CommitmentStateView.CommitmentStateProperty, nameof(Party.CommitmentState));
             _likeButton.SetBinding(CommitmentStateView.HostedByUserProperty, nameof(Party.HostedByUser));
         }

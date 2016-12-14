@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using App2Night.Data.Language;
 using App2Night.Model.Model;
 using App2Night.PageModel;
+using App2Night.PageModel.SubPages;
 using FreshMvvm;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;

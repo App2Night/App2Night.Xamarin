@@ -1,6 +1,7 @@
 ﻿using System;
 using App2Night.CustomView.Template;
 using App2Night.Model.Enum;
+using App2Night.Service.Helper;
 using Xamarin.Forms;
 
 namespace App2Night.CustomView.View
@@ -104,7 +105,7 @@ namespace App2Night.CustomView.View
         {
             // sets btn back to star with a white color
             Text = "\uf006";
-            ButtonLabel.TextColor = Color.White; 
+            ButtonLabel.TextColor = System.Drawing.Color.LightGray.ToXamarinColor(); 
         }
 
         private void AcceptParty()
