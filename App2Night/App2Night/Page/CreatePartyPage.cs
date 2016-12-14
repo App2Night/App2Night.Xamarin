@@ -95,7 +95,7 @@ namespace App2Night.Page
 
         private InputContainer<Entry> _priceContainer = new InputContainer<Entry>
         {
-            Input = {Keyboard = Keyboard.Numeric, Placeholder = "Price"}, //RESOURCE
+			Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.Price}, 
             IconCode = "\uf155",
             Margin = _defaultMargin
         };

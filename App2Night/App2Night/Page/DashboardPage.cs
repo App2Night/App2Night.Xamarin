@@ -146,7 +146,7 @@ namespace App2Night.Page
         {
             var reloadToolbarIcon = new ToolbarItem
             {
-                Text = "Reload"
+				Text = AppResources.Reload
             };
             ToolbarItems.Add(reloadToolbarIcon);
             reloadToolbarIcon.SetBinding(MenuItem.CommandProperty, "ReloadCommand");

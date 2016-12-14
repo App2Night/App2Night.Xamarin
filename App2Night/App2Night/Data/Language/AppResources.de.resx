@@ -192,4 +192,55 @@
   <data name="Yes" xml:space="preserve">
     <value>Ja</value>
   </data>
+	<data name="Price" xml:space="preserve">
+    <value>Preis</value>
+  </data>
+	<data name="Reload" xml:space="preserve">
+    <value>Neu Laden</value>
+  </data>
+	<data name="History" xml:space="preserve">
+    <value>Verlauf</value>
+  </data>
+	<data name="HistoryNoContent" xml:space="preserve">
+    <value>Du hast doch nicht an einer Party teilgenommen.</value>
+  </data>
+	<data name="AgbAcception" xml:space="preserve">
+    <value>Hiermit bestätige ich die allgemeinen Geschäftsbedingungen.</value>
+  </data>
+	<data name="OfflineContent" xml:space="preserve">
+    <value>Ihr Gerät ist nicht mit dem Internet verbunden.</value>
+  </data>
+	<data name="NoNotedPartiesContent" xml:space="preserve">
+    <value>Sie haben bisher keine gemerkt oder zugesagt</value>
+  </data>
+	<data name="ToOtherView" xml:space="preserve">
+    <value>ZU anderen Anischt</value>
+  </data>
+	<data name="AboutTitle" xml:space="preserve">
+    <value>Über diese App</value>
+  </data>
+	<data name="GeneralInfo" xml:space="preserve">
+    <value>Vielen Danke das Sie App2Night benutzen. Diese App ist ein Universitätsprojekt von Stefan Machmeier und Konrad Müller an der Baden-Wuerttemberg Duale Hochschule Stuttgart - Campus Horb.</value>
+  </data>
+	<data name="General" xml:space="preserve">
+    <value>Allgemein</value>
+  </data>
+	<data name="GeneralContent" xml:space="preserve">
+    <value>Diese App wurde mit Xamarin.forms mit einer Microsoft Azure Web API von Asp.Net erstellt. Sie können sich den Sourcecode unseres Projektes auf Github aussehen.</value>
+  </data>
+	<data name="Project" xml:space="preserve">
+    <value>Projekt</value>
+  </data>
+	<data name="Edit" xml:space="preserve">
+    <value>Bearbeiten</value>
+  </data>
+	<data name="Delete" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+	<data name="Website" xml:space="preserve">
+    <value>Webseite</value>
+  </data>
+	<data name="ThirdPartyTitle" xml:space="preserve">
+    <value>Third party librarys</value>
+  </data>
 </root>

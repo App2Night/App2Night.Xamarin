@@ -87,11 +87,11 @@ namespace App2Night.Page.SubPages
 
 		ToolbarItem _editToolbarItem = new ToolbarItem
 		{
-			Text = "Edit",
+			Text = AppResources.Edit,
 		};
 		ToolbarItem _deleteParty = new ToolbarItem
 		{
-			Text = "Delete"
+			Text = AppResources.Delete
 		};
 
 		readonly Map _partyLocation = new Map()

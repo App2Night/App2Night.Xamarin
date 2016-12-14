@@ -1,4 +1,5 @@
 ﻿using App2Night.CustomView.View;
+using App2Night.Data.Language;
 using App2Night.ValueConverter;
 using FreshMvvm;
 using Xamarin.Forms;
@@ -14,7 +15,7 @@ namespace App2Night.Page.SubPages
             //Toolbar item for project site redirection
             var toolbarItem = new ToolbarItem
             {
-                Text = "Website"
+                Text = AppResources.Website
             };
             ToolbarItems.Add(toolbarItem);
             toolbarItem.SetBinding( MenuItem.CommandProperty, "OpenWebsiteCommand");

@@ -18,10 +18,13 @@ namespace App2Night.CustomView.View
             {
                 _validationVisible = value;
                 _validationIconLabel.IsVisible = value;
-                //ColumnDefinitions[2].Width = new GridLength(value ? 25 : 0, GridUnitType.Absolute);
             }
         }
 
+		/// <summary>
+		/// Changes the validation item to either check or unchecked state.
+		/// </summary>
+		/// <param name="newValue">New value.</param>
         private void ChangeValidationItem(bool? newValue)
         {
             if(!newValue.HasValue) return;
@@ -64,7 +67,8 @@ namespace App2Night.CustomView.View
             }
         }
 
-        private Label _validationIconLabel = new Label
+		#region Views
+		private Label _validationIconLabel = new Label
         {
             FontFamily = "FontAwesome", 
             Opacity = 0.7,
@@ -72,17 +76,17 @@ namespace App2Night.CustomView.View
             Text = "\uf00c",
             FontSize = 25,
             TextColor = Color.Gray.ToXamarinColor()
-        }; 
-
-        Label _imageLabel = new Label
-        {
-            FontFamily = "FontAwesome",
-            FontSize = 25,
-            Margin = new Thickness(3)
         };
 
+		Label _imageLabel = new Label
+		{
+			FontFamily = "FontAwesome",
+			FontSize = 25,
+			Margin = new Thickness(3)
+		};
+		#endregion
 
-        public InputContainer()
+		public InputContainer()
         {
             ColumnSpacing = 0;
             ColumnDefinitions = new ColumnDefinitionCollection()

@@ -2,6 +2,7 @@
 using App2Night.CustomView.Page;
 using App2Night.CustomView.Template;
 using App2Night.CustomView.View;
+using App2Night.Data.Language;
 using App2Night.Model.Model;
 using App2Night.PageModel;
 using App2Night.ValueConverter;
@@ -29,7 +30,7 @@ namespace App2Night.Page
            
             var changeViewToolbarItem = new ToolbarItem()
             {
-                Text = "ToOtherView",
+				Text = AppResources.ToOtherView,
                 Command = new Command(() =>
                 {
                     if (Content == swipeView)
