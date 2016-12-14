@@ -117,13 +117,8 @@ namespace App2Night
             {
                 if (await CoordinateHelper.HasGeolocationAccess())
                 {
-                    CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
-                    FreshIOC.Container.Resolve<IDataService>().NearPartiesUpdated +=
-                        (sender, args) => 
-					{
-						if (!CrossGeolocator.Current.IsListening)
-						CrossGeolocator.Current.StartListeningAsync(2000, 100); 
-					};
+                    await CrossGeolocator.Current.StartListeningAsync(50, 100);
+                    CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged; 
                 }
             }); 
         }

@@ -173,10 +173,10 @@ namespace App2Night.Service.Service
 
             if (await IsPermissionAvailable(Permission.Storage)) return true;
 
-            if (!_alreadyRequestedLocation)
+            if (!_alreadyRequestedStorage)
             {
-                _alreadyRequestedLocation = true;
-                return await RequestAnyPermission(Permission.Storage, message);
+                _alreadyRequestedStorage = true;
+                return await  RequestAnyPermission(Permission.Storage, message);
             }
 
             return false; 
@@ -191,14 +191,14 @@ namespace App2Night.Service.Service
         /// Starts a permission request for the given permission type with the given message.
         /// </summary> 
         private static async Task<bool> RequestAnyPermission(Permission permissionType, string message)
-        { 
-            if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(permissionType))
-            {
-                await UserDialogs.Instance.AlertAsync(message, "Permission needed", "OK"); //RESOURCE
-            }
-            var results = await CrossPermissions.Current.RequestPermissionsAsync(new[] { permissionType });
-                var status = results[Permission.Location];
-             
+        {  
+                    if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(permissionType))
+                    {
+                        await UserDialogs.Instance.AlertAsync(message, "Permission needed", "OK"); //RESOURCE
+                    }
+                    var results = await CrossPermissions.Current.RequestPermissionsAsync(new[] { permissionType });
+                    var status = results[Permission.Location];
+
             return status == PermissionStatus.Granted;
         } 
         #endregion
