@@ -13,8 +13,7 @@ namespace App2Night.Page
         {
             FontSize = 18,
             VerticalOptions = LayoutOptions.Center,
-            HorizontalOptions = LayoutOptions.Center,
-			Text="Username"
+			HorizontalOptions = LayoutOptions.Start,
         };
 
         private Button _logoutBtn = new Button
@@ -24,38 +23,30 @@ namespace App2Night.Page
 
         private CustomButton _logInButton = new CustomButton
         {
-            ButtonLabel = { Text = AppResources.Login },
+            ButtonLabel = { Text = AppResources.Login, FontSize = 18 },
             VerticalOptions = LayoutOptions.Center,
             HorizontalOptions = LayoutOptions.Center
         };
 		private CustomButton _editProfileButton = new CustomButton 
 		{ 
-			ButtonLabel = {FontFamily="FontAwesome", Text= "\uf044" },
+			ButtonLabel = {FontFamily="FontAwesome", Text= "\uf044" , FontSize=18},
+			HorizontalOptions = LayoutOptions.Start,
 
 		};
 		private CustomButton _nextPartyButton = new CustomButton 
 		{
-			
+			ButtonLabel = { FontSize = 18},
+			VerticalOptions = LayoutOptions.Center,
+			HorizontalOptions = LayoutOptions.Start,
 		};
+		private ContentView _logoutContentView, _loginContentView;
         #endregion
         
         public NavigationPage()
         {
-			//_nameLabel.SetBinding(Label.TextProperty, "User.Name", stringFormat: "Hello " + "{0}");
-            _logoutBtn.SetBinding(Button.CommandProperty, nameof(NavigationViewModel.LogOutCommand));
-            _logInButton.SetBinding(CustomButton.CommandProperty, nameof(NavigationViewModel.LogInCommand));
-			//_nextPartyButton.ButtonLabel.SetBinding(Label.TextProperty, "NextParty.Name", stringFormat:"Your next Party " + "{0}");
-			_editProfileButton.SetBinding(CustomButton.CommandProperty, nameof(NavigationViewModel.MoveToUserEditCommand));
-
-
-            var loginContentView = LoginContentView();
-            var partyContentView = PartyContentView();
-            var logoutContentView = LogoutContentView();
-
-            loginContentView.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogInContentView));
-            logoutContentView.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogOutContentView));
-            _logoutBtn.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogInContentView));
-             
+			_loginContentView = LoginContentView();
+			_logoutContentView = LogoutContentView();
+			SetBindings();
             if(Device.OS == TargetPlatform.iOS) Padding = new Thickness(0, 20, 0, 0);
             Title = AppResources.Menu;
             
@@ -70,9 +61,8 @@ namespace App2Night.Page
                 },
                 Children =
                 {
-                    loginContentView,
-                   	partyContentView,
-                    logoutContentView,
+                    _loginContentView,
+                    _logoutContentView,
                     {MenuListView, 0, 1},
                     {_logoutBtn, 0, 2}
                 }
@@ -80,6 +70,21 @@ namespace App2Night.Page
 
         }
 
+		private void SetBindings()
+		{
+			// name of user and party
+			_nameLabel.SetBinding(Label.TextProperty, nameof(NavigationViewModel.UserName), stringFormat: "Hello " + "{0}");
+			_logoutBtn.SetBinding(Button.CommandProperty, nameof(NavigationViewModel.LogOutCommand));
+			_logInButton.SetBinding(CustomButton.CommandProperty, nameof(NavigationViewModel.LogInCommand));
+			_nextPartyButton.ButtonLabel.SetBinding(Label.TextProperty, nameof(NavigationViewModel.PartyName), stringFormat: "Your next Party " + "{0}");
+			_editProfileButton.SetBinding(CustomButton.CommandProperty, nameof(NavigationViewModel.MoveToUserEditCommand));
+			// log in and log out to hide views
+			_nameLabel.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogIn));
+			_editProfileButton.ButtonLabel.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogIn));
+			_nextPartyButton.ButtonLabel.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsNextParty));
+			_logoutContentView.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogOut));
+			_logoutBtn.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogIn));
+		}
         protected override void OnSizeAllocated(double width, double height)
         {
             base.OnSizeAllocated(width, height);
@@ -88,42 +93,32 @@ namespace App2Night.Page
 
         private ContentView LoginContentView ()
         {
-            return new ContentView
-            {
-                Content = new Grid
-                {
-                    ColumnDefinitions = new ColumnDefinitionCollection
-                    {
-                        new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)},
-                        new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto)},
-                    },
-                    Children =
-                    {
-      //                  {_nameLabel,0,0 },
-						//{_nameLabel,1,0 }
-                    }
-                }
-            };
-        }
-        private ContentView PartyContentView ()
-        {
-            return new ContentView
-            {
-                Content = new Grid
-                {
-                    ColumnDefinitions = new ColumnDefinitionCollection
-                    {
-                        new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)},
-                        new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star)},
-                    },
-                    Children =
-                    {
-						{_nameLabel,0,0 },
-						{_editProfileButton,1,0 },
-						{_nextPartyButton,0,1 }
-                    }
-                }
-            };
+             return new ContentView
+			{
+				Content = new Grid
+				{
+					Margin = 5,
+					RowSpacing = 0,
+					ColumnDefinitions = new ColumnDefinitionCollection
+					{
+						new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star)},
+						new ColumnDefinition { Width = new GridLength(1, GridUnitType.Auto)},
+					},
+					RowDefinitions = new RowDefinitionCollection
+					{
+						new RowDefinition { Height = new GridLength(50	, GridUnitType.Absolute)},
+						new RowDefinition { Height = new GridLength(1, GridUnitType.Auto)},
+						new RowDefinition { Height = new GridLength(1, GridUnitType.Auto)},
+
+					},
+					Children =
+					{
+						{_nameLabel,0,1 },
+						{_editProfileButton,1,1 },
+						{_nextPartyButton,0,2 }
+					}
+				}
+			};
         }
         private ContentView LogoutContentView ()
         {

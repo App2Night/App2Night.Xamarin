@@ -25,7 +25,7 @@ namespace App2Night.Service.Service
         public event EventHandler NearPartiesUpdated;
         public event EventHandler HistoryPartisUpdated;
         public event EventHandler SelectedPartiesUpdated;
-        public event EventHandler UserUpdated;
+        public event EventHandler<User> UserUpdated;
 
 
         /// <summary>
@@ -272,13 +272,15 @@ namespace App2Night.Service.Service
 
         #region user handlign
 
-        public User User { get; }
+        public User User { get; set; }
 
         public async Task<Result> GetUser()
         {
             if (!await CheckIfTokenIsValid()) return new Result();
-            var result = await _clientService.SendRequest("/api/userinfo", RestType.Get, 
-                            token: Token.AccessToken);
+            var result = await _clientService.SendRequest<User>("/connect/userinfo", RestType.Get, 
+                            token: Token.AccessToken, endpoint:Endpoint.User);
+            User = result.Data;
+			Device.BeginInvokeOnMainThread(() => UserUpdated?.Invoke(this, User));
             return result;
         }
 
@@ -356,7 +358,7 @@ namespace App2Night.Service.Service
                 {"grant_type", "password"},
                 {"username", username},
                 {"password", password},
-                {"scope", "App2NightAPI offline_access"},
+                {"scope", "App2NightAPI offline_access openid email profile"},
                 {"offline_access", "true"}
             };
         }
@@ -409,10 +411,23 @@ namespace App2Night.Service.Service
         public async Task<IEnumerable<Result>> BatchRefresh()
         {
             var allResults = new List<Result>();
+			var allTasks = new Task[]
+			{
+				Task.Run(async () =>
+				{
+					allResults.Add(await RequestPartyWithFilter());
+				}),
+				Task.Run(async () =>
+				{
+					allResults.Add(await RefreshPartyHistory());
+				}),
+				Task.Run(async () =>
+				{
+					allResults.Add(await RefreshSelectedParties());
+				})	
+			};
 
-            allResults.Add(await RequestPartyWithFilter());
-            allResults.Add(await RefreshPartyHistory());
-            allResults.Add(await RefreshSelectedParties());  
+			await Task.WhenAll(allTasks);
 
             return allResults;
         }

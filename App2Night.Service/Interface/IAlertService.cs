@@ -39,5 +39,17 @@ namespace App2Night.Service.Interface
         /// Informs the user, that refreshing of all party lists happend.
         /// </summary>
         Task<bool> PartyBatchRefreshFinished(IEnumerable<Result> requestBatch);
+
+        /// <summary>
+        /// Creates a popup to ask the user for location permissions.
+        /// </summary>
+        /// <returns></returns>
+        Task<bool> RequestLocationPermissions();
+
+        /// <summary>
+        /// Creates a popup to ask the user for storage permissions.
+        /// </summary>
+        /// <returns></returns>
+        Task<bool> RequestStoragePermissions();
     }
 }

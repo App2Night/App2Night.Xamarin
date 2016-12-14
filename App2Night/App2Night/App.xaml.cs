@@ -84,8 +84,9 @@ namespace App2Night
         /// <returns></returns>
         private async Task GenerelSetup()
         {
-            using (UserDialogs.Instance.Loading())
-            {
+			Device.BeginInvokeOnMainThread(() => UserDialogs.Instance.ShowLoading());
+                var alertService = FreshIOC.Container.Resolve<IAlertService>(); 
+
                 SetupGeolocator();
 
                 var storage = FreshIOC.Container.Resolve<IStorageService>();
@@ -98,7 +99,7 @@ namespace App2Night
                 {
                     ShowLoginModal();
                 }
-            }
+			Device.BeginInvokeOnMainThread(() => UserDialogs.Instance.HideLoading());
         }
 
         private void ShowLoginModal()
@@ -116,9 +117,8 @@ namespace App2Night
             {
                 if (await CoordinateHelper.HasGeolocationAccess())
                 {
-                    CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
-                    FreshIOC.Container.Resolve<IDataService>().NearPartiesUpdated +=
-                        (sender, args) => { CrossGeolocator.Current.StartListeningAsync(2000, 100); };
+                    await CrossGeolocator.Current.StartListeningAsync(50, 100);
+                    CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged; 
                 }
             }); 
         }
@@ -152,7 +152,7 @@ namespace App2Night
         { 
             FreshIOC.Container.Register<IDatabaseService>(Xamarin.Forms.DependencyService.Get<IDatabaseService>(), "IDatabaseService");
             FreshIOC.Container.Register<IStorageService, StorageService>().AsSingleton();
-            FreshIOC.Container.Register<IAlertService, AlertService>();
+            FreshIOC.Container.Register<IAlertService, AlertService>().AsSingleton();
             FreshIOC.Container.Register<IClientService, ClientService>();
             FreshIOC.Container.Register<IDataService, DataService>().AsSingleton();
         }
