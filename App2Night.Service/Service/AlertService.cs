@@ -30,7 +30,7 @@ namespace App2Night.Service.Service
                 {
                     Title = "User created!",
                     Message = $"Welcome to App2Night {username}! We send you an e-mail with a confirmation link. You can create parties after confirming your account.",
-                    OkText = "I understand."
+                    OkText = "I understand." //RESOURCE
                 })); 
             }
             else 
@@ -103,7 +103,7 @@ namespace App2Night.Service.Service
         {
             var message = "The last request got lost and we can't find it anymore :( " +
                           "Dont feel betrayed, we will handle your future requests even more carefull and give him more time! " +
-                          "To help us handling your request, please make sure you are actually connected to the internet.";
+                          "To help us handling your request, please make sure you are actually connected to the internet."; //RESOURCE
             Device.BeginInvokeOnMainThread(async () =>
             {
                 await UserDialogs.Instance.AlertAsync(new AlertConfig

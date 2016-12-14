@@ -118,9 +118,14 @@ namespace App2Night.PageModel
         }
         void SyncData()
         {
-			Task.Run(async () => { 
-				var result = await _dataService.BatchRefresh();
-				await _alertService.PartyBatchRefreshFinished(result);
+			Task.Run(async () =>
+			{
+			    bool retry = true;
+			    while (retry)
+			    {
+                    var result = await _dataService.BatchRefresh();
+                    retry = await _alertService.PartyBatchRefreshFinished(result);
+                }  
 				UserDialogs.Instance.HideLoading();
 			});
         }
