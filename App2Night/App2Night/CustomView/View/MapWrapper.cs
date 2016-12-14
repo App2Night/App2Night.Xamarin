@@ -32,12 +32,17 @@ namespace App2Night.CustomView.View
                     var locationAvailable = await CoordinateHelper.HasGeolocationAccess();
                     var locationPermissionsAvailable = await 
                         FreshIOC.Container.Resolve<IAlertService>().RequestLocationPermissions();
-                    map.IsShowingUser = locationAvailable;
+                   
 
-                    if (locationPermissionsAvailable)
+                    if (locationPermissionsAvailable )
+                    {
+                        map.IsShowingUser = locationAvailable; 
+                    }
+
+                    if (locationAvailable)
                     {
                         Content = map;
-                    } 
+                    }
                     else
                         Content = new Label { Text = "Location is not enabled for this app or available on your device.\n" +
                                                      "Activate the location for this device and restart the app to see a beautiful map here.",

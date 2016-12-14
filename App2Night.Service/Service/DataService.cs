@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Dynamic;
-using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.Model.Enum;
@@ -30,8 +28,7 @@ namespace App2Night.Service.Service
 
         /// <summary>
         /// Provides the token from the storage. 
-        /// </summary>
-
+        /// </summary> 
         private Token Token
         {
             get { return _storageService.Storage.Token; }

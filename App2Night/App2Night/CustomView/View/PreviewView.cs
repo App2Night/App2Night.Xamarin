@@ -44,7 +44,8 @@ namespace App2Night.CustomView.View
         {
             Style = _labelStyle,
             HorizontalOptions = LayoutOptions.CenterAndExpand,
-            VerticalOptions = LayoutOptions.Center
+            VerticalOptions = LayoutOptions.Center,
+            LineBreakMode = LineBreakMode.TailTruncation
         };
 
         private BoxView _middleBoxView = new BoxView

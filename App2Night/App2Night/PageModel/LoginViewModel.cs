@@ -112,7 +112,9 @@ namespace App2Night.PageModel
                 {
                     SyncData();
                     await ClosePage();
-                } 
+                }
+                else
+                    UserDialogs.Instance.HideLoading();
         }
         void SyncData()
         {

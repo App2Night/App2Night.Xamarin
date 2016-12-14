@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using App2Night.CustomView.Template;
 using App2Night.CustomView.View;
 using App2Night.Data.Language;
 using App2Night.Model.Enum;
@@ -213,6 +214,8 @@ namespace App2Night.Page.SubPages
 
 		public MyPartyDetailPage()
 		{
+		    _gallerieView.Template = typeof(ParticipantTemplate);
+
 			SetBindings();
 			Device.BeginInvokeOnMainThread(async () => await InitializeMapCoordinates());
 			ToolbarItems.Add(_editToolbarItem);

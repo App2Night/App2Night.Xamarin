@@ -17,6 +17,8 @@ namespace App2Night.PageModel.SubPages
     public class PartyDetailViewModel : FreshBasePageModel
     {
         private readonly IDataService _dataService;
+
+        [AlsoNotifyFor(nameof(ValidRate))]
         public Party Party { get; set; }
 
         public string Name => Party.Name;

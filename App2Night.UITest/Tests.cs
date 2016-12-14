@@ -41,6 +41,21 @@ namespace App2Night.UITest
             app.Tap(x => x.Marked("SignUpSwitch"));
             app.Tap(x => x.Marked("Submit"));
         }
+
+        [Test]
+        public void NewTest1()
+        {
+            app.SwipeLeftToRight();
+            app.PressEnter();
+            app.ScrollDown();
+            app.ScrollUp();
+            app.ScrollDown();
+            app.ScrollDown();
+            app.Tap(x => x.Class("CustomScrollViewRenderer"));
+            app.ScrollUp();
+            app.ScrollUp();
+            app.ScrollDown();
+        }
     }
 }
 

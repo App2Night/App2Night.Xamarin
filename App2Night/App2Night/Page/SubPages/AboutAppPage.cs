@@ -14,7 +14,7 @@ namespace App2Night.Page.SubPages
             var generalViewSize = 150;
             var iconImage = new Image
             {
-                Source = ImageSource.FromResource("App2Night.Data.IconCode.icon.png"),
+                Source = ImageSource.FromResource("App2Night.Data.Image.icon.png"),
                 Margin = new Thickness(8)
             }; 
             var generalView = new Grid
@@ -37,7 +37,7 @@ namespace App2Night.Page.SubPages
                 }
             };
 
-            var projectViewHeight = 100;
+            var projectViewHeight = 120;
             var projectLabel = new Label
             {
                 Text =

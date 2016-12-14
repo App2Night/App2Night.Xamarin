@@ -4,6 +4,7 @@ using App2Night.Data.Language;
 using App2Night.Model.Model;
 using App2Night.PageModel;
 using App2Night.PageModel.SubPages;
+using App2Night.ValueConverter;
 using FreshMvvm;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
@@ -110,10 +111,10 @@ namespace App2Night.CustomView.View
             _startTimeLabel.SetBinding(Label.TextProperty, "Date", stringFormat: AppResources.Time);
             _genreLabel.SetBinding(Label.TextProperty, "MusicGenre");
             _priceLabel.SetBinding(Label.TextProperty, "Price");
-			_generalRateLabel.SetBinding(Label.TextProperty, "GeneralAvg");
-			_priceRateLabel.SetBinding(Label.TextProperty, "PriceAvg");
-			_locationRateLabel.SetBinding(Label.TextProperty, "LocationAvg");
-			_moodRateLabel.SetBinding(Label.TextProperty, "MoodAvg");
+			_generalRateLabel.SetBinding(Label.TextProperty, "GeneralAvg", converter: new PercentageValueConverter());
+			_priceRateLabel.SetBinding(Label.TextProperty, "PriceAvg", converter: new PercentageValueConverter());
+			_locationRateLabel.SetBinding(Label.TextProperty, "LocationAvg", converter: new PercentageValueConverter());
+			_moodRateLabel.SetBinding(Label.TextProperty, "MoodAvg", converter: new PercentageValueConverter());
         }
         /// <summary>
         /// Initializes description label.
