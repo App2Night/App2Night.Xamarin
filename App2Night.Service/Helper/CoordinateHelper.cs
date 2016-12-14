@@ -1,5 +1,13 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Acr.UserDialogs;
 using App2Night.Model.Model;
+using App2Night.Service.Interface;
+using FreshMvvm;
+using Plugin.Geolocator;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
+using Xamarin.Forms;
 
 namespace App2Night.Service.Helper
 {
@@ -8,6 +16,73 @@ namespace App2Night.Service.Helper
     /// </summary>
     public static class CoordinateHelper
     {
+        public static async Task<bool> HasGeolocationAccess()
+        {
+            var storageService = FreshIOC.Container.Resolve<IStorageService>();
+
+            var storageEnabled = storageService.Storage.UseGps //Check if gps usage is enabled in the settigns.
+               && CrossGeolocator.Current.IsGeolocationAvailable  //Check if gps usage is available on the device.
+               && CrossGeolocator.Current.IsGeolocationEnabled; //Check if gps usage is enabled on the device.  
+
+            if (!storageEnabled) return false;
+
+            storageEnabled = await FreshIOC.Container.Resolve<IAlertService>().RequestLocationPermissions();
+
+            //Since CrossGeolocator does not catch if uwp denied the access, ask uwp again!
+            if (Device.OS == TargetPlatform.Windows && storageEnabled)
+            {
+                var locationAccess = DependencyService.Get<ILocationAccess>();
+                storageEnabled = await locationAccess.HasAccess(); 
+            }
+
+            return storageEnabled;
+        }
+
+        public static async Task<Coordinates> GetCoordinates(bool fallBackToDefaultCoordinates = true)
+        {
+            var storageService = FreshIOC.Container.Resolve<IStorageService>();
+
+            //TODO check if user is alowed to use gps
+
+            var storageEnabled =await HasGeolocationAccess();
+            Coordinates coordinates = null;
+
+            if (storageEnabled)
+            {
+                try
+                {
+                    //Get coordinates from GPS
+                    var location = await CrossGeolocator.Current.GetPositionAsync(10000);
+                    coordinates = new Coordinates()
+                    {
+                        Latitude = location.Latitude,
+                        Longitude = location.Longitude
+                    };
+                }
+                catch (TaskCanceledException e)
+                {
+                    DebugHelper.PrintDebug(DebugType.Error, "Getting location in time failed.\n" + e);
+                }
+            }
+
+            //Backup if gps is disabled or fetching from gps didnt return a valid result.
+            if (storageEnabled || coordinates == null)
+            {
+                var savedLocationData = storageService.Storage.ManualLocation;
+                if (savedLocationData != null)
+                    coordinates = new Coordinates((float) savedLocationData.Longitude, (float) savedLocationData.Latitude);
+            }
+
+            //Take default coordinates if everything else fails.
+            if (coordinates == null && fallBackToDefaultCoordinates)
+            {
+                coordinates = new Coordinates(10.324663f, 51.273610f);
+            }
+
+            return coordinates;
+        }
+
+
         /// <summary>
         /// Calculates the distance between to coordinates. 
         /// Includs the fact that the earth is actually not a pizza.

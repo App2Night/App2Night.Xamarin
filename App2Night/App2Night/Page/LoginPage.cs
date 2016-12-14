@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using App2Night.CustomView.Page;
 using App2Night.CustomView.View;
 using App2Night.Data.Language;
 using FreshMvvm;
@@ -7,13 +8,17 @@ using Xamarin.Forms;
 
 namespace App2Night.Page
 {
-    public class LoginPage : FreshBaseContentPage
+    public class LoginPage : CustomContentPage
     {
         #region Views  
 		private readonly InputContainer<Entry> _usernameEntry = new InputContainer<Entry>
         {
 			IconCode = "\uf2bd",
-            Input = { Placeholder = AppResources.Username},
+            Input =
+            {
+                Placeholder = AppResources.Username,
+                AutomationId = "UsernameInput"
+            },
             ValidationVisible = true
 
         };
@@ -21,7 +26,8 @@ namespace App2Night.Page
         private readonly InputContainer<Entry> _emailEntry = new InputContainer<Entry>
         {
             IconCode = "\uf003",
-            Input = { Placeholder = AppResources.EmailAdress, Keyboard = Keyboard.Email }, 
+            Input = { Placeholder = AppResources.EmailAdress, Keyboard = Keyboard.Email,
+                AutomationId = "EmailInput" }, 
             IsVisible = false,
             ValidationVisible = true
         };
@@ -31,7 +37,8 @@ namespace App2Night.Page
             Input =
             {
                 Placeholder = AppResources.Password,
-                IsPassword = true 
+                IsPassword = true,
+                AutomationId = "PasswordInput"
             },
 			IconCode = "\uf023",
             ValidationVisible = true
@@ -40,7 +47,8 @@ namespace App2Night.Page
         private readonly Switch  _signUpSwitch = new Switch()
         {
             HorizontalOptions = LayoutOptions.Start,
-            Margin = new Thickness(0, 10)
+            Margin = new Thickness(0, 10),
+            AutomationId = "SignUpSwitch"
         };
 
         private readonly Label _registerLabel = new Label
@@ -59,24 +67,27 @@ namespace App2Night.Page
         private readonly Image _image = new Image 
         {  
             Aspect = Aspect.AspectFit,
-            Source = ImageSource.FromResource("App2Night.Data.IconCode.icon.png")
+            Source = ImageSource.FromResource("App2Night.Data.Image.icon.png")
         };
 
         private readonly Switch _acceptAgbSwitch = new Switch
         {
             HorizontalOptions = LayoutOptions.Center, 
             IsVisible = false,
-            Margin = new Thickness(0, 10)
+            Margin = new Thickness(0, 10),
+            AutomationId = "AcceptAgbSwitch"
         };
 
         private readonly Button _submitButton = new Button
         {
-            Text = AppResources.Submit
+            Text = AppResources.Submit,
+            AutomationId = "Submit"
         };
 
         private readonly Button _useAnonymousButton = new Button
         {
-            Text = AppResources.ContinueAnonymous
+            Text = AppResources.ContinueAnonymous,
+            AutomationId = "ContinueAnonym"
         };
 
         private readonly CustomButton _agbText = new CustomButton
@@ -92,6 +103,7 @@ namespace App2Night.Page
         public LoginPage()
         { 
             BackgroundColor = Color.Red;
+            OfflineMessage = "Your device is not connected to the internet."; //RESOURCE 
 
             //Make sure that the page does not merge in to the status bar on iOS.
             if(Device.OS == TargetPlatform.iOS) 

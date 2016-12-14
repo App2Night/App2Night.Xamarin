@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.Model.HttpModel;
 using App2Night.Model.Model;
@@ -78,7 +79,7 @@ namespace App2Night.PageModel
             }
         }
 
-        public Command ContinueAnonymCommand => new Command(async()=> await ContinueAnonym());
+        public Command ContinueAnonymCommand => new Command(async()=> await ContinueAnonym()); 
 
         private async Task ContinueAnonym()
         {
@@ -88,12 +89,11 @@ namespace App2Night.PageModel
         private async Task FormSubmitted()
         {
             Result result = null;
-            using (var loading = UserDialogs.Instance.Loading(""))
-            { 
+			UserDialogs.Instance.ShowLoading();
                 //Create user
                 if (this.SignUp)
                 {
-                    loading.Title = "Creating user";
+					UserDialogs.Instance.Loading("Creating user");
                     var signUpData = new SignUp
                     {
                         Email = Email,
@@ -104,18 +104,28 @@ namespace App2Night.PageModel
                     _alertService.UserCreationFinished(result, Username);
                 }
                 else { 
-                    loading.Title = "Login";
+					UserDialogs.Instance.Loading("Login");
                      result = await _dataService.RequestToken(Username, Password);
-                    _alertService.LoginFinished(result);
+                    _alertService.LoginFinished(result); 
                 }
-            }
-            if (result != null && result.Success)
-                await ClosePage();
+                if (result != null && result.Success)
+                {
+                    SyncData();
+                    await ClosePage();
+                } 
+        }
+        void SyncData()
+        {
+			Task.Run(async () => { 
+				var result = await _dataService.BatchRefresh();
+				await _alertService.PartyBatchRefreshFinished(result);
+				UserDialogs.Instance.HideLoading();
+			});
         }
 
         private async Task ClosePage()
-        {
-            await CoreMethods.PopPageModel(true);
+        { 
+                await CoreMethods.PopPageModel(true);
         }
     }
 }

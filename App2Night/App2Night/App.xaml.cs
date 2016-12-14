@@ -4,14 +4,19 @@ using App2Night.Data.Language;
 using App2Night.DependencyService;
 using App2Night.Model.Model;
 using App2Night.PageModel;
+using App2Night.PageModel.SubPages;
 using App2Night.Service.Helper;
 using App2Night.Service.Interface;
 using App2Night.Service.Service;
 using FreshMvvm;
+using Microsoft.Azure.Mobile;
+using Microsoft.Azure.Mobile.Analytics;
+using Microsoft.Azure.Mobile.Crashes;
 using Plugin.Connectivity;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using Xamarin.Forms;
+using Device = Xamarin.Forms.Device;
 
 namespace App2Night
 {
@@ -19,10 +24,12 @@ namespace App2Night
     {
         public static bool MapAvailable { get; private set; }
 
-        CustomMasterDetailContainer _masterDetailNav; 
+        public static CustomMasterDetailContainer _masterDetailNav; 
 
         public App()
         {
+            MobileCenter.Start(typeof(Analytics), typeof(Crashes)); 
+
             InitializeComponent();
             CheckIfMapsIsAvailable();
 
@@ -38,7 +45,7 @@ namespace App2Night
                 Xamarin.Forms.DependencyService.Get<ICultureService>().SetLocale(ci); // set the Thread for locale-aware methods
             }
 
-            Device.BeginInvokeOnMainThread(async () => await GenerelSetup());
+            Task.Run(async () => await GenerelSetup());
         }
 
         /// <summary>
@@ -49,12 +56,12 @@ namespace App2Night
         {
             var masterDetailNav = new CustomMasterDetailContainer();
             masterDetailNav.Init("App2Night");
-            masterDetailNav.AddPage<DashboardPageModel>(AppResources.Dashboard, null);
-            masterDetailNav.AddPage<PartyPickerViewModel>(AppResources.PickAParty, null);
-            masterDetailNav.AddPage<CreatePartyViewModel>(AppResources.CreateAParty);
-            masterDetailNav.AddPage<HistoryViewModel>(AppResources.History);
-            masterDetailNav.AddPage<SettingViewModel>(AppResources.Settings);
-            masterDetailNav.AddPage<AboutTabbedViewModel>(AppResources.About);
+            masterDetailNav.AddPage<DashboardPageModel>(AppResources.Dashboard, "\uf015");
+            masterDetailNav.AddPage<PartyPickerViewModel>(AppResources.PickAParty, "\uf29b");
+            masterDetailNav.AddPage<CreatePartyViewModel>(AppResources.CreateAParty, "\uf271", requiresLogin: true);
+            masterDetailNav.AddPage<MyPartysViewModel>("My parties", "\uf274", requiresLogin: true); //RESOURCE
+            masterDetailNav.AddPage<SettingViewModel>(AppResources.Settings, "\uf085");
+            masterDetailNav.AddPage<AboutTabbedViewModel>(AppResources.About, "\uf05a");
             return masterDetailNav;
         }
 
@@ -77,48 +84,43 @@ namespace App2Night
         /// <returns></returns>
         private async Task GenerelSetup()
         {
-            using (UserDialogs.Instance.Loading())
-            {
+			Device.BeginInvokeOnMainThread(() => UserDialogs.Instance.ShowLoading());
+                var alertService = FreshIOC.Container.Resolve<IAlertService>(); 
+
                 SetupGeolocator();
 
-                await FreshIOC.Container.Resolve<IStorageService>().OpenStorage();
-                bool isLoggedIn = await ResumeLastSession();
+                var storage = FreshIOC.Container.Resolve<IStorageService>();
+                await storage.OpenStorage(); 
 
                 //Make an inital token refresh 
-                await FreshIOC.Container.Resolve<IDataService>().RequestPartyWithFilter();
+                await FreshIOC.Container.Resolve<IDataService>().BatchRefresh();
 
-                if (!isLoggedIn)
+                if (!storage.IsLogIn)
                 {
-                    await ShowLoginModal();
+                    ShowLoginModal();
                 }
-            }
+			Device.BeginInvokeOnMainThread(() => UserDialogs.Instance.HideLoading());
         }
 
-        private async Task ShowLoginModal()
+        private void ShowLoginModal()
         {
-            var page = FreshPageModelResolver.ResolvePageModel<LoginViewModel>();
-            await _masterDetailNav.PushPage(page, null, true);
-        }
-
-        private async Task<bool> ResumeLastSession()
-        {
-            bool isLoggedIn = false;
-            var storage = FreshIOC.Container.Resolve<IStorageService>().Storage;
-            if (storage.Token != null)
+            Device.BeginInvokeOnMainThread(async () =>
             {
-                //Set token from last session and update user information.
-                isLoggedIn = await FreshIOC.Container.Resolve<IDataService>().SetToken(storage.Token);
-            }
-            DebugHelper.PrintDebug(DebugType.Info,
-                isLoggedIn ? "Log in from last session." : "User not logged in. No token available.");
-            return isLoggedIn;
+                var page = FreshPageModelResolver.ResolvePageModel<LoginViewModel>();
+                await _masterDetailNav.PushPage(page, null, true);
+            }); 
         }
 
         private void SetupGeolocator()
         {
-            CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged;
-            FreshIOC.Container.Resolve<IDataService>().PartiesUpdated +=
-                (sender, args) => { CrossGeolocator.Current.StartListeningAsync(1, 100); };
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                if (await CoordinateHelper.HasGeolocationAccess())
+                {
+                    await CrossGeolocator.Current.StartListeningAsync(50, 100);
+                    CrossGeolocator.Current.PositionChanged += CurrentOnPositionChanged; 
+                }
+            }); 
         }
 
         /// <summary>
@@ -147,9 +149,10 @@ namespace App2Night
         /// Registers all interfaces.
         /// </summary>
         private void RegisterInterfaces()
-        {
+        { 
+            FreshIOC.Container.Register<IDatabaseService>(Xamarin.Forms.DependencyService.Get<IDatabaseService>(), "IDatabaseService");
             FreshIOC.Container.Register<IStorageService, StorageService>().AsSingleton();
-            FreshIOC.Container.Register<IAlertService, AlertService>();
+            FreshIOC.Container.Register<IAlertService, AlertService>().AsSingleton();
             FreshIOC.Container.Register<IClientService, ClientService>();
             FreshIOC.Container.Register<IDataService, DataService>().AsSingleton();
         }

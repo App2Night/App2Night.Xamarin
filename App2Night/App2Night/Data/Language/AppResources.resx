@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e</value>
   </resheader>
   <data name="About" xml:space="preserve">
     <value>About</value>
@@ -227,5 +227,56 @@
   </data>
   <data name="Cityname" xml:space="preserve">
     <value>City</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Login now!</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Logout</value>
+  </data>
+  <data name="Menu" xml:space="preserve">
+    <value>Menu</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>{0:MM/dd/yyyy}</value>
+  </data>
+  <data name="DateTime" xml:space="preserve">
+    <value>Date</value>
+  </data>
+  <data name="Genre" xml:space="preserve">
+    <value>Genre</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>Start Time</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>{0:hh:mm tt}</value>
+  </data>
+  <data name="ClearCache" xml:space="preserve">
+    <value>Clear Cache</value>
+  </data>
+  <data name="ClearCacheSettingsHeader" xml:space="preserve">
+    <value>Cache Settings</value>
+  </data>
+  <data name="ClearCacheUsage" xml:space="preserve">
+    <value>It will delete local caches on device. Your aren't able anymore to load cached parties.</value>
+  </data>
+  <data name="ClearCacheValid" xml:space="preserve">
+    <value>Do you really want to clear all cache?.</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="AgbContent" xml:space="preserve">
+    <value>Read AGB</value>
+  </data>
+  <data name="AgbHeader" xml:space="preserve">
+    <value>AGB of this App</value>
+  </data>
+  <data name="Rate" xml:space="preserve">
+    <value>Rate!</value>
   </data>
 </root>

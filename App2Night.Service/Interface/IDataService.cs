@@ -14,15 +14,42 @@ namespace App2Night.Service.Interface
     public interface IDataService
     {
         /// <summary>
-        /// Gets triggered if parties are updated.
+        /// Gets triggered if parties get updated.
         /// </summary>
-        event EventHandler PartiesUpdated;
+        event EventHandler NearPartiesUpdated;
+
+        /// <summary>
+        /// Gets triggered if the party history get updated.
+        /// </summary>
+        event EventHandler HistoryPartisUpdated;
+
+        /// <summary>
+        /// Gets triggered if the selected parties get updated.
+        /// </summary>
+        event EventHandler SelectedPartiesUpdated;
 
         /// <summary>
         /// Gets triggerd if the user is updated.
         /// </summary>
-        event EventHandler UserUpdated;
-        
+        event EventHandler<User> UserUpdated;
+
+        /// <summary>
+        /// Refreshes the party history, interesting parties and selected parties.
+        /// </summary>
+        /// <returns>Results of all refreshs.</returns>
+        Task<IEnumerable<Result>> BatchRefresh();
+
+        /// <summary>
+        /// Current user.
+        /// </summary>
+        User User { get; }
+
+        /// <summary>
+        /// Requests user information from the backend
+        /// </summary>
+        /// <returns></returns>
+        Task<Result> GetUser();
+
         /// <summary>
         /// Sets the token.
         /// </summary>
@@ -35,17 +62,7 @@ namespace App2Night.Service.Interface
         /// </summary>
         /// <param name="location">Location to be lookd up.</param>
         /// <returns>The best correspond to the given location.</returns>
-        Task<Result<Location>> ValidateLocation(Location location);
-
-        /// <summary>
-        /// Clears all data from the device storage and current objects, including the logged in user.
-        /// </summary>
-        Task WipeData();
-
-        /// <summary>
-        /// Returns the current <see cref="Model.Model.User"/>.
-        /// </summary>
-        User User { get; }
+        Task<Result<Location>> ValidateLocation(Location location); 
 
         /// <summary>
         /// Returns a cached collection of all <see cref="Party"/> filtered by last applied search criteria.
@@ -71,7 +88,17 @@ namespace App2Night.Service.Interface
         Task<Result<IEnumerable<Party>>> RequestPartyWithFilter();
 
         /// <summary>
-        /// Returns a single party to the given id.
+        /// Refresh the <see cref="PartyHistory"/> collection.
+        /// </summary> 
+        Task<Result<IEnumerable<Party>>> RefreshPartyHistory();
+
+        /// <summary>
+        /// Refresh the <see cref="SelectedPartys"/> collection.
+        /// </summary> 
+        Task<Result<IEnumerable<Party>>> RefreshSelectedParties();
+
+        /// <summary>
+        /// Returns a single party to the given partyId.
         /// </summary>
         /// <param name="id"><see cref="Guid"/> of the party.</param>
         /// <returns>The requested party.</returns>
@@ -81,20 +108,20 @@ namespace App2Night.Service.Interface
         /// Creates a new party.
         /// </summary>
         /// <returns>The created <see cref="Party"/></returns>
-        Task<Result<Party>> CreateParty(string name, DateTime date, MusicGenre genre, string country, string cityName, string street, string houseNr, string zipcode, PartyType type, string description);
+        Task<Result<Party>> CreateParty(string name, DateTime date, MusicGenre genre, string country, string cityName, string street, string houseNr, string zipcode, PartyType type, string description, int price);
 
         /// <summary>
         /// Deletes a party.
         /// </summary>
-        /// <param name="id"><see cref="Guid"/> of the party.</param>
+        /// <param name="partyId"><see cref="Guid"/> of the party.</param>
         /// <returns>Request result.</returns>
-        Task<Result> DeleteParty(Guid id);
+        Task<Result> DeleteParty(Guid partyId);
 
         /// <summary>
         /// Updates an existing party.
         /// </summary>
         /// <returns></returns>
-        Task<Result> UpdateParty();
+        Task<Result> UpdateParty(Party party);
 
         /// <summary>
         /// Updates an existing user.
@@ -135,5 +162,9 @@ namespace App2Night.Service.Interface
         /// </summary>
         /// <returns></returns>
         Task<Result> RefreshToken();
+
+        Task<Result> ChangeCommitmentState(Guid partyId, PartyCommitmentState commitmentState);
+
+        Task<Result> RateParty(Guid partyId, int general, int price, int location, int mood);
     }
 }

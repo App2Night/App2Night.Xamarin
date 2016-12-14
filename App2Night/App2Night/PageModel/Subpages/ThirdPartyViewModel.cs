@@ -71,7 +71,7 @@ namespace App2Night.PageModel.SubPages
                 if (value != null)
                 {
                     var license = value;  
-                    FreshIOC.Container.Resolve<NavigationViewModel>().OpenLicenseCommand.Execute(license);
+                    Device.BeginInvokeOnMainThread(async ()=> await CoreMethods.PushPageModel<ThirdPartyInfoViewModel>(license)); 
                 }
             }
         }

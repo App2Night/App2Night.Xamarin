@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
-using App2Night.DependencyService;
+using App2Night.Data.Language;
 using App2Night.Model.Model;
 using App2Night.PageModel;
 using App2Night.PageModel.SubPages;
-using FreshMvvm; 
+using FreshMvvm;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -16,17 +15,11 @@ namespace App2Night.CustomView.View
     /// </summary>
     public class PartyPreviewView : PreviewView
     {
+        private static int _defaultFontSize = 16;
+        private static int _defaultIconSize = 50;
         #region Views
-
         private Party Party => (Party) Item;
-        private MapWrapper _map;
-
-        Button _routeBtn = new Button
-        {
-            Text = "Route",
-            HorizontalOptions = LayoutOptions.Center
-        };
-
+        private readonly MapWrapper _map;
         Style _infoLabelStyle = new Style(typeof(Label))
         {
             Setters =
@@ -39,103 +32,246 @@ namespace App2Night.CustomView.View
             }
         };
 
-        private readonly IUserLocationService _userLocationService =
-            Xamarin.Forms.DependencyService.Get<IUserLocationService>();
+        Label _generalRateLabel = new Label
+        {
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.End,
+            FontSize = _defaultFontSize,
+        };
 
-        private readonly TapGestureRecognizer _closeTapGestureRecognizer = new TapGestureRecognizer();
+        Label _priceRateLabel = new Label
+        {
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.End,
+            FontSize = _defaultFontSize,
+        };
 
+        Label _locationRateLabel = new Label
+        {
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.End,
+            FontSize = _defaultFontSize,
+        };
+
+        Label _moodRateLabel = new Label
+        {
+            HorizontalOptions = LayoutOptions.Center,
+            VerticalOptions = LayoutOptions.End,
+            FontSize = _defaultFontSize,
+        };
+        Label _dateLabel, _startTimeLabel, _genreLabel, _priceLabel;
+        private Frame _ratingFrame;
         #endregion
 
         public PartyPreviewView(Party party, double parentHeight, double parentWidth) : base(party.Name, party)
         {
             BackgroundColor = Color.White;
-            // set button to calculate route
-            _routeBtn.Clicked += OpenNavigationToParty;
-            Coordinates userCoordinates = _userLocationService.GetUserCoordinates();
-            _map = new MapWrapper(new Map(MapSpan.FromCenterAndRadius(
-                new Position(userCoordinates.Latitude, userCoordinates.Longitude),
-                Distance.FromMiles(0.3)))
+            // Set Label for Information of party
+            DescriptionLabel(out _dateLabel, out _startTimeLabel, out _genreLabel, out _priceLabel);
+            SetBindings();
+            MoreEvent += OnMoreEventTapped;
+            _map = SetMap(party);
+            // Set HeightRepuest
+            _map.Map.HeightRequest = 3*(parentWidth/5);
+            var layoutGrid = CreateInputs();
+            // Set columnSpan of rateButton to centrate 
+            // Set HeightRequest 
+            HeightRequest = parentWidth * 2 / 3.0;
+            Content = new ScrollView { Content = layoutGrid };
+        }
+
+        /// <summary>
+        /// Sets MapWrapper with Poisitions of Party.
+        /// </summary>
+        /// <param name="party"></param>
+        /// <returns><see cref="MapWrapper"/> with Party position.</returns>
+        private MapWrapper SetMap(Party party)
+        {
+            var position = new Position(party.Location.Latitude, party.Location.Longitude);
+            return new MapWrapper(new Map(MapSpan.FromCenterAndRadius(
+                            position,
+                            Distance.FromMiles(0.3)))
             {
-                IsShowingUser = true
+                IsShowingUser = true,
+                Pins =
+                {
+                    new Pin
+                    {
+                        Label = party.Name,
+                        Position = position
+                    }
+                }
             });
-            Grid.SetColumnSpan(_map, 2);
+        }
 
-            var dateLabel = new Label {Style = _infoLabelStyle};
-            dateLabel.SetBinding(Label.TextProperty, "Date");
-            var startTimeLabel = new Label {Style = _infoLabelStyle};
-            startTimeLabel.SetBinding(Label.TextProperty, "Date");
-            var genreLabel = new Label {Style = _infoLabelStyle};
-            genreLabel.SetBinding(Label.TextProperty, "Genre");
+        private void SetBindings()
+        {
+            _dateLabel.SetBinding(Label.TextProperty, "Date", stringFormat: AppResources.Date);
+            _startTimeLabel.SetBinding(Label.TextProperty, "Date", stringFormat: AppResources.Time);
+            _genreLabel.SetBinding(Label.TextProperty, "MusicGenre");
+            _priceLabel.SetBinding(Label.TextProperty, "Price");
+			_generalRateLabel.SetBinding(Label.TextProperty, "GeneralAvg");
+			_priceRateLabel.SetBinding(Label.TextProperty, "PriceAvg");
+			_locationRateLabel.SetBinding(Label.TextProperty, "LocationAvg");
+			_moodRateLabel.SetBinding(Label.TextProperty, "MoodAvg");
+        }
+        /// <summary>
+        /// Initializes description label.
+        /// </summary>
+        /// <param name="dateLabel"></param>
+        /// <param name="startTimeLabel"></param>
+        /// <param name="genreLabel"></param>
+        /// <param name="priceLabel"></param>
+        private void DescriptionLabel(out Label dateLabel, out Label startTimeLabel, out Label genreLabel, out Label priceLabel)
+        {
+            dateLabel = new Label { Style = _infoLabelStyle, VerticalOptions = LayoutOptions.Center};
+            startTimeLabel = new Label { Style = _infoLabelStyle, VerticalOptions = LayoutOptions.Center };
+            genreLabel = new Label { Style = _infoLabelStyle, VerticalOptions = LayoutOptions.Center };
+            priceLabel = new Label { Style = _infoLabelStyle, VerticalOptions = LayoutOptions.Center };
+        }
+        /// <summary>
+        /// Opens either <see cref="PartyDetailViewModel"/> or <see cref="MyPartyDetailViewModel"/> if party if hosted by user.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="eventArgs"></param>
+        private void OnMoreEventTapped(object sender, EventArgs eventArgs)
+        {
+             FreshIOC.Container.Resolve<DashboardPageModel>().OpenMore(Party);
 
+        } 
+         
+        /// <summary>
+        /// Initialize Frame for Rating of Party.
+        /// </summary>
+        /// <returns><see cref="Frame"/></returns>
+        private Frame CreateRatingColumns()
+        {
+            return new Frame
+            {
+                Content = new Grid
+                {
+                    ColumnDefinitions = new ColumnDefinitionCollection
+                    {
+                        new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                        new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                        new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                        new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
+                    },
+                    RowDefinitions = new RowDefinitionCollection
+                    {
+                      new RowDefinition {Height = new GridLength(100, GridUnitType.Absolute)},
+                    },
+                    Children =
+                    {
+                        // Location Rating 
+                        {
+                            new Label
+                            {
+                                Text = "\uf015",
+                                FontFamily = "FontAwesome",
+                                TextColor = Color.Gray.MultiplyAlpha(0.3),
+                                FontSize = _defaultIconSize,
+                                HorizontalOptions = LayoutOptions.Center,
+                                VerticalOptions = LayoutOptions.Start,
+                            },
+                            0, 0
+                        },
+                        {_locationRateLabel, 0, 0},
+                        // Price Rating
+                        {
+                            new Label
+                            {
+                                Text = "\uf155",
+                                FontFamily = "FontAwesome",
+                                TextColor = Color.Gray.MultiplyAlpha(0.3),
+                                FontSize = _defaultIconSize,
+                                HorizontalOptions = LayoutOptions.Center,
+                                VerticalOptions = LayoutOptions.Start,
+                            },
+                            1, 0
+                        },
+                        {_priceRateLabel, 1, 0},
+                        // Mood Rating 
+                        {
+                            new Label
+                            {
+                                Text = "\uf118",
+                                FontFamily = "FontAwesome",
+                                TextColor = Color.Gray.MultiplyAlpha(0.3),
+                                FontSize = _defaultIconSize,
+                                HorizontalOptions = LayoutOptions.Center,
+                                VerticalOptions = LayoutOptions.Start,
+                            },
+                            2, 0
+                        },
+                        {_moodRateLabel, 2, 0},
+                        // General Rating
+                        {
+                            new Label
+                            {
+                                Text = "\uf29b",
+                                FontFamily = "FontAwesome",
+                                TextColor = Color.Gray.MultiplyAlpha(0.3),
+                                FontSize = _defaultIconSize,
+                                HorizontalOptions = LayoutOptions.Center,
+                                VerticalOptions = LayoutOptions.Start,
+                            },
+                            3, 0
+                        },
+                        {_generalRateLabel, 3, 0},
+                    }
+                }
+            };
+        }
+
+        /// <summary>
+        /// Creates <see cref="StackLayout"/> with map, rating and description of party.
+        /// </summary>
+        /// <returns></returns>
+        private StackLayout CreateInputs()
+        {
+            // Set ResourceDictionary 
             var views = new ResourceDictionary()
             {
-                {"Date", dateLabel},
-                {"Start time", startTimeLabel},
-                {"Genre", genreLabel}
+                {"\uf073", _dateLabel},
+                {"\uf017", _startTimeLabel},
+                {"\uf001", _genreLabel},
+                {"\uf155", _priceLabel}
             };
-
-            var layoutGrid = new Grid()
+            var descriptionGrid = new Grid
             {
                 RowDefinitions =
                 {
-                    new RowDefinition {Height = new GridLength(200, GridUnitType.Absolute)}
+                    new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)}
                 },
                 ColumnDefinitions =
                 {
-                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
-                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Auto)},
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Auto)}
                 },
-                Children =
-                {
-                    _map
-                }
             };
             int rowCounter = 1;
             foreach (KeyValuePair<string, object> valuePair in views)
             {
-                layoutGrid.RowDefinitions.Add(new RowDefinition {Height = new GridLength(1, GridUnitType.Star)});
-                layoutGrid.Children.Add(
-                    new Label {Text = valuePair.Key, Style = _infoLabelStyle, HorizontalOptions = LayoutOptions.Start},
-                    0, rowCounter);
-                layoutGrid.Children.Add((Xamarin.Forms.View) valuePair.Value, 1, rowCounter);
+                descriptionGrid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
+                descriptionGrid.Children.Add(new Label { Text = valuePair.Key, Style = _infoLabelStyle, HorizontalOptions = LayoutOptions.Start, FontFamily = "FontAwesome", FontSize = _defaultIconSize, VerticalOptions = LayoutOptions.Center }, 0, rowCounter);
+                descriptionGrid.Children.Add((Xamarin.Forms.View)valuePair.Value, 1, rowCounter);
                 rowCounter++;
             }
-            HeightRequest = parentWidth*2/3.0;
-            Content = new ScrollView {Content = layoutGrid};
+            return new StackLayout
+            {
+                Children =
+                {
+                    _map,
+                    (_ratingFrame = CreateRatingColumns()),
+                    new Frame
+                    {
+                        Content = descriptionGrid,
+                        Margin = 5,
+                        Padding = 5,
+                    },
+                }
+            };
         }
-
-        #region Events
-        /// <summary>
-        /// Change view to PartyDetailPage, if btn is pressed.
-        /// </summary>
-        public override void More()
-        {
-            base.More();
-            FreshIOC.Container.Resolve<NavigationViewModel>().OpenMore(Party);
-        }
-
-        protected override void OnBindingContextChanged()
-        {
-            base.OnBindingContextChanged();
-            var test = BindingContext;
-        }
-        /// <summary>
-        /// Closes <code>PartyPreviewView</code>.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="eventArgs"></param>
-        private void CloseTapGestureRecognizerOnTapped(object sender, EventArgs eventArgs)
-        {
-            CloseView();
-        }
-        /// <summary>
-        /// Shows up the route from user to party.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="eventArgs"></param>
-        private void OpenNavigationToParty(object sender, EventArgs eventArgs)
-        {
-        }
-        #endregion
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using App2Night.CustomView.Page;
 using App2Night.CustomView.View;
 using App2Night.Data.Language;
 using App2Night.Model.Enum;
@@ -12,7 +13,7 @@ namespace App2Night.Page
     /// <summary>
     /// Create party page.
     /// </summary>
-    public class CreatePartyPage : FreshBaseContentPage
+    public class CreatePartyPage : CustomContentPage
     {
         //Default thicknes
         private static Thickness _defaultMargin = new Thickness(5, 0);
@@ -29,12 +30,12 @@ namespace App2Night.Page
         };
 
         private InputContainer<Editor> _descriptionEntry = new InputContainer<Editor>
-        {  
+        {
             Input =
             {
                 HeightRequest = 100
             },
-            IconCode = "\uf040", 
+            IconCode = "\uf040",
             Margin = _defaultMargin
         };
 
@@ -80,10 +81,10 @@ namespace App2Night.Page
             Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.HNumber},
         };
 
-        private InputContainer<Entry> _locationEntry = new InputContainer<Entry>
+        private InputContainer<Entry> _priceEntry = new InputContainer<Entry>
         {
-            Input = {Placeholder = AppResources.Location},
-            IconCode = "\uf015",
+            Input = {Placeholder = AppResources.Location, Keyboard = Keyboard.Numeric},
+            IconCode = "\uf155",
             Margin = _defaultMargin
         };
 
@@ -92,16 +93,25 @@ namespace App2Night.Page
             Input = {Keyboard = Keyboard.Numeric, Placeholder = AppResources.Zipcode},
         };
 
+        private InputContainer<Entry> _priceContainer = new InputContainer<Entry>
+        {
+            Input = {Keyboard = Keyboard.Numeric, Placeholder = "Price"}, //RESOURCE
+            IconCode = "\uf155",
+            Margin = _defaultMargin
+        };
+
         private CustomButton _clearButton = new CustomButton
         {
             Text = "\uf1f8",
             ButtonLabel = {FontFamily = "FontAwesome", FontSize = 50},
+            IsEnabled = false
         };
 
         private CustomButton _acceptButton = new CustomButton
         {
             Text = "\uf00c",
             ButtonLabel = {FontFamily = "FontAwesome", FontSize = 50},
+            IsEnabled = false
         };
 
         private Map _headerMap = new Map();
@@ -143,18 +153,20 @@ namespace App2Night.Page
             Grid.SetRowSpan(inputRows, 2);
             Grid.SetColumnSpan(inputRows, 2);
 
+            //SKIA Replace with gradient layer
             var gradientLayer = new BoxView
             {
-                Color = Color.Gray.MultiplyAlpha(0.2)
-            }; 
+                Color = Color.White.MultiplyAlpha(0.3)
+            };
+
 
             Content = new Grid
             {
                 RowSpacing = 0,
                 ColumnDefinitions =
                 {
-                  new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
-                  new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)} 
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
                 },
                 RowDefinitions =
                 {
@@ -164,11 +176,10 @@ namespace App2Night.Page
                 Children =
                 {
                     inputRows,
-                    //{gradientLayer, 0, 1},
-                    {_clearButton, 0, 1 },
-                    {_acceptButton, 1,1 }
+                    {gradientLayer, 0, 1},
+                    {_clearButton, 0, 1},
+                    {_acceptButton, 1, 1}
                 }
-
             };
 
             Grid.SetColumnSpan(gradientLayer, 2);
@@ -183,40 +194,64 @@ namespace App2Night.Page
                     Spacing = 5,
                     Children =
                     {
-                        _nameEntry,
-                        _descriptionEntry,
-                        _musicGenreSwitch,
-                        _datePicker,
-                        _timePicker,
-                        _map,
-                        _locationEntry,
-                        new Grid
+                        new Frame
                         {
-                            ColumnDefinitions =
+                            Margin = 5,
+                            Padding = 0,
+                            Content = new StackLayout
                             {
-                                new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
-                                new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                                Children =
+                                {
+                                    _nameEntry,
+                                    _descriptionEntry,
+                                    _priceEntry,
+                                    _musicGenreSwitch,
+                                    _datePicker,
+                                    _timePicker,
+                                },
+                                Spacing = 5
                             },
-                            Children =
-                            {
-                                {_streetEntry, 0, 0},
-                                {_numberEntry, 1, 0}
-                            },
-                            Margin = _defaultMargin
                         },
-                        new Grid
+                        new Frame
                         {
-                            ColumnDefinitions =
+                            Margin = 5,
+                            Padding = 0,
+                            Content = new StackLayout
                             {
-                                new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
-                                new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                                Children =
+                                {
+                                    _map, 
+                                    new Grid
+                                    {
+                                        ColumnDefinitions =
+                                        {
+                                            new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
+                                            new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                                        },
+                                        Children =
+                                        {
+                                            {_streetEntry, 0, 0},
+                                            {_numberEntry, 1, 0}
+                                        },
+                                        Margin = _defaultMargin
+                                    },
+                                    new Grid
+                                    {
+                                        ColumnDefinitions =
+                                        {
+                                            new ColumnDefinition {Width = new GridLength(3, GridUnitType.Star)},
+                                            new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
+                                        },
+                                        Children =
+                                        {
+                                            {_cityNameEntry, 0, 0},
+                                            {_zipCodetEntry, 1, 0}
+                                        },
+                                        Margin = _defaultMargin
+                                    },
+                                },
+                                Spacing = 5
                             },
-                            Children =
-                            {
-                                {_cityNameEntry, 0, 0},
-                                {_zipCodetEntry, 1, 0}
-                            },
-                            Margin = _defaultMargin
                         },
                         new BoxView
                         {
@@ -231,8 +266,8 @@ namespace App2Night.Page
         private void SetBindings()
         {
             //Buttons
-            _acceptButton.SetBinding(IsEnabledProperty, nameof(CreatePartyViewModel.AcceptButtonEnabled));
-            _clearButton.SetBinding(IsEnabledProperty, nameof(CreatePartyViewModel.DeleteButtonEnabled));
+            _acceptButton.SetBinding(CustomButton.IsEnabledProperty, nameof(CreatePartyViewModel.AcceptButtonEnabled));
+            _clearButton.SetBinding(CustomButton.IsEnabledProperty, nameof(CreatePartyViewModel.ClearButtonEnabled));
 
             _acceptButton.SetBinding(CustomButton.CommandProperty, "CreatePartyCommand");
             _clearButton.SetBinding(CustomButton.CommandProperty, nameof(CreatePartyViewModel.ClearFormCommand));
@@ -241,6 +276,7 @@ namespace App2Night.Page
             _image.SetBinding(Image.SourceProperty, "Image");
             _image.GestureRecognizers.Add(_tapGesture);
 
+            _priceContainer.Input.SetBinding(Entry.TextProperty, "Price");
 
             _nameEntry.Input.SetBinding(Entry.TextProperty, "Name");
 
@@ -253,7 +289,6 @@ namespace App2Night.Page
             _musicGenreSwitch.Input.SetBinding(EnumBindablePicker<MusicGenre>.SelectedItemProperty, "MusicGenre");
             // date and time
             _datePicker.Input.SetBinding(DatePicker.DateProperty, "Date");
-            _datePicker.SetBinding(InputContainer<DatePicker>.InputValidateProperty, "ValidDate");
 
             _timePicker.Input.SetBinding(TimePicker.TimeProperty, "Time");
             // address
@@ -267,14 +302,10 @@ namespace App2Night.Page
             _numberEntry.Input.SetBinding(Entry.TextProperty, "HouseNumber");
             _numberEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, "ValidHousenumber");
 
-            _locationEntry.Input.SetBinding(Entry.TextProperty, "LocationName");
-            _locationEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, "ValidLocationname");
+            _priceEntry.Input.SetBinding(Entry.TextProperty, "Price"); 
 
             _zipCodetEntry.Input.SetBinding(Entry.TextProperty, "Zipcode");
             _zipCodetEntry.SetBinding(InputContainer<Entry>.InputValidateProperty, "ValidZipcode");
-
-            //Buttons
-           
         }
 
         protected override void OnSizeAllocated(double width, double height)
@@ -294,58 +325,5 @@ namespace App2Night.Page
                 ((InputContainer<Entry>) sender).Input.Text = text; //Set the Old value
             }
         }
-
-        #region Events
-
-        private async void MediaPicker(Object o, EventArgs e)
-        {
-            //await CrossMedia.Current.Initialize();
-
-            //if (!CrossMedia.Current.IsCameraAvailable || !CrossMedia.Current.IsTakePhotoSupported)
-            //{
-            //    await DisplayAlert("No Camera", ":( No camera available.", "OK");
-            //}
-
-            //var file = await CrossMedia.Current.TakePhotoAsync(new Plugin.Media.Abstractions.StoreCameraMediaOptions
-            //{
-            //    Directory = "Sample",
-            //    Name = "test.jpg"
-            //});
-
-            //if (file == null)
-
-            //await DisplayAlert("File Location", file.Path, "OK");
-
-            //_image.Source = ImageSource.FromStream(() =>
-            //{
-            //    var stream = file.GetStream();
-            //    file.Dispose();
-            //    return stream;
-            //});
-        }
-
-
-        /*
-        /// <summary>
-        /// Tappeds the animation.
-        /// </summary>
-        /// <param name="view">View.</param>
-        void TappedAnimation(Xamarin.Forms.View view)
-        {
-            var animation = new Animation(d => { view.Scale = d; }, 1, 1.6);
-            var nextAnimation = new Animation(d => { view.Scale = d; }, 1.6, 1);
-            animation.Commit(this, "Scale", length: 250, finished: delegate { nextAnimation.Commit(this, "Descale"); });
-        }
-
-        protected override void OnDisappearing()
-        {
-            // reset event handler
-            _acceptButton.ButtonTapped -= Accept;
-            _clearButton.ButtonTapped -= Delete;
-            base.OnDisappearing();
-        } 
-        */
-
-        #endregion
     }
 }

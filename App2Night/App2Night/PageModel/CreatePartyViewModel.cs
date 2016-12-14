@@ -1,8 +1,10 @@
-﻿using System;
-using System.Threading;
+﻿using System; 
+using System.Net; 
 using System.Threading.Tasks;
+using Acr.UserDialogs;
 using App2Night.Model.Enum;
 using App2Night.Model.Model;
+using App2Night.PageModel.SubPages;
 using App2Night.Service.Helper;
 using App2Night.Service.Interface;
 using FreshMvvm;
@@ -19,19 +21,32 @@ namespace App2Night.PageModel
         string _zipcode;
 		string _houseNumber;
         private string _cityName;
+        private int _price;
 
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled),nameof(DeleteButtonEnabled))] 
+
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled),nameof(ClearButtonEnabled))] 
         public string Name { get; set; }
 
         [AlsoNotifyFor(nameof(ValidDescription))]
         public string Description { get; set; }
+
+        public string Price
+        {
+            get { return _price.ToString(); }
+            set
+            {
+                var newPrice = int.Parse(value);
+                if(newPrice >= 0)
+                    _price = newPrice;
+            }
+        }
 
         public MusicGenre MusicGenre { get; set; }
 
         public TimeSpan Time { get; set; }
 
         [AlsoNotifyFor(nameof(ValidDate))]
-        public DateTime Date { get; set; }
+        public DateTime Date { get; set; } = DateTime.Today;
          
         public string StreetName
 		{
@@ -51,10 +66,7 @@ namespace App2Night.PageModel
                 _cityName = value;
                 StartLocationValidation();
             } 
-        }
-
-        [AlsoNotifyFor(nameof(ValidLocationname))]
-        public string LocationName { get; set; }
+        } 
 
         public string Zipcode
 		{
@@ -77,143 +89,149 @@ namespace App2Night.PageModel
             }
 		}
 
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))] 
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(ClearButtonEnabled))] 
         public bool ValidStreetname { get; private set; }
 
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(ClearButtonEnabled))]
         public bool ValidCityname { get; private set; }
 
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(ClearButtonEnabled))]
         public bool ValidHousenumber { get; private set; }
 
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))] 
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(ClearButtonEnabled))] 
         public bool ValidZipcode { get; private set; }
-
+         
         public bool AcceptButtonEnabled
         {
             get
-            {
-                return ValidCityname
-                       && ValidDate
+            {  
+                var enabled =
+                       ValidCityname 
                        && ValidDescription
-                       && ValidHousenumber
-                       && ValidLocationname
+                       && ValidHousenumber 
                        && ValidName
                        && ValidZipcode
                        && ValidStreetname;
+                return enabled;
             }
         }
 
-        public bool DeleteButtonEnabled
+        public bool ClearButtonEnabled
         {
             get
             {
-                return !(string.IsNullOrEmpty(CityName)
-                         && string.IsNullOrEmpty(Name)
-                         && string.IsNullOrEmpty(Description)
-                         && string.IsNullOrEmpty(Zipcode)
-                         && string.IsNullOrEmpty(StreetName)
-                         && string.IsNullOrEmpty(HouseNumber)
-                         && string.IsNullOrEmpty(LocationName));
+                var enabled = !(string.IsNullOrEmpty(CityName)
+                                && string.IsNullOrEmpty(Name)
+                                && string.IsNullOrEmpty(Description)
+                                && string.IsNullOrEmpty(Zipcode)
+                                && string.IsNullOrEmpty(StreetName)
+                                && string.IsNullOrEmpty(HouseNumber));
+                return enabled;
             }
-        }
+        } 
 
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
-        public bool ValidLocationname => ValidateLocationname();
-
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(ClearButtonEnabled))]
         public bool ValidDate => ValidateDate();
 
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(ClearButtonEnabled))]
         public bool ValidName => ValidateName();
 
-        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(DeleteButtonEnabled))]
+        [AlsoNotifyFor(nameof(AcceptButtonEnabled), nameof(ClearButtonEnabled))]
         public bool ValidDescription => ValidateDescription();
 
         public Command CreatePartyCommand => new Command(async () => await CreateParty());
-        public Command ClearFormCommand => new Command(ClearForm);
+        public Command ClearFormCommand => new Command(ClearForm); 
 
         private void ClearForm()
         {
             Zipcode = string.Empty;
             CityName = string.Empty;
             StreetName = string.Empty;
-            HouseNumber = string.Empty;
-            LocationName = string.Empty;
+            HouseNumber = string.Empty; 
             Name = string.Empty;
             Description = string.Empty;
         }
 
         public bool ValidateDate()
         {
-            return Date >= DateTime.Today && Date <= DateTime.Today.AddMonths(12);
-        } 
-
-        private bool ValidateLocationname()
-        {
-            return !string.IsNullOrEmpty(LocationName);
-        }
+            return Date > DateTime.Today && Date <= DateTime.Today.AddMonths(12);
+        }  
 
         bool ValidateName()
         {
-            return !string.IsNullOrEmpty(Name) && Name.Length > 3;
+            return !string.IsNullOrEmpty(Name) && Name.Length <= 32;
         }
 
         bool ValidateDescription()
 		{
-			return !string.IsNullOrEmpty(Description);
+			return !string.IsNullOrEmpty(Description) && Description.Length <= 256;
 		}
 
         private async Task CreateParty()
         {
-            var dateTime = new DateTime(Date.Year, Date.Month, Date.Day, Time.Hours, Time.Minutes, 0);
-            var result = await
-                    FreshIOC.Container.Resolve<IDataService>()
-                        .CreateParty(Name, dateTime, MusicGenre, "Germany", CityName, StreetName, HouseNumber, Zipcode,
-                            PartyType.Bar, Description);
+            using (UserDialogs.Instance.Loading("Creating Party")) //RESOURCE 
+            {
+                var dateTime = new DateTime(Date.Year, Date.Month, Date.Day, Time.Hours, Time.Minutes, 0);
+                var result = await
+                        FreshIOC.Container.Resolve<IDataService>()
+                            .CreateParty(Name, dateTime, MusicGenre, "Germany", CityName, StreetName, HouseNumber, Zipcode,
+                                PartyType.Bar, Description, _price);
+
+                if (result.Success)
+                {
+                    //The user should come to the dashboard after popping the party detail page.
+                    await CoreMethods.SwitchSelectedMaster<DashboardPageModel>();
+
+                    await CoreMethods.PushPageModel<MyPartyDetailViewModel>(result.Data);
+                }
+                else
+                {
+                    //TODO Handle failure
+                }
+            }   
         }
 
-        DateTime _lastLocationChange = new DateTime();
+        #region location validation
+         
+        private DateTime _lastInputTime;
 
-        private CancellationTokenSource _lastCancellationTokenSource; 
+        private Task _validationTask;
 
+        /// <summary>
+        /// Starts a task that sets a timestamp to the current time and starts the validation when the time between the timestamp and the current time is greater then 500 ms.
+        /// Calling this method while the task is still running will reset the timestamp to the current time.
+        /// </summary>
         private void StartLocationValidation()
         {
-            if (_lastCancellationTokenSource != null)
+            if (_validationTask!= null && !_validationTask.IsCompleted)
             {
-                _lastCancellationTokenSource.Cancel();
-                _lastCancellationTokenSource.Dispose();
+                _lastInputTime = DateTime.Now;
             }
-                
-            _lastCancellationTokenSource = new CancellationTokenSource(); 
-            var task =Task.Run(async () =>
+            else
             {
-                try
+                _validationTask = Task.Run(async () =>
                 {
-                    var timestamp = DateTime.Now;
-                    _lastLocationChange = timestamp;
-                    //Wait for another user input that cancels this task
-                    await Task.Delay(1000);
-                    //Check if this was the last user input
-                    if (timestamp == _lastLocationChange)
+                    _lastInputTime = DateTime.Now;
+                    try
                     {
+                        while ((DateTime.Now - _lastInputTime).TotalMilliseconds < 500)
+                        {
+                            await Task.Delay(50);
+                        } 
+
                         //Start location check
-                        await CheckLocation();
+                        await CheckLocation(); 
+                    } 
+                    catch (Exception e)
+                    {
+                        DebugHelper.PrintDebug(DebugType.Error, "Starting location validation process failed\n" + e);
                     }
-                }
-                catch (TaskCanceledException e)
-                {
-                    // ignored
-                }
-                catch (Exception e)
-                {
-                    DebugHelper.PrintDebug(DebugType.Error, "Starting location validation process failed\n" + e);
-                }
-            }, _lastCancellationTokenSource.Token); 
+                });
+            } 
         }
 
         private async Task CheckLocation()
-        {
+        { 
             var locationData = new Location
             {
                 CityName = CityName,
@@ -225,17 +243,21 @@ namespace App2Night.PageModel
 
             var result =await FreshIOC.Container.Resolve<IDataService>().ValidateLocation(locationData);
 
-            if (result.Success)
+            if (result.StatusCode == (int)HttpStatusCode.NotAcceptable || result.Success)
             {
                 var resLocation = result.Data;
 
-                ValidCityname = IsNameEqual(resLocation.CityName, CityName);
-                ValidZipcode = IsNameEqual(resLocation.Zipcode, Zipcode);
-                ValidStreetname = IsNameEqual(resLocation.StreetName, StreetName);
-                ValidHousenumber = IsNameEqual(resLocation.HouseNumber, HouseNumber);
+                if (IsEqualOrContains(resLocation.CityName, CityName))
+                    CityName = resLocation.CityName;
+
+                if (IsEqualOrContains(resLocation.StreetName, StreetName))
+                    StreetName = resLocation.StreetName;
+
+                ValidateAllLocationInputs(resLocation);
 
                 if (ValidCityname && IsEqualOrContains(resLocation.Zipcode, Zipcode))
-                    Zipcode = resLocation.Zipcode;
+                    Zipcode = resLocation.Zipcode; 
+               
 
                 if (IsEqualOrContains(resLocation.StreetName, StreetName))
                 {
@@ -250,8 +272,18 @@ namespace App2Night.PageModel
 
                     ValidCityname = true;
                     ValidZipcode = true;
-                }  
-            }
+                }
+
+                ValidateAllLocationInputs(resLocation);
+            } 
+        }
+
+        void ValidateAllLocationInputs(Location comparisonLocation)
+        {
+            ValidCityname = IsNameEqual(comparisonLocation.CityName, CityName);
+            ValidZipcode = IsNameEqual(comparisonLocation.Zipcode, Zipcode);
+            ValidStreetname = IsNameEqual(comparisonLocation.StreetName, StreetName);
+            ValidHousenumber = IsNameEqual(comparisonLocation.HouseNumber, HouseNumber);
         }
 
         bool IsEqualOrContains(string final, string notFinal)
@@ -276,5 +308,7 @@ namespace App2Night.PageModel
         {
             return s.ToLower().Replace(" ", "");
         }
+
+        #endregion
     }
 }

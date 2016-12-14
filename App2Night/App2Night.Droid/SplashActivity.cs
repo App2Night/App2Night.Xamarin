@@ -10,12 +10,7 @@ namespace App2Night.Droid
 {
     [Activity(Theme = "@style/MyTheme.Splash", MainLauncher = true, NoHistory = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
     public class SplashActivity : AppCompatActivity
-        { 
-        public override void OnCreate(Bundle savedInstanceState, PersistableBundle persistentState)
-        {
-            base.OnCreate(savedInstanceState, persistentState);
-            
-        }
+        {  
 
         protected override void OnResume()
         {

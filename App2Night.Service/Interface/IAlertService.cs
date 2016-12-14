@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using App2Night.Model.Enum;
 using App2Night.Model.Model;
 
 namespace App2Night.Service.Interface
@@ -27,5 +28,28 @@ namespace App2Night.Service.Interface
         /// </summary>
         /// <param name="requestResult">The login request result</param>
         void LoginFinished(Result requestResult);
+
+        /// <summary>
+        /// Informs the user, that the party commitment state of a party has changed.
+        /// </summary>
+        /// <param name="noted"></param>
+        void CommitmentStateChangedAlert(PartyCommitmentState noted, bool success);
+
+        /// <summary>
+        /// Informs the user, that refreshing of all party lists happend.
+        /// </summary>
+        Task<bool> PartyBatchRefreshFinished(IEnumerable<Result> requestBatch);
+
+        /// <summary>
+        /// Creates a popup to ask the user for location permissions.
+        /// </summary>
+        /// <returns></returns>
+        Task<bool> RequestLocationPermissions();
+
+        /// <summary>
+        /// Creates a popup to ask the user for storage permissions.
+        /// </summary>
+        /// <returns></returns>
+        Task<bool> RequestStoragePermissions();
     }
 }

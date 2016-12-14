@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using App2Night.CustomView.Template;
+using App2Night.PageModel;
+using App2Night.PageModel.SubPages;
+using App2Night.Service.Interface;
 using FreshMvvm;
 using Xamarin.Forms;
 
@@ -10,22 +14,48 @@ namespace App2Night
 {
     public sealed class CustomMasterDetailContainer : MasterDetailPage, IFreshNavigationService
     {
-        List<Xamarin.Forms.Page> _pagesInner = new List<Xamarin.Forms.Page>();
-        Dictionary<string, Xamarin.Forms.Page> _pages = new Dictionary<string, Xamarin.Forms.Page>();
-        ContentPage _menuPage;
-        ObservableCollection<string> _pageNames = new ObservableCollection<string>();
+        public class MenuCellData
+        {
+            public string Title { get; set; }
+            public string IconCode { get; set; }
 
-        public Dictionary<string, Xamarin.Forms.Page> Pages { get { return _pages; } }
+            public bool RequiresLogin { get; set; }
+        }
+
+        public IStorageService _storageService;
+        private MenuCellData _currentPageData;
+
+        List<Xamarin.Forms.Page> _pagesInner = new List<Xamarin.Forms.Page>();
+        Dictionary<MenuCellData, Xamarin.Forms.Page> _pages = new Dictionary<MenuCellData, Xamarin.Forms.Page>();
+        Page.NavigationPage _menuPage;
+        ObservableCollection<string> _pageNames = new ObservableCollection<string>();
+        private ListView ListView => _menuPage.MenuListView;
+
+        public Dictionary<MenuCellData, Xamarin.Forms.Page> Pages { get { return _pages; } }
         private ObservableCollection<string> PageNames { get { return _pageNames; } }
 
         public CustomMasterDetailContainer() : this(Constants.DefaultNavigationServiceName)
+        { 
+            _storageService = FreshIOC.Container.Resolve<IStorageService>();
+            _storageService.IsLoginChanged += LoginChanged;
+        }
+
+        private void LoginChanged(object sender, bool b)
         {
+            if (!b)
+            {
+                if (_currentPageData.RequiresLogin)
+                {
+                    SwitchSelectedRootPageModel<DashboardPageModel>();
+                }
+            }
         }
 
         public CustomMasterDetailContainer(string navigationServiceName)
         {
+
             NavigationServiceName = navigationServiceName;
-            RegisterNavigation();
+            RegisterNavigation(); 
         }
 
         public void Init(string menuTitle, string menuIcon = null)
@@ -39,17 +69,29 @@ namespace App2Night
             FreshIOC.Container.Register<IFreshNavigationService>(this, NavigationServiceName);
         }
 
-        public void AddPage<T>(string title, object data = null) where T : FreshBasePageModel
+        public void AddPage<T>(string title, string iconCode, object data = null, bool requiresLogin = false) where T : FreshBasePageModel
         {
             var page = FreshPageModelResolver.ResolvePageModel<T>(data);
             page.Title = title;
             page.GetModel().CurrentNavigationServiceName = NavigationServiceName;
             _pagesInner.Add(page);
             var navigationContainer = CreateContainerPage(page);
-            _pages.Add(title, navigationContainer);
+
+            var menuData = new MenuCellData
+            {
+                IconCode = iconCode,
+                Title = title,
+                RequiresLogin = requiresLogin
+            };
+
+            _pages.Add(menuData, navigationContainer);
             _pageNames.Add(title);
             if (_pages.Count == 1)
+            {
+                _currentPageData = menuData;
                 Detail = navigationContainer;
+                ListView.SelectedItem = menuData;
+            }
         }
 
         internal Xamarin.Forms.Page CreateContainerPageSafe(Xamarin.Forms.Page page)
@@ -64,28 +106,23 @@ namespace App2Night
         {
             return new NavigationPage(page);
         }
-        ListView listView;
 
         private void CreateMenuPage(string menuPageTitle, string menuIcon = null)
         {
-            _menuPage = new ContentPage();
-            _menuPage.Title = menuPageTitle;
-            listView = new ListView();
+            _menuPage = (Page.NavigationPage)FreshPageModelResolver.ResolvePageModel<NavigationViewModel>();
 
-            listView.ItemsSource = _pageNames;
+            ListView.ItemsSource = _pages.Keys;
+            ListView.ItemTemplate = new DataTemplate(typeof(MenuTemplate));
 
-            listView.ItemSelected += (sender, args) => {
-                if (_pages.ContainsKey((string)args.SelectedItem))
-                {
-                    Detail = _pages[(string)args.SelectedItem];
-                }
+            ListView.ItemSelected += SelectedItemChanged;
 
-                IsPresented = false;
-            };
 
-            _menuPage.Content = listView;
-
-            var navPage = new NavigationPage(_menuPage) { Title = "Menu" };
+            //_menuPage = new Page.SubPages.NavigationPage(_listView)
+            //{
+            //    BindingContext = FreshIOC.Container.Resolve<NavigationViewModel>(),
+            //    Title = menuPageTitle
+            //};
+            var navPage = _menuPage;
 
             if (!string.IsNullOrEmpty(menuIcon))
                 navPage.Icon = menuIcon;
@@ -93,17 +130,48 @@ namespace App2Night
             Master = navPage;
         }
 
+
+        private async void SelectedItemChanged(object sender, SelectedItemChangedEventArgs selectedItemChangedEventArgs)
+        { 
+            var selectedItem = (MenuCellData)selectedItemChangedEventArgs.SelectedItem;
+
+            if (selectedItem != _currentPageData)
+            {
+                var isLoggedIn = _storageService.IsLogIn;
+                if (selectedItem.RequiresLogin && !isLoggedIn)
+                {
+                    //Prompt with login page.
+                    var loginPage = FreshPageModelResolver.ResolvePageModel<LoginViewModel>();
+                    await PushPage(loginPage, null, true);
+                    //TODO fast forward user to the desired page if the login succeeds
+
+                    //Set the selected item back to the current page.
+                    ListView.SelectedItem = _currentPageData;
+                }
+                else
+                {   
+                    Detail = _pages[selectedItem];
+                    _currentPageData = selectedItem;
+                }
+            } 
+
+            IsPresented = false;
+        }
+
         public Task PushPage(Xamarin.Forms.Page page, FreshBasePageModel model, bool modal = false, bool animate = true)
         {
-            if (modal)
+            if (IsPresented)
+                IsPresented = false;
+
+            if (modal)  
                 return Detail.Navigation.PushModalAsync(page);
 
-            KeyValuePair<string, Xamarin.Forms.Page>  innerPage = _pages.FirstOrDefault(p => ((NavigationPage)p.Value).CurrentPage.GetType() == page.GetType());
+            KeyValuePair<MenuCellData, Xamarin.Forms.Page>  innerPage = _pages.FirstOrDefault(p => ((NavigationPage)p.Value).CurrentPage.GetType() == page.GetType());
             if (innerPage.Key != null)
             {
-                return Task.FromResult(listView.SelectedItem = innerPage.Key);
-            }  
-            return (Detail as NavigationPage).PushAsync(page, animate);    
+                return Task.FromResult(ListView.SelectedItem = innerPage.Key);
+            } 
+            return (Detail as NavigationPage).PushAsync(page, animate);   
          }
 
         public Task PopPage(bool modal = false, bool animate = true)
@@ -135,9 +203,8 @@ namespace App2Night
         {
             var tabIndex = _pagesInner.FindIndex(o => o.GetModel().GetType().FullName == typeof(T).FullName);
 
-            Detail = _pages.Values.ElementAt(tabIndex); ;
-
+            ListView.SelectedItem = _pages.ElementAt(tabIndex).Key;
             return Task.FromResult((Detail as NavigationPage).CurrentPage.GetModel());
         }
-    }
+    } 
 }

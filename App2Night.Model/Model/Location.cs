@@ -1,7 +1,13 @@
-﻿namespace App2Night.Model.Model
+﻿using SQLite.Net.Attributes;
+
+namespace App2Night.Model.Model
 {
     public class Location
-    {
+    { 
+        //Table id
+        [PrimaryKey, AutoIncrement] 
+        public int Id { get; set; }
+
         public string CountryName { get; set; }
         public string CityName { get; set; }
         public string StreetName { get; set; }
