@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using App2Night.Data.Language;
 using App2Night.Model.Model;
 using App2Night.PageModel;
-using App2Night.PageModel.SubPages;
-using App2Night.ValueConverter;
 using FreshMvvm;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
@@ -32,36 +30,9 @@ namespace App2Night.CustomView.View
                 }
             }
         };
-
-        Label _generalRateLabel = new Label
-        {
-            HorizontalOptions = LayoutOptions.Center,
-            VerticalOptions = LayoutOptions.End,
-            FontSize = _defaultFontSize,
-        };
-
-        Label _priceRateLabel = new Label
-        {
-            HorizontalOptions = LayoutOptions.Center,
-            VerticalOptions = LayoutOptions.End,
-            FontSize = _defaultFontSize,
-        };
-
-        Label _locationRateLabel = new Label
-        {
-            HorizontalOptions = LayoutOptions.Center,
-            VerticalOptions = LayoutOptions.End,
-            FontSize = _defaultFontSize,
-        };
-
-        Label _moodRateLabel = new Label
-        {
-            HorizontalOptions = LayoutOptions.Center,
-            VerticalOptions = LayoutOptions.End,
-            FontSize = _defaultFontSize,
-        };
-        Label _dateLabel, _startTimeLabel, _genreLabel, _priceLabel;
-        private Frame _ratingFrame;
+        PartyRatingView _ratingView = new PartyRatingView();
+         
+        Label _dateLabel, _startTimeLabel, _genreLabel, _priceLabel; 
         #endregion
 
         public PartyPreviewView(Party party, double parentHeight, double parentWidth) : base(party.Name, party)
@@ -111,10 +82,7 @@ namespace App2Night.CustomView.View
             _startTimeLabel.SetBinding(Label.TextProperty, "Date", stringFormat: AppResources.Time);
             _genreLabel.SetBinding(Label.TextProperty, "MusicGenre");
             _priceLabel.SetBinding(Label.TextProperty, "Price");
-			_generalRateLabel.SetBinding(Label.TextProperty, "GeneralAvg", converter: new PercentageValueConverter());
-			_priceRateLabel.SetBinding(Label.TextProperty, "PriceAvg", converter: new PercentageValueConverter());
-			_locationRateLabel.SetBinding(Label.TextProperty, "LocationAvg", converter: new PercentageValueConverter());
-			_moodRateLabel.SetBinding(Label.TextProperty, "MoodAvg", converter: new PercentageValueConverter());
+            _ratingView.SetBinding(PartyRatingView.PartyProperty, ".");
         }
         /// <summary>
         /// Initializes description label.
@@ -137,93 +105,8 @@ namespace App2Night.CustomView.View
         /// <param name="eventArgs"></param>
         private void OnMoreEventTapped(object sender, EventArgs eventArgs)
         {
-             FreshIOC.Container.Resolve<DashboardPageModel>().OpenMore(Party);
-
+             FreshIOC.Container.Resolve<DashboardPageModel>().OpenMore(Party); 
         } 
-         
-        /// <summary>
-        /// Initialize Frame for Rating of Party.
-        /// </summary>
-        /// <returns><see cref="Frame"/></returns>
-        private Frame CreateRatingColumns()
-        {
-            return new Frame
-            {
-                Content = new Grid
-                {
-                    ColumnDefinitions = new ColumnDefinitionCollection
-                    {
-                        new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
-                        new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
-                        new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)},
-                        new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
-                    },
-                    RowDefinitions = new RowDefinitionCollection
-                    {
-                      new RowDefinition {Height = new GridLength(100, GridUnitType.Absolute)},
-                    },
-                    Children =
-                    {
-                        // Location Rating 
-                        {
-                            new Label
-                            {
-                                Text = "\uf015",
-                                FontFamily = "FontAwesome",
-                                TextColor = Color.Gray.MultiplyAlpha(0.3),
-                                FontSize = _defaultIconSize,
-                                HorizontalOptions = LayoutOptions.Center,
-                                VerticalOptions = LayoutOptions.Start,
-                            },
-                            0, 0
-                        },
-                        {_locationRateLabel, 0, 0},
-                        // Price Rating
-                        {
-                            new Label
-                            {
-                                Text = "\uf155",
-                                FontFamily = "FontAwesome",
-                                TextColor = Color.Gray.MultiplyAlpha(0.3),
-                                FontSize = _defaultIconSize,
-                                HorizontalOptions = LayoutOptions.Center,
-                                VerticalOptions = LayoutOptions.Start,
-                            },
-                            1, 0
-                        },
-                        {_priceRateLabel, 1, 0},
-                        // Mood Rating 
-                        {
-                            new Label
-                            {
-                                Text = "\uf118",
-                                FontFamily = "FontAwesome",
-                                TextColor = Color.Gray.MultiplyAlpha(0.3),
-                                FontSize = _defaultIconSize,
-                                HorizontalOptions = LayoutOptions.Center,
-                                VerticalOptions = LayoutOptions.Start,
-                            },
-                            2, 0
-                        },
-                        {_moodRateLabel, 2, 0},
-                        // General Rating
-                        {
-                            new Label
-                            {
-                                Text = "\uf29b",
-                                FontFamily = "FontAwesome",
-                                TextColor = Color.Gray.MultiplyAlpha(0.3),
-                                FontSize = _defaultIconSize,
-                                HorizontalOptions = LayoutOptions.Center,
-                                VerticalOptions = LayoutOptions.Start,
-                            },
-                            3, 0
-                        },
-                        {_generalRateLabel, 3, 0},
-                    }
-                }
-            };
-        }
 
         /// <summary>
         /// Creates <see cref="StackLayout"/> with map, rating and description of party.
@@ -264,7 +147,7 @@ namespace App2Night.CustomView.View
                 Children =
                 {
                     _map,
-                    (_ratingFrame = CreateRatingColumns()),
+                    _ratingView,
                     new Frame
                     {
                         Content = descriptionGrid,

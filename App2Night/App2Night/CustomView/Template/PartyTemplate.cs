@@ -116,6 +116,7 @@ namespace App2Night.CustomView.Template
 
             View = new Frame
             {
+              HasShadow = Device.OS == TargetPlatform.Android,
               Content  = _grid,
               Padding = 0,
               Margin = 5

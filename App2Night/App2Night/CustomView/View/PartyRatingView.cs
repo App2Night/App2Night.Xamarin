@@ -169,7 +169,7 @@ namespace App2Night.CustomView.View
             for (int i = 0; i < 3; i++)
             {
                 var column = i*2 + 1;
-                var spacer = new BoxView {Color = Color.Accent};
+                var spacer = new BoxView {Color = Color.Gray.MultiplyAlpha(0.7)};
                 Children.Add(spacer, column, 0);
             }
 

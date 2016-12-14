@@ -22,6 +22,11 @@ namespace App2Night.Page.SubPages
 
 		#region Views
 
+	    private PartyRatingView _ratingView = new PartyRatingView
+	    {
+	        RatingVisible = false
+	    };
+
 		private InputContainer<Entry> _nameEntry = new InputContainer<Entry>
 		{
 			Input = { Placeholder = AppResources.PartyName, IsEnabled = false },
@@ -262,6 +267,7 @@ namespace App2Night.Page.SubPages
 				{
 					Children =
 					{
+                        _ratingView,
                         // Description of Party
                         new Frame
 						{
@@ -477,7 +483,10 @@ namespace App2Night.Page.SubPages
 			//Participants
 			_gallerieView.SetBinding(GallerieView.ItemSourceProperty, "Party.Participants");
 			_gallerieView.SetBinding(GallerieView.IsVisibleProperty, "ParticipantsVisible");
-		}
+
+            _ratingView.SetBinding(PartyRatingView.PartyProperty, "Party");
+
+        }
 
 		protected override void OnDisappearing()
 		{
