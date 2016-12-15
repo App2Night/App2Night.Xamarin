@@ -118,300 +118,300 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
-    <value>Über diese App</value>
-  </data>
-  <data name="AboutTitle" xml:space="preserve">
-    <value>About this App</value>
+    <value>Allgemein</value>
   </data>
   <data name="AcceptAgb" xml:space="preserve">
-    <value>I accept the terms and conditions.</value>
-  </data>
-  <data name="AcceptingParty" xml:space="preserve">
-    <value>Accepting party</value>
-  </data>
-  <data name="Address" xml:space="preserve">
-    <value>Address</value>
-  </data>
-  <data name="AgbAcception" xml:space="preserve">
-    <value>I confirm all general terms and condition's.</value>
-  </data>
-  <data name="AgbContent" xml:space="preserve">
-    <value>Read AGB</value>
-  </data>
-  <data name="AgbHeader" xml:space="preserve">
-    <value>AGB of this App</value>
-  </data>
-  <data name="Age" xml:space="preserve">
-    <value>Age</value>
-  </data>
-  <data name="Cancel" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
-  <data name="Cityname" xml:space="preserve">
-    <value>City</value>
-  </data>
-  <data name="ClearCache" xml:space="preserve">
-    <value>Clear Cache</value>
-  </data>
-  <data name="ClearCacheSettingsHeader" xml:space="preserve">
-    <value>Cache Settings</value>
-  </data>
-  <data name="ClearCacheUsage" xml:space="preserve">
-    <value>It will delete local caches on device. Your aren't able anymore to load cached parties.</value>
-  </data>
-  <data name="ClearCacheValid" xml:space="preserve">
-    <value>Do you really want to clear all cache?.</value>
-  </data>
-  <data name="CommitmentChangeFailed" xml:space="preserve">
-    <value>Changing the commitment state failed</value>
-  </data>
-  <data name="CommitmentStateChangedTo" xml:space="preserve">
-    <value>Commitment state changed to {0}</value>
-  </data>
-  <data name="ContHistory" xml:space="preserve">
-    <value>You didn't attend to a party yet! Former parties will be visible here.</value>
-  </data>
-  <data name="ContIntParty" xml:space="preserve">
-    <value>There are no parties that fit your interests. Try to modify your search filters.</value>
+    <value>Hiermit bestätige ich die AGB's.</value>
   </data>
   <data name="ContinueAnonymous" xml:space="preserve">
-    <value>Continue anonym</value>
-  </data>
-  <data name="ContMyParty" xml:space="preserve">
-    <value>You didn't enter a party yet. Tab to start searching.</value>
-  </data>
-  <data name="Create" xml:space="preserve">
-    <value>Create</value>
+    <value>Ohne Anmeldung fortfahren</value>
   </data>
   <data name="CreateAParty" xml:space="preserve">
-    <value>Create a party</value>
-  </data>
-  <data name="CreateParty" xml:space="preserve">
-    <value>Create Party</value>
-  </data>
-  <data name="CreateUser" xml:space="preserve">
-    <value>Creating user</value>
-  </data>
-  <data name="Dashboard" xml:space="preserve">
-    <value>Dashboard</value>
-  </data>
-  <data name="Date" xml:space="preserve">
-    <value>{0:MM/dd/yyyy}</value>
-  </data>
-  <data name="DateString" xml:space="preserve">
-    <value>Datum</value>
-  </data>
-  <data name="DateTime" xml:space="preserve">
-    <value>Date</value>
-  </data>
-  <data name="Delete" xml:space="preserve">
-    <value>Delete</value>
-  </data>
-  <data name="Description" xml:space="preserve">
-    <value>Description</value>
-  </data>
-  <data name="Edit" xml:space="preserve">
-    <value>Edit</value>
-  </data>
-  <data name="EditProfile" xml:space="preserve">
-    <value>Edit Profile</value>
+    <value>Party erstellen</value>
   </data>
   <data name="EmailAdress" xml:space="preserve">
-    <value>E-Mail Adress</value>
-  </data>
-  <data name="EnableGps" xml:space="preserve">
-    <value>Enable GPS</value>
-  </data>
-  <data name="General" xml:space="preserve">
-    <value>General</value>
-  </data>
-  <data name="GeneralContent" xml:space="preserve">
-    <value>This app is made with Xamarin.Forms connected to a Microsoft Azure Web API made with Asp.Net. You can find the sourcecode for this project at Github.</value>
-  </data>
-  <data name="GeneralInfo" xml:space="preserve">
-    <value>Thank you for using App2Night. This App is the product of a university project by Stefan Machmeier and Konrad Müller at the Baden-Wuerttemberg Cooperative State University Stuttgart - campus Horb.</value>
-  </data>
-  <data name="Genre" xml:space="preserve">
-    <value>Genre</value>
-  </data>
-  <data name="GpsSettingHeader" xml:space="preserve">
-    <value>GPS settings</value>
-  </data>
-  <data name="GpsUsage" xml:space="preserve">
-    <value>We need your position to locate parties near you. You can always disable GPS for this App and set a position manualy.</value>
-  </data>
-  <data name="History" xml:space="preserve">
-    <value>History</value>
-  </data>
-  <data name="HistoryNoContent" xml:space="preserve">
-    <value>You did not participate a party yet.</value>
-  </data>
-  <data name="HNumber" xml:space="preserve">
-    <value>Nr.</value>
-  </data>
-  <data name="IntParty" xml:space="preserve">
-    <value>Parties near you</value>
-  </data>
-  <data name="IUnderstand" xml:space="preserve">
-    <value>I understand.</value>
-  </data>
-  <data name="LoadDataFailed" xml:space="preserve">
-    <value>We were not able to load all party data, retry?</value>
-  </data>
-  <data name="LoadFailedShort" xml:space="preserve">
-    <value>Loading parties failed.</value>
-  </data>
-  <data name="Location" xml:space="preserve">
-    <value>Location</value>
-  </data>
-  <data name="LocationNotEnabled" xml:space="preserve">
-    <value>Location is not enabled for this app or available on your device.\n Activate the location for this device and restart the app to see a beautiful map here.</value>
-  </data>
-  <data name="LocationPermissions" xml:space="preserve">
-    <value>We need the permission to acccess your location to find parties near you.</value>
-  </data>
-  <data name="Login" xml:space="preserve">
-    <value>Login now!</value>
-  </data>
-  <data name="LoginFailed" xml:space="preserve">
-    <value>Login failed</value>
-  </data>
-  <data name="Logout" xml:space="preserve">
-    <value>Logout</value>
-  </data>
-  <data name="MapsNotInstalled" xml:space="preserve">
-    <value>Google maps is not installed on this device.</value>
-  </data>
-  <data name="Menu" xml:space="preserve">
-    <value>Menu</value>
-  </data>
-  <data name="MyParties" xml:space="preserve">
-    <value>My parties</value>
-  </data>
-  <data name="MyParty" xml:space="preserve">
-    <value>MyEvents</value>
-  </data>
-  <data name="No" xml:space="preserve">
-    <value>No</value>
-  </data>
-  <data name="NoNotedPartiesContent" xml:space="preserve">
-    <value>You did not note, accept or create a party yet.</value>
-  </data>
-  <data name="NotingParty" xml:space="preserve">
-    <value>Note party</value>
-  </data>
-  <data name="OfflineContent" xml:space="preserve">
-    <value>Your device is not connected to the internet.</value>
-  </data>
-  <data name="Party" xml:space="preserve">
-    <value>party</value>
+    <value>E-Mail Adresse</value>
   </data>
   <data name="PartyHistory" xml:space="preserve">
     <value>Recent parties</value>
   </data>
-  <data name="PartyName" xml:space="preserve">
-    <value>Party name</value>
-  </data>
   <data name="Password" xml:space="preserve">
-    <value>Password</value>
-  </data>
-  <data name="PermissionNeeded" xml:space="preserve">
-    <value>Permission needed</value>
+    <value>Passwort</value>
   </data>
   <data name="PickAParty" xml:space="preserve">
-    <value>Find a party</value>
+    <value>Nach Party suchen</value>
   </data>
-  <data name="PickParty" xml:space="preserve">
-    <value>Pick a Party</value>
-  </data>
-  <data name="Price" xml:space="preserve">
-    <value>Price</value>
-  </data>
-  <data name="Project" xml:space="preserve">
-    <value>Project</value>
-  </data>
-  <data name="Rate" xml:space="preserve">
-    <value>Rate!</value>
-  </data>
-  <data name="Rating" xml:space="preserve">
-    <value>Rating</value>
-  </data>
-  <data name="RejectingParty" xml:space="preserve">
-    <value>Rejecting party</value>
-  </data>
-  <data name="Reload" xml:space="preserve">
-    <value>Reload</value>
-  </data>
-  <data name="ReloadData" xml:space="preserve">
-    <value>Reload data</value>
-  </data>
-  <data name="RequestFailExplenation" xml:space="preserve">
-    <value>The last request got lost and we can't find it anymore :( Dont feel betrayed, we will handle your future requests even more carefull and give him more time! To help us handling your request, please make sure you are actually connected to the internet.</value>
-  </data>
-  <data name="SearchingPartiesFailed" xml:space="preserve">
-    <value>Searching for parties failed.</value>
-  </data>
-  <data name="Setting" xml:space="preserve">
-    <value>Setting</value>
+  <data name="GpsSettingHeader" xml:space="preserve">
+    <value>GPS Einstellungen</value>
   </data>
   <data name="Settings" xml:space="preserve">
-    <value>Settings</value>
+    <value>Einstellungen</value>
   </data>
   <data name="SignUp" xml:space="preserve">
-    <value>Sign up</value>
-  </data>
-  <data name="StartTime" xml:space="preserve">
-    <value>Start Time</value>
-  </data>
-  <data name="StoragePermissions" xml:space="preserve">
-    <value>We need to access your local storage to create a persistant user experience, the files wont be greater then 5mb and encrypted.</value>
-  </data>
-  <data name="StrName" xml:space="preserve">
-    <value>Street Name</value>
+    <value>Anmelden</value>
   </data>
   <data name="Submit" xml:space="preserve">
-    <value>Submit</value>
+    <value>Anmelden</value>
   </data>
-  <data name="SyncSuccess" xml:space="preserve">
-    <value>We successfully synchronised you parties.</value>
+  <data name="Username" xml:space="preserve">
+    <value>Benutzername</value>
   </data>
-  <data name="ThirdPartyTitle" xml:space="preserve">
-    <value>Third party librarys</value>
+  <data name="PartyName" xml:space="preserve">
+    <value>Partyname</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Beschreibung</value>
+  </data>
+  <data name="StrName" xml:space="preserve">
+    <value>Straßenname</value>
+  </data>
+  <data name="HNumber" xml:space="preserve">
+    <value>Nr.</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Ort</value>
+  </data>
+  <data name="Zipcode" xml:space="preserve">
+    <value>PLZ</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Adresse</value>
+  </data>
+  <data name="Age" xml:space="preserve">
+    <value>Alter</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>Benutzer bearbeiten</value>
+  </data>
+  <data name="CreateParty" xml:space="preserve">
+    <value>Party erstellen</value>
+  </data>
+  <data name="PickParty" xml:space="preserve">
+    <value>Paryt auswaählen</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Erstellen</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>Einstellung</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>Benuter</value>
+  </data>
+  <data name="IntParty" xml:space="preserve">
+    <value>Party's in deiner Nähe</value>
+  </data>
+  <data name="ContIntParty" xml:space="preserve">
+    <value>There are no parties that fit your interests. Try to modify your search filters.</value>
+  </data>
+  <data name="MyParty" xml:space="preserve">
+    <value>Meine Party's</value>
+  </data>
+  <data name="ContMyParty" xml:space="preserve">
+    <value>Sie haben noch an keiner Party teilgenommen. Klicke auf Sync.</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>Verlauf</value>
+  </data>
+  <data name="ContHistory" xml:space="preserve">
+    <value>Sie haben noch an keiner Party teilgenommen! Former parties will be visible here.</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="EnableGps" xml:space="preserve">
+    <value>Aktiviere GPS</value>
+  </data>
+  <data name="GpsUsage" xml:space="preserve">
+    <value>Wir benötigen ihren Standort um Party's in ihrer Nähe zu finden. Sie können jederzeit den Standort deaktivieren und ihn manuel angeben.</value>
+  </data>
+  <data name="Cityname" xml:space="preserve">
+    <value>Stadt</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Jetzt anmelden!</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Ausloggen</value>
+  </data>
+  <data name="Menu" xml:space="preserve">
+    <value>Menü</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>{0:MM/dd/yyyy}</value>
+  </data>
+  <data name="DateTime" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="Genre" xml:space="preserve">
+    <value>Genre</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>Uhrzeit</value>
   </data>
   <data name="Time" xml:space="preserve">
     <value>{0:hh:mm tt}</value>
   </data>
-  <data name="ToOtherView" xml:space="preserve">
-    <value>To Other View</value>
+  <data name="ClearCache" xml:space="preserve">
+    <value>Cache leeren</value>
   </data>
-  <data name="User" xml:space="preserve">
-    <value>User</value>
+  <data name="ClearCacheSettingsHeader" xml:space="preserve">
+    <value>Cache Einstellungen</value>
   </data>
-  <data name="UserCreated" xml:space="preserve">
-    <value>User created!</value>
+  <data name="ClearCacheUsage" xml:space="preserve">
+    <value>Löscht den Cache auf Ihrem Gerät. Sie danach nicht mehr in der Lage Party's offline zu laden.</value>
   </data>
-  <data name="UserCreationFailed" xml:space="preserve">
-    <value>User creation failed.</value>
+  <data name="ClearCacheValid" xml:space="preserve">
+    <value>Möchten Sie den Cache wirklich leeren?</value>
   </data>
-  <data name="UserLoggedIn" xml:space="preserve">
-    <value>User logged in.</value>
-  </data>
-  <data name="Username" xml:space="preserve">
-    <value>Username</value>
-  </data>
-  <data name="Website" xml:space="preserve">
-    <value>Website</value>
-  </data>
-  <data name="WeFoundPartiesNearYou" xml:space="preserve">
-    <value>We found {0} parties near you.</value>
-  </data>
-  <data name="WelcomeUser" xml:space="preserve">
-    <value>Welcome to App2Night {0}! We send you an e-mail with a confirmation link. You can create parties after confirming your account.</value>
+  <data name="No" xml:space="preserve">
+    <value>Nein</value>
   </data>
   <data name="Yes" xml:space="preserve">
-    <value>Yes</value>
+    <value>Ja</value>
   </data>
-  <data name="Zipcode" xml:space="preserve">
-    <value>ZIP</value>
+  <data name="AgbContent" xml:space="preserve">
+    <value>AGB's lesen</value>
+  </data>
+  <data name="AgbHeader" xml:space="preserve">
+    <value>AGB von dieser App</value>
+  </data>
+  <data name="Rate" xml:space="preserve">
+    <value>Bewerten!</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Preis</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Neuladen</value>
+  </data>
+  <data name="HistoryNoContent" xml:space="preserve">
+    <value>Sie haben bisher noch an keiner Party teilgenommen.</value>
+  </data>
+  <data name="AgbAcception" xml:space="preserve">
+    <value>Hiermit bestätigte ich die AGB's.</value>
+  </data>
+  <data name="OfflineContent" xml:space="preserve">
+    <value>Ihr Gerät hat keine Verbindung mit dem Internet</value>
+  </data>
+  <data name="NoNotedPartiesContent" xml:space="preserve">
+    <value>Sie haben bisher keine Party gemerkt, zugesagt oder erstellt.</value>
+  </data>
+  <data name="ToOtherView" xml:space="preserve">
+    <value>Zur anderen Ansicht</value>
+  </data>
+  <data name="AboutTitle" xml:space="preserve">
+    <value>Über diese App</value>
+  </data>
+  <data name="GeneralInfo" xml:space="preserve">
+    <value>Vielen Danke das Sie App2Night benutzen. Diese App ist ein Universitätsprojekt von Stefan Machmeier und Konrad Müller an der Baden-Wuerttemberg Duale Hochschule Stuttgart - Campus Horb.</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>Allgemein</value>
+  </data>
+  <data name="GeneralContent" xml:space="preserve">
+    <value>Diese App wurde mit Xamarin.forms mit einer Microsoft Azure Web API von Asp.Net erstellt. Sie können sich den Sourcecode unseres Projektes auf Github aussehen.</value>
+  </data>
+  <data name="Project" xml:space="preserve">
+    <value>Projekt</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Bearbeiten</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Webseite</value>
+  </data>
+  <data name="ThirdPartyTitle" xml:space="preserve">
+    <value>Third party librarys</value>
+  </data>
+  <data name="UserCreated" xml:space="preserve">
+    <value>Benutzer erstellt!</value>
+  </data>
+  <data name="WelcomeUser" xml:space="preserve">
+    <value>Willkommen bei App2Night {0}! Wir haben einen Bestätigungslink an ihre Email gesendet. Sie können nach der Bestätigung des Accounts Party's erstellen</value>
+  </data>
+  <data name="AcceptingParty" xml:space="preserve">
+    <value>Party zugesagt</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="CommitmentChangeFailed" xml:space="preserve">
+    <value>Änderung des Teilnahme fehlgeschlagen</value>
+  </data>
+  <data name="CommitmentStateChangedTo" xml:space="preserve">
+    <value>Teilnahme in {0} geändert</value>
+  </data>
+  <data name="CreateUser" xml:space="preserve">
+    <value>Benutzer erstellen</value>
+  </data>
+  <data name="DateString" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="IUnderstand" xml:space="preserve">
+    <value>Ich habe verstanden.</value>
+  </data>
+  <data name="LoadDataFailed" xml:space="preserve">
+    <value>Wir könnten nicht alle Party's laden, nochmal versuchen?</value>
+  </data>
+  <data name="LoadFailedShort" xml:space="preserve">
+    <value>Party's laden fehlgeschlagen</value>
+  </data>
+  <data name="LocationNotEnabled" xml:space="preserve">
+    <value>Standort ist nicht aktiviert oder verfügbar.\n Aktivieren Sie ihren Standort und starten Sie die App neu um die schöne Karte zu bewundern.</value>
+  </data>
+  <data name="LocationPermissions" xml:space="preserve">
+    <value>Wir benötigen die Berechtigung um Party's in ihrer Nähe zu finden</value>
+  </data>
+  <data name="LoginFailed" xml:space="preserve">
+    <value>Anmelden fehlgeschlagen</value>
+  </data>
+  <data name="MapsNotInstalled" xml:space="preserve">
+    <value>Google Maps ist nicht auf dem Gerät installiert</value>
+  </data>
+  <data name="MyParties" xml:space="preserve">
+    <value>Meine Party'S</value>
+  </data>
+  <data name="NotingParty" xml:space="preserve">
+    <value>Gemerkte Party</value>
+  </data>
+  <data name="Party" xml:space="preserve">
+    <value>Party</value>
+  </data>
+  <data name="PermissionNeeded" xml:space="preserve">
+    <value>Berechtigung benötigt</value>
+  </data>
+  <data name="Rating" xml:space="preserve">
+    <value>Bewertung</value>
+  </data>
+  <data name="RejectingParty" xml:space="preserve">
+    <value>Rejecting party</value>
+  </data>
+  <data name="ReloadData" xml:space="preserve">
+    <value>Erneut laden</value>
+  </data>
+  <data name="RequestFailExplenation" xml:space="preserve">
+    <value>Die letze Anfrage ging verloren und wir finden es nicht mehr :( Sei nicht traurig, Wir werden mit deinen zukunftigen Anfragen sorgfältiger umgehen! Helfen kannst du uns, indem Dein Gerät mit dem Internet verbunden ist</value>
+  </data>
+  <data name="SearchingPartiesFailed" xml:space="preserve">
+    <value>Searching for parties failed.</value>
+  </data>
+  <data name="StoragePermissions" xml:space="preserve">
+    <value>Wir müssen auf deinen lokale Speicher zugreifen um Daten zu persistieren, die Daten werden nicht größer als 5 MB und verschlüsselt sein.</value>
+  </data>
+  <data name="SyncSuccess" xml:space="preserve">
+    <value>Wir haben erfolgreich ihre Party's synchronisiert.</value>
+  </data>
+  <data name="UserCreationFailed" xml:space="preserve">
+    <value>Erstellung von Benutzer fehlgeschlagen.</value>
+  </data>
+  <data name="UserLoggedIn" xml:space="preserve">
+    <value>Benutzer eingeloggt.</value>
+  </data>
+  <data name="WeFoundPartiesNearYou" xml:space="preserve">
+    <value>Wir haben {0} Party's in deiner Nähe gefunden.</value>
   </data>
 </root>
