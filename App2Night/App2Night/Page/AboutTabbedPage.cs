@@ -9,8 +9,8 @@ namespace App2Night.Page
     {
         public AboutTabbedPage()  
         {
-            var aboutAppPage = new AboutAppPage {BindingContext = new AboutAppViewModel()};
-            var thirdPartyPage = new ThirdPartyPage {BindingContext = new ThirdPartyViewModel()};
+            var aboutAppPage =FreshPageModelResolver.ResolvePageModel<AboutAppViewModel>();
+            var thirdPartyPage = FreshPageModelResolver.ResolvePageModel<ThirdPartyViewModel>();
 
             Children.Add(aboutAppPage);
             Children.Add(thirdPartyPage);

@@ -19,6 +19,11 @@ namespace App2Night.CustomView.View
             double elementWidth = Width/Columns - Spacing*2 - Spacing*(Columns - 1);
             int tmpColumnCounter = 0;
             int tmpRowCounter = 0;
+
+            for (int i = 0; i < Columns; i++)
+            {
+                ContentGrid.ColumnDefinitions.Add(new ColumnDefinition{Width = new GridLength(elementWidth, GridUnitType.Absolute) });
+            }
              
             foreach (Xamarin.Forms.View view in ContentGrid.Children)
             {
@@ -30,19 +35,15 @@ namespace App2Night.CustomView.View
                 Grid.SetColumn(view, tmpColumnCounter);
                 Grid.SetRow(view, tmpRowCounter);
                 tmpColumnCounter++;
-            }
+            } 
 
-            for (int index = 0; index < ContentGrid.ColumnDefinitions.Count; index++)
-            {
-                ContentGrid.ColumnDefinitions[index].Width = new GridLength(elementWidth, GridUnitType.Absolute);
-
-            }
             for (int index = 0; index < tmpRowCounter; index++)
             {
                 ContentGrid.RowDefinitions.Add(new RowDefinition {Height = new GridLength(elementWidth, GridUnitType.Absolute)});
             }
             var t = ContentGrid.Height;
             ContentGrid.HeightRequest = (tmpRowCounter+1)*elementWidth + Spacing*(tmpRowCounter - 1) + 2*Spacing;
+            HeightRequest = ContentGrid.HeightRequest;
             if (ContentGrid.HeightRequest > Height && ContentGrid.HeightRequest > 0)
             {
                 InvalidateLayout(); 

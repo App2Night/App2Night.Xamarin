@@ -7,6 +7,7 @@
         public string Message { get; set; }
         public bool IsCached { get; set; }
         public bool RequestFailedToException { get; set; }
+        public bool NeedLogin { get; set; }
     }
 
     public class Result<TExpectedType> : Result

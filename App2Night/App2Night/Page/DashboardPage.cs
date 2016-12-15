@@ -1,27 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
+using App2Night.CustomView.Page;
 using App2Night.CustomView.Template;
 using App2Night.CustomView.View;
-using App2Night.Data.Language;
+using App2Night.Model.Language;
+using App2Night.Model.Model;
+using App2Night.PageModel;
+using App2Night.Service.Helper;
 using App2Night.ValueConverter;
 using FreshMvvm;
+using Plugin.Geolocator;
+using Plugin.Geolocator.Abstractions;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
+using Xamarin.Forms.Xaml;
+using Position = Xamarin.Forms.Maps.Position;
 
 namespace App2Night.Page
 { 
-    public class DashboardPage : ContentPage 
+    public class DashboardPage : CustomContentPage 
     {
-        #region Views
 
-        readonly EnhancedContainer _userInfoContainer = new EnhancedContainer
+        public static BindableProperty MapPinsProperty = BindableProperty.Create(nameof(MapPins), 
+            typeof(IList<Pin>), 
+            typeof(DashboardPage),
+            propertyChanged: (bindable, value, newValue) =>
+            {
+                if (newValue != null)
+                {
+                    ((DashboardPage) bindable).MapPinsSet((IList<Pin>) newValue);
+                } 
+            });
+        public IList<Pin> MapPins
         {
-            Name = AppResources.User,
-            ButtonText = "\uf0ad",
-            NoContentWarningVisible = false,
-            TopSpacerVisible = false
-        };
-
+            get { return (IList<Pin>)GetValue(MapPinsProperty); }
+            set { SetValue(MapPinsProperty, value); }
+        }
+        
+        #region Views
         readonly EnhancedContainer _interestingPartieContainer = new EnhancedContainer
         {
             Name = AppResources.IntParty,
@@ -38,12 +55,7 @@ namespace App2Night.Page
         {
             Name = AppResources.History,
             ContentMissingText = AppResources.ContHistory
-        };
-
-        readonly Map _headerMap = new Map()
-        {
-            HeightRequest = 200
-        };
+        }; 
 
         readonly Image _profilePicture = new Image
         {
@@ -52,6 +64,12 @@ namespace App2Night.Page
             Margin = new Thickness(10),
             Source = ImageSource.FromResource("App2Night.Data.IconCode.icon.png")
         };
+
+        Map _headerMap = new Map()
+        {
+            HeightRequest = 200,
+            IsShowingUser = true,
+        }; 
 
         readonly Label _usernameLabel = new Label();
         readonly Label _emaiLabel = new Label();
@@ -78,65 +96,23 @@ namespace App2Night.Page
 
         public DashboardPage()
         {
-            #region UserInfoView
-            var userInfoView = new Grid
+            AddReloadToolbarIcon();
+
+            this.SetBinding(DashboardPage.MapPinsProperty, nameof(DashboardPageModel.MapPins));
+             
+            Device.BeginInvokeOnMainThread(async () =>
             {
-                ColumnDefinitions =
+                if (await CoordinateHelper.HasGeolocationAccess())
                 {
-                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Auto)},
-                    new ColumnDefinition {Width = new GridLength(1, GridUnitType.Star)}
-                },
-                Children =
-                {
-                    _profilePicture
+                        CrossGeolocator.Current.PositionChanged += PositionChanged;
+                        await InitializeMapCoordinates();
                 }
-            };
-            _userInfoContainer.Content = userInfoView;
-            _usernameLabel.SetBinding(Label.TextProperty, "User.Name");
-            _emaiLabel.SetBinding(Label.TextProperty,"User.Email");
-            var profileDetails = new List<Xamarin.Forms.View>
-            {
-                _usernameLabel,
-                _emaiLabel
-            };
-            userInfoView.RowDefinitions.Add(new RowDefinition {Height = new GridLength(1, GridUnitType.Star)});
-            for (int index = 0; index < profileDetails.Count; index++)
-            {
-                Xamarin.Forms.View view = profileDetails[index];
-                userInfoView.RowDefinitions.Add(new RowDefinition {Height = new GridLength(1, GridUnitType.Auto)});
-                userInfoView.Children.Add(view, 1, index + 1);
-            }
-            userInfoView.RowDefinitions.Add(new RowDefinition {Height = new GridLength(1, GridUnitType.Star)});
-            Grid.SetRowSpan(_profilePicture, profileDetails.Count + 2);
-             _userInfoContainer.SetBinding(EnhancedContainer.CommandProperty, "MoveToUserEditCommand");
-            #endregion
+            }); 
 
-            #region InterestingPartieView
-            _interestingPartieContainer.Content = _interestingPartieGallerie;
-            _interestingPartieGallerie.ElementTapped += PartieSelected;
-            _interestingPartieGallerie.SetBinding(GallerieView.ItemSourceProperty, "InterestingPartiesForUser"); 
-          _interestingPartieContainer.SetBinding(EnhancedContainer.CommandProperty, "MoveToPartyPicker");
-         _interestingPartieContainer.SetBinding(  EnhancedContainer.NoContentWarnignVisibleProperty,
-               "InterestingPartieAvailable", converter: new InvertBooleanConverter());
-            #endregion
+            InitializeNearPartyView();
+            InitializeMyPartyView();
+            InitializeHistoryPartyView();
 
-            #region MyParties
-            _myPartiesContainer.Content = _myPartieGallerie;
-            _myPartieGallerie.ElementTapped += PartieSelected;
-            _myPartiesContainer.SetBinding(EnhancedContainer.CommandProperty, "MoveToMyPartiesCommand");
-            _myPartieGallerie.SetBinding( GallerieView.ItemSourceProperty, "Selectedparties");
-            _myPartiesContainer.SetBinding( EnhancedContainer.NoContentWarnignVisibleProperty,
-                "SelectedpartiesAvailable", converter: new InvertBooleanConverter());
-            #endregion
-
-            #region History
-            _historyContainer.Content = _historyGallerieView;
-            _historyContainer.SetBinding(EnhancedContainer.CommandProperty, "MoveToHistoryCommand");
-            _historyGallerieView.ElementTapped += PartieSelected;
-            _historyGallerieView.SetBinding( GallerieView.ItemSourceProperty, "PartyHistory");
-            _historyContainer.SetBinding(EnhancedContainer.NoContentWarnignVisibleProperty,
-                "PartyHistoryAvailable", converter: new InvertBooleanConverter());
-            #endregion
             //Main layout
             var mainLayout = new Grid()
             {
@@ -152,7 +128,6 @@ namespace App2Night.Page
                 Children =
                 {
                     new MapWrapper(_headerMap),
-                    {_userInfoContainer, 0, 1},
                     {_myPartiesContainer, 0, 2},
                     {_interestingPartieContainer, 0, 3},
                     {_historyContainer, 0, 4}
@@ -166,6 +141,80 @@ namespace App2Night.Page
             };
             Content = mainScroll;
         }
+
+        void AddReloadToolbarIcon()
+        {
+            var reloadToolbarIcon = new ToolbarItem
+            {
+				Text = AppResources.Reload,
+                Icon = "sync.png"
+            };
+            ToolbarItems.Add(reloadToolbarIcon);
+            reloadToolbarIcon.SetBinding(MenuItem.CommandProperty, "ReloadCommand");
+        }
+
+        private async Task InitializeMapCoordinates()
+        {
+           
+            var coordinates = await CoordinateHelper.GetCoordinates(true);
+            if (coordinates != null)
+            {
+                MoveMapToCoordinates(coordinates); 
+            }
+        }
+
+        private void MapPinsSet(IList<Pin> pins)
+        {
+            _headerMap.Pins.Clear();
+
+            foreach (Pin pin in pins)
+            {
+                _headerMap.Pins.Add(pin);
+            }
+        }
+
+        private void PositionChanged(object sender, PositionEventArgs positionEventArgs)
+        {
+            var coordinates = positionEventArgs.Position;
+            MoveMapToCoordinates(new Coordinates((float) coordinates.Longitude, (float) coordinates.Latitude));
+        }
+
+        private void MoveMapToCoordinates(Coordinates coordinates)
+        {
+            var mapSpan = MapSpan.FromCenterAndRadius(new Position(coordinates.Latitude, coordinates.Longitude), Distance.FromKilometers(2));
+            _headerMap.MoveToRegion(mapSpan);
+        }
+
+        private void InitializeHistoryPartyView()
+        {
+            _historyContainer.Content = _historyGallerieView;
+            _historyContainer.SetBinding(EnhancedContainer.CommandProperty, "MoveToHistoryCommand");
+            _historyGallerieView.ElementTapped += PartieSelected;
+            _historyGallerieView.SetBinding(GallerieView.ItemSourceProperty, "PartyHistory");
+            _historyContainer.SetBinding(EnhancedContainer.NoContentWarnignVisibleProperty,
+                "PartyHistoryAvailable", converter: new InvertBooleanConverter());
+        }
+
+        private void InitializeMyPartyView()
+        {
+            _myPartiesContainer.Content = _myPartieGallerie;
+            _myPartieGallerie.ElementTapped += PartieSelected;
+            _myPartiesContainer.SetBinding(EnhancedContainer.CommandProperty, "MoveToMyPartiesCommand");
+            _myPartieGallerie.SetBinding(GallerieView.ItemSourceProperty, "Selectedparties");
+            _myPartiesContainer.SetBinding(EnhancedContainer.NoContentWarnignVisibleProperty,
+                "SelectedpartiesAvailable", converter: new InvertBooleanConverter());
+        }
+
+        private void InitializeNearPartyView()
+        {
+            _interestingPartieContainer.Content = _interestingPartieGallerie;
+            _interestingPartieGallerie.ElementTapped += PartieSelected;
+            _interestingPartieGallerie.SetBinding(GallerieView.ItemSourceProperty, "InterestingPartiesForUser");
+            _interestingPartieContainer.SetBinding(EnhancedContainer.CommandProperty, "MoveToPartyPicker");
+            _interestingPartieContainer.SetBinding(EnhancedContainer.NoContentWarnignVisibleProperty,
+               "InterestingPartieAvailable", converter: new InvertBooleanConverter());
+        }
+
         /// <summary>
         /// Opens seleted party with <see cref="PartyPreviewView"/>.
         /// </summary>
@@ -173,10 +222,10 @@ namespace App2Night.Page
         /// <param name="o"></param>
         private void PartieSelected(object sender, object o)
         {
-            //PreviewItemSelected<Party, PartyPreviewView>((Party) o, new object[] {this., Height});
+            PreviewItemSelected<Party, PartyPreviewView>((Party) o, new object[] {Height, Width});
         }
 
-        private int lastColumns = 1;
+        private int _lastColumns = 1;
 
         /// <summary>
         /// Allocates size for <see cref="EnhancedContainer"/>. 
@@ -189,9 +238,9 @@ namespace App2Night.Page
 
             //Handle big screens
             int columns = (int) Math.Ceiling((Width - 200)/300); //Available columns
-            if (lastColumns != columns)
+            if (_lastColumns != columns)
             {
-                lastColumns = columns;
+                _lastColumns = columns;
                 _historyGallerieView.Columns = columns;
                 _interestingPartieGallerie.Columns = columns;
                 _myPartieGallerie.Columns = columns;
@@ -206,9 +255,9 @@ namespace App2Night.Page
         protected override void OnDisappearing()
         {
             base.OnDisappearing();
-            _interestingPartieGallerie.ElementTapped -= PartieSelected;
-            _myPartieGallerie.ElementTapped -= PartieSelected;
-            _historyGallerieView.ElementTapped -= PartieSelected;
+            //_interestingPartieGallerie.ElementTapped -= PartieSelected;
+            //_myPartieGallerie.ElementTapped -= PartieSelected;
+            //_historyGallerieView.ElementTapped -= PartieSelected;
         }
     }
 }

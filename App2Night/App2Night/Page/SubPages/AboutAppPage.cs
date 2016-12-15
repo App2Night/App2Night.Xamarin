@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using App2Night.CustomView.View;
+using App2Night.Model.Language;
 using FreshMvvm;
 using Xamarin.Forms;
 
@@ -9,12 +10,12 @@ namespace App2Night.Page.SubPages
     {
         public AboutAppPage()
         { 
-            Title = "About this App";  
+            Title = AppResources.AboutTitle;  
 
             var generalViewSize = 150;
             var iconImage = new Image
             {
-                Source = ImageSource.FromResource("App2Night.Data.IconCode.icon.png"),
+                Source = ImageSource.FromResource("App2Night.Data.Image.icon.png"),
                 Margin = new Thickness(8)
             }; 
             var generalView = new Grid
@@ -28,8 +29,7 @@ namespace App2Night.Page.SubPages
                 {
                     new Label
                     {
-                        Text = "Thank you for using App2Night. " +
-                               "This App is the product of a university project by Stefan Machmeier and Konrad Müller at the Baden-Wuerttemberg Cooperative State University Stuttgart - campus Horb.",
+						Text = AppResources.GeneralInfo,
                         Margin = new Thickness(15, 5)
 
                     },
@@ -37,12 +37,10 @@ namespace App2Night.Page.SubPages
                 }
             };
 
-            var projectViewHeight = 100;
+            var projectViewHeight = 120;
             var projectLabel = new Label
             {
-                Text =
-                    "This app is made with Xamarin.Forms connected to a Microsoft Azure Web API made with Asp.Net.\n" +
-                    "You can find the sourcecode for this project at Github. ",
+				Text = AppResources.GeneralContent,
                 Margin = new Thickness(15, 5)
             };
             var githubIconLabel = new CustomButton
@@ -72,11 +70,11 @@ namespace App2Night.Page.SubPages
             {
                 new List<TableSection>
                 { 
-                    new TableSection("General") //General
+					new TableSection(AppResources.General) //General
                     {
                         new ViewCell { View = generalView, Height = generalViewSize}
                     },
-                    new TableSection("Project") //Project
+					new TableSection(AppResources.Project) //Project
                     {
                         new ViewCell { View = projectView, Height = projectViewHeight}
                     },

@@ -1,4 +1,6 @@
-﻿using FreshMvvm;
+﻿
+using App2Night.Model.Language;
+using FreshMvvm;
 using Xamarin.Forms;
 
 namespace App2Night.Page.SubPages
@@ -7,7 +9,7 @@ namespace App2Night.Page.SubPages
     {
         public ThirdPartyPage()
         {  
-            Title = "Third party librarys"; 
+			Title = AppResources.ThirdPartyTitle; 
 
             var template = new DataTemplate(() =>
             {
@@ -16,7 +18,7 @@ namespace App2Night.Page.SubPages
                 return text;
             });
 
-            var libraryLicensesListView = new ListView
+            var libraryLicensesListView = new ListView(ListViewCachingStrategy.RecycleElement)
             { 
                 ItemTemplate = template,
                 HeightRequest = 40

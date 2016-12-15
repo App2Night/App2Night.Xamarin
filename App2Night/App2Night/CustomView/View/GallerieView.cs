@@ -162,7 +162,7 @@ namespace App2Night.CustomView.View
         private bool newAllocation = false;
         protected override void OnSizeAllocated(double width, double height)
         {
-            //base.OnSizeAllocated(width, height);
+            base.OnSizeAllocated(width, height);
             //tmpResizeWidth = width;
             //await Task.Delay(50); 
             //if(tmpResizeWidth!=width) return;

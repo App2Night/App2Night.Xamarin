@@ -71,7 +71,7 @@ namespace App2Night.PageModel.SubPages
                 if (value != null)
                 {
                     var license = value;  
-                    FreshIOC.Container.Resolve<NavigationViewModel>().OpenLicenseCommand.Execute(license);
+                    Device.BeginInvokeOnMainThread(async ()=> await CoreMethods.PushPageModel<ThirdPartyInfoViewModel>(license)); 
                 }
             }
         }
@@ -79,29 +79,26 @@ namespace App2Night.PageModel.SubPages
 
         public ThirdPartyViewModel()
         { 
-            using (UserDialogs.Instance.Loading())
+            var ioWatch = new Stopwatch();
+            ioWatch.Start();
+            var tasks = LicensesList.Select(license => Task.Run(() =>
             {
-                var ioWatch = new Stopwatch();
-                ioWatch.Start();
-                var tasks = LicensesList.Select(license => Task.Run(() =>
+                try
                 {
-                    try
+                    var assembly = typeof (QuadraticPartyTemplate).GetTypeInfo().Assembly;
+                    Stream stream = assembly.GetManifestResourceStream("App2Night.Data.Licenses." + license.LicenseFileName + ".txt");
+                    using (var reader = new StreamReader(stream))
                     {
-                        var assembly = typeof (QuadraticPartyTemplate).GetTypeInfo().Assembly;
-                        Stream stream = assembly.GetManifestResourceStream("App2Night.Data.Licenses." + license.LicenseFileName + ".txt");
-                        using (var reader = new StreamReader(stream))
-                        {
-                            license.LicenseText = reader.ReadToEnd();
-                        }
+                        license.LicenseText = reader.ReadToEnd();
                     }
-                    catch (Exception e)
-                    {
-                        Debug.WriteLine(e);
-                    }
-                })).ToList();
-                Task.WaitAll(tasks.ToArray());
-                ioWatch.PrintTime("Reading license files");
-            } 
+                }
+                catch (Exception e)
+                {
+                    Debug.WriteLine(e);
+                }
+            })).ToList();
+            Task.WaitAll(tasks.ToArray());
+            ioWatch.PrintTime("Reading license files");
         } 
     }
 }

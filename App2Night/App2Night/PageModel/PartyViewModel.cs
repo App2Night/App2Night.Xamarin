@@ -7,9 +7,10 @@ namespace App2Night.PageModel
     {
         public Party Party { get; private set; }
 
-        public PartyViewModel(Party party)
+        public override void Init(object initData)
         {
-            Party = party;
-        } 
+            base.Init(initData);
+            Party = (Party) initData;
+        }
     }
 }

@@ -1,9 +1,10 @@
-﻿using FreshMvvm;
+﻿using App2Night.CustomView.Page;
+using FreshMvvm;
 using Xamarin.Forms;
 
 namespace App2Night.Page
 {
-    public class PartyPage : FreshBaseContentPage
+    public class PartyPage : CustomContentPage
     {
         public PartyPage()
         {

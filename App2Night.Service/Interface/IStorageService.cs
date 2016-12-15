@@ -1,4 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using App2Night.Model.Enum;
 using App2Night.Model.Model;
 
 namespace App2Night.Service.Interface
@@ -8,6 +11,8 @@ namespace App2Night.Service.Interface
     /// </summary>
     public interface IStorageService
     {
+        event EventHandler<bool> IsLoginChanged;
+        bool IsLogIn { get; }
         /// <summary>
         /// Returns the <see cref="Storage"/> object that contains all settings, user data and the last token.
         /// </summary>
@@ -31,6 +36,30 @@ namespace App2Night.Service.Interface
         /// <returns></returns>
         Task DeleteStorage();
 
-        //TODO Add party caching
+        /// <summary>
+        /// Sets Token to current Storage and invoke EventHandler
+        /// </summary>
+        /// <param name="token"></param>
+        /// <returns></returns>
+        Task SetToken(Token token);
+
+        /// <summary>
+        /// Cache a party list.
+        /// </summary>
+        /// <param name="parties">To be cached parties.</param>
+        /// <param name="partyListType">Does the reference represent the party history, selected parties or local parties.</param>
+        void CacheParty(IEnumerable<Party> parties, PartyListType partyListType);
+
+        /// <summary>
+        /// Restores cached partys.
+        /// </summary>
+        /// <param name="listType">Type of the party list, to resolve the right table.</param>
+        /// <returns>The cached party or null if nothing was cached yet.</returns>
+        IList<Party> RestoreCachedParty(PartyListType listType);
+
+        /// <summary>
+        /// Clears all cached parties.
+        /// </summary> 
+        void ClearCache();
     }
 }

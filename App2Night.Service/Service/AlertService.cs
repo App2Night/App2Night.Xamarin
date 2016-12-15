@@ -3,15 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
+using App2Night.Model.Enum;
+using App2Night.Model.Language;
 using App2Night.Model.Model;
 using App2Night.Service.Helper;
 using App2Night.Service.Interface;
+using Plugin.Permissions;
+using Plugin.Permissions.Abstractions;
 using Xamarin.Forms;
 
 namespace App2Night.Service.Service
 {
     public class AlertService : IAlertService
-    {  
+    {
+
+        #region request alerts
+
         public void UserCreationFinished(Result requestResult, string username)
         {
             if (requestResult.Success)
@@ -22,13 +29,13 @@ namespace App2Night.Service.Service
                  */ 
                 Device.BeginInvokeOnMainThread(async ()=> await UserDialogs.Instance.AlertAsync(new AlertConfig
                 {
-                    Title = "User created!",
-                    Message = $"Welcome to App2Night {username}! We send you an e-mail with a confirmation link. You can create parties after confirming your account.",
-                    OkText = "I understand."
+                    Title = AppResources.UserCreated,
+                    Message = string.Format(AppResources.WelcomeUser, username),
+                    OkText = AppResources.IUnderstand
                 })); 
             }
             else 
-                RequestFailureHandler(requestResult, "User creation failed");
+                RequestFailureHandler(requestResult, AppResources.UserCreationFailed);
         }
 
         public void PartyPullFinished(Result<IEnumerable<Party>>  requestResult)
@@ -38,11 +45,11 @@ namespace App2Night.Service.Service
                 /*
                  * Inform the user how many parties were found.
                  */
-                var message = string.Format("We found {0} parties near you.", requestResult.Data.Count());
+                var message = string.Format(AppResources.WeFoundPartiesNearYou, requestResult.Data.Count());
                 Device.BeginInvokeOnMainThread(()=>UserDialogs.Instance.Toast(CreateToastConfig(message, ToastState.Success)));
             }
             else
-                RequestFailureHandler(requestResult, "Searching for parties failed.");
+                RequestFailureHandler(requestResult, AppResources.SearchingPartiesFailed);
         }
 
         public void LoginFinished(Result requestResult)
@@ -53,11 +60,38 @@ namespace App2Night.Service.Service
                 /*
                  * Inform the user that he got logged in successfully.
                  */
-                var message = "User logged in.";
+                var message = AppResources.UserLoggedIn;
                 UserDialogs.Instance.Toast(CreateToastConfig(message, ToastState.Success));
             }
             else
-                RequestFailureHandler(requestResult, "Login failed");
+                RequestFailureHandler(requestResult, AppResources.LoginFailed);
+        }
+
+        public void CommitmentStateChangedAlert(PartyCommitmentState noted, bool success)
+        {
+            var message = success
+                ? string.Format(AppResources.CommitmentStateChangedTo, noted)
+                : AppResources.CommitmentChangeFailed;
+
+            var toastConfig = CreateToastConfig(message, success ? ToastState.Success : ToastState.Failure);
+
+            UserDialogs.Instance.Toast(toastConfig);
+        }
+
+        public async Task<bool> PartyBatchRefreshFinished(IEnumerable<Result> requestBatch)
+        {
+            var failedRequests = requestBatch.Count(o => !o.Success);
+            if (failedRequests == 0)
+            {
+                var toastConfig = CreateToastConfig(AppResources.SyncSuccess, ToastState.Success);  
+                UserDialogs.Instance.Toast(toastConfig);
+                return false;
+            } 
+
+            //Ask the user if he wants to retry loading the parties.
+            var result = await UserDialogs.Instance.ConfirmAsync(
+                AppResources.LoadDataFailed, AppResources.LoadFailedShort, "Ok", AppResources.Cancel);  
+            return result; 
         }
 
         /// <summary>
@@ -68,9 +102,7 @@ namespace App2Night.Service.Service
         /// <param name="title">Title of the alert.</param>
         void RequestFailureHandler(Result result, string title)
         {
-            var message = "The last request got lost and we can't find it anymore :( " +
-                          "Dont feel betrayed, we will handle your future requests even more carefull and give him more time! " +
-                          "To help us handling your request, please make sure you are actually connected to the internet.";
+            var message = AppResources.RequestFailExplenation;
             Device.BeginInvokeOnMainThread(async () =>
             {
                 await UserDialogs.Instance.AlertAsync(new AlertConfig
@@ -111,6 +143,64 @@ namespace App2Night.Service.Service
             }
             return config;
         }
+
+        #endregion
+
+        #region permissions
+
+        private bool _alreadyRequestedLocation;
+        private bool _alreadyRequestedStorage;
+
+        public async Task<bool> RequestLocationPermissions()
+        {
+            var message = AppResources.LocationPermissions;
+
+            if (await IsPermissionAvailable(Permission.Location)) return true;
+
+            if (!_alreadyRequestedLocation)
+            {
+                _alreadyRequestedLocation = true;
+                return await RequestAnyPermission(Permission.Location, message);
+            }
+
+            return false;
+        } 
+
+        public async Task<bool> RequestStoragePermissions()
+        {
+            var message = AppResources.StoragePermissions;
+
+            if (await IsPermissionAvailable(Permission.Storage)) return true;
+
+            if (!_alreadyRequestedStorage)
+            {
+                _alreadyRequestedStorage = true;
+                return await  RequestAnyPermission(Permission.Storage, message);
+            }
+
+            return false; 
+        }
+
+        async Task<bool> IsPermissionAvailable(Permission permissionType)
+        {
+            return await CrossPermissions.Current.CheckPermissionStatusAsync(permissionType) == PermissionStatus.Granted;
+        }
+
+        /// <summary>
+        /// Starts a permission request for the given permission type with the given message.
+        /// </summary> 
+        private static async Task<bool> RequestAnyPermission(Permission permissionType, string message)
+        {  
+                    if (await CrossPermissions.Current.ShouldShowRequestPermissionRationaleAsync(permissionType))
+                    {
+                        await UserDialogs.Instance.AlertAsync(message,AppResources.PermissionNeeded, "OK"); 
+                    }
+                    var results = await CrossPermissions.Current.RequestPermissionsAsync(new[] { permissionType });
+                    var status = results[Permission.Location];
+
+            return status == PermissionStatus.Granted;
+        } 
+        #endregion
     }
 
     /// <summary>

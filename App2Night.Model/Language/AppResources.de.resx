@@ -1,0 +1,417 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="About" xml:space="preserve">
+    <value>Allgemein</value>
+  </data>
+  <data name="AcceptAgb" xml:space="preserve">
+    <value>Hiermit bestätige ich die AGB's.</value>
+  </data>
+  <data name="ContinueAnonymous" xml:space="preserve">
+    <value>Ohne Anmeldung fortfahren</value>
+  </data>
+  <data name="CreateAParty" xml:space="preserve">
+    <value>Party erstellen</value>
+  </data>
+  <data name="EmailAdress" xml:space="preserve">
+    <value>E-Mail Adresse</value>
+  </data>
+  <data name="PartyHistory" xml:space="preserve">
+    <value>Recent parties</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Passwort</value>
+  </data>
+  <data name="PickAParty" xml:space="preserve">
+    <value>Nach Party suchen</value>
+  </data>
+  <data name="GpsSettingHeader" xml:space="preserve">
+    <value>GPS Einstellungen</value>
+  </data>
+  <data name="Settings" xml:space="preserve">
+    <value>Einstellungen</value>
+  </data>
+  <data name="SignUp" xml:space="preserve">
+    <value>Anmelden</value>
+  </data>
+  <data name="Submit" xml:space="preserve">
+    <value>Anmelden</value>
+  </data>
+  <data name="Username" xml:space="preserve">
+    <value>Benutzername</value>
+  </data>
+  <data name="PartyName" xml:space="preserve">
+    <value>Partyname</value>
+  </data>
+  <data name="Description" xml:space="preserve">
+    <value>Beschreibung</value>
+  </data>
+  <data name="StrName" xml:space="preserve">
+    <value>Straßenname</value>
+  </data>
+  <data name="HNumber" xml:space="preserve">
+    <value>Nr.</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>Ort</value>
+  </data>
+  <data name="Zipcode" xml:space="preserve">
+    <value>PLZ</value>
+  </data>
+  <data name="Address" xml:space="preserve">
+    <value>Adresse</value>
+  </data>
+  <data name="Age" xml:space="preserve">
+    <value>Alter</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>Benutzer bearbeiten</value>
+  </data>
+  <data name="CreateParty" xml:space="preserve">
+    <value>Party erstellen</value>
+  </data>
+  <data name="PickParty" xml:space="preserve">
+    <value>Party auswählen</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Erstellen</value>
+  </data>
+  <data name="Setting" xml:space="preserve">
+    <value>Einstellung</value>
+  </data>
+  <data name="User" xml:space="preserve">
+    <value>Benuter</value>
+  </data>
+  <data name="IntParty" xml:space="preserve">
+    <value>Party's in deiner Nähe</value>
+  </data>
+  <data name="ContIntParty" xml:space="preserve">
+    <value>There are no parties that fit your interests. Try to modify your search filters.</value>
+  </data>
+  <data name="MyParty" xml:space="preserve">
+    <value>Meine Party's</value>
+  </data>
+  <data name="ContMyParty" xml:space="preserve">
+    <value>Sie haben noch an keiner Party teilgenommen. Klicke auf Sync.</value>
+  </data>
+  <data name="History" xml:space="preserve">
+    <value>Verlauf</value>
+  </data>
+  <data name="ContHistory" xml:space="preserve">
+    <value>Sie haben noch an keiner Party teilgenommen! Former parties will be visible here.</value>
+  </data>
+  <data name="Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="EnableGps" xml:space="preserve">
+    <value>Aktiviere GPS</value>
+  </data>
+  <data name="GpsUsage" xml:space="preserve">
+    <value>Wir benötigen ihren Standort um Party's in ihrer Nähe zu finden. Sie können jederzeit den Standort deaktivieren und ihn manuel angeben.</value>
+  </data>
+  <data name="Cityname" xml:space="preserve">
+    <value>Stadt</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Jetzt anmelden!</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>Ausloggen</value>
+  </data>
+  <data name="Menu" xml:space="preserve">
+    <value>Menü</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>{0:MM/dd/yyyy}</value>
+  </data>
+  <data name="DateTime" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="Genre" xml:space="preserve">
+    <value>Genre</value>
+  </data>
+  <data name="StartTime" xml:space="preserve">
+    <value>Uhrzeit</value>
+  </data>
+  <data name="Time" xml:space="preserve">
+    <value>{0:hh:mm tt}</value>
+  </data>
+  <data name="ClearCache" xml:space="preserve">
+    <value>Cache leeren</value>
+  </data>
+  <data name="ClearCacheSettingsHeader" xml:space="preserve">
+    <value>Cache Einstellungen</value>
+  </data>
+  <data name="ClearCacheUsage" xml:space="preserve">
+    <value>Löscht den Cache auf Ihrem Gerät. Sie danach nicht mehr in der Lage Party's offline zu laden.</value>
+  </data>
+  <data name="ClearCacheValid" xml:space="preserve">
+    <value>Möchten Sie den Cache wirklich leeren?</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nein</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Ja</value>
+  </data>
+  <data name="AgbContent" xml:space="preserve">
+    <value>AGB's lesen</value>
+  </data>
+  <data name="AgbHeader" xml:space="preserve">
+    <value>AGB von dieser App</value>
+  </data>
+  <data name="Rate" xml:space="preserve">
+    <value>Bewerten!</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Preis</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Neuladen</value>
+  </data>
+  <data name="HistoryNoContent" xml:space="preserve">
+    <value>Sie haben bisher noch an keiner Party teilgenommen.</value>
+  </data>
+  <data name="AgbAcception" xml:space="preserve">
+    <value>Hiermit bestätigte ich die AGB's.</value>
+  </data>
+  <data name="OfflineContent" xml:space="preserve">
+    <value>Ihr Gerät hat keine Verbindung mit dem Internet</value>
+  </data>
+  <data name="NoNotedPartiesContent" xml:space="preserve">
+    <value>Sie haben bisher keine Party gemerkt, zugesagt oder erstellt.</value>
+  </data>
+  <data name="ToOtherView" xml:space="preserve">
+    <value>Zur anderen Ansicht</value>
+  </data>
+  <data name="AboutTitle" xml:space="preserve">
+    <value>Über diese App</value>
+  </data>
+  <data name="GeneralInfo" xml:space="preserve">
+    <value>Vielen Danke das Sie App2Night benutzen. Diese App ist ein Universitätsprojekt von Stefan Machmeier und Konrad Müller an der Baden-Wuerttemberg Duale Hochschule Stuttgart - Campus Horb.</value>
+  </data>
+  <data name="General" xml:space="preserve">
+    <value>Allgemein</value>
+  </data>
+  <data name="GeneralContent" xml:space="preserve">
+    <value>Diese App wurde mit Xamarin.forms mit einer Microsoft Azure Web API von Asp.Net erstellt. Sie können sich den Sourcecode unseres Projektes auf Github aussehen.</value>
+  </data>
+  <data name="Project" xml:space="preserve">
+    <value>Projekt</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Bearbeiten</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Löschen</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>Webseite</value>
+  </data>
+  <data name="ThirdPartyTitle" xml:space="preserve">
+    <value>Third party librarys</value>
+  </data>
+  <data name="UserCreated" xml:space="preserve">
+    <value>Benutzer erstellt!</value>
+  </data>
+  <data name="WelcomeUser" xml:space="preserve">
+    <value>Willkommen bei App2Night {0}! Wir haben einen Bestätigungslink an ihre Email gesendet. Sie können nach der Bestätigung des Accounts Party's erstellen</value>
+  </data>
+  <data name="AcceptingParty" xml:space="preserve">
+    <value>Party zugesagt</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Abbrechen</value>
+  </data>
+  <data name="CommitmentChangeFailed" xml:space="preserve">
+    <value>Änderung des Teilnahme fehlgeschlagen</value>
+  </data>
+  <data name="CommitmentStateChangedTo" xml:space="preserve">
+    <value>Teilnahme in {0} geändert</value>
+  </data>
+  <data name="CreateUser" xml:space="preserve">
+    <value>Benutzer erstellen</value>
+  </data>
+  <data name="DateString" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="IUnderstand" xml:space="preserve">
+    <value>Ich habe verstanden.</value>
+  </data>
+  <data name="LoadDataFailed" xml:space="preserve">
+    <value>Wir könnten nicht alle Party's laden, nochmal versuchen?</value>
+  </data>
+  <data name="LoadFailedShort" xml:space="preserve">
+    <value>Party's laden fehlgeschlagen</value>
+  </data>
+  <data name="LocationNotEnabled" xml:space="preserve">
+    <value>Standort ist nicht aktiviert oder verfügbar.\n Aktivieren Sie ihren Standort und starten Sie die App neu um die schöne Karte zu bewundern.</value>
+  </data>
+  <data name="LocationPermissions" xml:space="preserve">
+    <value>Wir benötigen die Berechtigung um Party's in ihrer Nähe zu finden</value>
+  </data>
+  <data name="LoginFailed" xml:space="preserve">
+    <value>Anmelden fehlgeschlagen</value>
+  </data>
+  <data name="MapsNotInstalled" xml:space="preserve">
+    <value>Google Maps ist nicht auf dem Gerät installiert</value>
+  </data>
+  <data name="MyParties" xml:space="preserve">
+    <value>Meine Party'S</value>
+  </data>
+  <data name="NotingParty" xml:space="preserve">
+    <value>Gemerkte Party</value>
+  </data>
+  <data name="Party" xml:space="preserve">
+    <value>Party</value>
+  </data>
+  <data name="PermissionNeeded" xml:space="preserve">
+    <value>Berechtigung benötigt</value>
+  </data>
+  <data name="Rating" xml:space="preserve">
+    <value>Bewertung</value>
+  </data>
+  <data name="RejectingParty" xml:space="preserve">
+    <value>Rejecting party</value>
+  </data>
+  <data name="ReloadData" xml:space="preserve">
+    <value>Erneut laden</value>
+  </data>
+  <data name="RequestFailExplenation" xml:space="preserve">
+    <value>Die letze Anfrage ging verloren und wir finden es nicht mehr :( Sei nicht traurig, Wir werden mit deinen zukunftigen Anfragen sorgfältiger umgehen! Helfen kannst du uns, indem Dein Gerät mit dem Internet verbunden ist</value>
+  </data>
+  <data name="SearchingPartiesFailed" xml:space="preserve">
+    <value>Searching for parties failed.</value>
+  </data>
+  <data name="StoragePermissions" xml:space="preserve">
+    <value>Wir müssen auf deinen lokale Speicher zugreifen um Daten zu persistieren, die Daten werden nicht größer als 5 MB und verschlüsselt sein.</value>
+  </data>
+  <data name="SyncSuccess" xml:space="preserve">
+    <value>Wir haben erfolgreich ihre Party's synchronisiert.</value>
+  </data>
+  <data name="UserCreationFailed" xml:space="preserve">
+    <value>Erstellung von Benutzer fehlgeschlagen.</value>
+  </data>
+  <data name="UserLoggedIn" xml:space="preserve">
+    <value>Benutzer eingeloggt.</value>
+  </data>
+  <data name="WeFoundPartiesNearYou" xml:space="preserve">
+    <value>Wir haben {0} Party's in deiner Nähe gefunden.</value>
+  </data>
+</root>
