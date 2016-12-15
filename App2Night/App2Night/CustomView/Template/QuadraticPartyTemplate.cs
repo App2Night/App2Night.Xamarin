@@ -69,7 +69,8 @@ namespace App2Night.CustomView.Template
         private void SetBindings()
         {
             _likeButton.SetBinding(CommitmentStateView.CommitmentStatePendingProperty, "CommitmentStatePending");
-            //_image.SetBinding(Image.SourceProperty, nameof(Party.ImageSource));
+			if (Device.OS != TargetPlatform.Android)
+            	_image.SetBinding(Image.SourceProperty, nameof(Party.ImageSource));
             _titleLabel.SetBinding(Label.TextProperty, "Name");
             _distanceLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
             _shareIconLabel.SetBinding(IsVisibleProperty, "Date", converter: new DateInFutureConverter());
