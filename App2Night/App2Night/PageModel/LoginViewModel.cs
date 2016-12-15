@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.Model.HttpModel;
+using App2Night.Model.Language;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
 using FreshMvvm;
@@ -89,11 +90,11 @@ namespace App2Night.PageModel
         private async Task FormSubmitted()
         {
             Result result = null;
-			UserDialogs.Instance.ShowLoading();
+			//UserDialogs.Instance.ShowLoading();
                 //Create user
                 if (this.SignUp)
                 {
-					UserDialogs.Instance.Loading("Creating user");
+					 //UserDialogs.Instance.Loading(AppResources.CreateUser);
                     var signUpData = new SignUp
                     {
                         Email = Email,
@@ -103,8 +104,8 @@ namespace App2Night.PageModel
                     result = await _dataService.CreateUser(signUpData); 
                     _alertService.UserCreationFinished(result, Username);
                 }
-                else { 
-					UserDialogs.Instance.Loading("Login");
+                else {
+                     //UserDialogs.Instance.Loading("Login");
                      result = await _dataService.RequestToken(Username, Password);
                     _alertService.LoginFinished(result); 
                 }
@@ -113,8 +114,8 @@ namespace App2Night.PageModel
                     SyncData();
                     await ClosePage();
                 }
-                else
-                    UserDialogs.Instance.HideLoading();
+                //else
+                   // UserDialogs.Instance.HideLoading();
         }
         void SyncData()
         {

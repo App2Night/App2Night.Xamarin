@@ -278,6 +278,15 @@ namespace App2Night.Model.Language {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Creating user.
+        /// </summary>
+        public static string CreateUser {
+            get {
+                return ResourceManager.GetString("CreateUser", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dashboard.
         /// </summary>
         public static string Dashboard {

@@ -335,7 +335,6 @@
   <ItemGroup />
   <ItemGroup>
     <Content Include="environment.txt" />
-    <AndroidResource Include="Resources\drawable\dummy.png" />
     <AndroidResource Include="Resources\drawable\icon.png" />
     <AndroidResource Include="Resources\drawable-hdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
@@ -346,6 +345,7 @@
     <AndroidResource Include="Resources\drawable\edit.png" />
     <AndroidResource Include="Resources\drawable\history.png" />
     <AndroidResource Include="Resources\drawable\swipe.png" />
+    <AndroidResource Include="Resources\drawable-nodpi\dummy.jpeg" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Import Project="..\..\packages\Xamarin.Android.Support.Vector.Drawable.23.3.0\build\Xamarin.Android.Support.Vector.Drawable.targets" Condition="Exists('..\..\packages\Xamarin.Android.Support.Vector.Drawable.23.3.0\build\Xamarin.Android.Support.Vector.Drawable.targets')" />

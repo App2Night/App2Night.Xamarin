@@ -345,6 +345,9 @@
   <data name="CommitmentStateChangedTo" xml:space="preserve">
     <value>Commitment state changed to {0}</value>
   </data>
+  <data name="CreateUser" xml:space="preserve">
+    <value>Creating user</value>
+  </data>
   <data name="DateString" xml:space="preserve">
     <value>Datum</value>
   </data>
