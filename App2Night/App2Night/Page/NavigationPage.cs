@@ -37,8 +37,8 @@ namespace App2Night.Page
         #endregion
         
         public NavigationPage()
-        {
-			_loginContentView = LoginContentView();
+        { 
+            _loginContentView = LoginContentView();
 			_logoutContentView = LogoutContentView();
 			SetBindings();
             if(Device.OS == TargetPlatform.iOS) Padding = new Thickness(0, 20, 0, 0);
@@ -71,7 +71,8 @@ namespace App2Night.Page
 			_logoutBtn.SetBinding(Button.CommandProperty, nameof(NavigationViewModel.LogOutCommand));
 			_logInButton.SetBinding(CustomButton.CommandProperty, nameof(NavigationViewModel.LogInCommand));
 			_nextPartyButton.ButtonLabel.SetBinding(Label.TextProperty, nameof(NavigationViewModel.PartyName), stringFormat: "Your next Party " + "{0}"); 
-			// log in and log out to hide views
+			_nextPartyButton.SetBinding(CustomButton.CommandProperty, nameof(NavigationViewModel.MoveToPartyDetailPage));
+            // log in and log out to hide views
 			_nameLabel.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogIn)); 
 			_nextPartyButton.ButtonLabel.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsNextParty));
 			_logoutContentView.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogOut));

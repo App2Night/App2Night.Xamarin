@@ -98,7 +98,14 @@ namespace App2Night.PageModel
 
         public Command<License> OpenLicenseCommand => new Command<License>(async (license) => await CoreMethods.PushPageModel<EditProfileViewModel>(license));
 		public Command MoveToUserEditCommand => new Command(async () => await CoreMethods.PushPageModel<EditProfileViewModel>(_dataService, modal:true));
-		public Command MoveToPartyDetailPage => new Command(async () => await CoreMethods.PushPageModel<PartyDetailViewModel>(NextParty, modal:true));
+		public Command MoveToPartyDetailPage => new Command(() =>
+		{
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                var page = FreshPageModelResolver.ResolvePageModel<PartyDetailViewModel>(NextParty);
+                await App._masterDetailNav.PushPage(page, null);
+            });
+        });
 
         public Command LogOutCommand => new Command(async () => await _storageService.DeleteStorage());
 

@@ -59,7 +59,7 @@ namespace App2Night.CustomView.Template
 
         public PartyTemplate()
         {
-			if (Device.OS != TargetPlatform.Android)
+			//if (Device.OS != TargetPlatform.Android)
            		_pictureImage.SetBinding(Image.SourceProperty, nameof(Party.ImageSource));
             _nameLabel.SetBinding(Label.TextProperty, nameof(Party.Name));
 
