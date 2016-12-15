@@ -10,5 +10,6 @@
 
         public Location ManualLocation { get; set; }
 
+        public User User { get; set; }
     }
 }

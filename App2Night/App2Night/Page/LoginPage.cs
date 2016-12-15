@@ -59,7 +59,7 @@ namespace App2Night.Page
 
         private readonly Label _acceptLabel = new Label
         {
-            Text = "Hiermit bestätige ich das bla bla bla bla bla bla viel Recht,bla bla bla bla bla bla, ob du behindert bist hab ich gefragt",
+			Text = AppResources.AgbAcception,
             HorizontalOptions = LayoutOptions.Center, 
             IsVisible = false
         };
@@ -103,7 +103,7 @@ namespace App2Night.Page
         public LoginPage()
         { 
             BackgroundColor = Color.Red;
-            OfflineMessage = "Your device is not connected to the internet."; //RESOURCE 
+			OfflineMessage = AppResources.OfflineContent; //RESOURCE 
 
             //Make sure that the page does not merge in to the status bar on iOS.
             if(Device.OS == TargetPlatform.iOS) 

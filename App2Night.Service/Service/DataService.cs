@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Dynamic;
-using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.Model.Enum;
@@ -25,13 +23,13 @@ namespace App2Night.Service.Service
         public event EventHandler NearPartiesUpdated;
         public event EventHandler HistoryPartisUpdated;
         public event EventHandler SelectedPartiesUpdated;
+        public event EventHandler<Party> SelectedPartyUpdated;
         public event EventHandler<User> UserUpdated;
 
 
         /// <summary>
         /// Provides the token from the storage. 
-        /// </summary>
-
+        /// </summary> 
         private Token Token
         {
             get { return _storageService.Storage.Token; }
@@ -205,6 +203,12 @@ namespace App2Night.Service.Service
                 await
                     _clientService.SendRequest("/api/Party", RestType.Put, bodyParameter: o, token: Token.AccessToken, 
                         urlQuery: "?id=" + party.Id.ToString("D"));
+
+            if (result.Success)
+            {
+                await GetParty(party.Id);
+            }
+
             return result;
         }
 
@@ -264,15 +268,30 @@ namespace App2Night.Service.Service
             o.locationRating = location;
             o.moodRating = mood;
 
-            return await _clientService.SendRequest("/api/userParty/partyRating", RestType.Put, bodyParameter: o,
+            var result =  await _clientService.SendRequest("/api/userParty/partyRating", RestType.Put, bodyParameter: o,
                             token: Token.AccessToken, urlQuery:"?id=" + partyId.ToString("D"));
+
+            if (result.Success)
+            {
+                await GetParty(partyId);
+            }
+
+            return result;
         }
 
         #endregion
 
         #region user handlign
 
-        public User User { get; set; }
+        public User User
+        {
+            get { return _storageService.Storage?.User; }
+            set
+            {
+                _storageService.Storage.User = value;
+                _storageService.SaveStorage();
+            }
+        } 
 
         public async Task<Result> GetUser()
         {
@@ -336,12 +355,13 @@ namespace App2Night.Service.Service
 
             //Save the new token to the storage
             if (result.Success)
-            {
+            { 
                 Token = result.Data;
                 Token.LastRefresh = DateTime.Now;
 
-                //Save the modified storage
+                //Save the modified storage 
                 await _storageService.SaveStorage();
+                await GetUser();
             }
             return result;
         }
@@ -553,7 +573,8 @@ namespace App2Night.Service.Service
             {
                 AddPartyToCollection(PartyHistory, result.Data);
                 AddPartyToCollection(SelectedPartys, result.Data);
-                AddPartyToCollection(InterestingPartys, result.Data); 
+                AddPartyToCollection(InterestingPartys, result.Data);
+                Device.BeginInvokeOnMainThread(()=>SelectedPartyUpdated?.Invoke(this, result.Data));
             } 
             return result;
         }
@@ -570,6 +591,20 @@ namespace App2Night.Service.Service
                 if (item.Id == party.Id)
                 {
                     item.Participants = party.Participants;
+                    item.Location = party.Location;
+                    item.Name = party.Name; 
+                    item.Date = party.Date;
+
+                    //Voting
+                    item.GeneralUpVoting = party.GeneralUpVoting;
+                    item.LocationUpVoting = party.LocationUpVoting;
+                    item.MoodUpVoting = party.MoodUpVoting;
+                    item.PriceUpVoting = party.PriceUpVoting;
+                    item.GeneralDownVoting = party.GeneralDownVoting;
+                    item.LocationDownVoting = party.LocationDownVoting;
+                    item.MoodDownVoting = party.MoodDownVoting;
+                    item.PriceDownVoting = party.PriceDownVoting;
+
                     alreadyInCollection = true;
                     break;
                 } 
@@ -595,7 +630,20 @@ namespace App2Night.Service.Service
                     collection.Add(party);
                 }
             }
-        } 
+        }
+
+        public void ClearData()
+        {
+            Device.BeginInvokeOnMainThread(() =>
+            {
+                SelectedPartys.Clear();
+                PartyHistory.Clear();
+                SelectedPartiesUpdated?.Invoke(this, EventArgs.Empty);
+                HistoryPartisUpdated?.Invoke(this, EventArgs.Empty);
+            }); 
+        }
+
+        
 
         #endregion  
     }

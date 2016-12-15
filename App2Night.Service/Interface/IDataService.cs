@@ -33,6 +33,12 @@ namespace App2Night.Service.Interface
         /// </summary>
         event EventHandler<User> UserUpdated;
 
+
+        /// <summary>
+        /// Gets triggered when ever a single party gets updated.
+        /// </summary>
+        event EventHandler<Party> SelectedPartyUpdated;
+
         /// <summary>
         /// Refreshes the party history, interesting parties and selected parties.
         /// </summary>
@@ -166,5 +172,10 @@ namespace App2Night.Service.Interface
         Task<Result> ChangeCommitmentState(Guid partyId, PartyCommitmentState commitmentState);
 
         Task<Result> RateParty(Guid partyId, int general, int price, int location, int mood);
+
+        /// <summary>
+        /// Clears all user related data.
+        /// </summary> 
+        void ClearData();
     }
 }

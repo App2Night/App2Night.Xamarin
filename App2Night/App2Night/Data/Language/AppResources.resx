@@ -279,4 +279,55 @@
   <data name="Rate" xml:space="preserve">
     <value>Rate!</value>
   </data>
+	<data name="Price" xml:space="preserve">
+    <value>Price</value>
+  </data>
+	<data name="Reload" xml:space="preserve">
+    <value>Reload</value>
+  </data>
+	<data name="History" xml:space="preserve">
+    <value>History</value>
+  </data>
+	<data name="HistoryNoContent" xml:space="preserve">
+    <value>You did not participate a party yet.</value>
+  </data>
+	<data name="AgbAcception" xml:space="preserve">
+    <value>I confirm all general terms and condition's.</value>
+  </data>
+	<data name="OfflineContent" xml:space="preserve">
+    <value>Your device is not connected to the internet.</value>
+  </data>
+	<data name="NoNotedPartiesContent" xml:space="preserve">
+    <value>You did not note, accept or create a party yet.</value>
+  </data>
+	<data name="ToOtherView" xml:space="preserve">
+    <value>To Other View</value>
+  </data>
+	<data name="AboutTitle" xml:space="preserve">
+    <value>About this App</value>
+  </data>
+	<data name="GeneralInfo" xml:space="preserve">
+    <value>Thank you for using App2Night. This App is the product of a university project by Stefan Machmeier and Konrad Müller at the Baden-Wuerttemberg Cooperative State University Stuttgart - campus Horb.</value>
+  </data>
+	<data name="General" xml:space="preserve">
+    <value>General</value>
+  </data>
+	<data name="GeneralContent" xml:space="preserve">
+    <value>This app is made with Xamarin.Forms connected to a Microsoft Azure Web API made with Asp.Net. You can find the sourcecode for this project at Github.</value>
+  </data>
+	<data name="Project" xml:space="preserve">
+    <value>Project</value>
+  </data>
+	<data name="Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+	<data name="Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+	<data name="Website" xml:space="preserve">
+    <value>Website</value>
+  </data>
+	<data name="ThirdPartyTitle" xml:space="preserve">
+    <value>Third party librarys</value>
+  </data>
 </root>

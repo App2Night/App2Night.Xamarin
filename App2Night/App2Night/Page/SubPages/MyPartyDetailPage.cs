@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using App2Night.CustomView.Template;
 using App2Night.CustomView.View;
 using App2Night.Data.Language;
 using App2Night.Model.Enum;
@@ -20,6 +21,11 @@ namespace App2Night.Page.SubPages
 		public static int CommandHeight = 70;
 
 		#region Views
+
+	    private PartyRatingView _ratingView = new PartyRatingView
+	    {
+	        RatingVisible = false
+	    };
 
 		private InputContainer<Entry> _nameEntry = new InputContainer<Entry>
 		{
@@ -81,12 +87,14 @@ namespace App2Night.Page.SubPages
 
 		ToolbarItem _editToolbarItem = new ToolbarItem
 		{
-			Text = "Edit",
+			Text = AppResources.Edit,
+            Icon = "edit.png"
 		};
 		ToolbarItem _deleteParty = new ToolbarItem
 		{
-			Text = "Delete"
-		};
+			Text = AppResources.Delete,
+            Icon = "trash.png"
+        };
 
 		readonly Map _partyLocation = new Map()
 		{
@@ -213,6 +221,8 @@ namespace App2Night.Page.SubPages
 
 		public MyPartyDetailPage()
 		{
+		    _gallerieView.Template = typeof(ParticipantTemplate);
+
 			SetBindings();
 			Device.BeginInvokeOnMainThread(async () => await InitializeMapCoordinates());
 			ToolbarItems.Add(_editToolbarItem);
@@ -259,6 +269,7 @@ namespace App2Night.Page.SubPages
 				{
 					Children =
 					{
+                        _ratingView,
                         // Description of Party
                         new Frame
 						{
@@ -474,7 +485,10 @@ namespace App2Night.Page.SubPages
 			//Participants
 			_gallerieView.SetBinding(GallerieView.ItemSourceProperty, "Party.Participants");
 			_gallerieView.SetBinding(GallerieView.IsVisibleProperty, "ParticipantsVisible");
-		}
+
+            _ratingView.SetBinding(PartyRatingView.PartyProperty, "Party");
+
+        }
 
 		protected override void OnDisappearing()
 		{

@@ -40,8 +40,10 @@
     </Compile>
     <Compile Include="CustomMasterDetailContainer.cs" />
     <Compile Include="CustomView\Template\MenuTemplate.cs" />
+    <Compile Include="CustomView\Template\ParticipantTemplate.cs" />
     <Compile Include="CustomView\Template\SwipeViewTemplate.cs" />
     <Compile Include="CustomView\View\CommitmentStateView.cs" />
+    <Compile Include="CustomView\View\PartyRatingView.cs" />
     <Compile Include="CustomView\View\InputContainer.cs" />
     <Compile Include="CustomView\View\EnumBindablePicker.cs" />
     <Compile Include="CustomView\Page\CustomContentPage.cs" />
@@ -115,6 +117,7 @@
     <Compile Include="Page\SubPages\ThirdPartyPage.cs" />
     <Compile Include="ValueConverter\DateInFutureConverter.cs" />
     <Compile Include="ValueConverter\InvertBooleanConverter.cs" />
+    <Compile Include="ValueConverter\PercentageValueConverter.cs" />
     <Compile Include="ValueConverter\StringNotEmptyConverter.cs" />
     <Compile Include="DependencyService\ICultureService.cs" />
   </ItemGroup>

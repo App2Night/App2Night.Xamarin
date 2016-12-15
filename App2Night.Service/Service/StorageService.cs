@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using Acr.UserDialogs;
 using App2Night.Model.Enum;
 using App2Night.Model.Model;
 using App2Night.Service.Helper;
@@ -13,7 +11,6 @@ using FreshMvvm;
 using Newtonsoft.Json;
 using PCLStorage;
 using SQLite.Net;
-using Xamarin.Forms;
 
 namespace App2Night.Service.Service
 {
@@ -38,7 +35,7 @@ namespace App2Night.Service.Service
             {
                 //Create a new storage if non is set yet.
                 if (_storage == null)
-                {
+                { 
                     _storage = new Storage();
                 }
                 return _storage;
@@ -152,11 +149,7 @@ namespace App2Night.Service.Service
                     string encryptedString = await file.ReadAllTextAsync();
                     var decryptedString = DecriptString(encryptedString);
                     storage = JsonConvert.DeserializeObject<Storage>(decryptedString);
-                    cached = true;
-                    if (storage.Token != null)
-                    {
-                        LogInChanged(true);
-                    }
+                    cached = true; 
                 }
             }
 
@@ -167,14 +160,23 @@ namespace App2Night.Service.Service
             finally
             {
                 Storage = storage;
+                if (storage.Token != null)
+                {
+                    LogInChanged(true);
+                }
                 if (!cached) await SaveStorage();
             }
         }
 
         public async Task DeleteStorage()
         {
-            Storage = new Storage();
-            await ClearCache();
+            var range = Storage.FilterRadius;
+            Storage = new Storage
+            {
+                FilterRadius = range
+            };
+            
+            ClearCache();
             await SaveStorage();
             LogInChanged(false);
         }
@@ -186,10 +188,13 @@ namespace App2Night.Service.Service
             LogInChanged(true);
         }
 
-        public async Task ClearCache()
+        public void ClearCache()
         {
-            if(_databaseConnection!=null)
-               _databaseConnection.DeleteAll<Party>();
+            if (_databaseConnection != null)
+            {
+                FreshIOC.Container.Resolve<IDataService>().ClearData();
+                _databaseConnection.DeleteAll<Party>();
+            } 
         }
 
         private void LogInChanged(bool isLogIn)

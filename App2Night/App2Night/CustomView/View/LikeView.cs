@@ -43,12 +43,17 @@ namespace App2Night.CustomView.View
 
         public LikeView()
         {
+			// add events 
             _likeButton.ButtonTapped += TapLikeBtn;
             _dislikeButton.ButtonTapped += TapDislikeBtn;
             Grid grid = CreateInputColumns();
             Content = grid;
         }
-
+		/// <summary>
+		/// Taps the dislike button and changes the color to either red or gray.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">E.</param>
         private void TapDislikeBtn(object sender, EventArgs e)
         {
             if (_dislikeButton.ButtonLabel.TextColor == Color.Red)
@@ -63,7 +68,11 @@ namespace App2Night.CustomView.View
                 LikeState = -1;
             }
         }
-
+		/// <summary>
+		/// Taps the like button and changes the color to either green or gray.
+		/// </summary>
+		/// <param name="sender">Sender.</param>
+		/// <param name="e">E.</param>
         private void TapLikeBtn(object sender, EventArgs e)
         {
             if (_likeButton.ButtonLabel.TextColor == Color.Lime)

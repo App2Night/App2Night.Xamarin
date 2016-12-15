@@ -2,6 +2,7 @@
 using App2Night.CustomView.Page;
 using App2Night.CustomView.Template;
 using App2Night.CustomView.View;
+using App2Night.Data.Language;
 using App2Night.Model.Model;
 using Xamarin.Forms;
 
@@ -13,12 +14,13 @@ namespace App2Night.Page
 
         public MyPartysPage()
         {
-            NoContentWarningMessage = "You did not note, accept or create a party yet."; 
+			NoContentWarningMessage = AppResources.NoNotedPartiesContent;
 
-            //Switch to history toolbar icon
-            var historyToolbarIcon = new ToolbarItem
-            {
-                Text = "History" 
+			//Switch to history toolbar icon
+			var historyToolbarIcon = new ToolbarItem
+			{
+				Text = AppResources.History,
+                Icon = "history.png"
             };
             historyToolbarIcon.SetBinding(MenuItem.CommandProperty, "NavigateToHistoryCommand");
             ToolbarItems.Add(historyToolbarIcon);

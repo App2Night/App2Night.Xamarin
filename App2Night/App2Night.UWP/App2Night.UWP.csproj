@@ -90,12 +90,45 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Content Include="add.png" />
+    <Content Include="add.scale-100.png" />
+    <Content Include="add.scale-125.png" />
+    <Content Include="add.scale-150.png" />
+    <Content Include="add.scale-200.png" />
+    <Content Include="add.scale-400.png" />
     <Content Include="Assets\BadgeLogo.scale-100.png" />
     <Content Include="Assets\BadgeLogo.scale-125.png" />
     <Content Include="Assets\BadgeLogo.scale-150.png" />
     <Content Include="Assets\BadgeLogo.scale-200.png" />
     <Content Include="Assets\BadgeLogo.scale-400.png" />
     <Content Include="Assets\Fonts\FontAwesome.ttf" />
+    <Content Include="edit.png" />
+    <Content Include="edit.scale-100.png" />
+    <Content Include="edit.scale-125.png" />
+    <Content Include="edit.scale-150.png" />
+    <Content Include="edit.scale-200.png" />
+    <Content Include="edit.scale-400.png" />
+    <Content Include="history.png" />
+    <Content Include="history.scale-100.png" />
+    <Content Include="history.scale-125.png" />
+    <Content Include="swipe.png" />
+    <Content Include="swipe.scale-100.png" />
+    <Content Include="swipe.scale-125.png" />
+    <Content Include="swipe.scale-150.png" />
+    <Content Include="swipe.scale-200.png" />
+    <Content Include="swipe.scale-400.png" />
+    <Content Include="sync.png" />
+    <Content Include="sync.scale-100.png" />
+    <Content Include="sync.scale-125.png" />
+    <Content Include="sync.scale-150.png" />
+    <Content Include="sync.scale-200.png" />
+    <Content Include="sync.scale-400.png" />
+    <Content Include="trash.png" />
+    <Content Include="trash.scale-100.png" />
+    <Content Include="trash.scale-125.png" />
+    <Content Include="trash.scale-150.png" />
+    <Content Include="trash.scale-200.png" />
+    <Content Include="trash.scale-400.png" />
     <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
@@ -156,6 +189,9 @@
     <Content Include="Assets\Wide310x150Logo.scale-125.png" />
     <Content Include="Assets\Wide310x150Logo.scale-150.png" />
     <Content Include="Assets\Wide310x150Logo.scale-400.png" />
+    <Content Include="history.scale-150.png" />
+    <Content Include="history.scale-200.png" />
+    <Content Include="history.scale-400.png" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

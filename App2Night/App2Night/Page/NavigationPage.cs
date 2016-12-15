@@ -26,13 +26,7 @@ namespace App2Night.Page
             ButtonLabel = { Text = AppResources.Login, FontSize = 18 },
             VerticalOptions = LayoutOptions.Center,
             HorizontalOptions = LayoutOptions.Center
-        };
-		private CustomButton _editProfileButton = new CustomButton 
-		{ 
-			ButtonLabel = {FontFamily="FontAwesome", Text= "\uf044" , FontSize=18},
-			HorizontalOptions = LayoutOptions.Start,
-
-		};
+        }; 
 		private CustomButton _nextPartyButton = new CustomButton 
 		{
 			ButtonLabel = { FontSize = 18},
@@ -73,14 +67,12 @@ namespace App2Night.Page
 		private void SetBindings()
 		{
 			// name of user and party
-			_nameLabel.SetBinding(Label.TextProperty, nameof(NavigationViewModel.UserName), stringFormat: "Hello " + "{0}");
+			_nameLabel.SetBinding(Label.TextProperty, nameof(NavigationViewModel.UserName), stringFormat: "Hello {0}");
 			_logoutBtn.SetBinding(Button.CommandProperty, nameof(NavigationViewModel.LogOutCommand));
 			_logInButton.SetBinding(CustomButton.CommandProperty, nameof(NavigationViewModel.LogInCommand));
-			_nextPartyButton.ButtonLabel.SetBinding(Label.TextProperty, nameof(NavigationViewModel.PartyName), stringFormat: "Your next Party " + "{0}");
-			_editProfileButton.SetBinding(CustomButton.CommandProperty, nameof(NavigationViewModel.MoveToUserEditCommand));
+			_nextPartyButton.ButtonLabel.SetBinding(Label.TextProperty, nameof(NavigationViewModel.PartyName), stringFormat: "Your next Party " + "{0}"); 
 			// log in and log out to hide views
-			_nameLabel.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogIn));
-			_editProfileButton.ButtonLabel.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogIn));
+			_nameLabel.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogIn)); 
 			_nextPartyButton.ButtonLabel.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsNextParty));
 			_logoutContentView.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogOut));
 			_logoutBtn.SetBinding(IsVisibleProperty, nameof(NavigationViewModel.IsLogIn));
@@ -113,8 +105,7 @@ namespace App2Night.Page
 					},
 					Children =
 					{
-						{_nameLabel,0,1 },
-						{_editProfileButton,1,1 },
+						{_nameLabel,0,1 }, 
 						{_nextPartyButton,0,2 }
 					}
 				}

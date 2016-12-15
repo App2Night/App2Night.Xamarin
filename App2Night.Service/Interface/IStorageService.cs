@@ -60,6 +60,6 @@ namespace App2Night.Service.Interface
         /// <summary>
         /// Clears all cached parties.
         /// </summary> 
-        Task ClearCache();
+        void ClearCache();
     }
 }

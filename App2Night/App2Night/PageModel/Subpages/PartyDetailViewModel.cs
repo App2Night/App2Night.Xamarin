@@ -17,6 +17,8 @@ namespace App2Night.PageModel.SubPages
     public class PartyDetailViewModel : FreshBasePageModel
     {
         private readonly IDataService _dataService;
+
+        [AlsoNotifyFor(nameof(ValidRate))]
         public Party Party { get; set; }
 
         public string Name => Party.Name;
@@ -49,11 +51,22 @@ namespace App2Night.PageModel.SubPages
                     Label = Party.Name
                 };
             }
-        }
+        } 
 
         public PartyDetailViewModel(IDataService dataService)
         {
             _dataService = dataService;
+            _dataService.SelectedPartyUpdated += SelectedPartyUpdated;
+        }
+
+        private void SelectedPartyUpdated(object sender, Party party)
+        {
+            Party = party;
+            if (Party.Participants.Any())
+            {
+                RaisePropertyChanged(nameof(Party.Participants));
+                ParticipantsVisible = true;
+            }
         }
 
         public override void Init(object initData)
@@ -61,21 +74,17 @@ namespace App2Night.PageModel.SubPages
             base.Init(initData);
             Party = (Party)initData;
             Debug.WriteLine(Party.Id);
+            LoadPartyDetails();
+        }
+
+        private void LoadPartyDetails()
+        {
             //Load more detailed infos about the party
             Device.BeginInvokeOnMainThread(async () =>
             {
                 using (UserDialogs.Instance.Loading(""))
                 {
-                    var result = await _dataService.GetParty(Party.Id);
-                    if (result.Success)
-                    {
-                        Party = result.Data;
-                        if (Party.Participants.Any())
-                        {
-                            RaisePropertyChanged(nameof(Party.Participants));
-                            ParticipantsVisible = true;
-                        }
-                    }
+                    await _dataService.GetParty(Party.Id); 
                 }
             });
         }
@@ -84,13 +93,13 @@ namespace App2Night.PageModel.SubPages
 
         public bool ValidateRating()
         {
-            if (Party.CommitmentState == PartyCommitmentState.Rejected)
+            if (Party.CommitmentState == PartyCommitmentState.Rejected) //We can only rate when we noted or accepted a party
             {
                 return false;
             }
 
-            if (Party.Date.Date == DateTime.Today.Date) return true;
-            if (Party.Date.AddDays(1).Date == DateTime.Today.AddDays(1).Date) return true;
+            if (Party.Date.Date == DateTime.Today.Date) return true; //We can rate on the same day
+            if (Party.Date.AddDays(1).Date == DateTime.Today.Date) return true; //We can rate the next day
             return false;
         } 
     }

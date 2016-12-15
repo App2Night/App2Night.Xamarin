@@ -80,6 +80,10 @@ namespace App2Night.CustomView.Page
 
         public  CustomContentPage()
         {
+            if (Device.OS == TargetPlatform.Windows)
+                BackgroundColor = Color.FromHex("#f2f2f2");
+
+
             _mainLayout = new Grid
             {
                 RowSpacing = 0,
