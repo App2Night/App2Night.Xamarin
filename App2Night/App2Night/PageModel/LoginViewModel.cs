@@ -90,11 +90,11 @@ namespace App2Night.PageModel
         private async Task FormSubmitted()
         {
             Result result = null;
-			//UserDialogs.Instance.ShowLoading();
+			UserDialogs.Instance.ShowLoading();
                 //Create user
                 if (this.SignUp)
                 {
-					 //UserDialogs.Instance.Loading(AppResources.CreateUser);
+					UserDialogs.Instance.Loading(AppResources.CreateUser);
                     var signUpData = new SignUp
                     {
                         Email = Email,
@@ -105,7 +105,7 @@ namespace App2Night.PageModel
                     _alertService.UserCreationFinished(result, Username);
                 }
                 else {
-                     //UserDialogs.Instance.Loading("Login");
+                     UserDialogs.Instance.Loading("Login");
                      result = await _dataService.RequestToken(Username, Password);
                     _alertService.LoginFinished(result); 
                 }
@@ -114,8 +114,8 @@ namespace App2Night.PageModel
                     SyncData();
                     await ClosePage();
                 }
-                //else
-                   // UserDialogs.Instance.HideLoading();
+                else
+                   UserDialogs.Instance.HideLoading();
         }
         void SyncData()
         {
