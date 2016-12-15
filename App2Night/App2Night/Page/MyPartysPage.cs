@@ -19,7 +19,8 @@ namespace App2Night.Page
 			//Switch to history toolbar icon
 			var historyToolbarIcon = new ToolbarItem
 			{
-				Text = AppResources.History
+				Text = AppResources.History,
+                Icon = "history.png"
             };
             historyToolbarIcon.SetBinding(MenuItem.CommandProperty, "NavigateToHistoryCommand");
             ToolbarItems.Add(historyToolbarIcon);

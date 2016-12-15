@@ -20,7 +20,9 @@ namespace App2Night.PageModel
 
 		[AlsoNotifyFor(nameof(UserName))]
 		public Model.Model.User User { get; set;}
-		public string UserName => User != null ? User.Name : string.Empty;
+
+        public string UserName 
+            => User != null ? User.Name : string.Empty;
 
         private bool _isLogIn;
         public bool IsLogIn
@@ -62,9 +64,7 @@ namespace App2Night.PageModel
         public NavigationViewModel()
         {
             _storageService = FreshIOC.Container.Resolve<IStorageService>();
-            _dataService = FreshIOC.Container.Resolve<IDataService>();
-			_dataService.GetUser();
-			User = _dataService.User;
+            _dataService = FreshIOC.Container.Resolve<IDataService>(); 
             _storageService.IsLoginChanged += LoginChanged;
 			_dataService.UserUpdated += UserUpdated;
 			_dataService.SelectedPartiesUpdated += SelectedPartiesChanged;
@@ -75,6 +75,7 @@ namespace App2Night.PageModel
 			IsLogIn = b;
 			IsNextParty = b;
 			IsLogOut = !b;
+            RaisePropertyChanged(nameof(User));
 		}
 		private void UserUpdated(object sender, Model.Model.User e)
 		{

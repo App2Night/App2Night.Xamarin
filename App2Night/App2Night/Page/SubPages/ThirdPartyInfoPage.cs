@@ -15,7 +15,7 @@ namespace App2Night.Page.SubPages
             //Toolbar item for project site redirection
             var toolbarItem = new ToolbarItem
             {
-                Text = AppResources.Website
+                Text = AppResources.Website 
             };
             ToolbarItems.Add(toolbarItem);
             toolbarItem.SetBinding( MenuItem.CommandProperty, "OpenWebsiteCommand");

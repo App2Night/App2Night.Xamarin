@@ -2,9 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using Acr.UserDialogs;
 using App2Night.Model.Enum;
 using App2Night.Model.Model;
 using App2Night.Service.Helper;
@@ -13,7 +11,6 @@ using FreshMvvm;
 using Newtonsoft.Json;
 using PCLStorage;
 using SQLite.Net;
-using Xamarin.Forms;
 
 namespace App2Night.Service.Service
 {
@@ -152,11 +149,7 @@ namespace App2Night.Service.Service
                     string encryptedString = await file.ReadAllTextAsync();
                     var decryptedString = DecriptString(encryptedString);
                     storage = JsonConvert.DeserializeObject<Storage>(decryptedString);
-                    cached = true;
-                    if (storage.Token != null)
-                    {
-                        LogInChanged(true);
-                    }
+                    cached = true; 
                 }
             }
 
@@ -167,6 +160,10 @@ namespace App2Night.Service.Service
             finally
             {
                 Storage = storage;
+                if (storage.Token != null)
+                {
+                    LogInChanged(true);
+                }
                 if (!cached) await SaveStorage();
             }
         }

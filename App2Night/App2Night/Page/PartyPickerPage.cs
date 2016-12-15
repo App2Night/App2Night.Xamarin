@@ -37,7 +37,8 @@ namespace App2Night.Page
                         Content = listView;
                     else
                         Content = swipeView;
-                })
+                }),
+                Icon = "swipe.png"
             };
             ToolbarItems.Add(changeViewToolbarItem);
 

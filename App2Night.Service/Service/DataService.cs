@@ -283,7 +283,15 @@ namespace App2Night.Service.Service
 
         #region user handlign
 
-        public User User { get; set; }
+        public User User
+        {
+            get { return _storageService.Storage?.User; }
+            set
+            {
+                _storageService.Storage.User = value;
+                _storageService.SaveStorage();
+            }
+        } 
 
         public async Task<Result> GetUser()
         {
@@ -347,12 +355,13 @@ namespace App2Night.Service.Service
 
             //Save the new token to the storage
             if (result.Success)
-            {
+            { 
                 Token = result.Data;
                 Token.LastRefresh = DateTime.Now;
 
-                //Save the modified storage
+                //Save the modified storage 
                 await _storageService.SaveStorage();
+                await GetUser();
             }
             return result;
         }
@@ -565,7 +574,7 @@ namespace App2Night.Service.Service
                 AddPartyToCollection(PartyHistory, result.Data);
                 AddPartyToCollection(SelectedPartys, result.Data);
                 AddPartyToCollection(InterestingPartys, result.Data);
-                SelectedPartyUpdated?.Invoke(this, result.Data);
+                Device.BeginInvokeOnMainThread(()=>SelectedPartyUpdated?.Invoke(this, result.Data));
             } 
             return result;
         }

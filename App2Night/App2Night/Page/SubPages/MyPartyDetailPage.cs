@@ -88,11 +88,13 @@ namespace App2Night.Page.SubPages
 		ToolbarItem _editToolbarItem = new ToolbarItem
 		{
 			Text = AppResources.Edit,
+            Icon = "edit.png"
 		};
 		ToolbarItem _deleteParty = new ToolbarItem
 		{
-			Text = AppResources.Delete
-		};
+			Text = AppResources.Delete,
+            Icon = "trash.png"
+        };
 
 		readonly Map _partyLocation = new Map()
 		{
