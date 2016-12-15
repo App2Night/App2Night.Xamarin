@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
@@ -79,11 +80,34 @@ namespace App2Night.PageModel
 
         public int SelectedRange
         {
-            get { return _storageService.Storage.FilterRadius; }
-            set
+            get
             {
+                return _storageService.Storage.FilterRadius;
+            }
+            set
+            { 
                 _storageService.Storage.FilterRadius = value;
-                //TODO save range after x amount of time.
+                Debug.WriteLine("TETST");
+                Task.Run(RangeChanged);
+            }
+        }
+
+        DateTime lastChange = DateTime.Now;
+        private bool _firstChange = true; 
+
+        async Task RangeChanged()
+        {
+            if (_firstChange)
+            {
+                _firstChange = false;
+                return;
+            }
+            var changeTimestamp = DateTime.Now; 
+            lastChange = changeTimestamp;
+            await Task.Delay(50);
+            if (lastChange == changeTimestamp)
+            {
+                await _storageService.SaveStorage();
             }
         }
 
@@ -258,6 +282,12 @@ namespace App2Night.PageModel
         {
             _storageService = storageService;
             _dataService = dataService;
+        }
+
+        protected override void ViewIsAppearing(object sender, EventArgs e)
+        {
+            base.ViewIsAppearing(sender, e);
+            RaisePropertyChanged(nameof(SelectedRange));
         }
     }
 }

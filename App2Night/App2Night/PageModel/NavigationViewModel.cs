@@ -22,14 +22,14 @@ namespace App2Night.PageModel
 		public Model.Model.User User { get; set;}
 		public string UserName => User != null ? User.Name : string.Empty;
 
-		private bool _isLogIn;
+        private bool _isLogIn;
         public bool IsLogIn
 		{
 			get { return _isLogIn; }
 			private set {_isLogIn = value;}
 		}
 
-		private bool _isLogOut;
+		private bool _isLogOut = true;
 		public bool IsLogOut
 		{
 			get { return _isLogOut; }

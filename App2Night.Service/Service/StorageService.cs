@@ -38,7 +38,7 @@ namespace App2Night.Service.Service
             {
                 //Create a new storage if non is set yet.
                 if (_storage == null)
-                {
+                { 
                     _storage = new Storage();
                 }
                 return _storage;
@@ -173,7 +173,12 @@ namespace App2Night.Service.Service
 
         public async Task DeleteStorage()
         {
-            Storage = new Storage();
+            var range = Storage.FilterRadius;
+            Storage = new Storage
+            {
+                FilterRadius = range
+            };
+            
             ClearCache();
             await SaveStorage();
             LogInChanged(false);
