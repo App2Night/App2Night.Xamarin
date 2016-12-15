@@ -29,12 +29,13 @@ namespace App2Night
 
         public App()
         {
-            MobileCenter.Start(typeof(Analytics), typeof(Crashes)); 
-
-            InitializeComponent();
+            MobileCenter.Start(typeof(Analytics), typeof(Crashes));
             CheckIfMapsIsAvailable();
 
+            InitializeComponent();
+
             RegisterInterfaces();
+            SetupGeolocator();
             _masterDetailNav = CreateMasterDetailContainerInstance();
 
             MainPage = _masterDetailNav;
@@ -44,9 +45,7 @@ namespace App2Night
                 var ci = Xamarin.Forms.DependencyService.Get<ICultureService>().GetCurrentCultureInfo();
                 AppResources.Culture = ci; // set the RESX for resource localization
                 Xamarin.Forms.DependencyService.Get<ICultureService>().SetLocale(ci); // set the Thread for locale-aware methods
-            }
-
-            Task.Run(async () => await GenerelSetup());
+            } 
         }
 
         /// <summary>
@@ -86,21 +85,25 @@ namespace App2Night
         private async Task GenerelSetup()
         {
 			Device.BeginInvokeOnMainThread(() => UserDialogs.Instance.ShowLoading());
-                var alertService = FreshIOC.Container.Resolve<IAlertService>(); 
+            var alertService = FreshIOC.Container.Resolve<IAlertService>(); 
 
-                SetupGeolocator();
+            var storage = FreshIOC.Container.Resolve<IStorageService>();
+            await storage.OpenStorage(); 
 
-                var storage = FreshIOC.Container.Resolve<IStorageService>();
-                await storage.OpenStorage(); 
+            //Make an inital token refresh 
+            await FreshIOC.Container.Resolve<IDataService>().BatchRefresh();
 
-                //Make an inital token refresh 
-                await FreshIOC.Container.Resolve<IDataService>().BatchRefresh();
+            if (!storage.IsLogIn)
+            {
+                ShowLoginModal();
+            }
+            Device.BeginInvokeOnMainThread(() => UserDialogs.Instance.HideLoading()); 
+        }
 
-                if (!storage.IsLogIn)
-                {
-                    ShowLoginModal();
-                }
-			Device.BeginInvokeOnMainThread(() => UserDialogs.Instance.HideLoading());
+        protected override void OnStart()
+        {
+            base.OnStart(); 
+            Task.Run(async () => await GenerelSetup());
         }
 
         private void ShowLoginModal()

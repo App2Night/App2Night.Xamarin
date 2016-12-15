@@ -2,6 +2,7 @@
 using App2Night.Service.Helper;
 using App2Night.Service.Interface;
 using FreshMvvm;
+using Plugin.Geolocator;
 using Xamarin.Forms;
 using Xamarin.Forms.Maps;
 
@@ -35,7 +36,7 @@ namespace App2Night.CustomView.View
                         FreshIOC.Container.Resolve<IAlertService>().RequestLocationPermissions();
                    
 
-                    if (locationPermissionsAvailable )
+                    if (locationPermissionsAvailable && CrossGeolocator.Current.IsGeolocationEnabled)
                     {
                         map.IsShowingUser = locationAvailable; 
                     }
@@ -45,8 +46,14 @@ namespace App2Night.CustomView.View
                         Content = map;
                     }
                     else
-                        Content = new Label { Text = AppResources.LocationNotEnabled,
-                        Margin = new Thickness(10)};  
+                    {
+                        Content = new Label
+                        {
+                            Text = AppResources.LocationNotEnabled,
+                            Margin = new Thickness(10)
+                        };
+                    }
+                         
                 });
             } 
         }

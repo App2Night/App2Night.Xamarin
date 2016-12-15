@@ -21,8 +21,8 @@ namespace App2Night.Service.Helper
             var storageService = FreshIOC.Container.Resolve<IStorageService>();
 
             var storageEnabled = storageService.Storage.UseGps //Check if gps usage is enabled in the settigns.
-               && CrossGeolocator.Current.IsGeolocationAvailable  //Check if gps usage is available on the device.
-               && CrossGeolocator.Current.IsGeolocationEnabled; //Check if gps usage is enabled on the device.  
+                                 && CrossGeolocator.Current.IsGeolocationAvailable;  //Check if gps usage is available on the device. 
+              
 
             if (!storageEnabled) return false;
 
@@ -40,14 +40,12 @@ namespace App2Night.Service.Helper
 
         public static async Task<Coordinates> GetCoordinates(bool fallBackToDefaultCoordinates = true)
         {
-            var storageService = FreshIOC.Container.Resolve<IStorageService>();
-
-            //TODO check if user is alowed to use gps
+            var storageService = FreshIOC.Container.Resolve<IStorageService>(); 
 
             var storageEnabled =await HasGeolocationAccess();
             Coordinates coordinates = null;
 
-            if (storageEnabled)
+            if (storageEnabled && CrossGeolocator.Current.IsGeolocationEnabled)
             {
                 try
                 {
