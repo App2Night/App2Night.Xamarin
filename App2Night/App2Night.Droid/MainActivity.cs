@@ -1,4 +1,5 @@
-﻿using Acr.UserDialogs;
+﻿using System;
+using Acr.UserDialogs;
 using Android.App;
 using Android.Content.PM;
 using Android.OS;
@@ -13,7 +14,13 @@ namespace App2Night.Droid
 
         public override void OnRequestPermissionsResult(int requestCode, string[] permissions, Permission[] grantResults)
         {
-            PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            try
+            {
+                PermissionsImplementation.Current.OnRequestPermissionsResult(requestCode, permissions, grantResults);
+            }
+            catch (Exception)
+            { 
+            }
         }
 
         protected override void OnCreate(Bundle bundle)

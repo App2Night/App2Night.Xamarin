@@ -30,12 +30,14 @@ namespace App2Night
         public App()
         {
             MobileCenter.Start(typeof(Analytics), typeof(Crashes));
+
+            SetupGeolocator();
             CheckIfMapsIsAvailable();
 
             InitializeComponent();
 
             RegisterInterfaces();
-            SetupGeolocator();
+            
             _masterDetailNav = CreateMasterDetailContainerInstance();
 
             MainPage = _masterDetailNav;
@@ -84,21 +86,24 @@ namespace App2Night
         /// <returns></returns>
         private async Task GenerelSetup()
         {
-			Device.BeginInvokeOnMainThread(() => UserDialogs.Instance.ShowLoading());
-            var alertService = FreshIOC.Container.Resolve<IAlertService>(); 
+            Device.BeginInvokeOnMainThread(() => UserDialogs.Instance.ShowLoading());
+            await Task.Delay(500); 
 
             var storage = FreshIOC.Container.Resolve<IStorageService>();
-            await storage.OpenStorage(); 
+            await storage.OpenStorage();
 
             //Make an inital token refresh 
-            await FreshIOC.Container.Resolve<IDataService>().BatchRefresh();
 
             if (!storage.IsLogIn)
             {
+                Task.Run(async()=>await FreshIOC.Container.Resolve<IDataService>().RequestPartyWithFilter()); 
                 ShowLoginModal();
             }
-            Device.BeginInvokeOnMainThread(() => UserDialogs.Instance.HideLoading()); 
-        }
+            else
+                await FreshIOC.Container.Resolve<IDataService>().BatchRefresh();
+
+            Device.BeginInvokeOnMainThread(() => UserDialogs.Instance.HideLoading());
+        } 
 
         protected override void OnStart()
         {

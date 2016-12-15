@@ -501,6 +501,7 @@ namespace App2Night.Service.Service
             });
         }
 
+
         public async Task<Result<IEnumerable<Party>>> RequestPartyWithFilter()
         {
             Result<IEnumerable<Party>> requestResult = new Result<IEnumerable<Party>>();
