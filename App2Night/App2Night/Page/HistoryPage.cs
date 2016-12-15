@@ -1,7 +1,7 @@
 ﻿using App2Night.CustomView.Page;
 using App2Night.CustomView.Template;
 using App2Night.CustomView.View;
-using App2Night.Data.Language;
+using App2Night.Model.Language;
 using App2Night.Model.Model;
 using App2Night.PageModel;
 using App2Night.ValueConverter;

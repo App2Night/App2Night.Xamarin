@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.CustomView.Page;
 using App2Night.CustomView.View;
-using App2Night.Data.Language;
+using App2Night.Model.Language;
 using App2Night.PageModel;
 using Xamarin.Forms;
 

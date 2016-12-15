@@ -1,6 +1,6 @@
 ﻿using System.IO;
 using System.Reflection;
-using App2Night.Data.Language;
+using App2Night.Model.Language;
 using App2Night.PageModel.SubPages;
 using FreshMvvm;
 using Xamarin.Forms;

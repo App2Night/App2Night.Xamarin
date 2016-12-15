@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using App2Night.CustomView.View;
+using App2Night.Model.Language;
 using App2Night.Model.Model;
 using App2Night.ValueConverter;
 using Xamarin.Forms;
@@ -132,14 +133,13 @@ namespace App2Night.CustomView.Template
                 HorizontalOptions = LayoutOptions.Center
             };
             dateLabel.SetBinding(Label.TextProperty, nameof(Party.Date), stringFormat: "{0:dd MM yyyy}");
-            dic.Add("Date", dateLabel); //RESOURCE
-
+            dic.Add(AppResources.DateString, dateLabel); 
             Label musicGenreLabel = new Label
             {
                 HorizontalOptions = LayoutOptions.Center
             };
             musicGenreLabel.SetBinding(Label.TextProperty, nameof(Party.MusicGenre));
-            dic.Add("Genre", musicGenreLabel); //RESOURCE  
+            dic.Add(AppResources.Genre, musicGenreLabel);  
 
             return dic;
         }

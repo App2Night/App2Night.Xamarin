@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Acr.UserDialogs;
-using App2Night.Data.Language;
+
 using App2Night.DependencyService;
+using App2Night.Model.Language;
 using App2Night.Model.Model;
 using App2Night.PageModel;
 using App2Night.PageModel.SubPages;
@@ -59,7 +60,7 @@ namespace App2Night
             masterDetailNav.AddPage<DashboardPageModel>(AppResources.Dashboard, "\uf015");
             masterDetailNav.AddPage<PartyPickerViewModel>(AppResources.PickAParty, "\uf29b");
             masterDetailNav.AddPage<CreatePartyViewModel>(AppResources.CreateAParty, "\uf271", requiresLogin: true);
-            masterDetailNav.AddPage<MyPartysViewModel>("My parties", "\uf274", requiresLogin: true); //RESOURCE
+            masterDetailNav.AddPage<MyPartysViewModel>(AppResources.MyParties, "\uf274", requiresLogin: true); 
             masterDetailNav.AddPage<SettingViewModel>(AppResources.Settings, "\uf085");
             masterDetailNav.AddPage<AboutTabbedViewModel>(AppResources.About, "\uf05a");
             return masterDetailNav;

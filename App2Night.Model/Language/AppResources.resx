@@ -112,10 +112,10 @@
     <value>2.0</value>
   </resheader>
   <resheader name="reader">
-    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e</value>
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <resheader name="writer">
-    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e</value>
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="About" xml:space="preserve">
     <value>About</value>
@@ -279,55 +279,136 @@
   <data name="Rate" xml:space="preserve">
     <value>Rate!</value>
   </data>
-	<data name="Price" xml:space="preserve">
+  <data name="Price" xml:space="preserve">
     <value>Price</value>
   </data>
-	<data name="Reload" xml:space="preserve">
+  <data name="Reload" xml:space="preserve">
     <value>Reload</value>
   </data>
-	<data name="History" xml:space="preserve">
-    <value>History</value>
-  </data>
-	<data name="HistoryNoContent" xml:space="preserve">
+  <data name="HistoryNoContent" xml:space="preserve">
     <value>You did not participate a party yet.</value>
   </data>
-	<data name="AgbAcception" xml:space="preserve">
+  <data name="AgbAcception" xml:space="preserve">
     <value>I confirm all general terms and condition's.</value>
   </data>
-	<data name="OfflineContent" xml:space="preserve">
+  <data name="OfflineContent" xml:space="preserve">
     <value>Your device is not connected to the internet.</value>
   </data>
-	<data name="NoNotedPartiesContent" xml:space="preserve">
+  <data name="NoNotedPartiesContent" xml:space="preserve">
     <value>You did not note, accept or create a party yet.</value>
   </data>
-	<data name="ToOtherView" xml:space="preserve">
+  <data name="ToOtherView" xml:space="preserve">
     <value>To Other View</value>
   </data>
-	<data name="AboutTitle" xml:space="preserve">
+  <data name="AboutTitle" xml:space="preserve">
     <value>About this App</value>
   </data>
-	<data name="GeneralInfo" xml:space="preserve">
+  <data name="GeneralInfo" xml:space="preserve">
     <value>Thank you for using App2Night. This App is the product of a university project by Stefan Machmeier and Konrad Müller at the Baden-Wuerttemberg Cooperative State University Stuttgart - campus Horb.</value>
   </data>
-	<data name="General" xml:space="preserve">
+  <data name="General" xml:space="preserve">
     <value>General</value>
   </data>
-	<data name="GeneralContent" xml:space="preserve">
+  <data name="GeneralContent" xml:space="preserve">
     <value>This app is made with Xamarin.Forms connected to a Microsoft Azure Web API made with Asp.Net. You can find the sourcecode for this project at Github.</value>
   </data>
-	<data name="Project" xml:space="preserve">
+  <data name="Project" xml:space="preserve">
     <value>Project</value>
   </data>
-	<data name="Edit" xml:space="preserve">
+  <data name="Edit" xml:space="preserve">
     <value>Edit</value>
   </data>
-	<data name="Delete" xml:space="preserve">
+  <data name="Delete" xml:space="preserve">
     <value>Delete</value>
   </data>
-	<data name="Website" xml:space="preserve">
+  <data name="Website" xml:space="preserve">
     <value>Website</value>
   </data>
-	<data name="ThirdPartyTitle" xml:space="preserve">
+  <data name="ThirdPartyTitle" xml:space="preserve">
     <value>Third party librarys</value>
+  </data>
+  <data name="UserCreated" xml:space="preserve">
+    <value>User created!</value>
+  </data>
+  <data name="WelcomeUser" xml:space="preserve">
+    <value>Welcome to App2Night {0}! We send you an e-mail with a confirmation link. You can create parties after confirming your account.</value>
+  </data>
+  <data name="AcceptingParty" xml:space="preserve">
+    <value>Accepting party</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="CommitmentChangeFailed" xml:space="preserve">
+    <value>Changing the commitment state failed</value>
+  </data>
+  <data name="CommitmentStateChangedTo" xml:space="preserve">
+    <value>Commitment state changed to {0}</value>
+  </data>
+  <data name="DateString" xml:space="preserve">
+    <value>Datum</value>
+  </data>
+  <data name="IUnderstand" xml:space="preserve">
+    <value>I understand.</value>
+  </data>
+  <data name="LoadDataFailed" xml:space="preserve">
+    <value>We were not able to load all party data, retry?</value>
+  </data>
+  <data name="LoadFailedShort" xml:space="preserve">
+    <value>Loading parties failed.</value>
+  </data>
+  <data name="LocationNotEnabled" xml:space="preserve">
+    <value>Location is not enabled for this app or available on your device.\n Activate the location for this device and restart the app to see a beautiful map here.</value>
+  </data>
+  <data name="LocationPermissions" xml:space="preserve">
+    <value>We need the permission to acccess your location to find parties near you.</value>
+  </data>
+  <data name="LoginFailed" xml:space="preserve">
+    <value>Login failed</value>
+  </data>
+  <data name="MapsNotInstalled" xml:space="preserve">
+    <value>Google maps is not installed on this device.</value>
+  </data>
+  <data name="MyParties" xml:space="preserve">
+    <value>My parties</value>
+  </data>
+  <data name="NotingParty" xml:space="preserve">
+    <value>Note party</value>
+  </data>
+  <data name="Party" xml:space="preserve">
+    <value>party</value>
+  </data>
+  <data name="PermissionNeeded" xml:space="preserve">
+    <value>Permission needed</value>
+  </data>
+  <data name="Rating" xml:space="preserve">
+    <value>Rating</value>
+  </data>
+  <data name="RejectingParty" xml:space="preserve">
+    <value>Rejecting party</value>
+  </data>
+  <data name="ReloadData" xml:space="preserve">
+    <value>Reload data</value>
+  </data>
+  <data name="RequestFailExplenation" xml:space="preserve">
+    <value>The last request got lost and we can't find it anymore :( Dont feel betrayed, we will handle your future requests even more carefull and give him more time! To help us handling your request, please make sure you are actually connected to the internet.</value>
+  </data>
+  <data name="SearchingPartiesFailed" xml:space="preserve">
+    <value>Searching for parties failed.</value>
+  </data>
+  <data name="StoragePermissions" xml:space="preserve">
+    <value>We need to access your local storage to create a persistant user experience, the files wont be greater then 5mb and encrypted.</value>
+  </data>
+  <data name="SyncSuccess" xml:space="preserve">
+    <value>We successfully synchronised you parties.</value>
+  </data>
+  <data name="UserCreationFailed" xml:space="preserve">
+    <value>User creation failed.</value>
+  </data>
+  <data name="UserLoggedIn" xml:space="preserve">
+    <value>User logged in.</value>
+  </data>
+  <data name="WeFoundPartiesNearYou" xml:space="preserve">
+    <value>We found {0} parties near you.</value>
   </data>
 </root>

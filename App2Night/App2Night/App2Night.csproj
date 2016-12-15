@@ -63,16 +63,6 @@
     <Compile Include="CustomView\View\SwipeView.cs" />
     <Compile Include="CustomView\View\EnhancedContainer.cs" />
     <Compile Include="CustomView\View\VerticalGallerieView.cs" />
-    <Compile Include="Data\Language\AppResources.de.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AppResources.de.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Data\Language\AppResources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AppResources.resx</DependentUpon>
-    </Compile>
     <Compile Include="DependencyService\IUserLocationService.cs" />
     <Compile Include="DependencyService\IAndroidAppLookupService.cs" />
     <Compile Include="PageModel\SubPages\AgbViewModel.cs" />
@@ -260,14 +250,6 @@
     <EmbeddedResource Include="Data\Image\icon_name_transparent.svg" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Data\Language\AppResources.de.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>AppResources.de.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Data\Language\AppResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>AppResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Data\Licenses\MvvmNano.txt" />
     <EmbeddedResource Include="Data\Licenses\UserDialogs.txt" />
     <EmbeddedResource Include="Data\Licenses\MIT.txt" />

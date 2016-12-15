@@ -1,6 +1,6 @@
 ﻿using System;
 using Acr.UserDialogs;
-using App2Night.Data.Language;
+using App2Night.Model.Language;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
 using App2Night.Service.Service;
@@ -86,7 +86,7 @@ namespace App2Night.CustomView.View
             {
                 Device.BeginInvokeOnMainThread(async () =>
                 {
-                    using (UserDialogs.Instance.Loading("Rating")) // Resource
+                    using (UserDialogs.Instance.Loading(AppResources.Rating))  
                     {
                         var party = BindingContext as Party;
                         var result =

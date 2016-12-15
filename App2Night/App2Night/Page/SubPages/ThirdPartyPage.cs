@@ -1,4 +1,5 @@
-﻿using App2Night.Data.Language;
+﻿
+using App2Night.Model.Language;
 using FreshMvvm;
 using Xamarin.Forms;
 

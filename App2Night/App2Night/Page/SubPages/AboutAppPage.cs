@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using App2Night.CustomView.View;
-using App2Night.Data.Language;
+using App2Night.Model.Language;
 using FreshMvvm;
 using Xamarin.Forms;
 

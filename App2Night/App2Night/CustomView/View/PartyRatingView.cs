@@ -1,5 +1,5 @@
 ﻿using System;
-using App2Night.Data.Language;
+using App2Night.Model.Language;
 using App2Night.Model.Model;
 using Xamarin.Forms;
 

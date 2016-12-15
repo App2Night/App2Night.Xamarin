@@ -153,8 +153,7 @@ namespace App2Night.PageModel.SubPages
         public bool AcceptButtonEnabled
         {
             get
-            {
-                //TODO add again after backend fixes his endpoint.
+            { 
                 var enabled =
                     ValidCityname
                     && ValidDescription

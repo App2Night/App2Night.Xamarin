@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.Model.Enum;
+using App2Night.Model.Language;
 using App2Night.Model.Model;
 using App2Night.PageModel.SubPages;
 using App2Night.Service.Interface;
@@ -40,7 +41,7 @@ namespace App2Night.PageModel
 
         private async Task Reload()
         {
-            using (UserDialogs.Instance.Loading("Reloading datas")) //RESOURCE
+            using (UserDialogs.Instance.Loading(AppResources.ReloadData))
             {
                 var result = await _dataService.BatchRefresh(); 
             }
@@ -56,20 +57,20 @@ namespace App2Night.PageModel
             if (party.CommitmentState == PartyCommitmentState.Rejected)
             {
                 nextState = PartyCommitmentState.Noted;
-                message = "Noting party"; //RESOURCE
+                message = AppResources.NotingParty;
             }
 
 
             if (party.CommitmentState == PartyCommitmentState.Noted)
             {
                 nextState = PartyCommitmentState.Accepted;
-                message = "Accepting party"; //RESOURCE
+                message = AppResources.AcceptingParty;
             }
 
             if (party.CommitmentState == PartyCommitmentState.Accepted)
             {
                 nextState = PartyCommitmentState.Rejected;
-                message = "Rejecting party"; //RESOURCE
+                message = AppResources.RejectingParty;
             }
 
             using (UserDialogs.Instance.Loading(message))

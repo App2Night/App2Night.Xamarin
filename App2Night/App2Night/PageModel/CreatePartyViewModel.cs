@@ -3,6 +3,7 @@ using System.Net;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.Model.Enum;
+using App2Night.Model.Language;
 using App2Night.Model.Model;
 using App2Night.PageModel.SubPages;
 using App2Night.Service.Helper;
@@ -169,7 +170,7 @@ namespace App2Night.PageModel
 
         private async Task CreateParty()
         {
-            using (UserDialogs.Instance.Loading("Creating Party")) //RESOURCE 
+            using (UserDialogs.Instance.Loading(AppResources.CreateParty)) 
             {
                 var dateTime = new DateTime(Date.Year, Date.Month, Date.Day, Time.Hours, Time.Minutes, 0);
                 var result = await

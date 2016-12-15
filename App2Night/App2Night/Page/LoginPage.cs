@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using App2Night.CustomView.Page;
 using App2Night.CustomView.View;
-using App2Night.Data.Language;
+using App2Night.Model.Language;
 using FreshMvvm;
 using Xamarin.Forms;
 
@@ -103,7 +103,7 @@ namespace App2Night.Page
         public LoginPage()
         { 
             BackgroundColor = Color.Red;
-			OfflineMessage = AppResources.OfflineContent; //RESOURCE 
+			OfflineMessage = AppResources.OfflineContent; 
 
             //Make sure that the page does not merge in to the status bar on iOS.
             if(Device.OS == TargetPlatform.iOS) 

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Acr.UserDialogs;
 using App2Night.Model.Enum;
+using App2Night.Model.Language;
 using App2Night.Model.Model;
 using App2Night.Service.Interface;
 using FreshMvvm;
@@ -51,7 +52,7 @@ namespace App2Night.PageModel
 
         private async Task ChangeCommitmentState(Party party, PartyCommitmentState commitmentState)
         {
-            using (UserDialogs.Instance.Loading(commitmentState + " party")) //RESOURCE 
+            using (UserDialogs.Instance.Loading(commitmentState + " " + AppResources.Party))
             {
                 var result = await _dataService.ChangeCommitmentState(party.Id, commitmentState);
 

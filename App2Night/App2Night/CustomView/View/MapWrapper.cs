@@ -1,4 +1,5 @@
-﻿using App2Night.Service.Helper;
+﻿using App2Night.Model.Language;
+using App2Night.Service.Helper;
 using App2Night.Service.Interface;
 using FreshMvvm;
 using Xamarin.Forms;
@@ -21,9 +22,9 @@ namespace App2Night.CustomView.View
             if (Device.OS == TargetPlatform.Android && !App.MapAvailable)
             {
                 BackgroundColor = Color.Gray.MultiplyAlpha(0.6);
-                Content = new Label {Text = "Google maps is not installed on this device.",
+                Content = new Label {Text = AppResources.MapsNotInstalled,
                     Margin = new Thickness(10)
-                }; //RESOURCE
+                };  
             } 
             else
             {
@@ -44,9 +45,8 @@ namespace App2Night.CustomView.View
                         Content = map;
                     }
                     else
-                        Content = new Label { Text = "Location is not enabled for this app or available on your device.\n" +
-                                                     "Activate the location for this device and restart the app to see a beautiful map here.",
-                        Margin = new Thickness(10)}; //RESOURCE
+                        Content = new Label { Text = AppResources.LocationNotEnabled,
+                        Margin = new Thickness(10)};  
                 });
             } 
         }
